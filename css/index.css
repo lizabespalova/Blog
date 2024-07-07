@@ -1,0 +1,14 @@
+.image-container {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-left: auto; /* Это выровняет контейнер вправо */
+    padding-left: 20px; /* Дополнительный отступ слева */
+    padding-right: 20px; /* Отступ справа */
+}
+.image {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transition: transform 0.3s ease; /* Плавная анимация движения */
+}

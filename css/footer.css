@@ -1,0 +1,60 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+.footer {
+    background-color: #45526e;
+    color: white;
+    padding: 1rem 0;
+    margin-top: auto; /* Подтягивает footer к нижней части страницы */
+}
+.footer-links a {
+    color: white;
+}
+.youtube-icon {
+    font-size: 24px;
+    display: inline-block;
+    width: 40px; /* Размер иконки */
+    height: 40px; /* Размер иконки */
+    border-radius: 50%; /* Круглая форма */
+    background-color: #FF0000; /* Красный цвет фона */
+    text-align: center; /* Центрирование иконки внутри блока */
+    line-height: 40px; /* Вертикальное выравнивание иконки */
+}
+
+.youtube-icon i {
+    font-size: 24px; /* Размер иконки внутри блока */
+    line-height: 40px; /* Вертикальное выравнивание иконки */
+}
+#back-to-top {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+#back-to-top:hover {
+    background-color: #0056b3;
+}
+.youtube-icon:hover {
+    transform: translateY(-5px) scale(1.1); /* Подпрыгивание вверх на 5px и увеличение размера */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Добавление тени для более выразительного эффекта */
+}
+.footer p {
+    margin: 0;
+}
+.custom-img {
+    width: 150px; /* Установите ширину изображения по вашему усмотрению */
+    height: 150px; /* Установите высоту изображения по вашему усмотрению */
+    object-fit: cover; /* Обрезка изображения по кругу */
+    border-radius: 50%; /* Делает изображение круглым */
+    overflow: hidden; /* Скрывает части изображения, выходящие за границы */
+}

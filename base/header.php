@@ -1,0 +1,37 @@
+    <!-- Задний фон с изображением -->
+    <div class="header-background" style="background-image: url('/templates/images/code_with_me.jpg');">
+        <div class="container">
+            <!-- Тут можно добавить контент над фоном, если нужно -->
+        </div>
+    </div>
+    <!-- Навигационное меню -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <!-- Кнопка для мобильной версии -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Список ссылок навигации -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(текущая)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Homeworks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Archive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">IT news</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
