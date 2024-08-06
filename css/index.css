@@ -1,14 +1,101 @@
-.image-container {
-    height: 100%;
-    display: flex;
-    justify-content: space-around;
-    margin-left: auto; /* Это выровняет контейнер вправо */
-    padding-left: 20px; /* Дополнительный отступ слева */
-    padding-right: 20px; /* Отступ справа */
+.container {
+    width: 100%; /* Устанавливаем ширину контейнера */
+    clear: both; /* Обеспечиваем, чтобы контейнер очищал плавающие элементы */
 }
-.image {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    transition: transform 0.3s ease; /* Плавная анимация движения */
+
+.text-container {
+    width: 100%; /* Занимает всю ширину на маленьких экранах */
+    padding: 10px;
+}
+
+.image-container {
+    width: 100%; /* Занимает всю ширину на маленьких экранах */
+    max-width: 100%; /* Ограничиваем максимальную ширину изображения */
+    text-align: center;
+    padding: 10px;
+    float: none; /* Отменяем float по умолчанию */
+}
+
+.hover-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.main_text {
+    width: 100%; /* Ширина текста */
+    line-height: 2.0; /* Увеличиваем расстояние между строками */
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+h1 {
+    text-align: center; /* Центрируем заголовок */
+    font-size: 3em; /* Размер шрифта заголовка */
+    transform: rotate(-5deg); /* Наклон заголовка */
+    animation: fadeIn 2s ease-in-out; /* Анимация появления */
+}
+
+.dynamic-elements-wrapper {
+    width: 100%;
+    padding: 20px 0; /* Внутренний отступ сверху и снизу */
+    clear: both; /* Очищаем любые плавающие элементы */
+}
+
+.dynamic-elements-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Расстояние между карточками */
+    justify-content: center; /* Центрируем элементы по горизонтали */
+    background-color: #343333;
+}
+
+.dynamic-elements-container div {
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.header-container {
+    background-color:  #343333; /* Цвет фона для заголовка */
+    padding: 20px; /* Внутренний отступ */
+    text-align: center; /* Центрируем текст заголовка */
+}
+
+.header-container h1 {
+    margin: 0; /* Убираем внешние отступы у заголовка */
+    background-color: #be3d3d; /* Цвет фона заголовка */
+    color: #fff; /* Цвет текста заголовка */
+    padding: 10px; /* Внутренний отступ вокруг текста заголовка */
+    display: inline-block; /* Размещаем в блочном контексте */
+    border-radius: 8px; /* Закругляем углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+}
+.dynamic-elements-container h1 {
+    font-size: 16px;
+    margin: 0;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) rotate(-5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(-5deg);
+    }
+}
+
+@media(min-width: 768px) {
+    .text-container {
+        width: 50%; /* Занимает половину ширины на больших экранах */
+        float: left; /* Плавающий влево */
+        padding: 10px;
+    }
+
+    .image-container {
+        width: 50%; /* Занимает половину ширины на больших экранах */
+        float: right; /* Плавающий вправо */
+        padding: 10px;
+        text-align: right; /* Выровнять изображение по правому краю */
+    }
 }

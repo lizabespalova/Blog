@@ -6,6 +6,22 @@
     position: relative;
 }
 
-.navbar {
-    background-color: rgba(0, 0, 0, 0.6); /* Прозрачный фон навигации */
+
+.navbar-nav .profile-item {
+    position: absolute;
+    right: 20px;
 }
+
+.nav-link.profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 2px solid #fff; /* Белая граница */
+    transition: transform 0.3s ease;
+}
+
+.nav-link.profile img:hover {
+    transform: scale(1.1); /* Увеличение при наведении */
+}
+

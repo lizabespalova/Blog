@@ -14,7 +14,8 @@
 
             <!-- Список ссылок навигации -->
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav">
+
+                    <ul class="navbar-nav">
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(текущая)</span></a>
                     </li>
@@ -30,7 +31,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">IT news</a>
                     </li>
-                </ul>
+                        <li class="nav-item profile-item">
+                            <a class="nav-link profile" href="/auth/form_login.php">
+                                <img src="/templates/images/login.png" alt="Profile Picture">
+                            </a>
+                        </li>
+                    </ul>
             </div>
         </div>
     </nav>
