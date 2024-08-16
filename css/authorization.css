@@ -74,7 +74,6 @@ i {
     font-size: 0.85rem;
     color: #fefffe;
     display: flex;
-    justify-content: space-between;
 }
 .forget label{
     display: flex;
@@ -120,11 +119,15 @@ button:hover{
 .register p a:hover{
     text-decoration: underline;
 }
+.forget-link {
+    margin-left: 65px; /* Отступ */
+}
+
 #women {
     position: fixed;
     right: 0px; /* Расположение изображения в правом углу */
     bottom: 5px; /* Расположение изображения в нижнем углу */
-    width: 350px; /* Задайте нужную ширину */
+    width: 350px; /* Ширина */
     height: auto; /* Сохраняет пропорции изображения */
 }
 @media screen and (max-width: 980px) {

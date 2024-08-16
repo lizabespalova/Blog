@@ -1,5 +1,5 @@
     <!-- Задний фон с изображением -->
-    <div class="header-background" style="background-image: url('/templates/images/code_with_me.jpg');">
+    <div class="header-background" style="background-image: url('/templates/images/league_of_code.png');">
         <div class="container">
             <!-- Тут можно добавить контент над фоном, если нужно -->
         </div>
@@ -32,7 +32,7 @@
                         <a class="nav-link" href="#">IT news</a>
                     </li>
                         <li class="nav-item profile-item">
-                            <a class="nav-link profile" href="/auth/form_login.php">
+                            <a class="nav-link profile" href="/app/views/auth/form_login.php">
                                 <img src="/templates/images/login.png" alt="Profile Picture">
                             </a>
                         </li>
