@@ -1,15 +1,15 @@
 function toggleMenu() {
     const menuContent = document.querySelector('.menu-content');
-    menuContent.style.display = (menuContent.style.display === 'block' ? 'none' : 'block');
+    menuContent.classList.toggle('show');
 }
 
 // Закрытие меню при клике вне его области
 window.addEventListener('click', function(event) {
     const menu = document.querySelector('.menu');
+    const menuContent = document.querySelector('.menu-content');
     if (!menu.contains(event.target)) {
-        const menuContent = document.querySelector('.menu-content');
-        if (menuContent.style.display === 'block') {
-            menuContent.style.display = 'none';
+        if (menuContent.classList.contains('show')) {
+            menuContent.classList.remove('show');
         }
     }
 });
