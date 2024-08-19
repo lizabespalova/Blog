@@ -1,0 +1,26 @@
+.content-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px; /* Ограничение по ширине для улучшенного выравнивания */
+    margin: 80px auto; /* 80 px - отступление после строки и перед футером */
+}
+
+.content-text {
+    font-size: 1em;
+    line-height: 1.5em;
+    margin-left: 220px; /* Увеличьте значение, чтобы подвинуть текст ближе к изображению */
+}
+
+
+.content-image {
+    float: right;
+    margin-left: 20px;
+}
+
+.content-image img {
+    max-width: 100%;
+    width: 350px; /* Установите желаемую ширину */
+    height: auto; /* Высота будет автоматически изменяться в соответствии с пропорциями */
+    border-radius: 5px;
+}
