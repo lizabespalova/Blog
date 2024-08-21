@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <form method="POST" action="login.php">
+    <form method="POST" action="/app/controllers/auth_controllers/LoginController.php">
         <h1>Login</h1>
         <div class="inputbox">
             <i class="bi bi-person"></i>

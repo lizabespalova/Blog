@@ -2,5 +2,11 @@
   "require": {
     "vlucas/phpdotenv": "^5.4",
     "ext-mysqli": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "controllers\\authorized_users_controllers\\": "app/controllers/authorized_users_controllers/",
+      "models\\": "app/models/"
+    }
   }
 }

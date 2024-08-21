@@ -1,3 +1,7 @@
+<?php
+session_start(); // Начало сессии
+$user = $_SESSION['user'] ?? null; // Получаем данные пользователя из сессии
+?>
 <header class="header">
     <div class="header-content">
         <div class="header-left">
@@ -17,7 +21,7 @@
                 </a>
             </div>
 
-            <button class="edit-button" onclick="window.location.href='edit_description.php'">✎</button><!-- Edit button -->
+            <button class="edit-button" onclick="window.location.href='/app/views/authorized_users/edit_description.php'">✎</button><!-- Edit button -->
             <div class="menu">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <div class="menu-content">

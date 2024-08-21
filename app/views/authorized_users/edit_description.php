@@ -1,3 +1,17 @@
+<?php
+//require_once __DIR__ . '/../../../controllers/authorized_users_controllers/ProfileController.php';
+//
+//use controllers\authorized_users_controllers\ProfileController;
+//
+//// Запуск сессии
+//session_start();
+//
+//// Создание экземпляра контроллера
+//$profileController = new ProfileController(getDbConnection());
+//
+// $profileController->showProfile();
+//?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,27 +22,29 @@
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/edit_description.css">
-
-
 </head>
 <body>
 <!-- Header Section -->
-<?php include __DIR__ . '/../../views/authorized_users/profile_header.php'; ?>
+<?php include __DIR__ . '/profile_header.php'; ?>
+
 <main>
     <div class="edit-container">
         <h1>Edit Description</h1>
-        <form action="/submit_description" method="POST">
+        <form action="" method="POST">
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="10" cols="50" placeholder="Enter your description here..."></textarea>
             <br>
             <button type="submit" class="save-button">Save</button>
-            <button type="button" class="back-button" onclick="window.location.href='/app/views/authorized_users/profile.php';">Back</button>
-
+            <form action="/controllers/authorized_users_controllers/ProfileController" method="POST">
+                <input type="hidden" name="some_data" value="value" />
+                <button type="submit" class="back-button">Back</button>
+            </form>
         </form>
     </div>
 </main>
+
 <!-- Footer Section -->
-<?php include __DIR__ . '/../../views/authorized_users/profile_footer.php'; ?>
+<?php include __DIR__ . '/profile_footer.php'; ?>
 <script src="/js/menu.js"></script>
 </body>
 </html>
