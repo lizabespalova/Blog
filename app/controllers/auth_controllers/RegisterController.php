@@ -1,39 +1,59 @@
 <?php
+namespace controllers\auth_controllers;
 
-use controllers\authorized_users_controllers\ProfileController;
+use models\User;
+use Exception;
+use PHPMailer;
 
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ .'/../../../config/config.php';
+require_once __DIR__ . '/../../views/auth/phpmailer/PHPMailerAutoload.php';
 
 class RegisterController {
 
     private $userModel;
+    private $mailer;
 
     public function __construct($dbConnection) {
         $this->userModel = new \models\User($dbConnection);
+        $this->mailer = new PHPMailer(true);
+        $this->configureMailer();
+    }
+
+    public function show_register_form() {
+        include __DIR__ . '/../../views/auth/form_register.php';
     }
 
     public function register() {
         if (isset($_POST['register'])) {
-            $errors = $this->validateRegistration($_POST['login'], $_POST['password'], $_POST['email']);
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+            $email = $_POST['email'];
+
+            $errors = $this->validateRegistration($login, $password, $email);
 
             if (empty($errors)) {
-                $this->createNewUser($_POST['login'], $_POST['email'], $_POST['password']);
+                // Генерируем токен для подтверждения
+                $token = md5($login . mt_rand(1000, 9999));
 
-                // После успешной регистрации вызываем метод showProfile
-                $profileController = new ProfileController(getDbConnection());
-                $profileController->showProfile();
+                // Создаем временного пользователя
+                $this->userModel->createTemporaryUser($login, $email, password_hash($password, PASSWORD_DEFAULT), $token);
 
-                // Не используем header, так как мы уже показали профиль
+                // Отправляем письмо с подтверждением
+                $this->sendConfirmationEmail($email, $token);
+
+                // Перенаправляем на страницу ожидания подтверждения
+                header('Location: /confirmation_pending');
                 exit();
             } else {
                 $this->showErrors($errors);
             }
         }
     }
-
-    private function validateRegistration($login, $password, $email): array
-    {
+    public function registration_pending(){
+        include __DIR__ . '/../../views/auth/confirmation_pending.php';
+    }
+    private function validateRegistration($login, $password, $email): array {
         $errors = [];
 
         // Проверяем логин
@@ -50,34 +70,92 @@ class RegisterController {
             $errors[] = "A user with this login already exists in the database.";
         }
 
-        // Дополнительная проверка на email и другие параметры можно добавить здесь
+        // Проверяем email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email format.";
+        }
+
+        // Проверяем, существует ли пользователь с таким email
+        if ($this->userModel->getUserByEmail($email)) {
+            $errors[] = "A user with this email already exists in the database.";
+        }
+
+        // Проверяем пароль
+        if (strlen($password) < 8) {  // Обновленное ограничение на длину пароля
+            $errors[] = "The password must be at least 8 characters long.";
+        }
 
         return $errors;
     }
 
-    private function createNewUser($login, $email, $password) {
-        // Хешируем пароль
-        $hashedPassword = password_hash(trim($password), PASSWORD_DEFAULT);
-
-        // Создаем пользователя в базе данных
-        $this->userModel->createUser($login, $email, $hashedPassword, 0);
+    private function configureMailer() {
+        $this->mailer->isSMTP();
+        $this->mailer->Host = getHost();
+        $this->mailer->Port = getPort();
+        $this->mailer->SMTPSecure = getSmptSecure();
+        $this->mailer->SMTPAuth = true;
+        $this->mailer->Username = getEmail();
+        $this->mailer->Password = getEmailPassword();
     }
+
+    private function sendConfirmationEmail($email, $token) {
+        $confirmationUrl = 'http://localhost:8000/confirm?user_key=' . $token;
+
+        $this->mailer->setFrom(getEmail());
+        $this->mailer->addAddress($email);
+        $this->mailer->isHTML(true);
+        $this->mailer->Subject = 'Confirm Your Registration';
+        $this->mailer->Body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
+
+        try {
+            $this->mailer->send();
+            echo '<script type="text/javascript">
+            alert("Confirmation email sent successfully!");
+            window.location.href = "/confirmation_pending";
+        </script>';
+        } catch (Exception $e) {
+            echo 'Error: ', $this->mailer->ErrorInfo;
+        }
+    }
+
+
+    public function confirmRegistration() {
+        $token = $_GET['user_key'] ?? '';
+
+        if ($token) {
+            $user = $this->userModel->getTemporaryUserByToken($token);
+
+            if ($user) {
+                // Перемещаем пользователя из временной таблицы в основную таблицу
+                $this->userModel->moveToMainTable($user['user_login'], $user['user_email'], $user['user_password']);
+
+                // Удаляем временного пользователя
+                $this->userModel->deleteTemporaryUser($token);
+
+                header('Location: /app/views/authorized_users/thank_to_authorized_user.php');
+                exit();
+            } else {
+                echo 'Invalid or expired token.';
+            }
+        } else {
+            echo 'No token provided.';
+        }
+    }
+    private function isTokenExpired($createdAt): bool {
+        $expiration = new \DateTime($createdAt);
+        $now = new \DateTime();
+        $interval = $now->diff($expiration);
+
+        return $interval->i >= 30; // Проверка на истечение срока в минутах
+    }
+
 
     private function showErrors($errors) {
-        $errorMessages = implode("\\n", $errors); // Объединяем все ошибки в одну строку, разделяя их символом новой строки
+        $errorMessages = implode("\\n", $errors);
         echo "<script>
             alert('The following errors occurred during registration:\\n{$errorMessages}');
-            window.location.href = '/app/views/auth/form_register.php'; 
+            window.location.href = '/register'; 
           </script>";
     }
-
 }
-
-// Соединение с БД
-$conn = getDbConnection();
-
-// Создаем экземпляр контроллера и вызываем метод регистрации
-$registerController = new RegisterController($conn);
-$registerController->register();
-
 ?>

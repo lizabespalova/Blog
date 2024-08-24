@@ -32,7 +32,7 @@
                         <a class="nav-link" href="#">IT news</a>
                     </li>
                         <li class="nav-item profile-item">
-                            <a class="nav-link profile" href="/app/views/auth/form_login.php">
+                            <a class="nav-link profile" href="/login">
                                 <img src="/templates/images/login.png" alt="Profile Picture">
                             </a>
                         </li>

@@ -1,4 +1,5 @@
 <?php
+namespace controllers\auth_controllers;
 
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ .'/../../../config/config.php';
@@ -57,11 +58,11 @@ class ResetPasswordController {
     }
 }
 
-// Соединение с БД
-$conn = getDbConnection();
-
-// Создаем экземпляр контроллера и вызываем метод обработки запроса на сброс пароля
-$resetPasswordController = new ResetPasswordController($conn);
-$resetPasswordController->handleRequest();
+//// Соединение с БД
+//$conn = getDbConnection();
+//
+//// Создаем экземпляр контроллера и вызываем метод обработки запроса на сброс пароля
+//$resetPasswordController = new ResetPasswordController($conn);
+//$resetPasswordController->handleRequest();
 
 ?>

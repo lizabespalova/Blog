@@ -34,8 +34,10 @@ class ProfileController
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок
-            echo $e->getMessage();  // В реальной среде лучше использовать логирование или редирект на страницу с ошибкой
-            // header("Location: /error.php");  // Например, перенаправление на страницу с ошибкой
+            echo "<script>
+                alert('{$e->getMessage()}');
+                window.location.href = '/login'; // Перенаправление на страницу логина
+              </script>";
             exit();
         }
     }

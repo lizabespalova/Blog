@@ -1,43 +1,73 @@
 <?php
+
 namespace models;
+
 class User
 {
     private $link;
-    public $login;
-    public $change_key;
-    public $password;
+
     public function __construct($link) {
         $this->link = $link;
     }
+
     public function getUserByLogin($login) {
-        $query = mysqli_query($this->link, "SELECT * FROM users WHERE user_login='".mysqli_real_escape_string($this->link, $login)."' LIMIT 1");
-        return mysqli_fetch_assoc($query);
+        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_login = ? LIMIT 1");
+        $stmt->bind_param("s", $login);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
+
     public function getUserByEmail($email) {
-        $query = mysqli_query($this->link, "SELECT * FROM users WHERE user_email='".mysqli_real_escape_string($this->link, $email)."' LIMIT 1");
-        return mysqli_fetch_assoc($query);
+        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
+
     public function getUserByKey($key) {
-        $query = mysqli_query($this->link, "SELECT * FROM users WHERE user_key='".mysqli_real_escape_string($this->link, $key)."' LIMIT 1");
-        return mysqli_fetch_assoc($query);
+        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_key = ? LIMIT 1");
+        $stmt->bind_param("s", $key);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
+
     public function createUser($login, $email, $password, $change_key) {
-        $login = mysqli_real_escape_string($this->link, $login);
-        $email = mysqli_real_escape_string($this->link, $email);
-        $password = mysqli_real_escape_string($this->link, $password);
-        $change_key = mysqli_real_escape_string($this->link, $change_key);
-        mysqli_query($this->link, "INSERT INTO users (user_login, user_email, user_password, user_key) VALUES ('$login', '$email', '$password', '$change_key')");
+        $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password, user_key) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $login, $email, $password, $change_key);
+        $stmt->execute();
+        $stmt->close();
     }
 
     public function setKey($login, $key) {
         $login = mysqli_real_escape_string($this->link, $login);
         $key = mysqli_real_escape_string($this->link, $key);
-        mysqli_query($this->link, "UPDATE users SET user_key='$key' WHERE user_login='$login'");
-        $this->change_key = $key;
+        $createdAt = date('Y-m-d H:i:s'); // Текущее время
+        mysqli_query($this->link, "UPDATE users SET user_key='$key', key_created_at='$createdAt' WHERE user_login='$login'");
     }
+
+    public function getKey($email) {
+        $stmt = $this->link->prepare("SELECT user_key FROM users WHERE user_email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $user_key = null;
+        $stmt->bind_result($user_key);
+        $stmt->fetch();
+        $stmt->close();
+        return $user_key;
+    }
+
+    public function activateUser($user_id) {
+        $stmt = $this->link->prepare("UPDATE users SET is_active = 1, user_key = NULL WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
     public function updatePassword($login, $newPassword) {
-        $sql = "UPDATE users SET user_password = ? WHERE user_login = ?";
-        $stmt = $this->link->prepare($sql);
+        $stmt = $this->link->prepare("UPDATE users SET user_password = ? WHERE user_login = ?");
         $stmt->bind_param('ss', $newPassword, $login);
         return $stmt->execute();
     }
@@ -46,31 +76,63 @@ class User
         $stmt = $this->link->prepare("UPDATE users SET user_avatar = ? WHERE user_id = ?");
         $stmt->bind_param("si", $avatarPath, $userId);
         $stmt->execute();
+        $stmt->close();
     }
 
     public function getUserById($userId) {
         $stmt = $this->link->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 
     public function updateUserHash($user_id, $hash, $attach_ip = false) {
-        $user_id = intval($user_id);
-        $hash = md5($hash);
-        $insip = '';
-
+        $stmt = $this->link->prepare("UPDATE users SET user_hash = ?" . ($attach_ip ? ", user_ip = INET_ATON(?)" : "") . " WHERE user_id = ?");
         if ($attach_ip) {
-            $insip = ", user_ip=INET_ATON('".$_SERVER['REMOTE_ADDR']."')";
+            $stmt->bind_param("ssi", $hash, $_SERVER['REMOTE_ADDR'], $user_id);
+        } else {
+            $stmt->bind_param("si", $hash, $user_id);
         }
-
-        $query = "UPDATE users SET user_hash='$hash' $insip WHERE user_id='$user_id'";
-        return mysqli_query($this->link, $query);
+        return $stmt->execute();
     }
-    public function getUserAuthDataById($userId) {
-        $stmt = $this->link->prepare("SELECT user_id, user_hash FROM users WHERE user_id = ?");
-        $stmt->bind_param("i", $userId);
+    // Создание временного пользователя
+    public function createTemporaryUser($login, $email, $password, $token) {
+        $stmt = $this->link->prepare("INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $login, $email, $password, $token);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $stmt->close();
     }
+
+    // Получение временного пользователя по токену
+    public function getTemporaryUserByToken($token) {
+        $stmt = $this->link->prepare("SELECT * FROM temporary_users WHERE confirmation_token = ?");
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        return $user;
+    }
+
+    // Перемещение временного пользователя в основную таблицу
+    public function moveToMainTable($login, $email, $password) {
+        $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $login, $email, $password);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    // Удаление временного пользователя
+    public function deleteTemporaryUser($token) {
+        $stmt = $this->link->prepare("DELETE FROM temporary_users WHERE confirmation_token = ?");
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $stmt->close();
+    }
+//    public function deleteUserById($userId) {
+//        $stmt = $this->link->prepare("DELETE FROM users WHERE user_id = ?");
+//        $stmt->bind_param("i", $userId);
+//        return $stmt->execute();
+//    }
 }

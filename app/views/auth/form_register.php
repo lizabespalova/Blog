@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <form method="POST" action="/app/controllers/auth_controllers/RegisterController.php">
+    <form action="/register" method="POST">
         <h1>Registration</h1>
         <div class="inputbox">
             <i class="bi bi-person"></i>
@@ -34,7 +34,7 @@
         <button type="submit" name="register">Sign in</button>
         <div class="register">
             <p>Have an account?
-                <a href="/app/views/auth/form_login.php">Log in</a>
+                <a href="/login">Log in</a>
             </p>
         </div>
     </form>

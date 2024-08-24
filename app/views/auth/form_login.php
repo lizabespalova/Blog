@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <form method="POST" action="/app/controllers/auth_controllers/LoginController.php">
+    <form action="/login" method="POST">
         <h1>Login</h1>
         <div class="inputbox">
             <i class="bi bi-person"></i>
@@ -22,12 +22,12 @@
             <label>Password</label>
         </div>
         <div class="forget">
-            <a href="/app/views/auth/form_forget.php" class="forget-link">Forgot password?</a>
+            <a href="/forget" class="forget-link">Forgot password?</a>
         </div>
         <button type="submit" name="submit">Log in</button>
         <div class="register">
             <p>Don't have an account?
-                <a href="/app/views/auth/form_register.php">Sign in</a>
+                <a href="/register">Sign in</a>
             </p>
         </div>
     </form>

@@ -6,6 +6,7 @@
   "autoload": {
     "psr-4": {
       "controllers\\authorized_users_controllers\\": "app/controllers/authorized_users_controllers/",
+      "controllers\\auth_controllers\\": "app/controllers/auth_controllers/",
       "models\\": "app/models/"
     }
   }

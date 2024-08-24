@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/config/routes.php';
+
+// Получаем URI и метод запроса
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+// Запускаем маршрутизатор
+route($uri, $method);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

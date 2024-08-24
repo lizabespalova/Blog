@@ -52,7 +52,7 @@ if (isset($_POST['set_new_password'])) {
 </head>
 <body>
 <section>
-    <form method="POST">
+    <form action="/reset" method="POST">
         <h1>New password</h1>
         <p>Set new password</p>
         <input type="hidden" name="key" value="<?php echo htmlspecialchars($data['key']); ?>">

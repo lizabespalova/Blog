@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <form method="POST" action="/app/controllers/auth_controllers/ForgetPasswordController.php">
+    <form action="/forget" method="POST">
         <h1>Forget</h1>
         <p>Change the password via email</p>
 

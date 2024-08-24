@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ . '/../../../config/config.php';
 
 //// Начинаем сессию
-//session_start();
+session_start();
 
 // Соединение с базой данных
 $conn = getDbConnection();
@@ -17,13 +17,10 @@ $customerModel = new User($conn);
 
 // Проверяем наличие куки
 if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
-    // Получаем данные пользователя из базы данных по ID
     $user_id = intval($_COOKIE['id']);
     $userdata = $customerModel->getUserById($user_id);
-
-    // Проверяем, совпадает ли хеш из куков с хешем в базе данных
-    if ($userdata && $userdata['user_hash'] === $_COOKIE['hash']) {
-        // Если хеш совпадает, сохраняем данные пользователя в сессии
+    if ($userdata && md5($userdata['user_hash']) === $_COOKIE['hash']) {
+        // Хеш совпадает
         $_SESSION['user'] = [
             'user_avatar' => $userdata['user_avatar'],
             'user_login' => $userdata['user_login'],
@@ -32,17 +29,17 @@ if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
             'user_experience' => $userdata['user_experience'],
             'user_articles' => $userdata['user_articles'],
         ];
+        header('Location: /profile'); // Путь к странице профиля
+        exit();
 
-        // Перенаправляем пользователя на страницу профиля
-        $profileController = new ProfileController($conn);
-        $profileController->showProfile();
-        exit(); // Завершаем выполнение скрипта после отображения профиля
+        exit();
     } else {
-        // Если хеш не совпадает, выводим сообщение об ошибке авторизации
         echo "Authorization error";
+        echo "Stored hash: " . md5($userdata['user_hash']) . "<br>"; // Используйте md5 для отладки
+        echo "Cookie hash: " . $_COOKIE['hash'] . "<br>";
     }
 } else {
-    // Если куки отсутствуют, выводим сообщение о необходимости включения куки
     echo "Enable cookies";
 }
+
 ?>

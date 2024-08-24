@@ -20,6 +20,7 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
         'c' => 
         array (
             'controllers\\authorized_users_controllers\\' => 41,
+            'controllers\\auth_controllers\\' => 29,
         ),
         'S' => 
         array (
@@ -49,6 +50,10 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
         'controllers\\authorized_users_controllers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/controllers/authorized_users_controllers',
+        ),
+        'controllers\\auth_controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/controllers/auth_controllers',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (

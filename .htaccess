@@ -1,0 +1,7 @@
+#RewriteEngine On
+#RewriteBase /
+#
+## Перенаправляем все запросы на index.php
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)$ index.php [L,QSA]

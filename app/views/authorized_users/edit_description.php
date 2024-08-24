@@ -35,7 +35,7 @@
             <textarea id="description" name="description" rows="10" cols="50" placeholder="Enter your description here..."></textarea>
             <br>
             <button type="submit" class="save-button">Save</button>
-            <form action="/controllers/authorized_users_controllers/ProfileController" method="POST">
+            <form action="/profile" method="GET">
                 <input type="hidden" name="some_data" value="value" />
                 <button type="submit" class="back-button">Back</button>
             </form>

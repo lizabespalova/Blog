@@ -1,6 +1,12 @@
 <?php
-session_start(); // Начало сессии
+
+use controllers\authorized_users_controllers\ProfileController;
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $user = $_SESSION['user'] ?? null; // Получаем данные пользователя из сессии
+
 ?>
 <header class="header">
     <div class="header-content">
@@ -30,7 +36,7 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
                     <a href="#new_article"> Write an article <i class="fas fa-pen"></i></a>
                     <a href="#favourites"> Favourites <i class="fas fa-heart"></i></a>
                     <a href="#settings"> Settings <i class="fas fa-cog"></i></a>
-                    <a href="#logout"> Logout <i class="fas fa-sign-out-alt"></i></a>
+                    <a href="/app/controllers/authorized_users_controllers/logout.php"> Logout <i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>
         </div>

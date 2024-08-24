@@ -1,4 +1,5 @@
 <?php
+namespace controllers\auth_controllers;
 
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ .'/../../../config/config.php';
@@ -34,7 +35,7 @@ class LoginController {
                     setcookie("hash", md5($hash), time() + 60 * 60 * 24 * 30, "/", null, null, true); // httponly !!!
 
                     // Перенаправляем на страницу проверки
-                    header("Location: check.php");
+                    header("Location: /app/controllers/auth_controllers/check.php");
                     exit();
                 } else {
                     // Если пароль неверный
@@ -45,6 +46,9 @@ class LoginController {
                 $this->showError("The user with this login was not found.");
             }
         }
+    }
+    public function show_login_form(){
+        include __DIR__ . '/../../views/auth/form_login.php';
     }
 
     private function generateCode($length = 6) {
@@ -58,16 +62,19 @@ class LoginController {
     }
 
     private function showError($message) {
-        echo "<script>alert('$message');</script>";
-        include __DIR__ . '/../../views/auth/form_login.php';
+        echo "<script>
+        alert('$message');
+        window.location.href = '/app/views/auth/form_login.php'; // Путь к форме логина
+    </script>";
     }
+
 }
 
-// Соединение с БД
-$conn = getDbConnection();
-
-// Создаем экземпляр контроллера и вызываем метод логина
-$loginController = new LoginController($conn);
-$loginController->login();
+//// Соединение с БД
+//$conn = getDbConnection();
+//
+//// Создаем экземпляр контроллера и вызываем метод логина
+//$loginController = new LoginController($conn);
+//$loginController->login();
 
 ?>
