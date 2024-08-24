@@ -50,9 +50,10 @@ function route($uri, $method) {
 
         case '/reset':
             $controller = new ResetPasswordController($dbConnection);
-            if ($method === 'GET') {
+            if ($method === 'POST') {
                 $controller->handleRequest();
             }
+
             exit();  // Остановка выполнения после маршрута
 
         case '/confirm':

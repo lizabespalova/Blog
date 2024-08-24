@@ -13,9 +13,8 @@ class ResetPasswordController {
     }
 
     public function handleRequest() {
-        // Получаем данные из GET-запроса
-        $data = $_GET;
-
+        // Получаем данные из POST-запроса
+        $data = $_POST;
         // Сохраняем данные в сессии для использования на форме
         $_SESSION['data'] = $data;
 
@@ -53,8 +52,10 @@ class ResetPasswordController {
         $this->userModel->updatePassword($login, $hashedPassword);
 
         // Перенаправляем пользователя на страницу логина после успешного сброса пароля
-        header('Location: /form_login.php');
-        exit();
+        echo '<script>
+        alert("Password successfully reset. You will be redirected to the login page.");
+        window.location.href = "/login";
+    </script>';
     }
 }
 
