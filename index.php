@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__ . '/config/routes.php';
+require_once __DIR__ . '/config/routes/authorization_routes.php';
+require_once __DIR__ . '/config/routes/profile_routes.php';
 
 // Получаем URI и метод запроса
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Запускаем маршрутизатор
-route($uri, $method);
+authorization_route($uri, $method);
+profile_route($uri, $method);
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -27,7 +27,7 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
                 </a>
             </div>
 
-            <button class="edit-button" onclick="window.location.href='/app/views/authorized_users/edit_description.php'">✎</button><!-- Edit button -->
+            <button class="edit-button" onclick="window.location.href='/edit'">✎</button>
             <div class="menu">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <div class="menu-content">

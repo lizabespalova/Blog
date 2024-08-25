@@ -6,9 +6,9 @@ use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
 use controllers\authorized_users_controllers\ProfileController;
 
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../../config/config.php';
 
-function route($uri, $method) {
+function authorization_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
@@ -75,5 +75,5 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Запускаем маршрутизатор до вывода содержимого
-route($uri, $method);
+authorization_route($uri, $method);
 ?>

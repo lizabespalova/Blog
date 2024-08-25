@@ -1,17 +1,3 @@
-<?php
-//require_once __DIR__ . '/../../../controllers/authorized_users_controllers/ProfileController.php';
-//
-//use controllers\authorized_users_controllers\ProfileController;
-//
-//// Запуск сессии
-//session_start();
-//
-//// Создание экземпляра контроллера
-//$profileController = new ProfileController(getDbConnection());
-//
-// $profileController->showProfile();
-//?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,12 +20,13 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="10" cols="50" placeholder="Enter your description here..."></textarea>
             <br>
+        </form>
+        <div class="form-actions">
             <button type="submit" class="save-button">Save</button>
-            <form action="/profile" method="GET">
-                <input type="hidden" name="some_data" value="value" />
+            <form action="/profile" method="GET" style="margin: 0;">
                 <button type="submit" class="back-button">Back</button>
             </form>
-        </form>
+        </div>
     </div>
 </main>
 
