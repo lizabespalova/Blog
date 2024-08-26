@@ -5,18 +5,21 @@ use controllers\auth_controllers\LoginController;
 use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
 use controllers\authorized_users_controllers\EditController;
+use controllers\authorized_users_controllers\EditProfileController;
 use controllers\authorized_users_controllers\ProfileController;
 
 require_once __DIR__ . '/../../config/config.php';
 
 function profile_route($uri, $method) {
     $dbConnection = getDbConnection();
+    error_log("URI: $uri, Method: $method");
 
     switch ($uri) {
-        case '/edit':
-            $controller = new EditController($dbConnection);
-            if ($method === 'GET') {
-                $controller->show_edit();
+        case '/update-description':
+            $controller = new EditProfileController($dbConnection);
+            if ($method === 'POST') {
+            //    echo "Hello";
+                $controller->updateProfile();
             }
             exit();  // Остановка выполнения после маршрута
 

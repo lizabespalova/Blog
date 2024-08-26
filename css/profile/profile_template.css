@@ -1,0 +1,229 @@
+
+.profile-info {
+    position: relative; /* Устанавливаем относительное позиционирование */
+    padding: 30px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.profile-info, #edit-form {
+    position: relative;
+    padding: 30px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.edit-description-button {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.edit-description-button:hover {
+    background-color: #0056b3;
+}
+
+#edit-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-form label {
+    margin-top: 10px;
+}
+
+#edit-form input, #edit-form textarea {
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#edit-form button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#edit-form button:hover {
+    background-color: #0056b3;
+}
+
+.profile-photo {
+    margin-bottom: 20px;
+}
+
+.profile-photo img {
+    width: 358px;
+    height: 358px;
+    border-radius: 15px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.profile-info h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.profile-info p {
+    margin: 15px 0;
+    color: #555;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.profile-info p strong {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.profile-info p:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.profile-container {
+    display: flex; /* Используем flexbox для управления дочерними элементами */
+    flex-direction: column; /* Если элементы располагаются вертикально */
+    width: 80%; /* Или другая фиксированная ширина */
+    margin: 0 auto; /* Центрируем контейнер, если нужно */
+}
+
+.profile-header {
+    display: flex; /* Используем flexbox для управления дочерними элементами */
+    align-items: flex-start; /* Располагаем элементы по началу контейнера по высоте */
+    padding: 20px;
+    width: 100%; /* Устанавливаем ширину в 100% от родительского контейнера */
+}
+#edit-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-form button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#edit-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#edit-form .button-group {
+    display: flex;
+    gap: 10px; /* Расстояние между кнопками */
+    margin-top: 15px;
+}
+
+#edit-form .button-group button {
+    flex: 1;
+    text-align: center;
+}
+
+#edit-form .button-group button.cancel {
+    background-color: #6c757d;
+}
+
+#edit-form .button-group button.cancel:hover {
+    background-color: #5a6268;
+}
+
+/* Основной контейнер модального окна */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000; /* Высокий z-index для отображения поверх остальных элементов */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный фон для затемнения */
+}
+
+/* Содержимое модального окна */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Центрирование по вертикали и горизонтали */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px; /* Максимальная ширина для улучшения видимости на больших экранах */
+    position: relative; /* Убедитесь, что содержимое позиционируется относительно своего контейнера */
+    border-radius: 15px; /* Закругление углов */
+}
+
+/* Кнопка закрытия модального окна */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+
+/* Адаптивные стили */
+@media (min-width: 925px) {
+    .profile-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .profile-header {
+        flex-direction: row;
+    }
+
+    .profile-photo {
+        margin-bottom: 0;
+        margin-right: 20px;
+    }
+
+    .profile-info {
+        text-align: left;
+        width: auto; /* Устанавливаем автоматическую ширину */
+        flex-grow: 1; /* Заставляем блок информации занимать доступное пространство */
+        padding: 30px; /* Дополнительные отступы */
+    }
+}

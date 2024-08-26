@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Проверка, что данные пользователя есть в сессии
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user']; // Получаем данные из сессии
+} else {
+    // Если пользователь не аутентифицирован
+    header('Location: /login');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +18,7 @@
     <title>User Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
+    <link rel="stylesheet" href="/css/profile/profile_template.css">
     <link rel="stylesheet" href="/css/profile/navigation.css">
     <link rel="stylesheet" href="/css/profile/content.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
@@ -25,15 +38,56 @@
             <?php endif; ?>
         </div>
 
-        <div class="profile-info">
-            <h1><?= htmlspecialchars($user['user_login']) ?></h1>
-            <p><strong>Specialization:</strong> <?= htmlspecialchars($user['user_specialisation']) ?></p>
-            <p><strong>Company:</strong> <?= htmlspecialchars($user['user_company']) ?></p>
-            <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
-            <p><strong>Articles:</strong> <?= htmlspecialchars($user['user_articles']) ?></p>
+        <div class="profile-container">
+            <div class="profile-info" id="profile-info">
+                <h1><?= htmlspecialchars($user['user_login']) ?></h1>
+                <p>
+                    <strong>Specialization:</strong>
+                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
+                        <?= htmlspecialchars($user['user_specialisation']) ?>
+                    </span>
+                </p>
+                <p>
+                    <strong>Company:</strong>
+                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>">
+                        <?= htmlspecialchars($user['user_company']) ?>
+                    </span>
+                </p>
+                <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
+                <p><strong>Articles:</strong> <?= htmlspecialchars($user['user_articles']) ?></p>
+                <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
+                <!-- Модальное окно для отображения полного текста -->
+                <div id="modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p id="modal-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="edit-form" style="display: none;">
+                <form id="profile-edit-form">
+                    <label for="specialisation">Specialization:</label>
+                    <input type="text" id="specialisation" name="user_specialisation" value="<?= htmlspecialchars($user['user_specialisation']) ?>" required>
+
+                    <label for="company">Company:</label>
+                    <input type="text" id="company" name="user_company" value="<?= htmlspecialchars($user['user_company']) ?>" required>
+
+                    <label for="experience">Experience:</label>
+                    <input type="number" id="experience" name="user_experience" value="<?= htmlspecialchars($user['user_experience']) ?>" required>
+
+
+
+                    <div class="button-group">
+                        <button type="button" onclick="submitEditForm()">Save Changes</button>
+                        <button type="button" onclick="toggleEditForm()" class="cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 <!-- Navigation Menu -->
 <div class="profile-navigation">
     <div class="menu-items">
@@ -43,6 +97,7 @@
     </div>
     <div class="menu-indicator"></div>
 </div>
+
 <!-- Content Section -->
 <div class="content-section">
     <div class="content-text">
@@ -52,11 +107,13 @@
         <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
     </div>
 </div>
+
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/authorized_users/profile_footer.php'; ?>
+<script src="/js/authorized_users/add_dialog_window.js"></script>
+<script src="/js/authorized_users/show_edit_form.js"></script>
+<script src="/js/authorized_users/add_avatar.js"></script>
+<script src="/js/authorized_users/menu.js"></script>
 
-
-<script src="/js/add_avatar.js"></script>
-<script src="/js/menu.js"></script>
 </body>
 </html>

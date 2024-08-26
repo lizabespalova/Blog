@@ -2,6 +2,8 @@
 
 namespace models;
 
+use Exception;
+
 class User
 {
     private $link;
@@ -34,12 +36,12 @@ class User
         return $result->fetch_assoc();
     }
 
-    public function createUser($login, $email, $password, $change_key) {
-        $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password, user_key) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $login, $email, $password, $change_key);
-        $stmt->execute();
-        $stmt->close();
-    }
+//    public function createUser($login, $email, $password, $change_key) {
+//        $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password, user_key) VALUES (?, ?, ?, ?)");
+//        $stmt->bind_param("ssss", $login, $email, $password, $change_key);
+//        $stmt->execute();
+//        $stmt->close();
+//    }
 
     public function setKey($login, $key) {
         $login = mysqli_real_escape_string($this->link, $login);
@@ -59,12 +61,12 @@ class User
         return $user_key;
     }
 
-    public function activateUser($user_id) {
-        $stmt = $this->link->prepare("UPDATE users SET is_active = 1, user_key = NULL WHERE user_id = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $stmt->close();
-    }
+//    public function activateUser($user_id) {
+//        $stmt = $this->link->prepare("UPDATE users SET is_active = 1, user_key = NULL WHERE user_id = ?");
+//        $stmt->bind_param("i", $user_id);
+//        $stmt->execute();
+//        $stmt->close();
+//    }
 
     public function updatePassword($login, $newPassword) {
         $stmt = $this->link->prepare("UPDATE users SET user_password = ? WHERE user_login = ?");
@@ -130,9 +132,41 @@ class User
         $stmt->execute();
         $stmt->close();
     }
-//    public function deleteUserById($userId) {
-//        $stmt = $this->link->prepare("DELETE FROM users WHERE user_id = ?");
-//        $stmt->bind_param("i", $userId);
-//        return $stmt->execute();
-//    }
+    //Логин должен быть уникальным
+    public function updateUserProfile($user_login, $data)
+    {
+        // Исправленный запрос без user_articles
+        $sql = "UPDATE users SET 
+                user_specialisation = ?,
+                user_company = ?,
+                user_experience = ?
+            WHERE user_login = ?";
+
+        // Подготавливаем запрос
+        $stmt = $this->link->prepare($sql);
+
+        if ($stmt === false) {
+            throw new Exception('Prepare failed: ' . $this->link->error);
+        }
+
+        // Привязываем параметры
+        // 'sss' - строки для всех параметров
+        // Если user_experience является числом, то можно использовать 'sssi'
+        $stmt->bind_param('ssis',
+            $data['user_specialisation'],
+            $data['user_company'],
+            $data['user_experience'],
+            $user_login
+        );
+
+        // Выполняем запрос
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
+
+        return $result; // Возвращает true при успешном выполнении
+    }
+
 }

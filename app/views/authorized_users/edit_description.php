@@ -6,6 +6,7 @@
     <title>Edit Description</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
+
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/edit_description.css">
 </head>
@@ -32,6 +33,6 @@
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/profile_footer.php'; ?>
-<script src="/js/menu.js"></script>
+<script src="/js/authorized_users/menu.js"></script>
 </body>
 </html>
