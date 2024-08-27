@@ -4,6 +4,7 @@ session_start();
 // Проверка, что данные пользователя есть в сессии
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user']; // Получаем данные из сессии
+//    print_r($user);
 } else {
     // Если пользователь не аутентифицирован
     header('Location: /login');
@@ -56,13 +57,6 @@ if (isset($_SESSION['user'])) {
                 <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
                 <p><strong>Articles:</strong> <?= htmlspecialchars($user['user_articles']) ?></p>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
-                <!-- Модальное окно для отображения полного текста -->
-                <div id="modal" class="modal" style="display: none;">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p id="modal-text"></p>
-                    </div>
-                </div>
             </div>
 
             <div id="edit-form" style="display: none;">
@@ -76,7 +70,13 @@ if (isset($_SESSION['user'])) {
                     <label for="experience">Experience:</label>
                     <input type="number" id="experience" name="user_experience" value="<?= htmlspecialchars($user['user_experience']) ?>" required>
 
-
+                    <!-- Модальное окно для отображения полного текста -->
+                    <div id="modal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p id="modal-text"></p>
+                        </div>
+                    </div>
 
                     <div class="button-group">
                         <button type="button" onclick="submitEditForm()">Save Changes</button>
@@ -101,12 +101,17 @@ if (isset($_SESSION['user'])) {
 <!-- Content Section -->
 <div class="content-section">
     <div class="content-text">
-        <p>For adding a description, click on the edit button above.</p>
+        <?php if (!empty($user['user_description'])): ?>
+            <p><?php echo htmlspecialchars($user['user_description']); ?></p>
+        <?php else: ?>
+            <p>For adding a description, click on the edit button above.</p>
+        <?php endif; ?>
     </div>
     <div class="content-image">
         <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
     </div>
 </div>
+
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/authorized_users/profile_footer.php'; ?>

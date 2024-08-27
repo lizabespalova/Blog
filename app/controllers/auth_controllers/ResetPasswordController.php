@@ -24,7 +24,7 @@ class ResetPasswordController {
             exit;
         }
 
-        $user = $this->userModel->getUserByKey($data['key']);
+        $user = $this->userModel->get_user_by_key($data['key']);
 
         // Проверка наличия пользователя с данным ключом
         if (!$user) {
@@ -46,10 +46,10 @@ class ResetPasswordController {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
         // Очищаем ключ для сброса пароля, чтобы он больше не использовался
-        $this->userModel->setKey($login, NULL);
+        $this->userModel->set_key($login, NULL);
 
         // Обновляем пароль в базе данных
-        $this->userModel->updatePassword($login, $hashedPassword);
+        $this->userModel->update_password($login, $hashedPassword);
 
         // Перенаправляем пользователя на страницу логина после успешного сброса пароля
         echo '<script>

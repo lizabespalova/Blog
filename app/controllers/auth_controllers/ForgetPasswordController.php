@@ -27,7 +27,7 @@ class ForgetPasswordController {
     public function handleResetRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
             $email = $_POST['email'];
-            $user = $this->userModel->getUserByEmail($email);
+            $user = $this->userModel->get_user_by_email($email);
 
             if ($user) {
                 $this->sendResetEmail($user, $email);
@@ -67,7 +67,7 @@ class ForgetPasswordController {
             $this->mailer->Body = $login . ', a request to change your password has been completed.<br><br>Follow the link to change: ' . $resetUrl . '<br><br>If it was not you, it is recommended to change the password!';
 
             // Обновление ключа в базе данных
-            $this->userModel->setKey($login, $resetKey);
+            $this->userModel->set_key($login, $resetKey);
 
             // Отправка письма
             $this->mailer->send();

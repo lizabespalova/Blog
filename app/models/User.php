@@ -12,7 +12,7 @@ class User
         $this->link = $link;
     }
 
-    public function getUserByLogin($login) {
+    public function get_user_by_login($login) {
         $stmt = $this->link->prepare("SELECT * FROM users WHERE user_login = ? LIMIT 1");
         $stmt->bind_param("s", $login);
         $stmt->execute();
@@ -20,7 +20,7 @@ class User
         return $result->fetch_assoc();
     }
 
-    public function getUserByEmail($email) {
+    public function get_user_by_email($email) {
         $stmt = $this->link->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -28,7 +28,7 @@ class User
         return $result->fetch_assoc();
     }
 
-    public function getUserByKey($key) {
+    public function get_user_by_key($key) {
         $stmt = $this->link->prepare("SELECT * FROM users WHERE user_key = ? LIMIT 1");
         $stmt->bind_param("s", $key);
         $stmt->execute();
@@ -43,14 +43,14 @@ class User
 //        $stmt->close();
 //    }
 
-    public function setKey($login, $key) {
+    public function set_key($login, $key) {
         $login = mysqli_real_escape_string($this->link, $login);
         $key = mysqli_real_escape_string($this->link, $key);
         $createdAt = date('Y-m-d H:i:s'); // Текущее время
         mysqli_query($this->link, "UPDATE users SET user_key='$key', key_created_at='$createdAt' WHERE user_login='$login'");
     }
 
-    public function getKey($email) {
+    public function get_key($email) {
         $stmt = $this->link->prepare("SELECT user_key FROM users WHERE user_email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -68,20 +68,41 @@ class User
 //        $stmt->close();
 //    }
 
-    public function updatePassword($login, $newPassword) {
+    public function update_password($login, $newPassword) {
         $stmt = $this->link->prepare("UPDATE users SET user_password = ? WHERE user_login = ?");
         $stmt->bind_param('ss', $newPassword, $login);
         return $stmt->execute();
     }
 
-    public function updateUserAvatar($userId, $avatarPath) {
+    public function update_user_avatar($userId, $avatarPath) {
         $stmt = $this->link->prepare("UPDATE users SET user_avatar = ? WHERE user_id = ?");
         $stmt->bind_param("si", $avatarPath, $userId);
         $stmt->execute();
         $stmt->close();
     }
+    public function update_user_description($userId, $description): bool
+    {
+        // Подготовка SQL-запроса
+        $stmt = $this->link->prepare("UPDATE users SET user_description = ? WHERE user_id = ?");
+        if ($stmt === false) {
+            error_log("Error preparing statement: " . $this->link->error);
+            return false;
+        }
 
-    public function getUserById($userId) {
+        // Связывание параметров
+        $stmt->bind_param('si', $description, $userId);
+
+        // Выполнение запроса
+        if (!$stmt->execute()) {
+            error_log("Error executing statement: " . $stmt->error);
+            return false;
+        }
+
+        // В данном случае нам не нужно проверять количество затронутых строк
+        // Мы считаем, что успешное выполнение запроса всегда возвращает true
+        return true;
+    }
+    public function get_user_by_id($userId) {
         $stmt = $this->link->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
@@ -89,7 +110,7 @@ class User
         return $result->fetch_assoc();
     }
 
-    public function updateUserHash($user_id, $hash, $attach_ip = false) {
+    public function update_user_hash($user_id, $hash, $attach_ip = false) {
         $stmt = $this->link->prepare("UPDATE users SET user_hash = ?" . ($attach_ip ? ", user_ip = INET_ATON(?)" : "") . " WHERE user_id = ?");
         if ($attach_ip) {
             $stmt->bind_param("ssi", $hash, $_SERVER['REMOTE_ADDR'], $user_id);
@@ -99,7 +120,7 @@ class User
         return $stmt->execute();
     }
     // Создание временного пользователя
-    public function createTemporaryUser($login, $email, $password, $token) {
+    public function create_temporary_user($login, $email, $password, $token) {
         $stmt = $this->link->prepare("INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $login, $email, $password, $token);
         $stmt->execute();
@@ -107,7 +128,7 @@ class User
     }
 
     // Получение временного пользователя по токену
-    public function getTemporaryUserByToken($token) {
+    public function get_temporary_user_by_token($token) {
         $stmt = $this->link->prepare("SELECT * FROM temporary_users WHERE confirmation_token = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
@@ -118,7 +139,7 @@ class User
     }
 
     // Перемещение временного пользователя в основную таблицу
-    public function moveToMainTable($login, $email, $password) {
+    public function move_to_main_table($login, $email, $password) {
         $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $login, $email, $password);
         $stmt->execute();
@@ -126,14 +147,14 @@ class User
     }
 
     // Удаление временного пользователя
-    public function deleteTemporaryUser($token) {
+    public function delete_temporary_user($token) {
         $stmt = $this->link->prepare("DELETE FROM temporary_users WHERE confirmation_token = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
         $stmt->close();
     }
     //Логин должен быть уникальным
-    public function updateUserProfile($user_login, $data)
+    public function update_user_profile($user_login, $data)
     {
         // Исправленный запрос без user_articles
         $sql = "UPDATE users SET 

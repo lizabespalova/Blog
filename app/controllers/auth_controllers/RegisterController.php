@@ -17,7 +17,7 @@ class RegisterController {
     public function __construct($dbConnection) {
         $this->userModel = new \models\User($dbConnection);
         $this->mailer = new PHPMailer(true);
-        $this->configureMailer();
+        $this->configure_mailer();
     }
 
     public function show_register_form() {
@@ -30,30 +30,30 @@ class RegisterController {
             $password = $_POST['password'];
             $email = $_POST['email'];
 
-            $errors = $this->validateRegistration($login, $password, $email);
+            $errors = $this->validate_registration($login, $password, $email);
 
             if (empty($errors)) {
                 // Генерируем токен для подтверждения
                 $token = md5($login . mt_rand(1000, 9999));
 
                 // Создаем временного пользователя
-                $this->userModel->createTemporaryUser($login, $email, password_hash($password, PASSWORD_DEFAULT), $token);
+                $this->userModel->create_temporary_user($login, $email, password_hash($password, PASSWORD_DEFAULT), $token);
 
                 // Отправляем письмо с подтверждением
-                $this->sendConfirmationEmail($email, $token);
+                $this->send_confirmation_email($email, $token);
 
                 // Перенаправляем на страницу ожидания подтверждения
                 header('Location: /confirmation_pending');
                 exit();
             } else {
-                $this->showErrors($errors);
+                $this->show_errors($errors);
             }
         }
     }
     public function registration_pending(){
         include __DIR__ . '/../../views/auth/confirmation_pending.php';
     }
-    private function validateRegistration($login, $password, $email): array {
+    private function validate_registration($login, $password, $email): array {
         $errors = [];
 
         // Проверяем логин
@@ -66,7 +66,7 @@ class RegisterController {
         }
 
         // Проверяем, существует ли пользователь с таким логином
-        if ($this->userModel->getUserByLogin($login)) {
+        if ($this->userModel->get_user_by_login($login)) {
             $errors[] = "A user with this login already exists in the database.";
         }
 
@@ -76,7 +76,7 @@ class RegisterController {
         }
 
         // Проверяем, существует ли пользователь с таким email
-        if ($this->userModel->getUserByEmail($email)) {
+        if ($this->userModel->get_user_by_email($email)) {
             $errors[] = "A user with this email already exists in the database.";
         }
 
@@ -88,7 +88,7 @@ class RegisterController {
         return $errors;
     }
 
-    private function configureMailer() {
+    private function configure_mailer() {
         $this->mailer->isSMTP();
         $this->mailer->Host = getHost();
         $this->mailer->Port = getPort();
@@ -98,7 +98,7 @@ class RegisterController {
         $this->mailer->Password = getEmailPassword();
     }
 
-    private function sendConfirmationEmail($email, $token) {
+    private function send_confirmation_email($email, $token) {
         $confirmationUrl = 'http://localhost:8000/confirm?user_key=' . $token;
 
         $this->mailer->setFrom(getEmail());
@@ -123,14 +123,14 @@ class RegisterController {
         $token = $_GET['user_key'] ?? '';
 
         if ($token) {
-            $user = $this->userModel->getTemporaryUserByToken($token);
+            $user = $this->userModel->get_temporary_user_by_token($token);
 
             if ($user) {
                 // Перемещаем пользователя из временной таблицы в основную таблицу
-                $this->userModel->moveToMainTable($user['user_login'], $user['user_email'], $user['user_password']);
+                $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password']);
 
                 // Удаляем временного пользователя
-                $this->userModel->deleteTemporaryUser($token);
+                $this->userModel->delete_temporary_user($token);
 
                 header('Location: /app/views/authorized_users/thank_to_authorized_user.php');
                 exit();
@@ -150,7 +150,7 @@ class RegisterController {
     }
 
 
-    private function showErrors($errors) {
+    private function show_errors($errors) {
         $errorMessages = implode("\\n", $errors);
         echo "<script>
             alert('The following errors occurred during registration:\\n{$errorMessages}');

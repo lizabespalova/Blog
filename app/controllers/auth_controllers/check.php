@@ -18,10 +18,12 @@ $customerModel = new User($conn);
 // Проверяем наличие куки
 if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
     $user_id = intval($_COOKIE['id']);
-    $userdata = $customerModel->getUserById($user_id);
+    $userdata = $customerModel->get_user_by_id($user_id);
     if ($userdata && md5($userdata['user_hash']) === $_COOKIE['hash']) {
         // Хеш совпадает
         $_SESSION['user'] = [
+            'user_id' => $userdata['user_id'],
+            'user_description' => $userdata['user_description'],
             'user_avatar' => $userdata['user_avatar'],
             'user_login' => $userdata['user_login'],
             'user_specialisation' => $userdata['user_specialisation'],

@@ -16,7 +16,7 @@ if (empty($data['key'])) {
 }
 
 $customerModel = new \models\User($conn);
-$user = $customerModel->getUserByKey($data['key']);
+$user = $customerModel->get_user_by_key($data['key']);
 
 if (!$user) {
     header('Location: /');
@@ -33,8 +33,8 @@ if (isset($_POST['set_new_password'])) {
     $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     // Обновляем данные пользователя в базе данных
-    $customerModel->updatePassword($login, $hashedPassword); // Обновляем пароль в базе данных
-    $customerModel->setKey($login, NULL);  // Очищаем ключ в базе данных
+    $customerModel->update_password($login, $hashedPassword); // Обновляем пароль в базе данных
+    $customerModel->set_key($login, NULL);  // Очищаем ключ в базе данных
 
     // Перенаправляем пользователя на страницу логина после успешного сброса пароля
     header('Location: /app/views/auth/form_login.php');

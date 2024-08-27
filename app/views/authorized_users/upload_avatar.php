@@ -33,7 +33,7 @@ if (isset($_COOKIE['id'])) {
 
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
                 $avatarPath = '/app/views/authorized_users/uploads/user_' . $user_id . '.' . $fileExtension;
-                $customerModel->updateUserAvatar($user_id, $avatarPath);
+                $customerModel->update_user_avatar($user_id, $avatarPath);
 
                 $response['success'] = true;
              //   $response['message'] = "Avatar uploaded successfully!";

@@ -15,7 +15,7 @@ class LoginController {
     public function login() {
         if (isset($_POST['submit'])) {
             // Получаем данные пользователя из БД по логину
-            $data = $this->userModel->getUserByLogin($_POST['login']);
+            $data = $this->userModel->get_user_by_login($_POST['login']);
 
             // Если пользователь существует
             if ($data) {
@@ -28,7 +28,7 @@ class LoginController {
                     $attach_ip = !empty($_POST['not_attach_ip']);
 
                     // Обновляем хеш авторизации и IP в базе данных
-                    $this->userModel->updateUserHash($data['user_id'], $hash, $attach_ip);
+                    $this->userModel->update_user_hash($data['user_id'], $hash, $attach_ip);
 
                     // Устанавливаем куки
                     setcookie("id", $data['user_id'], time() + 60 * 60 * 24 * 30, "/");

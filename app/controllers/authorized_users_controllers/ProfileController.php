@@ -24,7 +24,7 @@ class ProfileController
             $user_id = intval($_COOKIE['id']);
 
             // Получение данных пользователя из базы данных
-            $user = $this->userModel->getUserById($user_id);
+            $user = $this->userModel->get_user_by_id($user_id);
 
             if (!$user) {
                 throw new Exception("User not found.");

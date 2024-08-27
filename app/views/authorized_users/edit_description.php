@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,22 +18,25 @@
 <main>
     <div class="edit-container">
         <h1>Edit Description</h1>
-        <form action="" method="POST">
+        <form action="/update-main-description" method="POST">
             <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="10" cols="50" placeholder="Enter your description here..."></textarea>
+            <textarea id="description" name="description" rows="10" cols="50" maxlength="500" placeholder="Enter your description here..."></textarea>
             <br>
+            <span id="char-count">0/500</span> <!-- Отображение количества введённых символов -->
+            <br>
+
+            <!-- Кнопки внутри формы -->
+            <div class="form-actions">
+                <button type="submit" class="save-button">Save</button>
+                <button type="button" class="back-button" onclick="window.location.href='/profile';">Back</button>
+            </div>
         </form>
-        <div class="form-actions">
-            <button type="submit" class="save-button">Save</button>
-            <form action="/profile" method="GET" style="margin: 0;">
-                <button type="submit" class="back-button">Back</button>
-            </form>
-        </div>
     </div>
 </main>
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/profile_footer.php'; ?>
 <script src="/js/authorized_users/menu.js"></script>
+<script src="/js/authorized_users/count_symbols_in_description.js"></script>
 </body>
 </html>

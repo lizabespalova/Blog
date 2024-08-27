@@ -7,16 +7,14 @@ session_start();
 
 class EditProfileController
 {
-    private $conn;
     private $userModel;
 
     public function __construct($conn)
     {
-        $this->conn = $conn;
         $this->userModel = new User($conn);
     }
 
-    public function updateProfile()
+    public function update_profile()
     {
         // Проверяем авторизацию пользователя
         if (!isset($_SESSION['user']) || !isset($_SESSION['user']['user_login'])) {
@@ -38,7 +36,7 @@ class EditProfileController
         }
 
         // Обновляем данные пользователя в базе данных
-        $updateSuccess = $this->userModel->updateUserProfile($user_login, [
+        $updateSuccess = $this->userModel->update_user_profile($user_login, [
             'user_specialisation' => $user_specialisation,
             'user_company' => $user_company,
             'user_experience' => $user_experience,
@@ -54,4 +52,39 @@ class EditProfileController
             http_response_code(500); // Внутренняя ошибка сервера
         }
     }
+    public function update_main_description()
+    {
+        // Проверка наличия description в POST запросе
+        if (!isset($_POST['description'])) {
+            error_log("No description provided.");
+            echo "No description provided.";
+            exit();
+        }
+
+        $description = trim($_POST['description']);
+        $description = substr($description, 0, 500); // Ограничение длины
+
+        // Сохранение в сессию
+        $_SESSION['user']['user_description'] = $description;
+        $userId = $_SESSION['user']['user_id'];
+
+        // Обновление в базе данных через модель
+        if (!$userId) {
+            error_log("User ID not found in session.");
+            echo "User ID not found in session.";
+            exit();
+        }
+
+
+        if ($this->userModel->update_user_description($userId, $description)) {
+            // Успешное обновление
+            header('Location: /profile');
+            exit();
+        } else {
+            // Логирование ошибки
+            error_log("Error updating description.");
+            echo "Error updating description.";
+        }
+    }
+
 }
