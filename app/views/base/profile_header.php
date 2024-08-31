@@ -21,13 +21,15 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
             </div>
         </div>
         <div class="header-right">
-            <div class="search-container">
-                <a href="#" class="search-button">
-                    <i class="fas fa-search"></i>
-                </a>
-            </div>
-
-            <button class="edit-button" onclick="window.location.href='/app/views/authorized_users/edit_description.php'">✎</button>
+            <form action="/search" method="GET" class="d-inline">
+                <div class="search-container">
+                    <!-- Кнопка отправки формы -->
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            <button class="edit-button" onclick="window.location.href='/edit'">✎</button>
             <div class="menu">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <div class="menu-content">
@@ -36,7 +38,7 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
                     <a href="#new_article"> Write an article <i class="fas fa-pen"></i></a>
                     <a href="#favourites"> Favourites <i class="fas fa-heart"></i></a>
                     <a href="#settings"> Settings <i class="fas fa-cog"></i></a>
-                    <a href="/app/controllers/authorized_users_controllers/logout.php"> Logout <i class="fas fa-sign-out-alt"></i></a>
+                    <a href="/logout"> Logout <i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>
         </div>

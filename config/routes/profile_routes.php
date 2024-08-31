@@ -4,9 +4,9 @@ use controllers\auth_controllers\ForgetPasswordController;
 use controllers\auth_controllers\LoginController;
 use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
-use controllers\authorized_users_controllers\EditController;
 use controllers\authorized_users_controllers\EditProfileController;
 use controllers\authorized_users_controllers\ProfileController;
+use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
 
@@ -23,13 +23,24 @@ function profile_route($uri, $method) {
             }
             exit();  // Остановка выполнения после маршрута
 
+        case '/edit':
+            $controller = new EditProfileController($dbConnection);
+            if ($method === 'GET') {
+                $controller->show_edit_form();
+            }
+            exit();  // Остановка выполнения после маршрута
         case '/update-main-description':
             $controller = new EditProfileController($dbConnection);
             if ($method === 'POST') {
                 $controller->update_main_description();
             }
             exit();  // Остановка выполнения после маршрута
-
+        case '/search':
+            $controller = new SearchController($dbConnection);
+            if ($method === 'GET') {
+                $controller->show_search_form();
+            }
+            exit();  // Остановка выполнения после маршрута
 
         default:
             return false;

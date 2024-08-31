@@ -26,7 +26,7 @@ if (isset($_SESSION['user'])) {
 </head>
 <body>
 <!-- Header Section -->
-<?php include __DIR__ . '/../../views/authorized_users/profile_header.php'; ?>
+<?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <!-- Profile Section -->
 <div class="profile-container">
@@ -114,7 +114,7 @@ if (isset($_SESSION['user'])) {
 
 
 <!-- Footer Section -->
-<?php include __DIR__ . '/../../views/authorized_users/profile_footer.php'; ?>
+<?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 <script src="/js/authorized_users/add_dialog_window.js"></script>
 <script src="/js/authorized_users/show_edit_form.js"></script>
 <script src="/js/authorized_users/add_avatar.js"></script>

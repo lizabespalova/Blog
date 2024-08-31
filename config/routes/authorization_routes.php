@@ -4,6 +4,7 @@ use controllers\auth_controllers\ForgetPasswordController;
 use controllers\auth_controllers\LoginController;
 use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
+use controllers\authorized_users_controllers\LogoutController;
 use controllers\authorized_users_controllers\ProfileController;
 
 require_once __DIR__ . '/../../config/config.php';
@@ -64,6 +65,11 @@ function authorization_route($uri, $method) {
         case '/confirmation_pending':
             $controller = new RegisterController(getDbConnection());
             $controller->registration_pending();
+            exit();
+
+        case '/logout':
+            $controller = new LogoutController(getDbConnection());
+            $controller->logout();
             exit();
         default:
             return false;

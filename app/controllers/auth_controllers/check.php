@@ -30,15 +30,14 @@ if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
             'user_company' => $userdata['user_company'],
             'user_experience' => $userdata['user_experience'],
             'user_articles' => $userdata['user_articles'],
+            'login_error_message'=> $userdata['login_error_message']
         ];
         header('Location: /profile'); // Путь к странице профиля
         exit();
-
-        exit();
     } else {
-        echo "Authorization error";
-        echo "Stored hash: " . md5($userdata['user_hash']) . "<br>"; // Используйте md5 для отладки
-        echo "Cookie hash: " . $_COOKIE['hash'] . "<br>";
+//        echo "Authorization error";
+//        echo "Stored hash: " . md5($userdata['user_hash']) . "<br>"; // Используйте md5 для отладки
+//        echo "Cookie hash: " . $_COOKIE['hash'] . "<br>";
     }
 } else {
     echo "Enable cookies";

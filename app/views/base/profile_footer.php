@@ -15,6 +15,6 @@
     <div class="footer-column">
         <h3>Cooperation</h3>
         <p>If you are interested in working with us, please contact us at:</p>
-        <p><a href="mailto:cooperation@example.com">cooperation@example.com</a></p>
+        <p><a href="../../../index.php">cooperation@example.com</a></p>
     </div>
 </footer>

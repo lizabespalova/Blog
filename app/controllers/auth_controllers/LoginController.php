@@ -22,7 +22,7 @@ class LoginController {
                 // Проверяем введенный пароль
                 if (password_verify($_POST['password'], $data['user_password'])) {
                     // Генерируем случайный код для хеша авторизации
-                    $hash = $this->generateCode(10);
+                    $hash = $this->generate_code(10);
 
                     // Если пользователь выбрал привязку к IP
                     $attach_ip = !empty($_POST['not_attach_ip']);
@@ -39,11 +39,12 @@ class LoginController {
                     exit();
                 } else {
                     // Если пароль неверный
-                    $this->showError("You entered the wrong login or password.");
+                    $this->show_error("You entered the wrong password.");
+
                 }
             } else {
                 // Если пользователь не найден
-                $this->showError("The user with this login was not found.");
+                $this->show_error("The user with this login was not found.");
             }
         }
     }
@@ -51,7 +52,7 @@ class LoginController {
         include __DIR__ . '/../../views/auth/form_login.php';
     }
 
-    private function generateCode($length = 6) {
+    private function generate_code($length = 6) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
         $code = "";
         $clen = strlen($chars) - 1;
@@ -61,13 +62,12 @@ class LoginController {
         return $code;
     }
 
-    private function showError($message) {
-        echo "<script>
-        alert('$message');
-        window.location.href = '/app/views/auth/form_login.php'; // Путь к форме логина
-    </script>";
+    private function show_error($message)
+    {
+        $encodedMessage = urlencode($message); // Кодируем сообщение для URL
+        header("Location: /app/controllers/auth_controllers/error_message.php?message=$encodedMessage");
+        exit(); // Завершаем выполнение текущего скрипта
     }
-
 }
 
 //// Соединение с БД

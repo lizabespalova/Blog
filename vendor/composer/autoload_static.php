@@ -19,6 +19,7 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
         ),
         'c' => 
         array (
+            'controllers\\search_controllers\\' => 31,
             'controllers\\authorized_users_controllers\\' => 41,
             'controllers\\auth_controllers\\' => 29,
         ),
@@ -46,6 +47,10 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
         'models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/models',
+        ),
+        'controllers\\search_controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/controllers/search_controllers',
         ),
         'controllers\\authorized_users_controllers\\' => 
         array (

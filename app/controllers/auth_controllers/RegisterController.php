@@ -152,10 +152,13 @@ class RegisterController {
 
     private function show_errors($errors) {
         $errorMessages = implode("\\n", $errors);
-        echo "<script>
-            alert('The following errors occurred during registration:\\n{$errorMessages}');
-            window.location.href = '/register'; 
-          </script>";
+//        echo "<script>
+//            alert('The following errors occurred during registration:\\n{$errorMessages}');
+//            window.location.href = '/register';
+//          </script>";
+        $encodedMessage = urlencode($errorMessages); // Кодируем сообщение для URL
+        header("Location: /app/controllers/auth_controllers/error_message.php?message=$encodedMessage");
+        exit(); // Завершаем выполнение текущего скрипта
     }
 }
 ?>

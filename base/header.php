@@ -1,4 +1,24 @@
-    <!-- Задний фон с изображением -->
+<?php
+session_start(); // Запуск сессии
+
+// Проверяем, авторизован ли пользователь
+$isAuthorized = isset($_SESSION['user']['user_id']);
+//var_dump($isAuthorized); // Для отладки
+
+// Устанавливаем путь к изображению профиля и ссылку
+if ($isAuthorized) {
+    $profileImage = $_SESSION['user']['user_avatar'] ?? '/templates/images/login.png'; // Если у пользователя нет изображения, используется изображение по умолчанию
+    $profileLink = '/profile'; // Ссылка на страницу профиля
+} else {
+    $profileImage = '/templates/images/login.png'; // Изображение по умолчанию
+    $profileLink = '/login'; // Ссылка на страницу логина
+}
+
+//var_dump($profileImage, $profileLink); // Для отладки
+?>
+
+
+<!-- Задний фон с изображением -->
     <div class="header-background" style="background-image: url('/templates/images/league_of_code.png');">
         <div class="container">
             <!-- Тут можно добавить контент над фоном, если нужно -->
@@ -32,8 +52,8 @@
                         <a class="nav-link" href="#">IT news</a>
                     </li>
                         <li class="nav-item profile-item">
-                            <a class="nav-link profile" href="/login">
-                                <img src="/templates/images/login.png" alt="Profile Picture">
+                            <a class="nav-link profile" href="<?php echo $profileLink; ?>">
+                                <img src="<?php echo $profileImage; ?>" alt="Profile Picture">
                             </a>
                         </li>
                     </ul>

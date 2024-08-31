@@ -52,6 +52,10 @@ class EditProfileController
             http_response_code(500); // Внутренняя ошибка сервера
         }
     }
+    public function show_edit_form(){
+        include __DIR__ . '/../../views/authorized_users/edit_description.php';
+    }
+
     public function update_main_description()
     {
         // Проверка наличия description в POST запросе
