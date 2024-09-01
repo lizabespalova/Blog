@@ -4,6 +4,7 @@ use controllers\auth_controllers\ForgetPasswordController;
 use controllers\auth_controllers\LoginController;
 use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
+use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\EditProfileController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\search_controllers\SearchController;
@@ -39,6 +40,12 @@ function profile_route($uri, $method) {
             $controller = new SearchController($dbConnection);
             if ($method === 'GET') {
                 $controller->show_search_form();
+            }
+            exit();  // Остановка выполнения после маршрута
+        case '/create-article':
+            $controller = new ArticleController($dbConnection);
+            if ($method === 'GET') {
+                $controller->show_article_form();
             }
             exit();  // Остановка выполнения после маршрута
 

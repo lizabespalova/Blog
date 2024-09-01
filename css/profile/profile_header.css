@@ -3,6 +3,7 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
 
@@ -35,12 +36,12 @@ body {
 
 
 /*Часть с меню*/
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #f4f4f4;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
 
 .header {
     background-color: #333; /* Серый фон для хедера */
@@ -58,6 +59,7 @@ body {
 
 .header-left h1 {
     margin: 0;
+    font-size: 24px; /* Размер текста */
 }
 
 .header-right {

@@ -33,9 +33,10 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
             <div class="menu">
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <div class="menu-content">
+                    <a href="/profile"> My profile <i class="fas fa-user"></i></a>
                     <a href="#my_article"> My articles <i class="fas fa-newspaper"></i></a>
                     <a href="#subscription">My subscriptions <i class="fas fa-bell"></i></a>
-                    <a href="#new_article"> Write an article <i class="fas fa-pen"></i></a>
+                    <a href="/create-article"> Write an article <i class="fas fa-pen"></i></a>
                     <a href="#favourites"> Favourites <i class="fas fa-heart"></i></a>
                     <a href="#settings"> Settings <i class="fas fa-cog"></i></a>
                     <a href="/logout"> Logout <i class="fas fa-sign-out-alt"></i></a>
