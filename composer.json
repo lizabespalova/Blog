@@ -1,7 +1,8 @@
 {
   "require": {
     "vlucas/phpdotenv": "^5.4",
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "erusev/parsedown": "^1.7"
   },
   "autoload": {
     "psr-4": {

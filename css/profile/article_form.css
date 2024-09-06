@@ -1,127 +1,75 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    /*align-items: center; !* Центрирует контент по горизонтали *!*/
-    min-height: 100vh;
-}
-
-.form-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-    margin: 20px auto; /* Центрирование формы */
-}
-/*Для фото*/
-.image-preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-.image-preview {
-    position: relative;
-    width: 100px;
-    height: 100px;
-}
-.image-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-}
-.form-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+/* Контейнер формы */
+form {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
     width: 100%;
     box-sizing: border-box;
-    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    margin: 60px auto;
+    font-family: 'Arial', sans-serif;
+    z-index: 1;
 }
 
-h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 24px;
-    text-align: center;
-    color: #333;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
-}
-
-input[type="text"],
-input[type="file"],
-textarea {
-    width: 100%;
+form input[type="text"],
+form textarea {
+    width: calc(100% - 20px);
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
-    color: #333;
+    box-sizing: border-box;
 }
 
-input[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
+form textarea {
+    height: 200px;
+}
+
+/* Стили для input file и последнего input[type=text] */
+form input[type="file"],
+form input[type="text"]:last-of-type {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* Кнопка отправки */
+form button[type="submit"] {
+    width: 100%;
     padding: 12px;
-    font-size: 16px;
+    background-color: #007bff;
+    border: none;
     border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
 }
 
-input[type="submit"]:hover {
+form button[type="submit"]:hover {
     background-color: #0056b3;
 }
-.form-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 700px; /* Увеличен максимальный размер контейнера формы */
-    width: 100%;
-    box-sizing: border-box;
-    margin: 20px auto;
-}
 
+/* Контейнер для изображения */
 .image-preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    position: relative;
+    display: inline-block;
     margin-bottom: 15px;
 }
 
-.image-preview {
-    position: relative;
-    width: calc(33.333% - 10px); /* Ширина для трёх изображений в ряд с учётом отступов */
-    height: 100px; /* Высота изображения */
-    box-sizing: border-box;
-}
-
-.image-preview img {
-    width: 100%;
-    height: 100%;
+/* Предварительный просмотр изображения */
+.cover-image-preview {
+    width: 150px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
-.image-preview .remove {
+/* Кнопка удаления */
+.remove-button {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -130,10 +78,16 @@ input[type="submit"]:hover {
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 24px;
+    z-index: 10;
+}
+
+.remove-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
 }

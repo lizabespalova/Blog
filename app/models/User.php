@@ -6,14 +6,14 @@ use Exception;
 
 class User
 {
-    private $link;
+    private $conn;
 
     public function __construct($link) {
-        $this->link = $link;
+        $this->conn = $link;
     }
 
     public function get_user_by_login($login) {
-        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_login = ? LIMIT 1");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_login = ? LIMIT 1");
         $stmt->bind_param("s", $login);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -21,7 +21,7 @@ class User
     }
 
     public function get_user_by_email($email) {
-        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -29,7 +29,7 @@ class User
     }
 
     public function get_user_by_key($key) {
-        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_key = ? LIMIT 1");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_key = ? LIMIT 1");
         $stmt->bind_param("s", $key);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -44,14 +44,14 @@ class User
 //    }
 
     public function set_key($login, $key) {
-        $login = mysqli_real_escape_string($this->link, $login);
-        $key = mysqli_real_escape_string($this->link, $key);
+        $login = mysqli_real_escape_string($this->conn, $login);
+        $key = mysqli_real_escape_string($this->conn, $key);
         $createdAt = date('Y-m-d H:i:s'); // Текущее время
-        mysqli_query($this->link, "UPDATE users SET user_key='$key', key_created_at='$createdAt' WHERE user_login='$login'");
+        mysqli_query($this->conn, "UPDATE users SET user_key='$key', key_created_at='$createdAt' WHERE user_login='$login'");
     }
 
     public function get_key($email) {
-        $stmt = $this->link->prepare("SELECT user_key FROM users WHERE user_email = ?");
+        $stmt = $this->conn->prepare("SELECT user_key FROM users WHERE user_email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $user_key = null;
@@ -69,13 +69,13 @@ class User
 //    }
 
     public function update_password($login, $newPassword) {
-        $stmt = $this->link->prepare("UPDATE users SET user_password = ? WHERE user_login = ?");
+        $stmt = $this->conn->prepare("UPDATE users SET user_password = ? WHERE user_login = ?");
         $stmt->bind_param('ss', $newPassword, $login);
         return $stmt->execute();
     }
 
     public function update_user_avatar($userId, $avatarPath) {
-        $stmt = $this->link->prepare("UPDATE users SET user_avatar = ? WHERE user_id = ?");
+        $stmt = $this->conn->prepare("UPDATE users SET user_avatar = ? WHERE user_id = ?");
         $stmt->bind_param("si", $avatarPath, $userId);
         $stmt->execute();
         $stmt->close();
@@ -83,9 +83,9 @@ class User
     public function update_user_description($userId, $description): bool
     {
         // Подготовка SQL-запроса
-        $stmt = $this->link->prepare("UPDATE users SET user_description = ? WHERE user_id = ?");
+        $stmt = $this->conn->prepare("UPDATE users SET user_description = ? WHERE user_id = ?");
         if ($stmt === false) {
-            error_log("Error preparing statement: " . $this->link->error);
+            error_log("Error preparing statement: " . $this->conn->error);
             return false;
         }
 
@@ -103,7 +103,7 @@ class User
         return true;
     }
     public function get_user_by_id($userId) {
-        $stmt = $this->link->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -111,7 +111,7 @@ class User
     }
 
     public function update_user_hash($user_id, $hash, $attach_ip = false) {
-        $stmt = $this->link->prepare("UPDATE users SET user_hash = ?" . ($attach_ip ? ", user_ip = INET_ATON(?)" : "") . " WHERE user_id = ?");
+        $stmt = $this->conn->prepare("UPDATE users SET user_hash = ?" . ($attach_ip ? ", user_ip = INET_ATON(?)" : "") . " WHERE user_id = ?");
         if ($attach_ip) {
             $stmt->bind_param("ssi", $hash, $_SERVER['REMOTE_ADDR'], $user_id);
         } else {
@@ -121,7 +121,7 @@ class User
     }
     // Создание временного пользователя
     public function create_temporary_user($login, $email, $password, $token) {
-        $stmt = $this->link->prepare("INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token) VALUES (?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $login, $email, $password, $token);
         $stmt->execute();
         $stmt->close();
@@ -129,7 +129,7 @@ class User
 
     // Получение временного пользователя по токену
     public function get_temporary_user_by_token($token) {
-        $stmt = $this->link->prepare("SELECT * FROM temporary_users WHERE confirmation_token = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM temporary_users WHERE confirmation_token = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -140,7 +140,7 @@ class User
 
     // Перемещение временного пользователя в основную таблицу
     public function move_to_main_table($login, $email, $password) {
-        $stmt = $this->link->prepare("INSERT INTO users (user_login, user_email, user_password) VALUES (?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO users (user_login, user_email, user_password) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $login, $email, $password);
         $stmt->execute();
         $stmt->close();
@@ -148,7 +148,7 @@ class User
 
     // Удаление временного пользователя
     public function delete_temporary_user($token) {
-        $stmt = $this->link->prepare("DELETE FROM temporary_users WHERE confirmation_token = ?");
+        $stmt = $this->conn->prepare("DELETE FROM temporary_users WHERE confirmation_token = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
         $stmt->close();
@@ -164,10 +164,10 @@ class User
             WHERE user_login = ?";
 
         // Подготавливаем запрос
-        $stmt = $this->link->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
 
         if ($stmt === false) {
-            throw new Exception('Prepare failed: ' . $this->link->error);
+            throw new Exception('Prepare failed: ' . $this->conn->error);
         }
 
         // Привязываем параметры
@@ -188,6 +188,29 @@ class User
         }
 
         return $result; // Возвращает true при успешном выполнении
+    }
+    public function set_articles($userId) {
+        // Подготовка запроса для увеличения значения столбца user_articles
+        $query = "UPDATE users SET user_amount_of_articles = user_amount_of_articles + 1 WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+
+        if ($stmt === false) {
+            throw new Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $userId);
+
+        // Выполнение запроса
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
+
+        // Закрытие соединения
+        $stmt->close();
+
+        return $result;
     }
 
 }

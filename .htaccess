@@ -1,4 +1,8 @@
 RewriteEngine On
+
+# Если файл или директория существует, не применять правила
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+
+# Общее правило перенаправления всех запросов на index.php
 RewriteRule ^(.*)$ /index.php [QSA,L]

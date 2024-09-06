@@ -47,8 +47,21 @@ function profile_route($uri, $method) {
             if ($method === 'GET') {
                 $controller->show_article_form();
             }
+            else if ($method === 'POST') {
+            $controller->create_article();
+            }
             exit();  // Остановка выполнения после маршрута
-
+        case '/articles':
+            if (isset($_GET['id'])) {
+                $article_id = $_GET['id'];
+                if ($article_id) {
+                    $controller = new ArticleController($dbConnection);
+                    $controller->show_article($article_id);
+                } else {
+                    echo "Article ID is missing.";
+                }
+                exit();
+            }
         default:
             return false;
     }

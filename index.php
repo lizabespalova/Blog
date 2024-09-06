@@ -2,13 +2,40 @@
 require_once __DIR__ . '/config/routes/authorization_routes.php';
 require_once __DIR__ . '/config/routes/profile_routes.php';
 
+// Подключение к базе данных
+$dbConnection = getDbConnection();
+
 // Получаем URI и метод запроса
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Обработка запроса по id
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']); // Преобразуем id в целое число
+
+    // Подготовка и выполнение запроса
+    $query = "SELECT * FROM articles WHERE id = ?";
+    $stmt = $dbConnection->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $article = $result->fetch_assoc();
+        require_once __DIR__ . '/app/views/authorized_users/article_template.php';
+
+        exit();
+    } else {
+        echo "Article not found.";
+        exit();
+    }
+}
+
 // Запускаем маршрутизатор
 authorization_route($uri, $method);
 profile_route($uri, $method);
+
+// Рендерим основную страницу
 ?>
 <!DOCTYPE html>
 <html lang="en">

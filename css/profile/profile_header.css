@@ -9,11 +9,13 @@ body {
 
 
 .container {
+    flex: 1;
     width: 80%;
     margin: 0 auto;
     background-color: rgba(0, 6, 10, 0.35);
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .avatar-container {

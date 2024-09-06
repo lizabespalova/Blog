@@ -28,12 +28,15 @@ if (isset($_COOKIE['id'])) {
         } elseif (!in_array($fileExtension, $allowedExts)) {
             $response['message'] = "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.";
         } else {
-            $uploadFileDir = __DIR__ . '/uploads/';
+            $uploadFileDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $user_id . '/avatar/';
             $dest_path = $uploadFileDir . 'user_' . $user_id . '.' . $fileExtension;
+            if (!file_exists($uploadFileDir)) {
+                mkdir($uploadFileDir, 0777, true); // Создаём директорию, если она не существует
+            }
 
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                $avatarPath = '/app/views/authorized_users/uploads/user_' . $user_id . '.' . $fileExtension;
-                $customerModel->update_user_avatar($user_id, $avatarPath);
+//                $avatarPath = '/app/views/authorized_users/uploads/user_' . $user_id . '.' . $fileExtension;
+                $customerModel->update_user_avatar($user_id, /*$avatarPath*/ $dest_path);
 
                 $response['success'] = true;
              //   $response['message'] = "Avatar uploaded successfully!";
