@@ -117,7 +117,9 @@ if (isset($_SESSION['user'])) {
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 <script src="/js/authorized_users/add_dialog_window.js"></script>
 <script src="/js/authorized_users/show_edit_form.js"></script>
-<script src="/js/authorized_users/add_avatar.js"></script>
+<script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
+
+<script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 
 </body>

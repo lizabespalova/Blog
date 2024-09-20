@@ -1,5 +1,5 @@
 /* Контейнер формы */
-form {
+.article-form {
     background-color: #ffffff;
     padding: 40px;
     border-radius: 12px;
@@ -37,7 +37,7 @@ form input[type="text"]:last-of-type {
 }
 
 /* Кнопка отправки */
-form button[type="submit"] {
+.custom-submit-button {
     width: 100%;
     padding: 12px;
     background-color: #007bff;
@@ -49,8 +49,9 @@ form button[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-form button[type="submit"]:hover {
-    background-color: #0056b3;
+/* Стиль при наведении */
+.custom-submit-button:hover {
+    background-color: #0056b3; /* Другой цвет при наведении */
 }
 
 /* Контейнер для изображения */

@@ -9,7 +9,9 @@
       "controllers\\authorized_users_controllers\\": "app/controllers/authorized_users_controllers/",
       "controllers\\auth_controllers\\": "app/controllers/auth_controllers/",
       "controllers\\search_controllers\\": "app/controllers/search_controllers/",
-      "models\\": "app/models/"
+      "controllers\\": "app/controllers/",
+      "models\\": "app/models/",
+      "services\\": "app/services/"
     }
   }
 }

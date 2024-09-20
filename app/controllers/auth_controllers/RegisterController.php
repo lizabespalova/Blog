@@ -126,8 +126,9 @@ class RegisterController {
             $user = $this->userModel->get_temporary_user_by_token($token);
 
             if ($user) {
-                // Перемещаем пользователя из временной таблицы в основную таблицу
-                $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password']);
+                // Перемещаем пользователя из временной таблицы в основную таблицу с генерацией ссылки на таблицу
+                $link = '/profile/' . $user['user_login'];
+                $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password'], $link);
 
                 // Удаляем временного пользователя
                 $this->userModel->delete_temporary_user($token);
@@ -157,7 +158,7 @@ class RegisterController {
 //            window.location.href = '/register';
 //          </script>";
         $encodedMessage = urlencode($errorMessages); // Кодируем сообщение для URL
-        header("Location: /app/controllers/auth_controllers/error_message.php?message=$encodedMessage");
+        header("Location: /../../services/error_message.php");
         exit(); // Завершаем выполнение текущего скрипта
     }
 }

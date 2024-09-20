@@ -20,30 +20,25 @@ if (isset($_COOKIE['id'])) {
         $fileNameCmps = explode(".", $fileName);
         $fileExtension = strtolower(end($fileNameCmps));
 
-        $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
-        $maxFileSize = 5 * 1024 * 1024; // 5 MB
-
-        if ($fileSize > $maxFileSize) {
-            $response['message'] = "File size exceeds the maximum allowed limit of 5 MB.";
-        } elseif (!in_array($fileExtension, $allowedExts)) {
-            $response['message'] = "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.";
-        } else {
             $uploadFileDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $user_id . '/avatar/';
             $dest_path = $uploadFileDir . 'user_' . $user_id . '.' . $fileExtension;
+            // Правильный относительный путь, который будет сохранен в базе данных:
+            $avatarPath = '/uploads/' . $user_id . '/avatar/user_' . $user_id . '.' . $fileExtension;
+
             if (!file_exists($uploadFileDir)) {
                 mkdir($uploadFileDir, 0777, true); // Создаём директорию, если она не существует
             }
 
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
 //                $avatarPath = '/app/views/authorized_users/uploads/user_' . $user_id . '.' . $fileExtension;
-                $customerModel->update_user_avatar($user_id, /*$avatarPath*/ $dest_path);
+                $customerModel->update_user_avatar($user_id, /*$avatarPath*/ $avatarPath);
 
                 $response['success'] = true;
              //   $response['message'] = "Avatar uploaded successfully!";
             } else {
                 $response['message'] = "Error moving uploaded file.";
             }
-        }
+//        }
     } else {
         $response['message'] = "No file uploaded or upload error.";
     }

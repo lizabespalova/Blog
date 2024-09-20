@@ -20,20 +20,24 @@ if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
     $user_id = intval($_COOKIE['id']);
     $userdata = $customerModel->get_user_by_id($user_id);
     if ($userdata && md5($userdata['user_hash']) === $_COOKIE['hash']) {
-        // Хеш совпадает
-        $_SESSION['user'] = [
-            'user_id' => $userdata['user_id'],
-            'user_description' => $userdata['user_description'],
-            'user_avatar' => $userdata['user_avatar'],
-            'user_login' => $userdata['user_login'],
-            'user_specialisation' => $userdata['user_specialisation'],
-            'user_company' => $userdata['user_company'],
-            'user_experience' => $userdata['user_experience'],
-            'user_articles' => $userdata['user_articles'],
-            'login_error_message'=> $userdata['login_error_message']
-        ];
-        header('Location: /profile'); // Путь к странице профиля
-        exit();
+            // Хеш совпадает
+            $_SESSION['user'] = [
+                'user_id' => $userdata['user_id'],
+                'user_description' => $userdata['user_description'],
+                'user_avatar' => $userdata['user_avatar'],
+                'user_login' => $userdata['user_login'],
+                'user_specialisation' => $userdata['user_specialisation'],
+                'user_company' => $userdata['user_company'],
+                'user_experience' => $userdata['user_experience'],
+                'user_articles' => $userdata['user_articles'],
+                'login_error_message'=> $userdata['login_error_message']
+            ];
+            $userModel = new \models\User(getDbConnection());
+            $user = $userModel->get_user_by_id($userdata['user_id']);
+
+
+            header('Location: /profile' . '/'. $user['user_login']); // Путь к странице профиля
+            exit();
     } else {
 //        echo "Authorization error";
 //        echo "Stored hash: " . md5($userdata['user_hash']) . "<br>"; // Используйте md5 для отладки

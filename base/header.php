@@ -8,7 +8,7 @@ $isAuthorized = isset($_SESSION['user']['user_id']);
 // Устанавливаем путь к изображению профиля и ссылку
 if ($isAuthorized) {
     $profileImage = $_SESSION['user']['user_avatar'] ?? '/templates/images/login.png'; // Если у пользователя нет изображения, используется изображение по умолчанию
-    $profileLink = '/profile'; // Ссылка на страницу профиля
+    $profileLink = '/profile/' . $_SESSION['user']['user_login']; // Ссылка на страницу профиля
 } else {
     $profileImage = '/templates/images/login.png'; // Изображение по умолчанию
     $profileLink = '/login'; // Ссылка на страницу логина

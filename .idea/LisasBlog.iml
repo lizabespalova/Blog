@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/app/controllers/authorized_users_controllers" isTestSource="false" packagePrefix="controllers\authorized_users_controllers\" />
       <sourceFolder url="file://$MODULE_DIR$/app/models" isTestSource="false" packagePrefix="models\" />
       <sourceFolder url="file://$MODULE_DIR$/app/controllers/search_controllers" isTestSource="false" packagePrefix="controllers\search_controllers\" />
+      <sourceFolder url="file://$MODULE_DIR$/app/controllers" isTestSource="false" packagePrefix="controllers\" />
+      <sourceFolder url="file://$MODULE_DIR$/app/services" isTestSource="false" packagePrefix="services\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/graham-campbell/result-type" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpoption/phpoption" />

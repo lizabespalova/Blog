@@ -6,6 +6,7 @@ use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
 use controllers\authorized_users_controllers\LogoutController;
 use controllers\authorized_users_controllers\ProfileController;
+use controllers\ErrorController;
 
 require_once __DIR__ . '/../../config/config.php';
 
@@ -13,7 +14,7 @@ function authorization_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
-        case '/profile':
+        case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
             $controller = new ProfileController($dbConnection);
             if ($method === 'GET') {
                 $controller->showProfile();
@@ -66,7 +67,10 @@ function authorization_route($uri, $method) {
             $controller = new RegisterController(getDbConnection());
             $controller->registration_pending();
             exit();
-
+        case '/error':
+            $controller = new ErrorController();
+            $controller->show_error();
+            exit();
         case '/logout':
             $controller = new LogoutController(getDbConnection());
             $controller->logout();

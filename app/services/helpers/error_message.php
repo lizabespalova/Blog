@@ -67,7 +67,7 @@ $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/app/views/auth/form_login.php'; // Путь к форме логина
+                window.location.href = 'app/views/auth/form_login.php'; // Путь к форме логина
             }
         });
     });

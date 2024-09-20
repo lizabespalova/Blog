@@ -13,6 +13,10 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'services\\' => 9,
+        ),
         'm' => 
         array (
             'models\\' => 7,
@@ -22,6 +26,7 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
             'controllers\\search_controllers\\' => 31,
             'controllers\\authorized_users_controllers\\' => 41,
             'controllers\\auth_controllers\\' => 29,
+            'controllers\\' => 12,
         ),
         'S' => 
         array (
@@ -44,6 +49,10 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
     );
 
     public static $prefixDirsPsr4 = array (
+        'services\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/services',
+        ),
         'models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/models',
@@ -59,6 +68,10 @@ class ComposerStaticInit6535dd32cf28e7080321a8cc1fe2a17f
         'controllers\\auth_controllers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/controllers/auth_controllers',
+        ),
+        'controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/controllers',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (

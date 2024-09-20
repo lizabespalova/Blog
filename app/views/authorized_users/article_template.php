@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/profile/article_template.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Подключаем стили SimpleMDE для рендеринга Markdown -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <base href="http://localhost:8080/">
@@ -20,27 +21,26 @@
     <article class="article-content">
         <!-- Заголовок статьи -->
         <h1 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h1>
-        <p class="article-author"><strong>Author:</strong> <?php echo htmlspecialchars($article['author']); ?></p>
+
+        <!-- Информация об авторе, дате и просмотрах -->
+        <div class="article-header">
+            <img src="<?php echo htmlspecialchars($author['avatar']); ?>" alt="Author Avatar" class="author-avatar">
+            <div class="author-info">
+                <a href="/profile/<?php echo urlencode($article['author']); ?>" class="article-author"><?php echo htmlspecialchars($article['author']); ?></a>
+                <span class="article-date">Published on: <?php echo htmlspecialchars($article['date_created']); ?></span>
+                <span class="article-views">Views: <?php echo htmlspecialchars($article['views']); ?></span>
+            </div>
+        </div>
 
         <!-- Основной контент статьи -->
         <div class="article-text">
             <?php if (!empty($article['content'])): ?>
-                <!-- Элемент для отображения Markdown-контента -->
-                <textarea id="markdown-content" style="display:none;"><?php echo htmlspecialchars($article['content']); ?></textarea>
                 <!-- Контейнер для рендеринга Markdown -->
                 <div id="rendered-content"></div>
             <?php else: ?>
                 <p>No content available for this article.</p>
             <?php endif; ?>
         </div>
-
-        <!-- Изображение обложки -->
-        <?php if ($article['cover_image']): ?>
-            <div class="article-cover">
-                <img src="<?php echo htmlspecialchars($article['cover_image']); ?>" alt="Cover Image">
-                <p class="image-caption">This is the cover image of the article.</p>
-            </div>
-        <?php endif; ?>
 
         <!-- Видеоролик YouTube -->
         <?php if ($article['youtube_link']): ?>
@@ -50,17 +50,6 @@
             </div>
         <?php endif; ?>
 
-        <!-- Прочие изображения статьи -->
-        <?php if (!empty($article['images'])): ?>
-            <div class="article-images">
-                <?php foreach ($article['images'] as $image): ?>
-                    <figure>
-                        <img src="<?php echo htmlspecialchars($image); ?>" alt="Article Image">
-                        <figcaption>Caption for the image</figcaption>
-                    </figure>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
     </article>
 </main>
 
@@ -68,8 +57,11 @@
     <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 </footer>
 
+
 <!-- Подключаем SimpleMDE JavaScript для рендеринга Markdown -->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="/js/authorized_users/menu.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var markdownElement = document.getElementById('markdown-content');

@@ -82,7 +82,7 @@ class EditProfileController
 
         if ($this->userModel->update_user_description($userId, $description)) {
             // Успешное обновление
-            header('Location: /profile');
+            header('Location: /profile/' . $_SESSION['user']['user_login']);
             exit();
         } else {
             // Логирование ошибки
