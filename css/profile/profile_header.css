@@ -6,8 +6,6 @@ body {
     min-height: 100vh;
 }
 
-
-
 .container {
     flex: 1;
     width: 80%;
@@ -34,23 +32,12 @@ body {
     object-fit: cover;
 }
 
-
-
-
-/*Часть с меню*/
-/*body {*/
-/*    font-family: Arial, sans-serif;*/
-/*    background-color: #f4f4f4;*/
-/*    margin: 0;*/
-/*    padding: 0;*/
-/*}*/
-
 .header {
     background-color: #333; /* Серый фон для хедера */
     color: white;
     padding: 10px 20px;
     position: relative; /* Необходимо для позиционирования меню относительно хедера */
-    z-index: 1000; /* Устанавливаем высокий z-index для хедера, чтобы он был выше других элементов */
+    /*z-index: 1000; !* Устанавливаем высокий z-index для хедера, чтобы он был выше других элементов *!*/
 }
 
 .header-content {

@@ -92,3 +92,133 @@ form input[type="text"]:last-of-type {
 .remove-button:hover {
     background-color: rgba(0, 0, 0, 0.7);
 }
+
+/* Стили модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 30%;
+    text-align: center;
+}
+
+.close {
+    color: red;
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#modes-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.mode-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mode-button:hover {
+    background-color: #0056b3;
+}
+
+.formula {
+    font-family: "Courier New", monospace; /* Шрифт для формул */
+    background-color: #f9f9f9; /* Цвет фона для выделения */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block; /* Отображение как блочный элемент для центрирования */
+    margin: 5px 0; /* Отступы сверху и снизу */
+}
+
+/* Стили для спойлеров */
+details {
+    background-color: #f0f0f0; /* Цвет фона для спойлеров */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+
+summary {
+    cursor: pointer; /* Указатель для курсора на заголовке спойлера */
+    font-weight: bold; /* Выделение заголовка спойлера */
+}
+
+summary:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+}
+
+
+
