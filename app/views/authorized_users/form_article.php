@@ -29,7 +29,7 @@
              <input type="number" id="rows" min="1" max="20" value="2" >
              <label for="columns">Columns:</label>
              <input type="number" id="columns" min="1" max="20" value="2">
-             <button id="insertTableBtn">Create table</button>
+             <button id="insertTableBtn" type="button">Create table</button>
          </div>
      </div>
 
@@ -51,7 +51,6 @@
  <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
  <script src="/js/authorized_users/add_markdown.js"></script>
  <script src="/js/authorized_users/menu.js"></script>
- <script src="/js/authorized_users/add_dynamic_table_for_article.js"></script>
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 </body>

@@ -47,7 +47,7 @@ class ArticleController
                 mkdir($userDir, 0777, true);
             }
 
-            $cover_image_path = null;
+            $cover_image_path = "templates/images/article_logo.png";
             if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0) {
                 $cover_image_name = basename($_FILES['cover_image']['name']);
                 $cover_image_path = $userDir . $cover_image_name;

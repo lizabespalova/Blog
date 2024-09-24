@@ -21,6 +21,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     input.onchange = function() {
                         let file = input.files[0];
+
+                        // Проверка формата и размера изображения
+                        if (!isValidImage(file)) {
+                            alert("Invalid photo format");
+                            return;
+                        }
+
+                        if (!isValidSize(file)) {
+                            alert("Maximum photo size is 5 MB");
+                            return;
+                        }
+
                         let reader = new FileReader();
 
                         reader.onload = function(e) {
@@ -28,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             let imageId = `image${Object.keys(imageMap).length + 1}`;
                             imageMap[imageId] = imageUrl;
 
-                            let markdownImage = `[${imageId}]`;
+                            let markdownImage = `[${imageId}]`; // Обновлено для вставки URL изображения
                             editor.codemirror.replaceSelection(markdownImage + "\n");
                         };
 
@@ -40,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 className: "fa fa-picture-o",
                 title: "Upload image"
             },
+
             {
                 name: "insert-link",
                 action: function customLinkInsert(editor) {
@@ -62,10 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('insertTableBtn').onclick = function() {
                         let columns = parseInt(document.getElementById('columns').value);
                         let rows = parseInt(document.getElementById('rows').value);
-                        if (rows > 20 || columns > 20 || columns < 1 || columns <1) {
+
+                        if (rows > 20 || columns > 20 || columns < 1 || rows < 1) {
                             alert('Maximum allowed rows and columns is 20, minimum is 1');
                             return;
                         }
+
                         if (columns > 0 && rows > 0) {
                             let tableHeader = '| ' + 'Header '.repeat(columns).trim().replace(/ /g, ' | ') + ' |\n';
                             let tableDivider = '| ' + '--- '.repeat(columns).trim().replace(/ /g, ' | ') + ' |\n';
@@ -151,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Обработка таблиц
-            const tableRegex = /(\|[^\n]+\|)(\n\|[^\n]+\|)(\n(\|[-:]+[-|:]*)+)(\n(\|[^\n]+\|?)+)/g;
+            const tableRegex = /((?:\|[^\n]+\|(?:\n|$))+)(\|[-:]+[-|:]*)(\n(?:\|[^\n]+\|(?:\n|$))*)+/g;
             plainText = plainText.replace(tableRegex, function(match) {
                 return `<table style="width: 100%; border-collapse: collapse;">${match.replace(/\|/g, '<td>').replace(/(\n)/g, '</tr><tr>').replace(/<\/tr><tr>$/, '</tr></table>')}</tr>`;
             });
@@ -165,10 +180,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return simplemde.markdown(plainText);
         }
     });
+    //Вставка фото
+    simplemde.codemirror.on("paste", function(editor, event) {
+        let items = (event.clipboardData || window.clipboardData).items;
 
-    document.querySelector('.close').onclick = function() {
-        document.getElementById('tableModal').style.display = 'none';
-    };
+        for (let item of items) {
+            if (item.type.includes("image")) {
+                let file = item.getAsFile();
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    let imageId = `image${Object.keys(imageMap).length + 1}`;
+                    imageMap[imageId] = e.target.result;
+                    simplemde.codemirror.replaceSelection(`[${imageId}]\n`);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    });
 
     document.querySelector('form').addEventListener('submit', function(event) {
         var contentField = document.getElementById("markdown-editor");
@@ -180,5 +210,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         contentField.value = content;
     });
+
+    document.querySelector('.close').onclick = function() {
+        document.getElementById('tableModal').style.display = 'none';
+    };
 
 });
