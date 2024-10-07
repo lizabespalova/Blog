@@ -3,24 +3,29 @@ namespace controllers\authorized_users_controllers;
 
 use models\User;
 use Exception;
+use services\LoginService;
+
 session_start();
 
 class EditProfileController
 {
     private $userModel;
+    private $loginService;
 
     public function __construct($conn)
     {
         $this->userModel = new User($conn);
+        $this->loginService = new LoginService($conn);
     }
 
     public function update_profile()
     {
         // Проверяем авторизацию пользователя
-        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['user_login'])) {
-            http_response_code(403); // Доступ запрещен
-            exit();
-        }
+        $this->loginService->check_authorisation();
+//        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['user_login'])) {
+//            http_response_code(403); // Доступ запрещен
+//            exit();
+//        }
 
         $user_login = $_SESSION['user']['user_login'];
 

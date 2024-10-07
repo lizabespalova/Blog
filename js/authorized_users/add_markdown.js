@@ -1,4 +1,5 @@
 let imageMap = {}; // Объект для хранения изображений
+let uploadedFiles = []; // Массив для хранения загруженных файлов
 
 document.addEventListener('DOMContentLoaded', function() {
     var simplemde = new SimpleMDE({
@@ -22,25 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.onchange = function() {
                         let file = input.files[0];
 
-                        // Проверка формата и размера изображения
-                        if (!isValidImage(file)) {
-                            alert("Invalid photo format");
-                            return;
-                        }
-
-                        if (!isValidSize(file)) {
-                            alert("Maximum photo size is 5 MB");
-                            return;
-                        }
-
                         let reader = new FileReader();
-
                         reader.onload = function(e) {
                             let imageUrl = e.target.result;
                             let imageId = `image${Object.keys(imageMap).length + 1}`;
                             imageMap[imageId] = imageUrl;
 
-                            let markdownImage = `[${imageId}]`; // Обновлено для вставки URL изображения
+                            // Сохраняем файл в массив с использованием его идентификатора
+                            uploadedFiles.push(file); // Добавляем только файл в массив
+
+                            let markdownImage = `[${imageId}]`;
                             editor.codemirror.replaceSelection(markdownImage + "\n");
                         };
 
@@ -52,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 className: "fa fa-picture-o",
                 title: "Upload image"
             },
-
             {
                 name: "insert-link",
                 action: function customLinkInsert(editor) {
@@ -154,11 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 className: "fa fa-info-circle",
                 title: "Instructions"
             },
-
             "preview", "side-by-side", "fullscreen"
         ],
         previewRender: function(plainText) {
-
             // Обработка изображений
             for (const [id, url] of Object.entries(imageMap)) {
                 let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto;">`;
@@ -180,7 +169,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return simplemde.markdown(plainText);
         }
     });
-    //Вставка фото
+
+    // Вставка фото
     simplemde.codemirror.on("paste", function(editor, event) {
         let items = (event.clipboardData || window.clipboardData).items;
 
@@ -192,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reader.onload = function(e) {
                     let imageId = `image${Object.keys(imageMap).length + 1}`;
                     imageMap[imageId] = e.target.result;
+                    uploadedFiles.push(file); // Добавляем только файл в массив
                     simplemde.codemirror.replaceSelection(`[${imageId}]\n`);
                 };
 
@@ -200,19 +191,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.querySelector('form').addEventListener('submit', function(event) {
-        var contentField = document.getElementById("markdown-editor");
-        let content = simplemde.value();
+    document.getElementById('articleForm').addEventListener('submit', function(event) {
+        var form = this;
+        var formData = new FormData(form);  // Собираем данные формы
+        let content = simplemde.value();  // Получаем контент из редактора
 
+        // Подставляем ссылки на изображения в контент статьи
         for (const [id, url] of Object.entries(imageMap)) {
             content = content.replace(new RegExp(`\\[${id}\\]`, 'g'), `![${id}](${url})`);
         }
 
-        contentField.value = content;
+        // Заменяем значение контента в форме
+        document.getElementById("markdown-editor").value = content;
+
+        // Добавляем изображения в FormData для отправки на сервер
+        uploadedFiles.forEach(item => {
+            formData.append('article_images[]', item.file);
+        });
+
     });
-
-    document.querySelector('.close').onclick = function() {
-        document.getElementById('tableModal').style.display = 'none';
-    };
-
 });

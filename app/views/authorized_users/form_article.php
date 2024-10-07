@@ -42,7 +42,7 @@
 
      <label for="youtube_link">YouTube Link:</label>
      <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz">
-
+     <input type="file" name="article_images[]" id="fileInput" multiple>
      <button type="submit" class="custom-submit-button">Save Article</button>
  </form>
  <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>

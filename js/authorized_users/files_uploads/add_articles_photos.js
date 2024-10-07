@@ -1,38 +1,38 @@
-document.getElementById('cover_image').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const previewElement = document.getElementById('cover_image_preview');
-    const removeButton = document.getElementById('remove_button');
-
-    if (file) {
-        if (!isValidImage(file)) {
-            alert('Invalid file format. Only JPG and PNG are allowed.');
-            removeImage(previewElement, event.target, removeButton);
-            return;
-        }
-
-        if (!isValidSize(file, 2)) {
-            alert('File is too large. Maximum size is 2MB.');
-            removeImage(previewElement, event.target, removeButton);
-            return;
-        }
-
-        displayImagePreview(file, previewElement, removeButton);
-    } else {
-        removeImage(previewElement, event.target, removeButton);
-    }
-});
-
-// Обработчик удаления изображения статьи
-document.getElementById('remove_button').addEventListener('click', function() {
-    removeImage(document.getElementById('cover_image_preview'), document.getElementById('cover_image'), this);
-});
-
-// Обработчик загрузки изображения статьи
-function uploadArticlePhoto(articleId) {
-    uploadFile('cover_image', `/app/views/authorized_users/upload_article_photo.php?article_id=${articleId}`, function() {
-        location.reload(); // Перезагружаем страницу после успешной загрузки
-    });
-}
+// document.getElementById('cover_image').addEventListener('change', function(event) {
+//     const file = event.target.files[0];
+//     const previewElement = document.getElementById('cover_image_preview');
+//     const removeButton = document.getElementById('remove_button');
+//
+//     if (file) {
+//         if (!isValidImage(file)) {
+//             alert('Invalid file format. Only JPG and PNG are allowed.');
+//             removeImage(previewElement, event.target, removeButton);
+//             return;
+//         }
+//
+//         if (!isValidSize(file, 2)) {
+//             alert('File is too large. Maximum size is 2MB.');
+//             removeImage(previewElement, event.target, removeButton);
+//             return;
+//         }
+//
+//         displayImagePreview(file, previewElement, removeButton);
+//     } else {
+//         removeImage(previewElement, event.target, removeButton);
+//     }
+// });
+//
+// // Обработчик удаления изображения статьи
+// document.getElementById('remove_button').addEventListener('click', function() {
+//     removeImage(document.getElementById('cover_image_preview'), document.getElementById('cover_image'), this);
+// });
+//
+// // Обработчик загрузки изображения статьи
+// function uploadArticlePhoto(articleId) {
+//     uploadFile('cover_image', `/app/views/authorized_users/upload_article_photo.php?article_id=${articleId}`, function() {
+//         location.reload(); // Перезагружаем страницу после успешной загрузки
+//     });
+// }
 
 //
 //

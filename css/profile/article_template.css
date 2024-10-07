@@ -6,11 +6,6 @@ body {
     margin: 0;
     padding: 0;
 }
-header, footer {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-}
 .article-container {
     max-width: 900px;
     margin: 20px auto;

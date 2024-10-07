@@ -51,17 +51,11 @@ function profile_route($uri, $method) {
             $controller->create_article();
             }
             exit();  // Остановка выполнения после маршрута
-        case '/articles':
-            if (isset($_GET['id'])) {
-                $article_id = $_GET['id'];
-                if ($article_id) {
-                    $controller = new ArticleController($dbConnection);
-                    $controller->show_article($article_id);
-                } else {
-                    echo "Article ID is missing.";
-                }
-                exit();
-            }
+        case (preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches) ? true : false):
+            $slug = $matches[1]; // Извлекаем слаг из URL
+            $controller = new ArticleController($dbConnection);
+            $controller->show_article($slug);
+            exit(); // Остановка выполнения после маршрута
         default:
             return false;
     }

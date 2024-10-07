@@ -13,11 +13,8 @@ class Articles
     }
     public function add_article($title, $content, $author, $coverImagePath, $youtubeLink)
     {
-//        // Генерация ссылки на статью
-//        $link = '/articles/' . urlencode(strtolower(str_replace(' ', '-', $title)));
-
         // SQL запрос для вставки статьи
-        $stmt = $this->conn->prepare('INSERT INTO articles (title, content, author, cover_image, youtube_link) VALUES (?, ?, ?, ?, ?)');
+        $stmt = $this->conn->prepare('INSERT INTO articles (title, content, author, cover_image, youtube_link) VALUES ( ?, ?, ?, ?, ?)');
         if ($stmt === false) {
             die('Prepare failed: ' . $this->conn->error);
         }
@@ -49,63 +46,43 @@ class Articles
             return false;
         }
     }
-    public function update_article_link($article_id, $article_link){
-        $stmt = $this->conn->prepare('UPDATE articles SET link = ? WHERE id = ?');
+
+    public function save_image_path_to_db($article_id, string $image_path)
+    {
+        $sql = "INSERT INTO article_images (article_id, image_path) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
-            die('Prepare failed: ' . $this->conn->error);
+            die('Ошибка подготовки запроса: ' . $this->conn->error);
         }
-        $stmt->bind_param('si', $article_link, $article_id);
+
+        // Привязываем параметры и выполняем запрос
+        $stmt->bind_param('is', $article_id, $image_path);
         if (!$stmt->execute()) {
-            error_log("Update failed: " . $stmt->error);
+            die('Ошибка выполнения запроса: ' . $stmt->error);
+        }
+
+        // Закрываем подготовленный запрос
+        $stmt->close();
+    }
+    public function update_content($articleId, $content){
+        $stmt = $this->conn->prepare("UPDATE articles SET content = ? WHERE id = ?");
+        $stmt->bind_param("si", $content, $articleId); // "si" - строка и целое число
+        if (!$stmt->execute()) {
+            die('Update failed: ' . $stmt->error);
         }
         $stmt->close();
     }
-
-    // Метод для добавления изображений статьи
-    public function add_article_images($article_id, $images)
-    {
-        // Подготовка SQL-запроса для вставки изображений
-        $stmt = $this->conn->prepare("INSERT INTO article_images (article_id, image_path) VALUES (?, ?)");
-        if ($stmt === false) {
-            die('Prepare failed: ' . $this->conn->error);
-        }
-
-        // Цикл для вставки всех изображений
-        foreach ($images as $image_path) {
-            // Привязываем параметры
-            // Устанавливаем значение параметра $image_path
-            $stmt->bind_param("is", $article_id, $image_path);
-            // Выполняем запрос для текущего изображения
-            $stmt->execute();
-        }
-
-        // Закрытие statement
-        $stmt->close();
-    }
-
-    // Метод для получения изображений статьи
-    public function get_article_by_id($article_id)
-    {
-        $stmt = $this->conn->prepare("SELECT * FROM articles WHERE id = ?");
-        $stmt->bind_param("i", $article_id);
+    public function  update_article_slug($articleId, $slug){
+        $query = "UPDATE articles SET slug = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('si', $slug, $articleId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $article = $result->fetch_assoc();
-        $stmt->close();
-        return $article;
     }
-
-    public function get_article_images($article_id)
-    {
-        $stmt = $this->conn->prepare("SELECT image_path FROM article_images WHERE article_id = ?");
-        $stmt->bind_param("i", $article_id);
+    public function  get_article_by_slug($slug){
+        $query = "SELECT * FROM articles WHERE slug = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $slug);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $images = [];
-        while ($row = $result->fetch_assoc()) {
-            $images[] = $row['image_path'];
-        }
-        $stmt->close();
-        return $images;
+        return $stmt->get_result()->fetch_assoc();
     }
 }
