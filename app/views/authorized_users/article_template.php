@@ -22,15 +22,19 @@
         <!-- Заголовок статьи -->
         <h1 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h1>
 
-        <!-- Информация об авторе, дате и просмотрах -->
-        <div class="article-header">
-            <img src="<?php echo htmlspecialchars($author['avatar']); ?>" alt="Author Avatar" class="author-avatar">
+        <!-- Карточка с информацией об авторе, дате и просмотрах -->
+        <div class="author-card">
+            <img src="<?php echo htmlspecialchars($author_info['user_avatar']); ?>" alt="Author Avatar" class="author-avatar">
             <div class="author-info">
                 <a href="/profile/<?php echo urlencode($article['author']); ?>" class="article-author"><?php echo htmlspecialchars($article['author']); ?></a>
-                <span class="article-date">Published on: <?php echo htmlspecialchars($article['date_created']); ?></span>
+                <span class="article-date">Published on: <?php echo htmlspecialchars(date("Y-m-d", strtotime($article['created_at']))); ?></span>
                 <span class="article-views">Views: <?php echo htmlspecialchars($article['views']); ?></span>
             </div>
         </div>
+
+
+
+
 
         <!-- Основной контент статьи -->
         <div class="article-text">

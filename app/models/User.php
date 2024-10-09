@@ -106,8 +106,7 @@ class User
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        return $stmt->get_result()->fetch_assoc();
     }
 
     public function update_user_hash($user_id, $hash, $attach_ip = false) {
@@ -212,5 +211,26 @@ class User
 
         return $result;
     }
+    public function get_author_avatar($author_login)
+    {
+        $sql = "SELECT user_avatar FROM users WHERE user_login = ?";
+
+        // Подготовка и выполнение запроса
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $author_login);
+        $stmt->execute();
+
+        // Получение результата
+        $result = $stmt->get_result();
+        $author = $result->fetch_assoc();
+
+        // Закрытие запроса
+        $stmt->close();
+
+        // Возвращаем аватар автора
+        return $author;
+    }
+
+
 
 }

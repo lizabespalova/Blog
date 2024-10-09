@@ -3,17 +3,20 @@
 namespace controllers\authorized_users_controllers;
 
 use models\Articles;
+use models\User;
 use services\LoginService;
 
 class ArticleController
 {
     private $articleModel;
+    private $userModel;
     private $loginService;
 
     public function __construct($conn)
     {
         $this->articleModel = new Articles($conn);
         $this->loginService = new LoginService($conn);
+        $this->userModel = new User($conn);
     }
 
     public function show_article_form()
@@ -143,8 +146,15 @@ class ArticleController
     {
         // Ищем статью по слагу
         $article = $this->articleModel->get_article_by_slug($slug);
+//        $author = $this->articleModel->get_author_by_id($article['author_id']);
 
         if ($article) {
+//            echo "<pre>Article";
+//            print_r($article);
+//            echo "</pre>";
+            // Получаем данные автора (аватар)
+            $author_info = $this->userModel->get_author_avatar($article['author']);
+
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/article_form.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
 </head>
 <body>
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
@@ -52,6 +53,5 @@
  <script src="/js/authorized_users/add_markdown.js"></script>
  <script src="/js/authorized_users/menu.js"></script>
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-
 </body>
 </html>

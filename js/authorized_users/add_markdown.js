@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 className: "fa fa-link",
                 title: "Insert link"
             },
+
             {
                 name: "insert-table",
                 action: function customTableInsert(editor) {
@@ -190,7 +191,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    // Закрытие модального окна при нажатии на крестик
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('tableModal').style.display = 'none';
+    });
 
+    // Закрытие модального окна при клике вне его содержимого
+    window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('tableModal')) {
+            document.getElementById('tableModal').style.display = 'none';
+        }
+    });
     document.getElementById('articleForm').addEventListener('submit', function(event) {
         var form = this;
         var formData = new FormData(form);  // Собираем данные формы
