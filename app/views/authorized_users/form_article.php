@@ -34,6 +34,27 @@
          </div>
      </div>
 
+
+     <label for="category">Category:</label>
+     <input type="text" id="category" name="category" placeholder="Category" required><br>
+
+     <label for="difficulty">Difficulty:</label>
+     <select id="difficulty" name="difficulty" required>
+         <option value="">Select difficulty</option>
+         <option value="beginner">Beginner</option>
+         <option value="intermediate">Intermediate</option>
+         <option value="advanced">Advanced</option>
+     </select><br>
+
+     <label for="read_time">Estimated Read Time (in minutes):</label>
+     <input type="number" id="read_time" name="read_time" min="1" required><br>
+
+     <label for="tags">Tags (comma-separated):</label>
+     <input type="text" id="tags" name="tags" placeholder="Tag1, Tag2, Tag3" required><br>
+
+     <label for="youtube_link">YouTube Link:</label>
+     <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz">
+
      <label for="cover_image">Upload cover image:</label>
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*">
@@ -41,9 +62,7 @@
          <button id="remove_button" class="remove-button" style="display:none;">×</button>
      </div>
 
-     <label for="youtube_link">YouTube Link:</label>
-     <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz">
-     <input type="file" name="article_images[]" id="fileInput" multiple>
+<!--          <input type="file" name="article_images[]" id="fileInput" multiple>-->
      <button type="submit" class="custom-submit-button">Save Article</button>
  </form>
  <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>

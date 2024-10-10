@@ -1,140 +1,76 @@
-/* Общие стили */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-}
-
-/* Контейнер статьи */
-.article-container {
-    max-width: 1200px; /* Увеличьте максимальную ширину контейнера */
-    margin: 20px auto;
-    padding: 20px; /* Добавлено отступы для лучшего отображения */
-    background-color: #fff;
-    border: 1px solid #ddd;
+/* Карточка статьи */
+.article-card {
+    background-color: #f5f5f5;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Заголовок статьи */
-.article-title {
-    font-size: 28px;
-    margin-bottom: 15px;
-    text-align: center; /* Центрирование заголовка */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 /* Карточка автора */
 .author-card {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Равномерное распределение пространства между элементами */
-    padding: 15px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    justify-content: space-between; /* Для выравнивания контента */
 }
 
 /* Аватар автора */
 .author-avatar {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 15px;
-    border: 2px solid #ddd;
+    margin-right: 10px;
 }
 
-/* Информация об авторе */
+/* Имя автора и дата */
 .author-info {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Позволяет информации занимать доступное пространство */
+    margin-left: 10px;
 }
 
-/* Стиль для имени автора */
 .article-author {
-    font-size: 16px;
-    color: #333;
+    font-size: 14px;
     font-weight: bold;
+    color: #333;
     text-decoration: none;
     margin-bottom: 5px;
 }
 
-/* Дата публикации и просмотры */
-.article-date, .article-views {
+.article-date {
     font-size: 14px;
     color: #777;
 }
 
-/* Основной текст статьи */
-.article-content {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-/* Стили обложки статьи */
-.article-cover {
+/* Заголовок статьи */
+.article-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
     text-align: center;
-    margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-.article-cover img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.image-caption {
-    font-size: 0.9em;
-    color: #777;
-}
-
-/* Видеоролик */
-.article-video {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.article-video iframe {
-    max-width: 100%;
-    height: 315px;
-    border-radius: 8px;
-}
-
-.video-caption {
-    font-size: 0.9em;
-    color: #777;
-}
-
-/* Изображения в статье */
-.article-images {
+/* Информация о статье */
+.article-details {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.article-images figure {
-    margin: 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #f9f9f9;
-}
-
-.article-images img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-.article-images figcaption {
-    font-size: 0.9em;
+    justify-content: flex-start;
+    gap: 20px;
+    font-size: 14px;
     color: #777;
-    padding: 5px 10px;
-    text-align: center;
+    align-items: center;
+}
+
+.article-details i {
+    margin-right: 5px;
+}
+
+.article-details span {
+    margin-left: 20px;
 }

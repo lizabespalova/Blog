@@ -19,20 +19,47 @@
 
 <main class="article-container">
     <article class="article-content">
-        <!-- Заголовок статьи -->
-        <h1 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h1>
+<!--       Заголовок статьи -->
+<!--        <h1 class="article-title">--><?php //echo htmlspecialchars($article['title']); ?><!--</h1>-->
 
         <!-- Карточка с информацией об авторе, дате и просмотрах -->
-        <div class="author-card">
-            <img src="<?php echo htmlspecialchars($author_info['user_avatar']); ?>" alt="Author Avatar" class="author-avatar">
-            <div class="author-info">
-                <a href="/profile/<?php echo urlencode($article['author']); ?>" class="article-author"><?php echo htmlspecialchars($article['author']); ?></a>
-                <span class="article-date">Published on: <?php echo htmlspecialchars(date("Y-m-d", strtotime($article['created_at']))); ?></span>
-                <span class="article-views">Views: <?php echo htmlspecialchars($article['views']); ?></span>
+        <div class="article-card">
+            <div class="author-card">
+                <!-- Аватар и имя автора -->
+                <a href="/profile/<?php echo urlencode($article['author']); ?>">
+                    <img src="<?php echo htmlspecialchars($author_info['user_avatar']); ?>" alt="Author Avatar" class="author-avatar">
+                </a>
+                <div class="author-info">
+                    <a href="/profile/<?php echo urlencode($article['author']); ?>" class="article-author"><?php echo htmlspecialchars($article['author']); ?></a>
+                </div>
+
+                <!-- Дата и просмотры на одном уровне с автором -->
+                <div class="article-details">
+            <span class="article-date">
+                <i class="far fa-clock"></i> <?php echo htmlspecialchars(date("d M Y", strtotime($article['created_at']))); ?>
+            </span>
+                    <span class="article-views">
+                <i class="far fa-eye"></i> <?php echo htmlspecialchars($article['views']); ?>
+            </span>
+            <span class="article-category">
+                <i class="fas fa-tag"></i> <?php echo htmlspecialchars($article['category']); ?>
+            </span>
+            <span class="article-difficulty">
+                <i class="fas fa-signal"></i> <?php echo htmlspecialchars($article['difficulty']); ?>
+            </span>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> <?php echo htmlspecialchars($article['read_time']); ?> min
+            </span>
+            <span class="article-tags">
+                <i class="fas fa-tags"></i> <?php echo htmlspecialchars(implode(', ', $article['tags'])); ?>
+            </span>
+                </div>
             </div>
+
+
+            <!-- Заголовок статьи -->
+            <h1 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h1>
         </div>
-
-
 
 
 
