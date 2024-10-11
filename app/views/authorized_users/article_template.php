@@ -1,3 +1,14 @@
+<?php
+// Обработка тегов
+$tagsOutput = '-'; // Значение по умолчанию
+
+if (!empty($article['tags'])) {
+    // Разбиваем строку на массив
+    $tagsArray = explode(',', $article['tags']);
+    // Преобразуем массив обратно в строку с использованием implode
+    $tagsOutput = htmlspecialchars(implode(', ', $tagsArray));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,8 +62,10 @@
                 <i class="far fa-clock"></i> <?php echo htmlspecialchars($article['read_time']); ?> min
             </span>
             <span class="article-tags">
-                <i class="fas fa-tags"></i> <?php echo htmlspecialchars(implode(', ', $article['tags'])); ?>
+                <i class="fas fa-tags"></i>
+                <?php echo $tagsOutput; ?>
             </span>
+
                 </div>
             </div>
 

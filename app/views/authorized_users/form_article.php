@@ -36,7 +36,17 @@
 
 
      <label for="category">Category:</label>
-     <input type="text" id="category" name="category" placeholder="Category" required><br>
+     <select id="category" name="category" required>
+         <option value="" disabled selected>Select a category</option>
+         <option value="programming">Programming</option>
+         <option value="web_development">Web Development</option>
+         <option value="data_science">Data Science</option>
+         <option value="cyber_security">Cyber Security</option>
+         <option value="cloud_computing">Cloud Computing</option>
+         <option value="machine_learning">Machine Learning</option>
+         <option value="it_news">IT News</option>
+         <option value="software_testing">Software Testing</option>
+     </select><br>
 
      <label for="difficulty">Difficulty:</label>
      <select id="difficulty" name="difficulty" required>
@@ -49,8 +59,13 @@
      <label for="read_time">Estimated Read Time (in minutes):</label>
      <input type="number" id="read_time" name="read_time" min="1" required><br>
 
-     <label for="tags">Tags (comma-separated):</label>
-     <input type="text" id="tags" name="tags" placeholder="Tag1, Tag2, Tag3" required><br>
+     <label for="tags">Tags such IT languages (comma-separated):</label>
+     <div class="tag-container">
+         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3">
+         <span id="tag-warning" style="color: red; display: none; margin-left: 10px;">❗ No more than 10 tags!</span>
+     </div>
+     <input type="hidden" id="tags" name="tags">
+
 
      <label for="youtube_link">YouTube Link:</label>
      <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz">
@@ -69,6 +84,7 @@
  <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
  <script src="/js/authorized_users/files_uploads/show_preview.js"></script>
  <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
+<script src="/js/authorized_users/files_uploads/form_actions.js"></script>
  <script src="/js/authorized_users/add_markdown.js"></script>
  <script src="/js/authorized_users/menu.js"></script>
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>

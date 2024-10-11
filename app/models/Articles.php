@@ -11,17 +11,17 @@ class Articles
     public function __construct($conn) {
         $this->conn = $conn;
     }
-    public function add_article($title, $content, $author, $coverImagePath, $youtubeLink)
+    public function add_article($title, $content, $author, $coverImagePath, $youtubeLink,$category, $difficulty, $read_time, $tags)
     {
         // SQL запрос для вставки статьи
-        $stmt = $this->conn->prepare('INSERT INTO articles (title, content, author, cover_image, youtube_link) VALUES ( ?, ?, ?, ?, ?)');
+        $stmt = $this->conn->prepare('INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         if ($stmt === false) {
             die('Prepare failed: ' . $this->conn->error);
         }
 
         // Привязываем параметры. Используем 's' для строк и 'b' для NULL.
-        $types = 'sssss';
-        $params = [$title, $content, $author, /*$link*/ $coverImagePath, $youtubeLink];
+        $types = 'sssssssss';
+        $params = [$title, $content, $author, /*$link*/ $coverImagePath, $youtubeLink, $category, $difficulty, $read_time, $tags];
 
         // Установить NULL для пустых значений
         foreach ($params as &$param) {

@@ -32,6 +32,10 @@ class ArticleController
             $title = $_POST['title'];
             $content = $_POST['content'];
             $youtube_link = $_POST['youtube_link'];
+            $category = $_POST['category'];
+            $difficulty = $_POST['difficulty'];
+            $read_time = $_POST['read_time'];
+            $tags = $_POST['tags'];
             $author = $_SESSION['user']['user_login'];
             $user_id = $_SESSION['user']['user_id'];
 
@@ -48,7 +52,7 @@ class ArticleController
 
             // Добавляем статью в базу данных и получаем её ID
             $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию
-            $article_id = $this->articleModel->add_article($title, '', $author, $cover_image_path, $youtube_link);
+            $article_id = $this->articleModel->add_article($title, '', $author, $cover_image_path, $youtube_link, $category, $difficulty, $read_time, $tags);
 
             if ($article_id) {
                 $articleDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id);

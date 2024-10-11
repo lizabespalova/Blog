@@ -1,6 +1,19 @@
+/* Основные цвета */
+:root {
+    --primary-color: #007bff; /* Основной синий цвет */
+    --primary-hover-color: #0056b3; /* Тёмный синий при наведении */
+    --secondary-color: #e0e0e0; /* Нейтральный серый */
+    --secondary-hover-color: #cccccc; /* Светлый серый при наведении */
+    --border-color: #b0e0e6; /* Нежный голубой для границ */
+    --background-color: #f7f7f7; /* Светлый фон */
+    --text-color: #333; /* Тёмно-серый для текста */
+    --input-background: #ffffff; /* Белый фон полей ввода */
+    --remove-button-color: #ff4d4d; /* Красный для кнопок удаления */
+}
+
 /* Контейнер формы */
 .article-form {
-    background-color: #f9f9f9; /* Молочный фон */
+    background-color: var(--background-color);
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -21,23 +34,24 @@ form input[type="url"],
 form textarea,
 form select {
     width: calc(100% - 20px);
-    padding: 12px; /* Увеличены отступы */
+    padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid #b0e0e6; /* Цвет рамки */
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
-    transition: border-color 0.3s ease; /* Плавное изменение цвета рамки */
-    background-color: #ffffff; /* Фон полей ввода */
+    transition: border-color 0.3s ease;
+    background-color: var(--input-background);
 }
 
 /* Изменение цвета рамки при фокусе */
 form input[type="text"]:focus,
 form input[type="url"]:focus,
+form input[type="number"]:focus,
 form textarea:focus,
 form select:focus {
-    border-color: #000000; /* Черная рамка при фокусе */
-    outline: none; /* Убираем стандартный фокус */
+    border-color: var(--primary-color);
+    outline: none;
 }
 
 /* Стиль для textarea */
@@ -48,33 +62,33 @@ form textarea {
 /* Стили для input file */
 form input[type="file"] {
     margin-bottom: 20px;
-    padding: 10px; /* Добавлены отступы для кнопки */
-    border: 1px solid #b0e0e6; /* Цвет рамки */
+    padding: 10px;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
-    background-color: #ffffff; /* Фон кнопки */
+    background-color: var(--input-background);
 }
 
 /* Кнопка отправки */
 .custom-submit-button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff; /* Цвет кнопки */
+    background-color: var(--primary-color);
     border: none;
     border-radius: 5px;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s; /* Плавное изменение фона и эффекта нажатия */
+    transition: background-color 0.3s ease, transform 0.1s;
 }
 
 /* Стиль при наведении */
 .custom-submit-button:hover {
-    background-color: #0056b3; /* Другой цвет при наведении */
+    background-color: var(--primary-hover-color);
 }
 
 /* Эффект нажатия */
 .custom-submit-button:active {
-    transform: scale(0.98); /* Уменьшение размера кнопки при нажатии */
+    transform: scale(0.98);
 }
 
 /* Контейнер для изображения */
@@ -142,24 +156,70 @@ form input[type="file"] {
     border-radius: 5px;
     width: 30%;
     text-align: center;
-    position: relative; /* Для абсолютного позиционирования кнопки */
+    position: relative;
 }
 
-/* Кнопка для модального окна */
-.modal button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
+/* Контейнер для тегов */
+.tag-container {
+    width: 100%; /* Задаем 100% ширину контейнера */
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--border-color);
+    padding: 8px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    position: absolute; /* Позиционируем кнопку */
-    right: 10px; /* Отступ от правого края */
-    bottom: 10px; /* Отступ от нижнего края */
+    background-color: var(--input-background);
+    margin-bottom: 20px;
+    box-sizing: border-box; /* Добавляем это, чтобы учитывать padding и border */
 }
 
-/* Стиль кнопки модального окна при наведении */
-.modal button:hover {
-    background-color: #0056b3;
+/* Поле для ввода тегов */
+#tags-input {
+    flex-grow: 1; /* Позволяет полю тегов расти, занимая доступное пространство */
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 8px;
+    color: var(--text-color);
+    background-color: transparent;
+    box-sizing: border-box; /* Добавляем это, чтобы учитывать padding */
+    width: calc(100% - 16px); /* Учитываем padding контейнера (8px слева и справа) */
 }
+
+/* Стили для каждого тега */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 4px 10px; /* Уменьшенные отступы для тегов */
+    margin: 4px; /* Уменьшенный отступ между тегами */
+    border-radius: 8px;
+    font-size: 12px; /* Уменьшенный размер шрифта для тегов */
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Кнопка удаления тега */
+.tag .remove-tag {
+    background-color: transparent;
+    color: var(--remove-button-color);
+    border: none;
+    border-radius: 50%;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+/* Кнопка удаления тега при наведении */
+.tag .remove-tag:hover {
+    color: #ff0000;
+}
+
