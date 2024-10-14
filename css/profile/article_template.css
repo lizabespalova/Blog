@@ -1,70 +1,80 @@
 /* Карточка статьи */
 .article-card {
-    background-color: #f5f5f5;
+    background-color: #fff; /* Чистый фон */
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 20px auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    /*align-items: center;*/
 }
-
 /* Карточка автора */
 .author-card {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    justify-content: space-between; /* Для выравнивания контента */
+    align-items: flex-start; /* Выравниваем по верхней границе */
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative;
 }
 
-/* Аватар автора */
+.author-avatar-wrapper {
+    display: inline-flex; /*  flex для центрирования */
+    justify-content: center; /* Центрируем содержимое по горизонтали */
+    align-items: center; /* Центрируем содержимое по вертикали */
+    width: 70px; /* Увеличиваем ширину обертки для лучшего обтекания */
+    height: 70px; /* Увеличиваем высоту обертки для лучшего обтекания */
+    border-radius: 50%; /* Делаем обертку круглой */
+    background-color: #9b9a9a; /* Цвет обтекания вокруг аватара */
+    transition: background-color 0.3s ease; /* Плавный переход цвета при наведении */
+    margin-right: 10px; /* Отступ между аватаром и заголовком */
+}
+
+.author-avatar-wrapper:hover {
+    background-color: #6e6e6e; /* Цвет при наведении */
+}
+
 .author-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
+    width: 60px; /* Уменьшаем размер аватара, чтобы он был меньше обертки */
+    height: 60px;
+    border-radius: 50%; /* Круглая форма аватара */
+    object-fit: cover; /* Обрезка изображения для сохранения пропорций */
 }
 
-/* Имя автора и дата */
+
+/* Имя автора без подчеркивания и с серым цветом */
 .author-info {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
+    font-size: 14px; /* Уменьшаем размер шрифта */
+    font-weight: normal; /* Меняем на обычный вес шрифта */
+    color: #777; /* Серый цвет */
+    text-decoration: none; /* Убираем подчеркивание */
+    flex-grow: 1;
 }
 
-.article-author {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    margin-bottom: 5px;
-}
-
-.article-date {
-    font-size: 14px;
-    color: #777;
-}
-
-/* Заголовок статьи */
+/* Заголовок статьи с обтеканием */
 .article-title {
     font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 10px;
+    font-weight: bold; /* Полужирный шрифт */
+    color: #444; /* Спокойный темно-серый цвет */
+    line-height: 1.2; /* Межстрочный интервал */
+    margin-top: 0; /* Убираем верхний отступ */
+    text-indent: 30px; /* Отступ первой строки */
+    margin-bottom: 15px; /* Отступ снизу для разделения с автором */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Небольшая тень для объема */
 }
+
 
 /* Информация о статье */
 .article-details {
     display: flex;
-    justify-content: flex-start;
-    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
     font-size: 14px;
-    color: #777;
-    align-items: center;
+    color: #555;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
 }
 
 .article-details i {
@@ -72,5 +82,21 @@
 }
 
 .article-details span {
-    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Теги */
+.article-tags {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 3px 10px;
+    color: #666;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/*основной контент*/
+.article-text {
+    margin-top: 20px; /* Отступ сверху */
 }

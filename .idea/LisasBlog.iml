@@ -29,5 +29,9 @@
     <orderEntry type="library" name="emoji-button" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="emoji-mart" level="application" />
+    <orderEntry type="library" name="marked" level="application" />
+    <orderEntry type="library" name="showdown" level="application" />
+    <orderEntry type="library" name="default" level="application" />
+    <orderEntry type="library" name="highlight" level="application" />
   </component>
 </module>

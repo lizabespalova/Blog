@@ -72,13 +72,13 @@ class Articles
         }
         $stmt->close();
     }
-    public function  update_article_slug($articleId, $slug){
+    public function update_article_slug($articleId, $slug){
         $query = "UPDATE articles SET slug = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('si', $slug, $articleId);
         $stmt->execute();
     }
-    public function  get_article_by_slug($slug){
+    public function get_article_by_slug($slug){
         $query = "SELECT * FROM articles WHERE slug = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('s', $slug);

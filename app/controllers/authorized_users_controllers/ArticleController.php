@@ -4,6 +4,7 @@ namespace controllers\authorized_users_controllers;
 
 use models\Articles;
 use models\User;
+use Parsedown;
 use services\LoginService;
 
 class ArticleController
@@ -150,7 +151,6 @@ class ArticleController
     {
         // Ищем статью по слагу
         $article = $this->articleModel->get_article_by_slug($slug);
-//        $author = $this->articleModel->get_author_by_id($article['author_id']);
 
         if ($article) {
 //            echo "<pre>Article";
@@ -158,6 +158,8 @@ class ArticleController
 //            echo "</pre>";
             // Получаем данные автора (аватар)
             $author_info = $this->userModel->get_author_avatar($article['author']);
+            // Парсим содержимое статьи из Markdown в HTML
+            $parsedContent = $this->parseMarkdown($article['content']);
 
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
@@ -194,6 +196,12 @@ class ArticleController
 
         echo "Изображение успешно сохранено по пути {$imagePath}.\n";
         return true;
+    }
+
+    // Функция для парсинга Markdown
+    public function parseMarkdown($markdownContent): string
+    {
+        return (new Parsedown())->text($markdownContent);
     }
 
 }

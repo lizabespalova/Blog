@@ -1,0 +1,165 @@
+/*Формулы*/
+.formula-container {
+    display: inline-block; /* Чтобы формула не растягивалась на всю ширину */
+    background-color: #f9f9f9; /* Цвет фона */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 4px; /* Закругленные углы */
+    padding: 8px; /* Отступы */
+    margin: 4px 0; /* Отступы сверху и снизу */
+    font-family: 'Courier New', Courier, monospace; /* Моноширинный шрифт для формул */
+    white-space: pre; /* Сохраняем пробелы и переносы строк */
+}
+
+/*спойлер*/
+details {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px;
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+summary:hover {
+    background-color: #e0e0e0; /* Цвет при наведении */
+}
+
+details[open] summary {
+    background-color: #d0d0d0; /* Цвет при открытом спойлере */
+}
+
+details[open] {
+    padding: 10px; /* Увеличиваем отступы при открытом спойлере */
+}
+/*Таблица*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Стили для жирного текста */
+strong {
+    font-weight: bold;
+}
+
+/* Стили для блоков кода */
+.code-container {
+    background-color: #1e1e1e;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 4px;
+    position: relative;
+}
+/* Блок кода с позиционированием */
+pre {
+    position: relative;
+    padding: 20px; /* Увеличиваем отступ для кнопки копирования */
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Menlo', monospace; /* Шрифт для кода */
+    font-size: 14px; /* Оптимальный размер шрифта */
+    overflow: auto; /* Прокрутка для длинных блоков кода */
+    max-height: 300px; /* Максимальная высота блока с кодом */
+}
+
+/* Живые цвета для подсветки кода */
+.hljs-keyword {
+    color: #c678dd; /* Цвет ключевых слов */
+    font-weight: bold;
+}
+
+.hljs-string {
+    color: #98c379; /* Цвет строк */
+}
+
+.hljs-comment {
+    color: #5c6370; /* Цвет комментариев */
+    font-style: italic;
+}
+
+.hljs-number {
+    color: #d19a66; /* Цвет чисел */
+}
+
+.hljs-function {
+    color: #61afef; /* Цвет функций */
+}
+
+.hljs-variable {
+    color: #e06c75; /* Цвет переменных */
+}
+
+.hljs-class {
+    color: #e5c07b; /* Цвет классов */
+}
+
+.hljs-attribute {
+    color: #56b6c2; /* Цвет атрибутов */
+}
+
+
+/* Нумерация строк */
+.hljs-line-numbers {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    padding-right: 10px;
+    text-align: right;
+    user-select: none;
+    opacity: 0.5;
+    color: #888;
+}
+
+.hljs-line {
+    display: block;
+    padding-left: 10px;
+    white-space: pre-wrap;
+}
+
+
+.copy-code-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: #888;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.copy-code-btn:active {
+    background-color: #888;
+}
+
+.copy-code-btn .copy-text {
+    display: none;
+}
+
+.copy-code-btn.copied .copy-icon {
+    display: none;
+}
+
+.copy-code-btn.copied .copy-text {
+    display: inline;
+}
+
+.copy-code-btn:hover {
+    color: #333;
+}

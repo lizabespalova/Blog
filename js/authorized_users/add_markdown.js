@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 name: "insert-code",
                 action: function customCodeInsert(editor) {
-                    let code = prompt("Введите ваш код:");
+                    let code = prompt("Enter your code:");
                     if (code) {
                         let markdownCode = `\`\`\`\n${code}\n\`\`\``;
                         editor.codemirror.replaceSelection(markdownCode + "\n");
@@ -149,11 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
             "preview", "side-by-side", "fullscreen"
         ],
         previewRender: function(plainText) {
-            // Обработка изображений
-            for (const [id, url] of Object.entries(imageMap)) {
-                let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto;">`;
-                plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
-            }
 
             // Обработка таблиц
             const tableRegex = /((?:\|[^\n]+\|(?:\n|$))+)(\|[-:]+[-|:]*)(\n(?:\|[^\n]+\|(?:\n|$))*)+/g;
@@ -162,10 +157,17 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Обработка формул
-            plainText = plainText.replace(/\$\$([\s\S]*?)\$\$/g, '<span class="formula">$1</span>');
+            plainText = plainText.replace(/\$\$([\s\S]*?)\$\$/g, '<div class="formula-container">$1</div>');
 
             // Обработка спойлеров
             plainText = plainText.replace(/>\s*\[!spoiler\]\s*(.*)/g, '<details><summary>Spoiler</summary>$1</details>');
+
+
+            // Обработка изображений
+            for (const [id, url] of Object.entries(imageMap)) {
+                let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+                plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
+            }
 
             return simplemde.markdown(plainText);
         }
@@ -221,4 +223,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     });
+
 });
