@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
     const markdownContent = document.getElementById('rendered-content').innerHTML.trim();
-    console.log(markdownContent);
 
     // Настройки Showdown-конвертера
     const converter = new showdown.Converter({
@@ -9,12 +8,17 @@ document.addEventListener("DOMContentLoaded", function() {
         tables: true
     });
 
-
     // Преобразуем Markdown в HTML
     let htmlContent = converter.makeHtml(markdownContent);
 
-    // // Принудительно заменяем <code> теги, чтобы избежать ошибок с блоками кода
-    // htmlContent = htmlContent.replace(/<code>/g, '<pre><code class="hljs">').replace(/<\/code>/g, '</code></pre>');
+    // Обработка фото
+    htmlContent = htmlContent.replace(/<img src="(\/?uploads\/[^"]+)"/g, (match, p1) => {
+        // Добавляем абсолютный путь от корня сайта, начиная с /
+        let relativePath = p1.replace('/articles/', '/'); // Убираем /articles если оно есть
+        console.log("Relative Path:", relativePath); // Логируем для проверки пути
+        return `<img src="/${relativePath}" alt="Image" />`; // Добавляем слеш в начале
+    });
+
 
     // Обработка спойлеров
     htmlContent = htmlContent.replace(/\[!spoiler\]\s*(.*?)\s*(\n|$)/g, '<details><summary>Spoiler</summary>$1</details>');
@@ -34,7 +38,8 @@ document.addEventListener("DOMContentLoaded", function() {
         copy_to_clipboard(block);
 
         // Добавление нумерации строк
-        add_line_numbers(block);    });
+        add_line_numbers(block);
+    });
 
     // Инициализируем MathJax для формул
     if (typeof MathJax !== 'undefined') {

@@ -80,7 +80,7 @@ class ArticleController
 
             // Генерация уникального имени файла для каждого изображения
             $fileName = "image_" . $photoNumber . ".jpg";
-            $imagePath = $articleDir . '/' . $fileName;
+            $imagePath =  $articleDir . '/' . $fileName;
 
             // Сохраняем изображение на сервере
             if ($this->save_Base64Image($base64Data, $imagePath)) {
