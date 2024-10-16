@@ -12,11 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
     let htmlContent = converter.makeHtml(markdownContent);
 
     // Обработка фото
-    htmlContent = htmlContent.replace(/<img src="(\/?uploads\/[^"]+)"/g, (match, p1) => {
-        // Добавляем абсолютный путь от корня сайта, начиная с /
-        let relativePath = p1.replace('/articles/', '/'); // Убираем /articles если оно есть
-        console.log("Relative Path:", relativePath); // Логируем для проверки пути
-        return `<img src="/${relativePath}" alt="Image" />`; // Добавляем слеш в начале
+    htmlContent = htmlContent.replace(/<img\s+[^>]*src="(\/?uploads\/[^"]+)"[^>]*>/g, (match, p1) => {
+        let relativePath = p1.replace('/articles/', '/');
+        let altText = 'Uploaded Image'; // Задаем новое значение для alt
+        return `<img src="/${relativePath}" alt="${altText}" />`; // Заменяем путь и задаем новый alt
     });
 
 

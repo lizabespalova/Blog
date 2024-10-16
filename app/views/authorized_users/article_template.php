@@ -81,17 +81,23 @@ if (!empty($article['tags'])) {
                     <p>No content available for this article.</p>
                 <?php endif; ?>
             </div>
+
+            <!-- Видеоролик YouTube -->
+            <?php if ($youtube_embed_url): ?>
+                <div class="youtube-video">
+                    <h3>Video for the article</h3>
+                    <iframe width="560" height="315" src="<?php echo $youtube_embed_url; ?>"
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            <?php endif; ?>
+
         </div>
 
 
 
-        <!-- Видеоролик YouTube -->
-        <?php if ($article['youtube_link']): ?>
-            <div class="article-video">
-                <iframe src="<?php echo htmlspecialchars($article['youtube_link']); ?>" frameborder="0" allowfullscreen></iframe>
-                <p class="video-caption">Video related to the content of the article.</p>
-            </div>
-        <?php endif; ?>
+
 
     </article>
 </main>

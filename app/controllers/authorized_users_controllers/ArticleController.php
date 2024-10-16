@@ -63,11 +63,27 @@ class ArticleController
 
                 // Обрабатываем и сохраняем все найденные изображения
                $this->process_images($matches, $articleDir, $article_id, $content);
+
+                // Генерируем слаг
+                $slug = $this->create_slug($author, $article_id,$title);
+                $this->articleModel->update_article_slug($article_id, $slug);
+                header('Location: /articles/' . $slug);
+
+                //Добавляю +1 к статье
+                $this->userModel->set_articles($user_id);
+            }else{
+        echo "<script>
+            window.onload = function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to create article. Please try again!',
+                    confirmButtonText: 'OK'
+                });
+        }
+        </script>";
             }
-            // Генерируем слаг
-            $slug = $this->create_slug($author, $article_id,$title);
-            $this->articleModel->update_article_slug($article_id, $slug);
-            header('Location: /articles/' . $slug);
+
             exit(); //exit, чтобы остановить выполнение скрипта после перенаправления
         }
     }
@@ -161,6 +177,10 @@ class ArticleController
             // Парсим содержимое статьи из Markdown в HTML
             $parsedContent = $this->parseMarkdown($article['content']);
 
+            // Получаем YouTube ссылку
+            $youtube_link = $article['youtube_link'];
+            $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
+
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -203,5 +223,14 @@ class ArticleController
     {
         return (new Parsedown())->text($markdownContent);
     }
+// Функция для получения правильной ссылки на YouTube видео
+    private function getYouTubeEmbedUrl($youtube_link)
+    {
+        // Извлекаем ID видео
+        preg_match("/(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|embed\/|v\/))([^\?&\"'>]+)/", $youtube_link, $matches);
+        $video_id = isset($matches[4]) ? $matches[4] : null;
 
+        // Возвращаем ссылку для встраивания
+        return $video_id ? 'https://www.youtube.com/embed/' . $video_id : null;
+    }
 }
