@@ -41,6 +41,13 @@ if (!empty($article['tags'])) {
                 </a>
                 <!-- Заголовок статьи -->
                 <h2 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h2>
+                <?php if ($_SESSION['user']['user_login'] === $article['author']) : ?>
+                    <!-- Кнопки редактирования и удаления только для автора статьи -->
+                    <div class="article-actions">
+                        <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit">Edit</a>
+                        <a href="/articles/delete/<?php echo urlencode($article['slug']); ?>" class="btn btn-delete" onclick="return confirm('Are you sure, that you want to delete the article?');">Delete</a>
+                    </div>
+                <?php endif; ?>
             </div>
             <!-- Имя автора ниже аватара -->
             <div class="author-info">

@@ -100,3 +100,45 @@
 .article-text {
     margin-top: 20px; /* Отступ сверху */
 }
+
+.article-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.article-actions .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+    border-radius: 3px;
+}
+
+/* Кнопка редактирования — синий цвет */
+.article-actions .btn-edit {
+    background-color: #5380e3; /* Синий для редактирования */
+}
+
+.article-actions .btn-edit:hover {
+    background-color: #466bba; /* Темнее при наведении */
+}
+
+.article-actions .btn-edit:active {
+    transform: scale(0.95); /* Эффект нажатия — уменьшение кнопки */
+}
+
+/* Кнопка удаления — красный цвет */
+.article-actions .btn-delete {
+    background-color: #dc3545; /* Красный для удаления */
+}
+
+.article-actions .btn-delete:hover {
+    background-color: #c82333; /* Темнее при наведении */
+}
+
+.article-actions .btn-delete:active {
+    transform: scale(0.95); /* Эффект нажатия — уменьшение кнопки */
+}

@@ -11,17 +11,30 @@ class Articles
     public function __construct($conn) {
         $this->conn = $conn;
     }
-    public function add_article($title, $content, $author, $coverImagePath, $youtubeLink,$category, $difficulty, $read_time, $tags)
+    public function add_article($inputData, $coverImagePath)
     {
         // SQL запрос для вставки статьи
-        $stmt = $this->conn->prepare('INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = $this->conn->prepare(
+            'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+
         if ($stmt === false) {
             die('Prepare failed: ' . $this->conn->error);
         }
 
-        // Привязываем параметры. Используем 's' для строк и 'b' для NULL.
-        $types = 'sssssssss';
-        $params = [$title, $content, $author, /*$link*/ $coverImagePath, $youtubeLink, $category, $difficulty, $read_time, $tags];
+        // Массив данных, который мы передаем для вставки
+        $params = [
+            $inputData['title'] ?? '',         // Заголовок
+            $inputData['content'] ?? '',       // Контент
+            $inputData['author'] ?? '',        // Автор
+            $coverImagePath,                   // Путь к обложке
+            $inputData['youtube_link'] ?? '',  // Ссылка на YouTube
+            $inputData['category'] ?? '',      // Категория
+            $inputData['difficulty'] ?? '',    // Сложность
+            $inputData['read_time'] ?? '',     // Время чтения
+            $inputData['tags'] ?? ''           // Теги
+        ];
 
         // Установить NULL для пустых значений
         foreach ($params as &$param) {
@@ -29,6 +42,9 @@ class Articles
                 $param = null;
             }
         }
+
+        // Привязываем параметры. Используем 's' для строк.
+        $types = str_repeat('s', count($params));
 
         // Привязка параметров
         $stmt->bind_param($types, ...$params);

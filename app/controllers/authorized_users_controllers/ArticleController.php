@@ -30,22 +30,12 @@ class ArticleController
         $this->loginService->check_authorisation();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $title = $_POST['title'];
-            $content = $_POST['content'];
-            $youtube_link = $_POST['youtube_link'];
-            $category = $_POST['category'];
-            $difficulty = $_POST['difficulty'];
-            $read_time = $_POST['read_time'];
-            $tags = $_POST['tags'];
-            $author = $_SESSION['user']['user_login'];
-            $user_id = $_SESSION['user']['user_id'];
+            $inputData = $this->get_article_input();
 
             // Валидация данных
-            $this->validate_input($title, $content);
-
-            // Ищем все изображения в контенте
-            preg_match('/\[image\d+\]\(data:image\/(png|jpg|jpeg|gif);base64,([^"]+)\)/', $content, $matches);
-
+            $this->validate_input($inputData['title'], $inputData['content']);
+            // Обрабатываем контент для поиска изображений
+            $matches = $this->find_images_in_content($inputData['content']);
 //            // Отладка: выводим массив с найденными изображениями
 //            echo "<pre>Контент";
 //            print_r($content);
@@ -53,35 +43,26 @@ class ArticleController
 
             // Добавляем статью в базу данных и получаем её ID
             $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию
-            $article_id = $this->articleModel->add_article($title, '', $author, $cover_image_path, $youtube_link, $category, $difficulty, $read_time, $tags);
+            $article_id = $this->articleModel->add_article($inputData, $cover_image_path/*$title, '', $author, $cover_image_path, $youtube_link, $category, $difficulty, $read_time, $tags*/);
 
             if ($article_id) {
-                $articleDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id);
+                $articleDir = $this->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $article_id);
 
                 // Создаем директорию для статьи (и cover)
-                $this->upload_cover_image($article_id, $user_id);
+                $this->upload_cover_image($article_id, $inputData['user_id']);
 
                 // Обрабатываем и сохраняем все найденные изображения
-               $this->process_images($matches, $articleDir, $article_id, $content);
+               $this->process_images($matches, $articleDir, $article_id, $inputData['content']);
 
                 // Генерируем слаг
-                $slug = $this->create_slug($author, $article_id,$title);
+                $slug = $this->create_slug($inputData['author'], $article_id, $inputData['title']);
                 $this->articleModel->update_article_slug($article_id, $slug);
                 header('Location: /articles/' . $slug);
 
                 //Добавляю +1 к статье
-                $this->userModel->set_articles($user_id);
+                $this->userModel->set_articles($inputData['user_id']);
             }else{
-        echo "<script>
-            window.onload = function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to create article. Please try again!',
-                    confirmButtonText: 'OK'
-                });
-        }
-        </script>";
+                header('Location: /error');
             }
 
             exit(); //exit, чтобы остановить выполнение скрипта после перенаправления
@@ -233,4 +214,26 @@ class ArticleController
         // Возвращаем ссылку для встраивания
         return $video_id ? 'https://www.youtube.com/embed/' . $video_id : null;
     }
+
+    private function get_article_input()
+    {
+        return [
+            'title' => $_POST['title'],
+            'content' => $_POST['content'],
+            'youtube_link' => $_POST['youtube_link'],
+            'category' => $_POST['category'],
+            'difficulty' => $_POST['difficulty'],
+            'read_time' => $_POST['read_time'],
+            'tags' => $_POST['tags'],
+            'author' => $_SESSION['user']['user_login'],
+            'user_id' => $_SESSION['user']['user_id']
+        ];
+    }
+    private function find_images_in_content($content)
+    {
+        preg_match('/\[image\d+\]\(data:image\/(png|jpg|jpeg|gif);base64,([^"]+)\)/', $content, $matches);
+        return $matches;
+    }
+
+
 }
