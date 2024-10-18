@@ -45,7 +45,7 @@ if (!empty($article['tags'])) {
                     <!-- Кнопки редактирования и удаления только для автора статьи -->
                     <div class="article-actions">
                         <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit">Edit</a>
-                        <a href="/articles/delete/<?php echo urlencode($article['slug']); ?>" class="btn btn-delete" onclick="return confirm('Are you sure, that you want to delete the article?');">Delete</a>
+                        <a href="javascript:void(0);" class="btn btn-delete" onclick="confirmDelete(event, '<?php echo urlencode($article['slug']); ?>')">Delete</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -116,9 +116,11 @@ if (!empty($article['tags'])) {
 
 <!-- Подключаем SimpleMDE JavaScript для рендеринга Markdown -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/get_markdown.js"></script>
+<script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 
 </body>

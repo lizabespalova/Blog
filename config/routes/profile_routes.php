@@ -51,11 +51,17 @@ function profile_route($uri, $method) {
             $controller->create_article();
             }
             exit();  // Остановка выполнения после маршрута
-        case (preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches) ? true : false):
+        case (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
             $slug = $matches[1]; // Извлекаем слаг из URL
             $controller = new ArticleController($dbConnection);
             $controller->show_article($slug);
             exit(); // Остановка выполнения после маршрута
+        case (bool)preg_match('/^\/articles\/delete\/([\w-]+)$/', $uri, $matches):
+            $slug = $matches[1];
+            $controller = new ArticleController(getDbConnection());
+            $controller->delete_article($slug);
+            exit();
+
         default:
             return false;
     }

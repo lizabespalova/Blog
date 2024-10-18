@@ -4,6 +4,7 @@ use controllers\auth_controllers\ForgetPasswordController;
 use controllers\auth_controllers\LoginController;
 use controllers\auth_controllers\RegisterController;
 use controllers\auth_controllers\ResetPasswordController;
+use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\LogoutController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\ErrorController;
@@ -72,9 +73,10 @@ function authorization_route($uri, $method) {
             $controller->show_error();
             exit();
         case '/logout':
-            $controller = new LogoutController(getDbConnection());
+            $controller = new LogoutController();
             $controller->logout();
             exit();
+
         default:
             return false;
     }

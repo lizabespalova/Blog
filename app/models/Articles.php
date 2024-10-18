@@ -101,4 +101,20 @@ class Articles
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
+    public function delete_article($slug) {
+        $stmt = $this->conn->prepare('DELETE FROM articles WHERE slug = ?');
+        if ($stmt === false) {
+            die('Prepare failed: ' . $this->conn->error);
+        }
+        $stmt->bind_param('s', $slug);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            error_log("Delete failed: " . $stmt->error);
+            $stmt->close();
+            return false;
+        }
+    }
 }

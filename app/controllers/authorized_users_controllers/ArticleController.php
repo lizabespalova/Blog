@@ -168,6 +168,8 @@ class ArticleController
             echo "Article not found.";
         }
     }
+
+
     /**
      * Сохраняет изображение, переданное в формате base64, по указанному пути.
      *
@@ -198,6 +200,8 @@ class ArticleController
         echo "Изображение успешно сохранено по пути {$imagePath}.\n";
         return true;
     }
+
+
 
     // Функция для парсинга Markdown
     public function parseMarkdown($markdownContent): string
@@ -234,6 +238,14 @@ class ArticleController
         preg_match('/\[image\d+\]\(data:image\/(png|jpg|jpeg|gif);base64,([^"]+)\)/', $content, $matches);
         return $matches;
     }
-
-
+    public function delete_article($slug){
+            if ($this->articleModel->delete_article($slug)) {
+                header('Location: /articles?status=deleted');
+                exit();
+            } else {
+                // Обработка ошибки
+                header('Location: /error');
+                exit();
+            }
+    }
 }

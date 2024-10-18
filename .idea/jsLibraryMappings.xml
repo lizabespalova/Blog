@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{@joeattardi/emoji-button, bootstrap, default, emoji-button, emoji-mart, font-awesome, highlight, marked, showdown, simplemde}" />
+    <file url="PROJECT" libraries="{default, font-awesome, highlight, showdown, simplemde, sweetalert2}" />
   </component>
 </project>
