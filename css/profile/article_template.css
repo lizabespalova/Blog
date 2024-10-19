@@ -142,3 +142,162 @@
 .article-actions .btn-delete:active {
     transform: scale(0.95); /* Эффект нажатия — уменьшение кнопки */
 }
+
+
+
+
+/*Лайк, дизлайк, избранное*/
+/* Разделительная полоска */
+.article-divider {
+    margin: 40px 0;
+    border: none;
+    height: 2px;
+    background-color: #ddd;
+}
+
+/* Блок с реакциями */
+.article-reactions {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.reaction-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reaction-buttons button i {
+    font-size: 16px;
+}
+
+.reaction-buttons button:hover {
+    background-color: #f0f0f0;
+}
+
+.reaction-buttons .like-count,
+.reaction-buttons .dislike-count {
+    font-weight: bold;
+    color: #5380e3;
+}
+
+.reaction-buttons .btn-favorite i {
+    color: #f0c040;
+}
+
+.reaction-buttons .btn-like:hover,
+.reaction-buttons .btn-repost:hover {
+    color: #5380e3;
+}
+
+.reaction-buttons .btn-dislike:hover {
+    color: #e04b4b;
+}
+
+.reaction-buttons .btn-favorite:hover {
+    color: #f0c040;
+}
+
+
+
+/*Комментарии*/
+
+.comments-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.comments-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.comments-container .comment {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-author-name {
+    font-weight: bold;
+    color: #5380e3;
+}
+
+.comment-content {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.comment-actions {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999;
+}
+
+.comment-actions a.comment-reply-btn {
+    text-decoration: none;
+    color: #5380e3;
+}
+
+.add-comment-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-comment-form .comment-input {
+    resize: none;
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.add-comment-form .btn-add-comment {
+    align-self: flex-end;
+    padding: 8px 15px;
+    background-color: #5380e3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-comment-form .btn-add-comment:hover {
+    background-color: #436cb0;
+}

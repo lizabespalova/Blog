@@ -99,11 +99,56 @@ if (!empty($article['tags'])) {
                     </iframe>
                 </div>
             <?php endif; ?>
+            <!-- Разделительная полоска перед комментариями -->
+            <hr class="article-divider">
+
+            <!-- Блок с лайками, дизлайками, избранным и репостом -->
+            <section class="article-reactions">
+                <div class="reaction-buttons">
+                    <button class="btn-like" title="Like">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <button class="btn-dislike" title="Dislike">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <button class="btn-favorite" title="Add to Favorites">
+                        <i class="fas fa-star"></i>
+                    </button>
+                    <button class="btn-repost" title="Repost">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Блок комментариев -->
+            <section class="comments-section">
+                <h3>Comments</h3>
+                <div class="comments-container">
+                    <!-- Пример комментария -->
+                    <div class="comment">
+                        <div class="comment-author">
+                            <img src="/path/to/avatar.jpg" alt="Author Avatar" class="comment-author-avatar">
+                            <span class="comment-author-name">User123</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>This is a sample comment. It will be dynamically generated in the future.</p>
+                        </div>
+                        <div class="comment-actions">
+                            <span class="comment-date">Posted on: 12 Oct 2024</span>
+                            <a href="#" class="comment-reply-btn">Reply</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Форма добавления комментария -->
+                <form class="add-comment-form">
+                    <textarea placeholder="Add a comment..." class="comment-input"></textarea>
+                    <button type="submit" class="btn btn-add-comment">Post Comment</button>
+                </form>
+            </section>
+
 
         </div>
-
-
-
 
 
     </article>

@@ -2,6 +2,7 @@
 
 namespace controllers\authorized_users_controllers;
 
+use models\ArticleImages;
 use models\Articles;
 use models\User;
 use Parsedown;
@@ -10,12 +11,14 @@ use services\LoginService;
 class ArticleController
 {
     private $articleModel;
+    private $articleImagesModel;
     private $userModel;
     private $loginService;
 
     public function __construct($conn)
     {
         $this->articleModel = new Articles($conn);
+        $this->articleImagesModel = new ArticleImages($conn);
         $this->loginService = new LoginService($conn);
         $this->userModel = new User($conn);
     }
@@ -51,12 +54,13 @@ class ArticleController
                 // Создаем директорию для статьи (и cover)
                 $this->upload_cover_image($article_id, $inputData['user_id']);
 
-                // Обрабатываем и сохраняем все найденные изображения
-               $this->process_images($matches, $articleDir, $article_id, $inputData['content']);
-
                 // Генерируем слаг
                 $slug = $this->create_slug($inputData['author'], $article_id, $inputData['title']);
                 $this->articleModel->update_article_slug($article_id, $slug);
+
+                // Обрабатываем и сохраняем все найденные изображения
+                $this->process_images($matches, $articleDir, $article_id, $inputData['content'], $slug);
+
                 header('Location: /articles/' . $slug);
 
                 //Добавляю +1 к статье
@@ -68,7 +72,7 @@ class ArticleController
             exit(); //exit, чтобы остановить выполнение скрипта после перенаправления
         }
     }
-    public function process_images($matches, $articleDir, $article_id, $content){
+    public function process_images($matches, $articleDir, $article_id, $content, $slug){
         $pattern = '/\[image(\d+)\]\(data:image\/[a-zA-Z]+;base64,([^\)]+)\)/';
         preg_match_all($pattern, $matches[0], $result);
 
@@ -82,7 +86,7 @@ class ArticleController
             // Сохраняем изображение на сервере
             if ($this->save_Base64Image($base64Data, $imagePath)) {
                 // Если изображение успешно сохранено, сохраняем путь в базу данных
-                $this->articleModel->save_image_path_to_db($article_id, $imagePath);
+                $this->articleImagesModel->save_image_path_to_db($article_id, $imagePath,$slug);
             }
         }
         // Заменяем base64 код в контенте на путь к изображению
@@ -240,8 +244,9 @@ class ArticleController
     }
     public function delete_article($slug){
             if ($this->articleModel->delete_article($slug)) {
-                header('Location: /articles?status=deleted');
-                exit();
+//                header('Location: /articles?status=deleted');
+//                exit();
+                return true;
             } else {
                 // Обработка ошибки
                 header('Location: /error');

@@ -1,12 +1,8 @@
 <?php
 
-use controllers\auth_controllers\ForgetPasswordController;
-use controllers\auth_controllers\LoginController;
-use controllers\auth_controllers\RegisterController;
-use controllers\auth_controllers\ResetPasswordController;
 use controllers\authorized_users_controllers\ArticleController;
+use controllers\authorized_users_controllers\ArticleImagesController;
 use controllers\authorized_users_controllers\EditProfileController;
-use controllers\authorized_users_controllers\ProfileController;
 use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
@@ -60,6 +56,8 @@ function profile_route($uri, $method) {
             $slug = $matches[1];
             $controller = new ArticleController(getDbConnection());
             $controller->delete_article($slug);
+            $controller = new ArticleImagesController(getDbConnection());
+            $controller->delete_article_images($slug);
             exit();
 
         default:
