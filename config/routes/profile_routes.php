@@ -47,11 +47,11 @@ function profile_route($uri, $method) {
             $controller->create_article();
             }
             exit();  // Остановка выполнения после маршрута
-        case (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
+        case $_SERVER['REQUEST_METHOD'] === 'GET' && (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
             $slug = $matches[1]; // Извлекаем слаг из URL
             $controller = new ArticleController($dbConnection);
             $controller->show_article($slug);
-            exit(); // Остановка выполнения после маршрута
+            exit();
         case (bool)preg_match('/^\/articles\/delete\/([\w-]+)$/', $uri, $matches):
             $slug = $matches[1];
             $controller = new ArticleController(getDbConnection());
@@ -59,7 +59,10 @@ function profile_route($uri, $method) {
             $controller = new ArticleImagesController(getDbConnection());
             $controller->delete_article_images($slug);
             exit();
-
+        case $_SERVER['REQUEST_METHOD'] === 'POST' && $uri === '/articles/react':
+            $controller = new ArticleController(getDbConnection());
+            $controller->handle_reaction();
+            exit();
         default:
             return false;
     }

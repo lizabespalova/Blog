@@ -3,15 +3,18 @@
 namespace controllers\authorized_users_controllers;
 
 use models\ArticleImages;
+use models\ArticleReactions;
 use models\Articles;
 use models\User;
 use Parsedown;
 use services\LoginService;
-
+use function Symfony\Component\String\s;
+require_once 'app/services/helpers/session_check.php';
 class ArticleController
 {
     private $articleModel;
     private $articleImagesModel;
+    private $articleReactionsModel;
     private $userModel;
     private $loginService;
 
@@ -21,6 +24,7 @@ class ArticleController
         $this->articleImagesModel = new ArticleImages($conn);
         $this->loginService = new LoginService($conn);
         $this->userModel = new User($conn);
+        $this->articleReactionsModel = new ArticleReactions($conn);
     }
 
     public function show_article_form()
@@ -29,7 +33,7 @@ class ArticleController
     }
     public function create_article()
     {
-        session_start();
+//        session_start();
         $this->loginService->check_authorisation();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -165,7 +169,7 @@ class ArticleController
             // Получаем YouTube ссылку
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
-
+//            $user = $_SESSION['user'];
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -253,4 +257,83 @@ class ArticleController
                 exit();
             }
     }
+
+    public function handle_reaction() {
+        // Получаем данные из POST-запроса
+        $input = json_decode(file_get_contents('php://input'), true);
+        $this->check_data($input);
+
+        $slug = $input['slug'];
+        $reactionType = $input['reaction_type'];
+        $userId = $input['user_id'];
+
+        // Проверка существующей реакции
+        $existingReaction = $this->articleReactionsModel->get_reaction($userId, $slug);
+
+        // Отладочный вывод
+        error_log('Существующая реакция: ' . print_r($existingReaction, true));
+
+        if ($existingReaction) {
+            // Если реакция уже есть
+            if ($existingReaction['reaction_type'] === $reactionType) {
+                // Если это та же реакция, удалить ее
+                $this->articleReactionsModel->remove_reaction($userId, $slug);
+                if ($reactionType === 'like') {
+                    $this->articleModel->decrement_like_count($slug);
+                } else {
+                    $this->articleModel->decrement_dislike_count($slug);
+                }
+                echo json_encode(['success' => true, 'message' => 'Reaction removed']);
+            } else {
+                // Если реакция отличается, обновить ее
+                $this->articleReactionsModel->update_reaction($userId, $slug, $reactionType);
+                if ($reactionType === 'like') {
+                    $this->articleModel->increment_like_count($slug);
+                    $this->articleModel->decrement_dislike_count($slug);
+                } else {
+                    $this->articleModel->increment_dislike_count($slug);
+                    $this->articleModel->decrement_like_count($slug);
+                }
+                echo json_encode(['success' => true, 'message' => 'Reaction updated']);
+            }
+        } else {
+            // Если реакции нет, добавить новую
+            $this->articleReactionsModel->add_reaction($userId, $slug, $reactionType);
+            if ($reactionType === 'like') {
+                $this->articleModel->increment_like_count($slug);
+            } else {
+                $this->articleModel->increment_dislike_count($slug);
+            }
+            echo json_encode(['success' => true, 'message' => 'Reaction added']);
+        }
+        exit();
+    }
+
+
+
+    public function check_data($input){
+        if (!isset($input['slug'], $input['reaction_type'], $input['user_id'])) {
+            $missingParams = [];
+
+            // Проверяем, какие параметры отсутствуют
+            if (!isset($input['slug'])) {
+                $missingParams[] = 'slug';
+            }
+            if (!isset($input['reaction_type'])) {
+                $missingParams[] = 'reaction_type';
+            }
+            if (!isset($input['user_id'])) {
+                $missingParams[] = 'user_id';
+            }
+
+            echo json_encode([
+                'success' => false,
+                'error' => 'Missing parameters',
+                'missing' => $missingParams
+            ]);
+            exit();
+        }
+    }
+
+
 }

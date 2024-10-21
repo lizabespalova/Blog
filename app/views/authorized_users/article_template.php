@@ -105,20 +105,30 @@ if (!empty($article['tags'])) {
             <!-- Блок с лайками, дизлайками, избранным и репостом -->
             <section class="article-reactions">
                 <div class="reaction-buttons">
-                    <button class="btn-like" title="Like">
+                    <!-- Лайки -->
+                    <button class="btn-like" title="Like" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
                         <i class="fas fa-thumbs-up"></i>
+                        <span class="like-count"><?php echo htmlspecialchars($article['likes']); ?></span> <!-- Здесь будет отображаться количество лайков -->
                     </button>
-                    <button class="btn-dislike" title="Dislike">
+
+                    <!-- Дизлайки -->
+                    <button class="btn-dislike" title="Dislike" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
                         <i class="fas fa-thumbs-down"></i>
+                        <span class="dislike-count"><?php echo htmlspecialchars($article['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
                     </button>
+
+                    <!-- Избранное -->
                     <button class="btn-favorite" title="Add to Favorites">
                         <i class="fas fa-star"></i>
                     </button>
+
+                    <!-- Репост -->
                     <button class="btn-repost" title="Repost">
                         <i class="fas fa-share-alt"></i>
                     </button>
                 </div>
             </section>
+
 
             <!-- Блок комментариев -->
             <section class="comments-section">
@@ -165,6 +175,7 @@ if (!empty($article['tags'])) {
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/get_markdown.js"></script>
+<script src="/js/authorized_users/articles_actions.js"></script>
 <script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 

@@ -2,7 +2,6 @@
 
 namespace models;
 
-use Exception;
 class ArticleImages
 {
     private $conn;

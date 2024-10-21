@@ -1,5 +1,6 @@
 <?php
 
+
 namespace models;
 
 use Exception;
@@ -63,23 +64,6 @@ class Articles
         }
     }
 
-//    public function save_image_path_to_db($article_id, string $image_path)
-//    {
-//        $sql = "INSERT INTO article_images (article_id, image_path) VALUES (?, ?)";
-//        $stmt = $this->conn->prepare($sql);
-//        if ($stmt === false) {
-//            die('Ошибка подготовки запроса: ' . $this->conn->error);
-//        }
-//
-//        // Привязываем параметры и выполняем запрос
-//        $stmt->bind_param('is', $article_id, $image_path);
-//        if (!$stmt->execute()) {
-//            die('Ошибка выполнения запроса: ' . $stmt->error);
-//        }
-//
-//        // Закрываем подготовленный запрос
-//        $stmt->close();
-//    }
     public function update_content($articleId, $content){
         $stmt = $this->conn->prepare("UPDATE articles SET content = ? WHERE id = ?");
         $stmt->bind_param("si", $content, $articleId); // "si" - строка и целое число
@@ -101,6 +85,7 @@ class Articles
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
+
     public function delete_article($slug) {
         $stmt = $this->conn->prepare('DELETE FROM articles WHERE slug = ?');
         if ($stmt === false) {
@@ -116,5 +101,40 @@ class Articles
             $stmt->close();
             return false;
         }
+    }
+    // Метод для увеличения счетчика лайков
+    public function increment_like_count($slug) {
+        $sql = "UPDATE articles SET likes = likes + 1 WHERE slug = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    // Метод для уменьшения счетчика лайков
+    public function decrement_like_count($slug) {
+        $sql = "UPDATE articles SET likes = GREATEST(likes - 1, 0) WHERE slug = ?"; // Не допускаем отрицательных значений
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    // Метод для увеличения счетчика дизлайков
+    public function increment_dislike_count($slug) {
+        $sql = "UPDATE articles SET dislikes = dislikes + 1 WHERE slug = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    // Метод для уменьшения счетчика дизлайков
+    public function decrement_dislike_count($slug) {
+        $sql = "UPDATE articles SET dislikes = GREATEST(dislikes - 1, 0) WHERE slug = ?"; // Не допускаем отрицательных значений
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $stmt->close();
     }
 }
