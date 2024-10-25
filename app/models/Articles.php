@@ -137,4 +137,31 @@ class Articles
         $stmt->execute();
         $stmt->close();
     }
+    // Метод для получения количества лайков
+    public function get_likes_count($slug): int
+    {
+        $slug = $this->conn->real_escape_string($slug); // Экранируем строку для безопасности
+        $sql = "SELECT likes FROM articles WHERE slug = '$slug'";
+        $result = $this->conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return (int)$row['likes'];
+        }
+        return 0; // Если запись не найдена
+    }
+
+    // Метод для получения количества дизлайков
+    public function get_dislikes_count($slug): int
+    {
+        $slug = $this->conn->real_escape_string($slug); // Экранируем строку для безопасности
+        $sql = "SELECT dislikes FROM articles WHERE slug = '$slug'";
+        $result = $this->conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return (int)$row['dislikes'];
+        }
+        return 0; // Если запись не найдена
+    }
 }

@@ -191,6 +191,7 @@
 .reaction-buttons .dislike-count {
     font-weight: bold;
     color: #5380e3;
+
 }
 
 .reaction-buttons .btn-favorite i {
@@ -211,26 +212,27 @@
 }
 
 /*Комментарии*/
-
 .comments-section {
     margin-top: 30px;
     padding: 20px;
-    background-color: #f9f9f9;
     border-radius: 8px;
+    border: 1px solid #ddd; /* легкая рамка */
 }
 
 .comments-section h3 {
-    font-size: 20px;
+    font-size: 24px;
     margin-bottom: 20px;
-    color: #333;
+    color: #333; /* темно-серый цвет для заголовка */
+    text-align: left; /* выравнивание заголовка */
 }
 
 .comments-container .comment {
     margin-bottom: 15px;
     padding: 15px;
-    background-color: #fff;
+    background-color: #f8f8f8; /* светло-серый фон для комментариев */
     border: 1px solid #ddd;
     border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* легкая тень */
 }
 
 .comment-author {
@@ -240,15 +242,16 @@
 }
 
 .comment-author-avatar {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* размер аватара */
+    height: 50px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
 .comment-author-name {
     font-weight: bold;
-    color: #5380e3;
+    color: #0056b3; /* синий цвет для имени автора */
+    text-decoration: none;
 }
 
 .comment-content {
@@ -260,13 +263,29 @@
 .comment-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 12px;
     color: #999;
 }
 
-.comment-actions a.comment-reply-btn {
-    text-decoration: none;
-    color: #5380e3;
+.comment-buttons {
+    display: flex;
+    gap: 10px; /* отступ между кнопками */
+}
+
+.comment-buttons button {
+    background-color: #e0e0e0; /* светло-серая кнопка */
+    color: #333; /* цвет текста */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 8px; /* уменьшенный отступ */
+    font-size: 12px;
+    transition: background-color 0.3s; /* эффект перехода */
+}
+
+.comment-buttons button:hover {
+    background-color: #d0d0d0; /* более темная серая при наведении */
 }
 
 .add-comment-form {
@@ -277,9 +296,9 @@
 
 .add-comment-form .comment-input {
     resize: none;
-    width: 100%;
+    width: 97%;
     height: 80px;
-    padding: 5px;
+    padding: 10px; /* отступ */
     border: 1px solid #ddd;
     border-radius: 6px;
     margin-bottom: 10px;
@@ -289,13 +308,47 @@
 .add-comment-form .btn-add-comment {
     align-self: flex-end;
     padding: 8px 15px;
-    background-color: #5380e3;
+    background-color: #0056b3; /* синий цвет для кнопки отправки */
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s; /* эффект перехода */
 }
 
 .add-comment-form .btn-add-comment:hover {
-    background-color: #436cb0;
+    background-color: #004494; /* более темный синий при наведении */
+}
+
+
+.reply-input {
+    width: 90%; /* Ширина textarea на всю ширину */
+    height: 60px; /* Высота textarea */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 5px; /* Закругление углов */
+    padding: 10px; /* Внутренние отступы */
+    font-size: 14px; /* Размер шрифта */
+    resize: none; /* Запретить изменение размера */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+    margin-top: 10px; /* Отступ сверху для смещения вниз */
+}
+
+.reply-input:focus {
+    border-color: #007bff; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное обведение */
+}
+
+.btn-add-reply {
+    margin-top: 5px; /* Отступ сверху */
+    padding: 8px 12px; /* Внутренние отступы */
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругление углов */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.btn-add-reply:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
 }

@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
+                console.log('Server response:', data); // Логирование ответа сервера
                 if (data.success) {
                     likeCount.textContent = formatNumber(data.likes); // Обновляем количество лайков
                     dislikeCount.textContent = formatNumber(data.dislikes); // Обновляем количество дизлайков

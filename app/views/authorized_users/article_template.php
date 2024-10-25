@@ -129,33 +129,48 @@ if (!empty($article['tags'])) {
                 </div>
             </section>
 
-
-            <!-- Блок комментариев -->
+            <!-- Блок с комментариями -->
             <section class="comments-section">
                 <h3>Comments</h3>
                 <div class="comments-container">
-                    <!-- Пример комментария -->
-                    <div class="comment">
-                        <div class="comment-author">
-                            <img src="/path/to/avatar.jpg" alt="Author Avatar" class="comment-author-avatar">
-                            <span class="comment-author-name">User123</span>
+                    <?php foreach ($comments as $comment): ?>
+                        <div class="comment">
+                            <div class="comment-author">
+                                <a href="<?= htmlspecialchars($comment['link']); ?>" class="comment-author-link">
+                                    <img src="<?= htmlspecialchars($comment['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
+                                    <span class="comment-author-name"><?= htmlspecialchars($comment['user_login']); ?></span>
+                                </a>
+                            </div>
+                            <div class="comment-content">
+                                <p><?= htmlspecialchars($comment['comment_text']); ?></p>
+                            </div>
+                            <div class="comment-actions">
+                                <span class="comment-date">Posted on: <?= htmlspecialchars($comment['created_at']); ?></span>
+                                <div class="comment-buttons">
+                                    <button class="btn-like">👍</button>
+                                    <button class="btn-dislike">👎</button>
+                                    <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>">Reply</button>
+                                </div>
+                            </div>
+
+                            <!-- Форма ответа на комментарий -->
+                            <form class="reply-comment-form" data-parent-id="<?= $comment['id']; ?>" style="display: none;">
+                                <textarea placeholder="Add a reply..." class="reply-input"></textarea>
+                                <button type="submit" class="btn btn-add-reply">Post Reply</button>
+                            </form>
                         </div>
-                        <div class="comment-content">
-                            <p>This is a sample comment. It will be dynamically generated in the future.</p>
-                        </div>
-                        <div class="comment-actions">
-                            <span class="comment-date">Posted on: 12 Oct 2024</span>
-                            <a href="#" class="comment-reply-btn">Reply</a>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Форма добавления комментария -->
                 <form class="add-comment-form">
+                    <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
+                    <input type="hidden" class="user-id" value="<?= htmlspecialchars($user['user_id']); ?>">
                     <textarea placeholder="Add a comment..." class="comment-input"></textarea>
                     <button type="submit" class="btn btn-add-comment">Post Comment</button>
                 </form>
             </section>
+
 
 
         </div>
@@ -175,7 +190,8 @@ if (!empty($article['tags'])) {
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/get_markdown.js"></script>
-<script src="/js/authorized_users/articles_actions.js"></script>
+<script src="/js/authorized_users/articles_reactions.js"></script>
+<script src="/js/authorized_users/articles_comments.js"></script>
 <script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 

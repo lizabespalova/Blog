@@ -2,6 +2,7 @@
 
 namespace controllers\authorized_users_controllers;
 
+use models\ArticleComments;
 use models\ArticleImages;
 use models\ArticleReactions;
 use models\Articles;
@@ -16,6 +17,7 @@ class ArticleController
     private $articleImagesModel;
     private $articleReactionsModel;
     private $userModel;
+    private $articleCommentsModel;
     private $loginService;
 
     public function __construct($conn)
@@ -25,6 +27,8 @@ class ArticleController
         $this->loginService = new LoginService($conn);
         $this->userModel = new User($conn);
         $this->articleReactionsModel = new ArticleReactions($conn);
+        $this->articleCommentsModel = new ArticleComments(getDbConnection());
+
     }
 
     public function show_article_form()
@@ -169,7 +173,8 @@ class ArticleController
             // Получаем YouTube ссылку
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
-//            $user = $_SESSION['user'];
+            //comments
+            $comments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -227,7 +232,7 @@ class ArticleController
         return $video_id ? 'https://www.youtube.com/embed/' . $video_id : null;
     }
 
-    private function get_article_input()
+    private function get_article_input(): array
     {
         return [
             'title' => $_POST['title'],
@@ -241,7 +246,7 @@ class ArticleController
             'user_id' => $_SESSION['user']['user_id']
         ];
     }
-    private function find_images_in_content($content)
+    private function find_images_in_content($content): array
     {
         preg_match('/\[image\d+\]\(data:image\/(png|jpg|jpeg|gif);base64,([^"]+)\)/', $content, $matches);
         return $matches;
@@ -283,7 +288,7 @@ class ArticleController
                 } else {
                     $this->articleModel->decrement_dislike_count($slug);
                 }
-                echo json_encode(['success' => true, 'message' => 'Reaction removed']);
+                $message = 'Reaction removed';
             } else {
                 // Если реакция отличается, обновить ее
                 $this->articleReactionsModel->update_reaction($userId, $slug, $reactionType);
@@ -294,7 +299,7 @@ class ArticleController
                     $this->articleModel->increment_dislike_count($slug);
                     $this->articleModel->decrement_like_count($slug);
                 }
-                echo json_encode(['success' => true, 'message' => 'Reaction updated']);
+                $message = 'Reaction updated';
             }
         } else {
             // Если реакции нет, добавить новую
@@ -304,7 +309,45 @@ class ArticleController
             } else {
                 $this->articleModel->increment_dislike_count($slug);
             }
-            echo json_encode(['success' => true, 'message' => 'Reaction added']);
+            $message = 'Reaction added';
+        }
+
+        // Получаем актуальное количество лайков и дизлайков
+        $updated_likes = $this->articleModel->get_likes_count($slug);
+        $updated_dislikes = $this->articleModel->get_dislikes_count($slug);
+
+        // Возвращаем обновленные данные в ответе
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+            'likes' => $updated_likes,
+            'dislikes' => $updated_dislikes
+        ]);
+
+        exit();
+    }
+
+    public function handle_add_comment() {
+        // Получаем данные из POST-запроса
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        // Валидация данных
+        if (empty($input['comment_text']) || empty($input['article_slug']) || empty($input['user_id'])) {
+            echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+            exit();
+        }
+
+        $article_slug = $input['article_slug'];
+        $user_id = $input['user_id'];
+        $comment_text = $input['comment_text'];
+
+        // Используем модель для сохранения комментария
+        $isAdded = $this->articleCommentsModel->add_comment($article_slug, $user_id, $comment_text);
+
+        if ($isAdded) {
+            echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to add comment']);
         }
         exit();
     }

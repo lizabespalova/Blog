@@ -63,6 +63,10 @@ function profile_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->handle_reaction();
             exit();
+        case $_SERVER['REQUEST_METHOD'] === 'POST' && $uri === '/articles/add_comment':
+            $controller = new ArticleController(getDbConnection());
+            $controller->handle_add_comment();
+            exit();
         default:
             return false;
     }
