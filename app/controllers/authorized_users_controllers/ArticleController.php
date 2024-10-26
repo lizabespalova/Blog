@@ -174,7 +174,16 @@ class ArticleController
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
             //comments
-            $comments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
+            $ustructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
+//            if (is_array($ustructuredComments)) {
+//                echo "<pre>"; // Используем <pre> для форматирования вывода
+//                var_dump($ustructuredComments);
+//                echo "</pre>";
+//            } else {
+//                echo "No comments found or not an array.";
+//            }
+
+            $comments = $this->structure_comments(  $ustructuredComments );
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -213,6 +222,42 @@ class ArticleController
         echo "Изображение успешно сохранено по пути {$imagePath}.\n";
         return true;
     }
+
+    public function structure_comments($comments) {
+        $structuredComments = [];
+
+        // Вывод всех комментариев для отладки
+        error_log("All comments: " . json_encode($comments));
+
+        // Сначала обрабатываем корневые комментарии
+        foreach ($comments as $comment) {
+            if (is_null($comment['parent_id'])) {
+                // Если это корневой комментарий, сохраняем его и инициализируем массив для вложенных комментариев
+                $structuredComments[$comment['id']] = $comment;
+                $structuredComments[$comment['id']]['replies'] = [];
+            }
+        }
+
+        // Затем обрабатываем вложенные комментарии
+        foreach ($comments as $comment) {
+            if (!is_null($comment['parent_id'])) {
+                // Если это вложенный комментарий, добавляем его в массив replies
+                if (isset($structuredComments[$comment['parent_id']])) {
+                    $structuredComments[$comment['parent_id']]['replies'][] = $comment;
+                }
+//                else {
+//                    // Вывод информации для отладки, если родительский комментарий не найден
+//                    error_log("Parent comment ID {$comment['parent_id']} not found for reply: " . json_encode($comment));
+//                }
+            }
+        }
+
+//        // Вывод структурированных комментариев для отладки
+//        var_dump($structuredComments);
+
+        return $structuredComments;
+    }
+
 
 
 
@@ -340,9 +385,10 @@ class ArticleController
         $article_slug = $input['article_slug'];
         $user_id = $input['user_id'];
         $comment_text = $input['comment_text'];
+        $parent_id = !empty($input['parent_id']) ? $input['parent_id'] : null;
 
         // Используем модель для сохранения комментария
-        $isAdded = $this->articleCommentsModel->add_comment($article_slug, $user_id, $comment_text);
+        $isAdded = $this->articleCommentsModel->add_comment($article_slug, $user_id, $comment_text, $parent_id);
 
         if ($isAdded) {
             echo json_encode(['success' => true, 'message' => 'Comment added successfully']);

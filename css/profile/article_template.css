@@ -352,3 +352,24 @@
 .btn-add-reply:hover {
     background-color: #0056b3; /* Цвет фона при наведении */
 }
+
+.btn-toggle-replies {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1.2em;
+    color: #007bff;
+}
+
+.replies-container {
+    display: none; /* Скрываем по умолчанию */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Плавный переход */
+    overflow: hidden; /* Скрываем переполнение */
+    margin-top: 10px; /* Отступ сверху, можно изменить по вашему усмотрению */
+    margin-bottom: 10px; /* Отступ снизу, можно изменить по вашему усмотрению */
+}
+
+.replies-container.show {
+    max-height: 500px; /* Максимальная высота при открытом состоянии */
+    opacity: 1; /* Полная непрозрачность при открытом состоянии */
+}

@@ -150,7 +150,36 @@ if (!empty($article['tags'])) {
                                     <button class="btn-like">👍</button>
                                     <button class="btn-dislike">👎</button>
                                     <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>">Reply</button>
+                                    <button class="btn-toggle-replies">⮟</button> <!-- Кнопка для раскрытия ответов -->
                                 </div>
+                            </div>
+
+                            <!-- Контейнер для вложенных ответов -->
+                            <div class="replies-container" style="display: none;">
+                                <?php if (!empty($comment['replies'])): ?>
+                                    <?php foreach ($comment['replies'] as $reply): ?>
+                                        <div class="comment reply">
+                                            <div class="comment-author">
+                                                <a href="<?= htmlspecialchars($reply['link']); ?>" class="comment-author-link">
+                                                    <img src="<?= htmlspecialchars($reply['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
+                                                    <span class="comment-author-name"><?= htmlspecialchars($reply['user_login']); ?></span>
+                                                </a>
+                                            </div>
+                                            <div class="comment-content">
+                                                <p><?= htmlspecialchars($reply['comment_text']); ?></p>
+                                            </div>
+                                            <div class="comment-actions">
+                                                <span class="comment-date">Posted on: <?= htmlspecialchars($reply['created_at']); ?></span>
+                                                <div class="comment-buttons">
+                                                    <button class="btn-like">👍</button>
+                                                    <button class="btn-dislike">👎</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p>No replies yet.</p> <!-- Сообщение, если нет ответов -->
+                                <?php endif; ?>
                             </div>
 
                             <!-- Форма ответа на комментарий -->
@@ -162,7 +191,7 @@ if (!empty($article['tags'])) {
                     <?php endforeach; ?>
                 </div>
 
-                <!-- Форма добавления комментария -->
+                <!-- Форма добавления нового комментария -->
                 <form class="add-comment-form">
                     <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
                     <input type="hidden" class="user-id" value="<?= htmlspecialchars($user['user_id']); ?>">
@@ -170,6 +199,7 @@ if (!empty($article['tags'])) {
                     <button type="submit" class="btn btn-add-comment">Post Comment</button>
                 </form>
             </section>
+
 
 
 

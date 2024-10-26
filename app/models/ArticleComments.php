@@ -23,10 +23,10 @@ class ArticleComments
         return $comments;
     }
     // Метод для добавления комментария
-    public function add_comment($article_slug, $user_id, $comment_text) {
-        $query = "INSERT INTO comments (article_slug, user_id, comment_text) VALUES (?, ?, ?)";
+    public function add_comment($article_slug, $user_id, $comment_text, $parent_id ) {
+        $query = "INSERT INTO comments (article_slug, user_id, comment_text, parent_id) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('sis', $article_slug, $user_id, $comment_text);
+        $stmt->bind_param('siss', $article_slug, $user_id, $comment_text, $parent_id);
 
         $result = $stmt->execute(); // Выполнение запроса
 
