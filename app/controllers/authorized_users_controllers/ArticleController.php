@@ -174,7 +174,7 @@ class ArticleController
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
             //comments
-            $ustructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
+           $unstructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
 //            if (is_array($ustructuredComments)) {
 //                echo "<pre>"; // Используем <pre> для форматирования вывода
 //                var_dump($ustructuredComments);
@@ -183,7 +183,7 @@ class ArticleController
 //                echo "No comments found or not an array.";
 //            }
 
-            $comments = $this->structure_comments(  $ustructuredComments );
+            $comments = $this->structure_comments(  $unstructuredComments );
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -396,6 +396,18 @@ class ArticleController
             echo json_encode(['success' => false, 'message' => 'Failed to add comment']);
         }
         exit();
+    }
+
+    public function get_comments()
+    {
+        $slug = $_GET['article_slug'] ?? '';
+        if ($slug) {
+            $comments = $this->articleCommentsModel->get_comments_by_slug($slug);
+            $structuredComments = $this->structure_comments($comments);
+            include __DIR__ . '/../../views/authorized_users/comments_template.php'; // шаблон только для комментариев
+        } else {
+            echo "Comments not found.";
+        }
     }
 
 

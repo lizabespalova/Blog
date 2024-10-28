@@ -212,19 +212,19 @@
 }
 
 /*Комментарии*/
-.comments-section {
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd; /* легкая рамка */
-}
+/*.comments-section {*/
+/*    margin-top: 30px;*/
+/*    padding: 20px;*/
+/*    border-radius: 8px;*/
+/*    border: 1px solid #ddd; !* легкая рамка *!*/
+/*}*/
 
-.comments-section h3 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333; /* темно-серый цвет для заголовка */
-    text-align: left; /* выравнивание заголовка */
-}
+/*.comments-section h3 {*/
+/*    font-size: 24px;*/
+/*    margin-bottom: 20px;*/
+/*    color: #333; !* темно-серый цвет для заголовка *!*/
+/*    text-align: left; !* выравнивание заголовка *!*/
+/*}*/
 
 .comments-container .comment {
     margin-bottom: 15px;
@@ -372,4 +372,52 @@
 .replies-container.show {
     max-height: 500px; /* Максимальная высота при открытом состоянии */
     opacity: 1; /* Полная непрозрачность при открытом состоянии */
+}
+
+.btn-show-more {
+    display: block;
+    margin: 20px auto; /* Выравнивание по центру */
+    padding: 12px 20px;
+    background-color: transparent;
+    color:  #5380e3;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #5380e3;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.btn-show-more:hover {
+    background-color:  #0056b3;
+    color: #fff;
+    box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-show-more:active {
+    transform: translateY(1px);
+    box-shadow: 0px 3px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-show-more-replies {
+    color: blue; /* Цвет текста */
+    text-decoration: underline; /* Подчеркивание */
+    cursor: pointer; /* Указатель курсора */
+    border: none; /* Убирает обводку */
+    background: none; /* Убирает фон */
+    padding: 0; /* Убирает отступы, чтобы текст не выглядел как кнопка */
+    outline: none; /* Убирает обводку при фокусе */
+}
+
+.btn-show-more-replies:hover {
+    color: darkblue; /* Цвет текста при наведении */
+}
+
+/* Убираем обводку при фокусе */
+.btn-show-more-replies:focus {
+    outline: none; /* Убирает обводку при фокусе */
 }

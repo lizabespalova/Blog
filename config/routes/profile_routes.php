@@ -47,11 +47,6 @@ function profile_route($uri, $method) {
             $controller->create_article();
             }
             exit();  // Остановка выполнения после маршрута
-        case $_SERVER['REQUEST_METHOD'] === 'GET' && (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
-            $slug = $matches[1]; // Извлекаем слаг из URL
-            $controller = new ArticleController($dbConnection);
-            $controller->show_article($slug);
-            exit();
         case (bool)preg_match('/^\/articles\/delete\/([\w-]+)$/', $uri, $matches):
             $slug = $matches[1];
             $controller = new ArticleController(getDbConnection());
@@ -66,6 +61,15 @@ function profile_route($uri, $method) {
         case $_SERVER['REQUEST_METHOD'] === 'POST' && $uri === '/articles/add_comment':
             $controller = new ArticleController(getDbConnection());
             $controller->handle_add_comment();
+            exit();
+        case $_SERVER['REQUEST_METHOD'] === 'GET' && (bool)preg_match('/^\/articles\/get_comments$/', $uri, $matches):
+            $controller = new ArticleController(getDbConnection());
+            $controller->get_comments(); // Создайте метод get_comments
+            exit();
+        case $_SERVER['REQUEST_METHOD'] === 'GET' && (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
+            $slug = $matches[1]; // Извлекаем слаг из URL
+            $controller = new ArticleController($dbConnection);
+            $controller->show_article($slug);
             exit();
         default:
             return false;

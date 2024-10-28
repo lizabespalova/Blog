@@ -128,69 +128,10 @@ if (!empty($article['tags'])) {
                     </button>
                 </div>
             </section>
-
             <!-- Блок с комментариями -->
-            <section class="comments-section">
+            <div id="comments-section" data-article-slug="<?php echo htmlspecialchars($article['slug']); ?>">
                 <h3>Comments</h3>
-                <div class="comments-container">
-                    <?php foreach ($comments as $comment): ?>
-                        <div class="comment">
-                            <div class="comment-author">
-                                <a href="<?= htmlspecialchars($comment['link']); ?>" class="comment-author-link">
-                                    <img src="<?= htmlspecialchars($comment['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
-                                    <span class="comment-author-name"><?= htmlspecialchars($comment['user_login']); ?></span>
-                                </a>
-                            </div>
-                            <div class="comment-content">
-                                <p><?= htmlspecialchars($comment['comment_text']); ?></p>
-                            </div>
-                            <div class="comment-actions">
-                                <span class="comment-date">Posted on: <?= htmlspecialchars($comment['created_at']); ?></span>
-                                <div class="comment-buttons">
-                                    <button class="btn-like">👍</button>
-                                    <button class="btn-dislike">👎</button>
-                                    <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>">Reply</button>
-                                    <button class="btn-toggle-replies">⮟</button> <!-- Кнопка для раскрытия ответов -->
-                                </div>
-                            </div>
-
-                            <!-- Контейнер для вложенных ответов -->
-                            <div class="replies-container" style="display: none;">
-                                <?php if (!empty($comment['replies'])): ?>
-                                    <?php foreach ($comment['replies'] as $reply): ?>
-                                        <div class="comment reply">
-                                            <div class="comment-author">
-                                                <a href="<?= htmlspecialchars($reply['link']); ?>" class="comment-author-link">
-                                                    <img src="<?= htmlspecialchars($reply['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
-                                                    <span class="comment-author-name"><?= htmlspecialchars($reply['user_login']); ?></span>
-                                                </a>
-                                            </div>
-                                            <div class="comment-content">
-                                                <p><?= htmlspecialchars($reply['comment_text']); ?></p>
-                                            </div>
-                                            <div class="comment-actions">
-                                                <span class="comment-date">Posted on: <?= htmlspecialchars($reply['created_at']); ?></span>
-                                                <div class="comment-buttons">
-                                                    <button class="btn-like">👍</button>
-                                                    <button class="btn-dislike">👎</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <p>No replies yet.</p> <!-- Сообщение, если нет ответов -->
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Форма ответа на комментарий -->
-                            <form class="reply-comment-form" data-parent-id="<?= $comment['id']; ?>" style="display: none;">
-                                <textarea placeholder="Add a reply..." class="reply-input"></textarea>
-                                <button type="submit" class="btn btn-add-reply">Post Reply</button>
-                            </form>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
+                <?php include __DIR__ . '/comments_template.php'; ?>
                 <!-- Форма добавления нового комментария -->
                 <form class="add-comment-form">
                     <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
@@ -198,13 +139,8 @@ if (!empty($article['tags'])) {
                     <textarea placeholder="Add a comment..." class="comment-input"></textarea>
                     <button type="submit" class="btn btn-add-comment">Post Comment</button>
                 </form>
-            </section>
-
-
-
-
+            </div>
         </div>
-
 
     </article>
 </main>
