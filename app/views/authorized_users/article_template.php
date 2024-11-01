@@ -136,8 +136,13 @@ if (!empty($article['tags'])) {
                 <form class="add-comment-form">
                     <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
                     <input type="hidden" class="user-id" value="<?= htmlspecialchars($user['user_id']); ?>">
-                    <textarea placeholder="Add a comment..." class="comment-input"></textarea>
-                    <button type="submit" class="btn btn-add-comment">Post Comment</button>
+                    <div class="comment-input-wrapper">
+                        <textarea placeholder="Add a comment..." class="comment-input"></textarea>
+                        <span class="char-count">0/500</span> <!-- Элемент для отображения количества символов -->
+                    </div>
+                    <button type="submit" class="btn btn-add-comment">
+                        <i class="fas fa-paper-plane"></i> <!-- Иконка для отправки -->
+                    </button>
                 </form>
             </div>
         </div>

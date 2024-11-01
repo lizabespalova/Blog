@@ -27,11 +27,8 @@
                 <!-- Контейнер для вложенных ответов -->
                 <div class="replies-container" style="display: none;">
                     <?php
-                    $replyCount = 0;
                     foreach ($comments as $reply):
                         if ($reply['parent_id'] == $comment['id']):
-                            $replyCount++;
-                            if ($replyCount > 3) break;
                             ?>
                             <div class="comment reply" style="display: <?= $replyCount <= 3 ? 'block' : 'none'; ?>">
                                 <div class="comment-author">
@@ -53,9 +50,7 @@
                             </div>
                         <?php endif; endforeach; ?>
                     <!-- Кнопка для показа остальных ответов -->
-                    <?php if ($replyCount > 3): ?>
                         <button class="btn-show-more-replies">Show more replies</button>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Форма ответа на комментарий -->
