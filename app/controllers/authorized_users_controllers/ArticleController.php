@@ -174,16 +174,24 @@ class ArticleController
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
             //comments
-           $unstructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
-//            if (is_array($ustructuredComments)) {
-//                echo "<pre>"; // Используем <pre> для форматирования вывода
-//                var_dump($ustructuredComments);
-//                echo "</pre>";
-//            } else {
-//                echo "No comments found or not an array.";
-//            }
+            // Получаем неструктурированные комментарии
+            $unstructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
 
-            $comments = $this->structure_comments(  $unstructuredComments );
+            // Убедимся, что функция structure_comments возвращает массив комментариев
+            $commentsArray = $this->structure_comments($unstructuredComments);
+
+            // Парсим каждый комментарий и собираем массив с распарсенными данными
+            $comments = array_map(function($comment) {
+                // Проверяем, существует ли 'comment_text' и парсим его
+                if (isset($comment['comment_text'])) {
+                    $comment['comment_text'] = $this->parseMarkdown($comment['comment_text']); // Парсим текст комментария
+                }
+                return $comment; // Возвращаем весь комментарий с распарсенным текстом
+            }, $commentsArray);
+
+
+
+            $comment_count = $this->articleCommentsModel->get_comments_amount($article['slug']);
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {

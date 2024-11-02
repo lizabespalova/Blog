@@ -12,7 +12,7 @@
                     </a>
                 </div>
                 <div class="comment-content">
-                    <p><?= htmlspecialchars($comment['comment_text']); ?></p>
+                    <p><?= $comment['comment_text']; ?></p> <!-- Здесь выводим распарсенный текст -->
                 </div>
                 <div class="comment-actions">
                     <span class="comment-date">Posted on: <?= htmlspecialchars($comment['created_at']); ?></span>
@@ -20,11 +20,10 @@
                         <button class="btn-like">👍</button>
                         <button class="btn-dislike">👎</button>
                         <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>"><i class="fas fa-reply"></i></button>
-                        <button class="btn-toggle-replies">⮟</button> <!-- Кнопка для раскрытия ответов -->
+                        <button class="btn-toggle-replies">⮟</button>
                     </div>
                 </div>
 
-                <!-- Контейнер для вложенных ответов -->
                 <div class="replies-container" style="display: none;">
                     <?php
                     foreach ($comments as $reply):
@@ -38,7 +37,7 @@
                                     </a>
                                 </div>
                                 <div class="comment-content">
-                                    <p><?= htmlspecialchars($reply['comment_text']); ?></p>
+                                    <p><?= $reply['comment_text']; ?></p> <!-- Здесь также выводим распарсенный текст -->
                                 </div>
                                 <div class="comment-actions">
                                     <span class="comment-date">Posted on: <?= htmlspecialchars($reply['created_at']); ?></span>
@@ -49,11 +48,9 @@
                                 </div>
                             </div>
                         <?php endif; endforeach; ?>
-                    <!-- Кнопка для показа остальных ответов -->
-                        <button class="btn-show-more-replies">Show more replies</button>
+                    <button class="btn-show-more-replies">Show more replies</button>
                 </div>
 
-                <!-- Форма ответа на комментарий -->
                 <form class="reply-comment-form" data-parent-id="<?= $comment['id']; ?>" style="display: none;">
                     <textarea placeholder="Add a reply..." class="reply-input"></textarea>
                     <button type="submit" class="btn btn-add-reply">Post Reply</button>

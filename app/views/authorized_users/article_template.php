@@ -130,16 +130,17 @@ if (!empty($article['tags'])) {
             </section>
             <!-- Блок с комментариями -->
             <div id="comments-section" data-article-slug="<?php echo htmlspecialchars($article['slug']); ?>">
-                <h3>Comments</h3>
+                <h3>Comments <span class="comment-count">(<?php echo $comment_count; ?>)</span></h3>
                 <?php include __DIR__ . '/comments_template.php'; ?>
                 <!-- Форма добавления нового комментария -->
                 <form class="add-comment-form">
                     <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
                     <input type="hidden" class="user-id" value="<?= htmlspecialchars($user['user_id']); ?>">
                     <div class="comment-input-wrapper">
-                        <textarea placeholder="Add a comment..." class="comment-input"></textarea>
-                        <span class="char-count">0/500</span> <!-- Элемент для отображения количества символов -->
-                    </div>
+                        <textarea id="markdown-comment-input" placeholder="Add a comment..." class="comment-input"></textarea>
+                        <div class="comment-editor-wrapper">
+                            <span class="char-count">0/500</span>
+                        </div>                    </div>
                     <button type="submit" class="btn btn-add-comment">
                         <i class="fas fa-paper-plane"></i> <!-- Иконка для отправки -->
                     </button>
@@ -160,6 +161,7 @@ if (!empty($article['tags'])) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
+<script src="/js/authorized_users/add_markdown_comments.js"></script>
 <script src="/js/authorized_users/get_markdown.js"></script>
 <script src="/js/authorized_users/articles_reactions.js"></script>
 <script src="/js/authorized_users/articles_comments.js"></script>

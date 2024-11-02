@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const maxVisibleReplies = 3;
     const articleSlug = commentForm.querySelector('.article-slug').value;
     const commentInput = document.querySelector('.comment-input');
-    const charCountDisplay = document.querySelector('.char-count');
-    const maxLengthLimit = 500; // Лимит на символы в форме для комментариев
+    // const charCountDisplay = document.querySelector('.char-count');
+    // const maxLengthLimit = 500; // Лимит на символы в форме для комментариев
 
     loadComments(articleSlug);
 
@@ -26,18 +26,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
-    //Проверка формы комментариев на количество символов
-    document.querySelector('.add-comment-form').addEventListener('submit', function (event) {
-        if (commentInput.value.length > maxLengthLimit) {
-            event.preventDefault(); // Остановите отправку формы
-            alert(`The comment must not exceed ${maxLengthLimit} characters.`);
-        }
-    });
-
-    commentInput.addEventListener('input', function () {
-        const usedChars = commentInput.value.length;
-        charCountDisplay.textContent = `${usedChars}/500`; // Обновляем счётчик символов
-    });
+    // //Проверка формы комментариев на количество символов
+    // document.querySelector('.add-comment-form').addEventListener('submit', function (event) {
+    //     if (commentInput.value.length > maxLengthLimit) {
+    //         event.preventDefault(); // Остановите отправку формы
+    //         alert(`The comment must not exceed ${maxLengthLimit} characters.`);
+    //     }
+    // });
+    //
+    // commentInput.addEventListener('input', function () {
+    //     const usedChars = commentInput.value.length;
+    //     charCountDisplay.textContent = `${usedChars}/500`; // Обновляем счётчик символов
+    // });
 
     function loadComments(articleSlug) {
         fetch('/articles/get_comments?article_slug=' + articleSlug)

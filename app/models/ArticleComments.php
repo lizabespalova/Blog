@@ -33,6 +33,22 @@ class ArticleComments
         $stmt->close();
         return $result;
     }
+    public function get_comments_amount($slug){
+        $query = "SELECT COUNT(*) as comment_count FROM comments WHERE article_slug = ?";
+        $stmt = $this->conn->prepare($query);
 
+        if ($stmt) {
+            $stmt->bind_param('s', $slug);
+            $stmt->execute();
+            $stmt->bind_result($commentCount);
+            $stmt->fetch();
+            $stmt->close();
+            return $commentCount;
+        } else {
+            // Обработка ошибки, если запрос не удался
+            return 0;
+        }
+
+    }
 
 }
