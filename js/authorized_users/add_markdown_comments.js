@@ -1,3 +1,4 @@
+
 // Инициализация SimpleMDE
 const simplemde = new SimpleMDE({
     element: document.getElementById("markdown-comment-input"),
@@ -12,10 +13,45 @@ const simplemde = new SimpleMDE({
         "ordered-list",    // Нумерованный список
         "|",
         "link",            // Ссылка
+
         "|",
-        "preview",         // Предпросмотр
+        {
+            name: "insert-code",
+            action: function customCodeInsert(editor) {
+                let code = prompt("Enter your code:");
+                if (code) {
+                    let markdownCode = `\`\`\`\n${code}\n\`\`\``;
+                    editor.codemirror.replaceSelection(markdownCode + "\n");
+                }
+            },
+            className: "fa fa-code",
+            title: "Insert Code"
+        },
+        {
+            name: "insert-formula",
+            action: function customFormulaInsert(editor) {
+                let formula = prompt("Enter your formula (Example:a^2 + b^2 = c^2):");
+                if (formula) {
+                    let markdownFormula = `$$${formula}$$`;
+                    editor.codemirror.replaceSelection(markdownFormula);
+                }
+            },
+            className: "fa fa-superscript",
+            title: "Insert Formula"
+        },
+        "|",
+        "preview", // Предпросмотр
     ],
-    spellChecker: false,
+    previewRender: function(plainText) {
+
+        // Обработка формул
+        plainText = plainText.replace(/\$\$([\s\S]*?)\$\$/g, '<div class="formula-container">$1</div>');
+        // Обработка спойлеров
+        plainText = plainText.replace(/>\s*\[!spoiler\]\s*(.*)/g, '<details><summary>Spoiler</summary>$1</details>');
+
+        return simplemde.markdown(plainText);
+    },
+spellChecker: false,
 });
 
 // Максимальное количество символов

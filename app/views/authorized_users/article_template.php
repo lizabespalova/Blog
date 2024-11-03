@@ -81,7 +81,7 @@ if (!empty($article['tags'])) {
                 <div id="toast-container"></div>
 
                 <?php if (!empty($parsedContent)): ?>
-                    <div id="rendered-content">
+                    <div id="rendered-content-1">
                         <?php echo $parsedContent; ?>
                     </div>
                 <?php else: ?>
@@ -129,6 +129,8 @@ if (!empty($article['tags'])) {
                 </div>
             </section>
             <!-- Блок с комментариями -->
+
+
             <div id="comments-section" data-article-slug="<?php echo htmlspecialchars($article['slug']); ?>">
                 <h3>Comments <span class="comment-count">(<?php echo $comment_count; ?>)</span></h3>
                 <?php include __DIR__ . '/comments_template.php'; ?>
@@ -167,6 +169,8 @@ if (!empty($article['tags'])) {
 <script src="/js/authorized_users/articles_comments.js"></script>
 <script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->
+
 
 </body>
 </html>

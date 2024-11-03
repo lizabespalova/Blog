@@ -184,11 +184,14 @@ class ArticleController
             $comments = array_map(function($comment) {
                 // Проверяем, существует ли 'comment_text' и парсим его
                 if (isset($comment['comment_text'])) {
-                    $comment['comment_text'] = $this->parseMarkdown($comment['comment_text']); // Парсим текст комментария
+                    $parsedText = $this->parseMarkdown($comment['comment_text']); // Парсим текст комментария
+
+                    $comment['comment_text'] = $parsedText; // Присваиваем распарсенный текст обратно
                 }
                 return $comment; // Возвращаем весь комментарий с распарсенным текстом
             }, $commentsArray);
 
+//            var_dump($comments); // Проверка распарсенного массива комментариев перед отправкой на вывод
 
 
             $comment_count = $this->articleCommentsModel->get_comments_amount($article['slug']);

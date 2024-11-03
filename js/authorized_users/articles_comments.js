@@ -57,20 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (comments.length > maxVisibleComments) addShowMoreButton(comments, maxVisibleComments, 'Show more', 'Hide');
     }
 
-    function addShowMoreButton(elements, maxVisible, showText, hideText) {
-        const showMoreButton = document.createElement('button');
-        showMoreButton.classList.add('btn-show-more');
-        showMoreButton.textContent = showText;
-
-        showMoreButton.addEventListener('click', function () {
-            const hiddenElements = elements.filter(element => element.style.display === 'none');
-            hiddenElements.slice(0, maxVisible).forEach(element => element.style.display = 'block');
-
-            if (hiddenElements.length <= maxVisible) showMoreButton.remove();
-        });
-        commentsContainer.appendChild(showMoreButton);
-    }
-
     function postReply(replyForm) {
         const replyText = replyForm.querySelector('.reply-input').value;
         const userId = commentForm.querySelector('.user-id').value;
@@ -125,8 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
         replies.forEach((reply, index) => reply.style.display = index < maxVisibleReplies ? 'block' : 'none');
         addShowMoreRepliesButton(replies, repliesContainer);
     }
-
-
     function addShowMoreRepliesButton(replies, repliesContainer) {
         let showMoreButton = repliesContainer.querySelector('.btn-show-more-replies');
         console.log(replies)
@@ -138,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         showMoreButton.addEventListener('click', function () {
-                const currentlyHiddenReplies = replies.filter(reply => reply.style.display === 'none');
+            const currentlyHiddenReplies = replies.filter(reply => reply.style.display === 'none');
 
-                if (showMoreButton.textContent === 'Show more replies') {
-                    console.log('Все комментарии:', replies);
+            if (showMoreButton.textContent === 'Show more replies') {
+                console.log('Все комментарии:', replies);
                 console.log('Скрытые комментарии перед показом:', currentlyHiddenReplies);
 
                 currentlyHiddenReplies.slice(0, maxVisibleReplies).forEach(reply => {
@@ -160,5 +144,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMoreButton.textContent = 'Show more replies'; // Вернуть текст кнопки
             }
         });
+    }
+
+    function addShowMoreButton(comments, maxToShow, showText, hideText) {
+        const existingButton = commentsContainer.querySelector('.btn-show-more');
+        if (existingButton) {
+            existingButton.remove();
+        }
+
+        const showMoreButton = document.createElement('button');
+        showMoreButton.classList.add('btn-show-more');
+        showMoreButton.textContent = showText;
+
+        showMoreButton.addEventListener('click', function () {
+            const currentlyHidden = comments.filter(comment => comment.style.display === 'none');
+
+            if (currentlyHidden.length > 0) {
+                currentlyHidden.slice(0, maxToShow).forEach(comment => {
+                    comment.style.display = 'block';
+                });
+
+                if (currentlyHidden.length <= maxToShow) {
+                    showMoreButton.textContent = hideText;
+                }
+            } else {
+                comments.forEach((comment, index) => {
+                    comment.style.display = index < maxVisibleComments ? 'block' : 'none';
+                });
+                showMoreButton.textContent = showText;
+            }
+        });
+
+        commentsContainer.appendChild(showMoreButton);
     }
 });
