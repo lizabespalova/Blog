@@ -17,7 +17,7 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
                 <?php else: ?>
                     <img src="/templates/images/profile.jpg" alt="Default Avatar">
                 <?php endif; ?>
-                <input type="file" name="avatar" id="avatar" onchange="uploadAvatar()">
+                <input type="file" name="avatar" id="avatar" >
             </div>
         </div>
         <div class="header-right">

@@ -262,7 +262,6 @@ class ArticleController
 //                }
             }
         }
-
 //        // Вывод структурированных комментариев для отладки
 //        var_dump($structuredComments);
 
@@ -318,21 +317,62 @@ class ArticleController
                 exit();
             }
     }
+    public function handle_comment_reaction(){
+        $data = $this->get_posted_data();
+        // Извлекаем нужные значения из массива
+        $userId = $data['user_id']; $slug = $data['slug']; $reactionType = $data['reaction_type'];
+        // Проверка существующей реакции
+        $existingReaction = $this->articleCommentsModel->get_reaction($userId, $slug);
+        if ($existingReaction) {
+            // Если реакция уже есть
+            if ($existingReaction['reaction_type'] === $reactionType) {
+                // Если это та же реакция, удалить ее
+                $this->articleCommentsModel->remove_reaction($userId, $slug);
+                if ($reactionType === 'like') {
+                    $this->articleCommentsModel->decrement_like_count($slug);
+                } else {
+                    $this->articleCommentsModel->decrement_dislike_count($slug);
+                }
+                $message = 'Reaction removed';
+            } else {
+                // Если реакция отличается, обновить ее
+                $this->articleCommentsModel->update_reaction($userId, $slug, $reactionType);
+                if ($reactionType === 'like') {
+                    $this->articleCommentsModel->increment_like_count($slug);
+                    $this->articleCommentsModel->decrement_dislike_count($slug);
+                } else {
+                    $this->articleCommentsModel->increment_dislike_count($slug);
+                    $this->articleCommentsModel->decrement_like_count($slug);
+                }
+                $message = 'Reaction updated';
+            }
+        } else {
+            // Если реакции нет, добавить новую
+            $this->articleCommentsModel->add_reaction($userId, $slug, $reactionType);
+            if ($reactionType === 'like') {
+                $this->articleCommentsModel->increment_like_count($slug);
+            } else {
+                $this->articleCommentsModel->increment_dislike_count($slug);
+            }
+            $message = 'Reaction added';
+        }
 
+        // Получаем актуальное количество лайков и дизлайков
+        $updated_likes = $this->articleModel->get_likes_count($slug);
+        $updated_dislikes = $this->articleModel->get_dislikes_count($slug);
+
+        $this->show_json($message,$updated_likes,$updated_dislikes);
+        exit();
+    }
     public function handle_reaction() {
-        // Получаем данные из POST-запроса
-        $input = json_decode(file_get_contents('php://input'), true);
-        $this->check_data($input);
-
-        $slug = $input['slug'];
-        $reactionType = $input['reaction_type'];
-        $userId = $input['user_id'];
-
+        $data = $this->get_posted_data();
+        // Извлекаем нужные значения из массива
+        $userId = $data['user_id']; $slug = $data['slug']; $reactionType = $data['reaction_type'];
         // Проверка существующей реакции
         $existingReaction = $this->articleReactionsModel->get_reaction($userId, $slug);
 
-        // Отладочный вывод
-        error_log('Существующая реакция: ' . print_r($existingReaction, true));
+//        // Отладочный вывод
+//        error_log('Существующая реакция: ' . print_r($existingReaction, true));
 
         if ($existingReaction) {
             // Если реакция уже есть
@@ -372,15 +412,18 @@ class ArticleController
         $updated_likes = $this->articleModel->get_likes_count($slug);
         $updated_dislikes = $this->articleModel->get_dislikes_count($slug);
 
-        // Возвращаем обновленные данные в ответе
-        echo json_encode([
-            'success' => true,
-            'message' => $message,
-            'likes' => $updated_likes,
-            'dislikes' => $updated_dislikes
-        ]);
-
-        exit();
+        $this->show_json($message,$updated_likes,$updated_dislikes);
+       exit();
+    }
+    public function get_posted_data(){
+        // Получаем данные из POST-запроса
+        $input = json_decode(file_get_contents('php://input'), true);
+        $this->check_data($input);
+        return [
+            'slug' =>  $input['slug'],
+            'reaction_type' => $input['reaction_type'],
+            'user_id' => $input['user_id']
+        ];
     }
 
     public function handle_add_comment() {
@@ -420,7 +463,15 @@ class ArticleController
             echo "Comments not found.";
         }
     }
-
+    public function show_json($message,$updated_likes,$updated_dislikes){
+        // Возвращаем обновленные данные в ответе
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+            'likes' => $updated_likes,
+            'dislikes' => $updated_dislikes
+        ]);
+    }
 
 
     public function check_data($input){

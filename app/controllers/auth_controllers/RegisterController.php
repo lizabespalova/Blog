@@ -67,7 +67,7 @@ class RegisterController {
 
         // Проверяем, существует ли пользователь с таким логином
         if ($this->userModel->get_user_by_login($login)) {
-            $errors[] = "A user with this login already exists in the database.";
+            $errors[] = "User with this login already exists.";
         }
 
         // Проверяем email
@@ -77,7 +77,7 @@ class RegisterController {
 
         // Проверяем, существует ли пользователь с таким email
         if ($this->userModel->get_user_by_email($email)) {
-            $errors[] = "A user with this email already exists in the database.";
+            $errors[] = "User with this email already exists";
         }
 
         // Проверяем пароль
@@ -142,23 +142,24 @@ class RegisterController {
             echo 'No token provided.';
         }
     }
-    private function isTokenExpired($createdAt): bool {
-        $expiration = new \DateTime($createdAt);
-        $now = new \DateTime();
-        $interval = $now->diff($expiration);
-
-        return $interval->i >= 30; // Проверка на истечение срока в минутах
-    }
+//    private function isTokenExpired($createdAt): bool {
+//        $expiration = new \DateTime($createdAt);
+//        $now = new \DateTime();
+//        $interval = $now->diff($expiration);
+//
+//        return $interval->i >= 30; // Проверка на истечение срока в минутах
+//    }
 
 
     private function show_errors($errors) {
-        $errorMessages = implode("\\n", $errors);
+        $errorMessages = implode(" ", $errors);
 //        echo "<script>
 //            alert('The following errors occurred during registration:\\n{$errorMessages}');
 //            window.location.href = '/register';
 //          </script>";
         $encodedMessage = urlencode($errorMessages); // Кодируем сообщение для URL
-        header("Location: /../../services/error_message.php");
+
+        header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
         exit(); // Завершаем выполнение текущего скрипта
     }
 }

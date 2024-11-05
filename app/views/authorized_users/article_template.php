@@ -106,13 +106,13 @@ if (!empty($article['tags'])) {
             <section class="article-reactions">
                 <div class="reaction-buttons">
                     <!-- Лайки -->
-                    <button class="btn-like" title="Like" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                    <button class="btn-like" title="Like" data-url="/articles/react" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
                         <i class="fas fa-thumbs-up"></i>
                         <span class="like-count"><?php echo htmlspecialchars($article['likes']); ?></span> <!-- Здесь будет отображаться количество лайков -->
                     </button>
 
                     <!-- Дизлайки -->
-                    <button class="btn-dislike" title="Dislike" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                    <button class="btn-dislike" title="Dislike" data-url="/articles/react" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
                         <i class="fas fa-thumbs-down"></i>
                         <span class="dislike-count"><?php echo htmlspecialchars($article['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
                     </button>
@@ -129,8 +129,6 @@ if (!empty($article['tags'])) {
                 </div>
             </section>
             <!-- Блок с комментариями -->
-
-
             <div id="comments-section" data-article-slug="<?php echo htmlspecialchars($article['slug']); ?>">
                 <h3>Comments <span class="comment-count">(<?php echo $comment_count; ?>)</span></h3>
                 <?php include __DIR__ . '/comments_template.php'; ?>

@@ -10,29 +10,9 @@ $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <style>
-        /* Кастомные стили для улучшения внешнего вида */
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-        .swal2-title {
-            font-size: 1.5rem;
-            color: #d9534f; /* Цвет заголовка */
-        }
-        .swal2-html-container {
-            font-size: 1rem;
-            color: #333; /* Цвет текста */
-        }
-        .swal2-confirm {
-            background-color: #d9534f; /* Цвет кнопки */
-            border: none;
-            border-radius: 4px;
-        }
-        .swal2-confirm:hover {
-            background-color: #c9302c; /* Цвет кнопки при наведении */
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <link rel="stylesheet" href="/css/error.css">
 </head>
 <body>
 <script>
@@ -67,7 +47,7 @@ $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'app/views/auth/form_login.php'; // Путь к форме логина
+                window.location.href = '/app/views/auth/form_register.php'; // Путь к форме логина
             }
         });
     });

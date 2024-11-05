@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const likeButtons = document.querySelectorAll('.btn-like');
     const dislikeButtons = document.querySelectorAll('.btn-dislike');
+    console.log(likeButtons)
+    console.log(dislikeButtons)
 
     // Обработчики клика на лайк
     likeButtons.forEach(button => {
@@ -31,10 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Функция для отправки AJAX-запроса
     function handleReaction(type, button, slug, user_id) {
+        const url = button.getAttribute('data-url');
         const likeCount = button.closest('.reaction-buttons').querySelector('.like-count');
         const dislikeCount = button.closest('.reaction-buttons').querySelector('.dislike-count');
-
-        fetch('/articles/react', {
+        // alert("handleReaction function")
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

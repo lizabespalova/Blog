@@ -1,0 +1,20 @@
+/* Кастомные стили для улучшения внешнего вида */
+.swal2-popup {
+    font-family: 'Arial', sans-serif;
+}
+.swal2-title {
+    font-size: 1.5rem;
+    color: #d9534f; /* Цвет заголовка */
+}
+.swal2-html-container {
+    font-size: 1rem;
+    color: #333; /* Цвет текста */
+}
+.swal2-confirm {
+    background-color: #d9534f; /* Цвет кнопки */
+    border: none;
+    border-radius: 4px;
+}
+.swal2-confirm:hover {
+    background-color: #c9302c; /* Цвет кнопки при наведении */
+}

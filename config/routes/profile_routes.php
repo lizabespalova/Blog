@@ -71,6 +71,10 @@ function profile_route($uri, $method) {
             $controller = new ArticleController($dbConnection);
             $controller->show_article($slug);
             exit();
+        case $_SERVER['REQUEST_METHOD'] === 'POST' && $uri === '/comments/react':
+            $controller = new ArticleController(getDbConnection());
+            $controller->handle_comment_reaction();
+            exit();
         default:
             return false;
     }

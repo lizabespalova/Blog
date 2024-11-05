@@ -29,8 +29,19 @@
                 <div class="comment-actions">
                     <span class="comment-date">Posted on: <?= htmlspecialchars($comment['created_at']); ?></span>
                     <div class="comment-buttons">
-                        <button class="btn-like">👍</button>
-                        <button class="btn-dislike">👎</button>
+                        <div class="reaction-buttons">
+                        <!-- Лайки -->
+                        <button class="btn-like" data-url="/comments/react" title="Like" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span class="like-count"><?php echo htmlspecialchars($comment['likes']); ?></span> <!-- Здесь будет отображаться количество лайков -->
+                        </button>
+
+                        <!-- Дизлайки -->
+                        <button class="btn-dislike" data-url="/comments/react" title="Dislike" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                            <i class="fas fa-thumbs-down"></i>
+                            <span class="dislike-count"><?php echo htmlspecialchars($comment['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
+                        </button>
+                        </div>
                         <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>"><i class="fas fa-reply"></i></button>
                         <button class="btn-toggle-replies">⮟</button> <!-- Кнопка для раскрытия ответов -->
                     </div>
