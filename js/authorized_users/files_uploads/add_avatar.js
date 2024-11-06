@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     // removeImage(previewElement, avatarInput, removeButton);
                     return;
                 }
-
+                uploadAvatar()
                 // displayImagePreview(file, previewElement, removeButton);
             } else {
                 // removeImage(previewElement, avatarInput, removeButton);
             }
         });
-        uploadAvatar()
+
         // removeButton.addEventListener('click', function() {
         //     removeImage(previewElement, avatarInput, this);
         // });

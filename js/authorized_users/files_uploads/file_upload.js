@@ -19,8 +19,8 @@ function isValidSize(file, maxSizeMB = 5) {
 //     };
 //     reader.readAsDataURL(file);
 // }
-
-// Функция удаления изображения
+//
+// // Функция удаления изображения
 // function removeImage(previewElement, fileInput, removeButton) {
 //     previewElement.src = '';
 //     previewElement.style.display = 'none'; // Скрываем превью

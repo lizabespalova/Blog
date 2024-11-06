@@ -1,4 +1,7 @@
 <?php
+
+use models\User;
+
 session_start();
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ . '/../../../config/config.php';
@@ -6,7 +9,7 @@ require_once __DIR__ . '/../../../config/config.php';
 header('Content-Type: application/json');
 
 $conn = getDbConnection();
-$customerModel = new \models\User($conn);
+$customerModel = new User($conn);
 
 $response = ['success' => false, 'message' => ''];
 
@@ -28,17 +31,20 @@ if (isset($_COOKIE['id'])) {
             if (!file_exists($uploadFileDir)) {
                 mkdir($uploadFileDir, 0777, true); // Создаём директорию, если она не существует
             }
-
+            else{
+                //Проверка и удаления лишних файлов
+                $existingFiles = glob($uploadFileDir . 'user_' . $user_id . '.*');
+                foreach ($existingFiles as $file) {
+                    unlink($file);
+                }
+            }
             if (move_uploaded_file($fileTmpPath, $dest_path)) {
-//                $avatarPath = '/app/views/authorized_users/uploads/user_' . $user_id . '.' . $fileExtension;
-                $customerModel->update_user_avatar($user_id, /*$avatarPath*/ $avatarPath);
-
+                $customerModel->update_user_avatar($user_id, $avatarPath);
                 $response['success'] = true;
-             //   $response['message'] = "Avatar uploaded successfully!";
+                $_SESSION['user']['user_avatar'] = $avatarPath;
             } else {
                 $response['message'] = "Error moving uploaded file.";
             }
-//        }
     } else {
         $response['message'] = "No file uploaded or upload error.";
     }

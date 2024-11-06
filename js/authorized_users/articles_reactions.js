@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const user_id = button.dataset.user_id;
 
         button.addEventListener('click', function () {
+
             handleReaction('dislike', button, slug, user_id);
         });
     });
