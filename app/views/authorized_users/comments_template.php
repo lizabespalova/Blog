@@ -31,15 +31,15 @@
                     <div class="comment-buttons">
                         <div class="reaction-buttons">
                         <!-- Лайки -->
-                        <button class="btn-like" data-url="/comments/react" title="Like" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                        <button class="btn-like" data-url="/comments/react" title="Like"  data-user_id="<?= htmlspecialchars($comment['user_id']); ?>" data-comment_id="<?= htmlspecialchars($comment['id']); ?>">
                             <i class="fas fa-thumbs-up"></i>
-                            <span class="like-count"><?php echo htmlspecialchars($comment['likes']); ?></span> <!-- Здесь будет отображаться количество лайков -->
+                            <span class="like-count"><?= htmlspecialchars($comment['likes']); ?></span>
                         </button>
 
                         <!-- Дизлайки -->
-                        <button class="btn-dislike" data-url="/comments/react" title="Dislike" data-slug="<?php echo htmlspecialchars($article['slug']); ?>" data-user_id="<?php echo htmlspecialchars($user['user_id']); ?>">
+                        <button class="btn-dislike" data-url="/comments/react" title="Dislike"  data-user_id="<?= htmlspecialchars($comment['user_id']); ?>" data-comment_id="<?= htmlspecialchars($comment['id']);?>">
                             <i class="fas fa-thumbs-down"></i>
-                            <span class="dislike-count"><?php echo htmlspecialchars($comment['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
+                            <span class="dislike-count"><?= htmlspecialchars($comment['dislikes']); ?></span>
                         </button>
                         </div>
                         <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>"><i class="fas fa-reply"></i></button>
@@ -68,8 +68,19 @@
                                 <div class="comment-actions">
                                     <span class="comment-date">Posted on: <?= htmlspecialchars($reply['created_at']); ?></span>
                                     <div class="comment-buttons">
-                                        <button class="btn-like">👍</button>
-                                        <button class="btn-dislike">👎</button>
+                                        <div class="reaction-buttons">
+                                        <!-- Лайки -->
+                                        <button class="btn-like" data-url="/comments/react" title="Like"  data-user_id="<?= htmlspecialchars($reply['user_id']); ?>" data-comment_id="<?= htmlspecialchars($reply['id']); ?>">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            <span class="like-count"><?= htmlspecialchars($reply['likes']); ?></span>
+                                        </button>
+
+                                        <!-- Дизлайки -->
+                                        <button class="btn-dislike" data-url="/comments/react" title="Dislike"  data-user_id="<?= htmlspecialchars($reply['user_id']); ?>" data-comment_id="<?= htmlspecialchars($reply['id']);?>">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            <span class="dislike-count"><?= htmlspecialchars($reply['dislikes']); ?></span>
+                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

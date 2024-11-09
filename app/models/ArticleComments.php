@@ -50,58 +50,26 @@ class ArticleComments
         }
 
     }
-    public function get_reaction($userId, $slug) {
-        $stmt =  $this->conn->prepare("SELECT reaction_type FROM comments WHERE user_id = ? AND article_slug = ?");
-        $stmt->bind_param("is", $userId, $slug);
+    public function get_reaction($userId, $comment_id) {
+        $stmt =  $this->conn->prepare("SELECT reaction_type FROM comment_reactions WHERE user_id = ? AND comment_id = ?");
+        $stmt->bind_param("ii", $userId, $comment_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
-    public function add_reaction($userId, $slug, $reactionType) {
-        $stmt = $this->conn->prepare("INSERT INTO comments (user_id, article_slug, reaction_type) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $userId, $slug, $reactionType);
+    public function add_reaction($userId, $comment_id, $reactionType) {
+        $stmt = $this->conn->prepare("INSERT INTO comment_reactions (comment_id, user_id, reaction_type) VALUES (?, ?, ?)");
+        $stmt->bind_param("iis", $comment_id, $userId, $reactionType);
         $stmt->execute();
-    }
-    public function update_reaction($userId, $slug, $reactionType) {
-        $stmt = $this->conn->prepare("UPDATE comments SET reaction_type = ? WHERE user_id = ? AND article_slug = ?");
-        $stmt->bind_param("sis", $reactionType, $userId, $slug);
-        $stmt->execute();
-    }
-    public function remove_reaction($userId, $slug) {
-        $stmt = $this->conn->prepare("DELETE FROM comments WHERE user_id = ? AND article_slug = ?");
-        $stmt->bind_param("is", $userId, $slug);
-        $stmt->execute();
-    }
-    public function increment_dislike_count($slug) {
-        $sql = "UPDATE comments SET dislikes = dislikes + 1 WHERE slug = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $slug);
-        $stmt->execute();
-        $stmt->close();
     }
 
-    // Метод для уменьшения счетчика дизлайков
-    public function decrement_dislike_count($slug) {
-        $sql = "UPDATE comments SET dislikes = GREATEST(dislikes - 1, 0) WHERE slug = ?"; // Не допускаем отрицательных значений
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $slug);
+    public function update_reaction($userId, $comment_id, $reactionType) {
+        $stmt = $this->conn->prepare("UPDATE comment_reactions SET reaction_type = ? WHERE user_id = ? AND comment_id = ?");
+        $stmt->bind_param("sii", $reactionType, $userId, $comment_id);
         $stmt->execute();
-        $stmt->close();
     }
-    // Метод для увеличения счетчика лайков
-    public function increment_like_count($slug) {
-        $sql = "UPDATE comments SET likes = likes + 1 WHERE slug = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $slug);
+    public function remove_reaction($userId, $comment_id) {
+        $stmt = $this->conn->prepare("DELETE FROM comment_reactions WHERE comment_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $comment_id, $userId);
         $stmt->execute();
-        $stmt->close();
-    }
-
-    // Метод для уменьшения счетчика лайков
-    public function decrement_like_count($slug) {
-        $sql = "UPDATE comments SET likes = GREATEST(likes - 1, 0) WHERE slug = ?"; // Не допускаем отрицательных значений
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $slug);
-        $stmt->execute();
-        $stmt->close();
     }
 }

@@ -40,6 +40,7 @@
      <select id="category" name="category" required>
          <option value="" disabled selected>Select a category</option>
          <option value="programming">Programming</option>
+         <option value="ai">Artificial Intelligence</option>
          <option value="web_development">Web Development</option>
          <option value="data_science">Data Science</option>
          <option value="cyber_security">Cyber Security</option>
@@ -53,7 +54,7 @@
      <select id="difficulty" name="difficulty" required>
          <option value="">Select difficulty</option>
          <option value="beginner">Beginner</option>
-         <option value="intermediate">Intermediate</option>
+         <option value="intermediate">In termediate</option>
          <option value="advanced">Advanced</option>
      </select><br>
 

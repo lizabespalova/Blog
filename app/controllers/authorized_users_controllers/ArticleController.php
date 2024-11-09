@@ -6,6 +6,7 @@ use models\ArticleComments;
 use models\ArticleImages;
 use models\ArticleReactions;
 use models\Articles;
+use models\Comment;
 use models\User;
 use Parsedown;
 use services\LoginService;
@@ -19,6 +20,7 @@ class ArticleController
     private $userModel;
     private $articleCommentsModel;
     private $loginService;
+    private $commentModel;
 
     public function __construct($conn)
     {
@@ -28,7 +30,7 @@ class ArticleController
         $this->userModel = new User($conn);
         $this->articleReactionsModel = new ArticleReactions($conn);
         $this->articleCommentsModel = new ArticleComments(getDbConnection());
-
+        $this->commentModel = new Comment(getDbConnection());
     }
 
     public function show_article_form()
@@ -276,7 +278,7 @@ class ArticleController
     {
         return (new Parsedown())->text($markdownContent);
     }
-// Функция для получения правильной ссылки на YouTube видео
+    // Функция для получения правильной ссылки на YouTube видео
     private function getYouTubeEmbedUrl($youtube_link)
     {
         // Извлекаем ID видео
@@ -317,113 +319,79 @@ class ArticleController
                 exit();
             }
     }
-    public function handle_comment_reaction(){
-        $data = $this->get_posted_data();
-        // Извлекаем нужные значения из массива
-        $userId = $data['user_id']; $slug = $data['slug']; $reactionType = $data['reaction_type'];
+    public function handle_reaction($entityType) {
+        // Получаем данные из POST-запроса
+        $data = $this->get_posted_data($entityType);
+
+        $userId = $data['user_id'];
+        $reactionType = $data['reaction_type'];
+        $entityId = $data['id'];  // ID статьи или комментария
+
+        // Определяем соответствующую модель и счетчик
+        $reactionModel = $entityType === 'article' ? $this->articleReactionsModel : $this->articleCommentsModel;
+        $entityModel = $entityType === 'article' ? $this->articleModel : $this->commentModel;
+
         // Проверка существующей реакции
-        $existingReaction = $this->articleCommentsModel->get_reaction($userId, $slug);
+        $existingReaction = $reactionModel->get_reaction($userId, $entityId);
+
         if ($existingReaction) {
             // Если реакция уже есть
             if ($existingReaction['reaction_type'] === $reactionType) {
-                // Если это та же реакция, удалить ее
-                $this->articleCommentsModel->remove_reaction($userId, $slug);
-                if ($reactionType === 'like') {
-                    $this->articleCommentsModel->decrement_like_count($slug);
-                } else {
-                    $this->articleCommentsModel->decrement_dislike_count($slug);
-                }
+                // Удалить реакцию, если та же
+                $reactionModel->remove_reaction($userId, $entityId);
+                $this->update_reaction_count($entityModel, $entityId, $reactionType, 'decrement');
                 $message = 'Reaction removed';
             } else {
-                // Если реакция отличается, обновить ее
-                $this->articleCommentsModel->update_reaction($userId, $slug, $reactionType);
-                if ($reactionType === 'like') {
-                    $this->articleCommentsModel->increment_like_count($slug);
-                    $this->articleCommentsModel->decrement_dislike_count($slug);
-                } else {
-                    $this->articleCommentsModel->increment_dislike_count($slug);
-                    $this->articleCommentsModel->decrement_like_count($slug);
-                }
+                // Обновить, если реакция отличается
+                $reactionModel->update_reaction($userId, $entityId, $reactionType);
+                $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
+                $this->update_reaction_count($entityModel, $entityId, $existingReaction['reaction_type'], 'decrement');
                 $message = 'Reaction updated';
             }
         } else {
-            // Если реакции нет, добавить новую
-            $this->articleCommentsModel->add_reaction($userId, $slug, $reactionType);
-            if ($reactionType === 'like') {
-                $this->articleCommentsModel->increment_like_count($slug);
-            } else {
-                $this->articleCommentsModel->increment_dislike_count($slug);
-            }
+            // Добавить новую реакцию
+            $reactionModel->add_reaction($userId, $entityId, $reactionType);
+            $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
             $message = 'Reaction added';
         }
 
         // Получаем актуальное количество лайков и дизлайков
-        $updated_likes = $this->articleModel->get_likes_count($slug);
-        $updated_dislikes = $this->articleModel->get_dislikes_count($slug);
+        $updated_likes = $entityModel->get_likes_count($entityId);
+        $updated_dislikes = $entityModel->get_dislikes_count($entityId);
 
-        $this->show_json($message,$updated_likes,$updated_dislikes);
+        $this->show_json($message, $updated_likes, $updated_dislikes);
         exit();
     }
-    public function handle_reaction() {
-        $data = $this->get_posted_data();
-        // Извлекаем нужные значения из массива
-        $userId = $data['user_id']; $slug = $data['slug']; $reactionType = $data['reaction_type'];
-        // Проверка существующей реакции
-        $existingReaction = $this->articleReactionsModel->get_reaction($userId, $slug);
 
-//        // Отладочный вывод
-//        error_log('Существующая реакция: ' . print_r($existingReaction, true));
-
-        if ($existingReaction) {
-            // Если реакция уже есть
-            if ($existingReaction['reaction_type'] === $reactionType) {
-                // Если это та же реакция, удалить ее
-                $this->articleReactionsModel->remove_reaction($userId, $slug);
-                if ($reactionType === 'like') {
-                    $this->articleModel->decrement_like_count($slug);
-                } else {
-                    $this->articleModel->decrement_dislike_count($slug);
-                }
-                $message = 'Reaction removed';
-            } else {
-                // Если реакция отличается, обновить ее
-                $this->articleReactionsModel->update_reaction($userId, $slug, $reactionType);
-                if ($reactionType === 'like') {
-                    $this->articleModel->increment_like_count($slug);
-                    $this->articleModel->decrement_dislike_count($slug);
-                } else {
-                    $this->articleModel->increment_dislike_count($slug);
-                    $this->articleModel->decrement_like_count($slug);
-                }
-                $message = 'Reaction updated';
-            }
+    // Универсальная функция для обновления счетчиков реакции
+    private function update_reaction_count($entityModel, $entityId, $reactionType, $action) {
+        if ($reactionType === 'like') {
+            $action === 'increment' ? $entityModel->increment_like_count($entityId) : $entityModel->decrement_like_count($entityId);
         } else {
-            // Если реакции нет, добавить новую
-            $this->articleReactionsModel->add_reaction($userId, $slug, $reactionType);
-            if ($reactionType === 'like') {
-                $this->articleModel->increment_like_count($slug);
-            } else {
-                $this->articleModel->increment_dislike_count($slug);
-            }
-            $message = 'Reaction added';
+            $action === 'increment' ? $entityModel->increment_dislike_count($entityId) : $entityModel->decrement_dislike_count($entityId);
         }
-
-        // Получаем актуальное количество лайков и дизлайков
-        $updated_likes = $this->articleModel->get_likes_count($slug);
-        $updated_dislikes = $this->articleModel->get_dislikes_count($slug);
-
-        $this->show_json($message,$updated_likes,$updated_dislikes);
-       exit();
     }
-    public function get_posted_data(){
-        // Получаем данные из POST-запроса
+
+    // Универсальная функция получения POST-данных для статей и комментариев
+    public function get_posted_data($entityType) {
         $input = json_decode(file_get_contents('php://input'), true);
-        $this->check_data($input);
+        $this->check_data($input, $entityType);
         return [
-            'slug' =>  $input['slug'],
+            'id' => $entityType === 'article' ? $input['slug'] : $input['comment_id'],
             'reaction_type' => $input['reaction_type'],
             'user_id' => $input['user_id']
         ];
+    }
+
+    // Проверка данных в зависимости от типа сущности
+    private function check_data($input, $entityType) {
+        $requiredFields = $entityType === 'article' ? ['slug', 'reaction_type', 'user_id'] : ['comment_id', 'reaction_type', 'user_id'];
+        foreach ($requiredFields as $field) {
+            if (!isset($input[$field])) {
+                echo json_encode(['success' => false, 'error' => 'Missing parameter', 'missing' => $field]);
+                exit();
+            }
+        }
     }
 
     public function handle_add_comment() {
@@ -473,30 +441,53 @@ class ArticleController
         ]);
     }
 
+//    public function check_comment_data($input){
+//        if (!isset($input['comment_id'], $input['reaction_type'], $input['user_id'])) {
+//            $missingParams = [];
+//
+//            // Проверяем, какие параметры отсутствуют
+//            if (!isset($input['comment_id'])) {
+//                $missingParams[] = 'comment_id';
+//            }
+//            if (!isset($input['reaction_type'])) {
+//                $missingParams[] = 'reaction_type';
+//            }
+//            if (!isset($input['user_id'])) {
+//                $missingParams[] = 'user_id';
+//            }
+//
+//            echo json_encode([
+//                'success' => false,
+//                'error' => 'Missing parameters',
+//                'missing' => $missingParams
+//            ]);
+//            exit();
+//        }
+//    }
 
-    public function check_data($input){
-        if (!isset($input['slug'], $input['reaction_type'], $input['user_id'])) {
-            $missingParams = [];
-
-            // Проверяем, какие параметры отсутствуют
-            if (!isset($input['slug'])) {
-                $missingParams[] = 'slug';
-            }
-            if (!isset($input['reaction_type'])) {
-                $missingParams[] = 'reaction_type';
-            }
-            if (!isset($input['user_id'])) {
-                $missingParams[] = 'user_id';
-            }
-
-            echo json_encode([
-                'success' => false,
-                'error' => 'Missing parameters',
-                'missing' => $missingParams
-            ]);
-            exit();
-        }
-    }
+//    public function check_article_data($input){
+//        if (!isset($input['slug'], $input['reaction_type'], $input['user_id'])) {
+//            $missingParams = [];
+//
+//            // Проверяем, какие параметры отсутствуют
+//            if (!isset($input['slug'])) {
+//                $missingParams[] = 'slug';
+//            }
+//            if (!isset($input['reaction_type'])) {
+//                $missingParams[] = 'reaction_type';
+//            }
+//            if (!isset($input['user_id'])) {
+//                $missingParams[] = 'user_id';
+//            }
+//
+//            echo json_encode([
+//                'success' => false,
+//                'error' => 'Missing parameters',
+//                'missing' => $missingParams
+//            ]);
+//            exit();
+//        }
+//    }
 
 
 }
