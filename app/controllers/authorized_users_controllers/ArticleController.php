@@ -33,10 +33,24 @@ class ArticleController
         $this->commentModel = new Comment(getDbConnection());
     }
 
-    public function show_article_form()
+    public function show_article_form($slug)
     {
-        include __DIR__ . '/../../views/authorized_users/form_article.php';
+        if ($slug) {
+            $article = $this->articleModel->get_article_by_slug($slug);
+
+            // Проверка и обработка обложки
+            $coverImage = $article['cover_image'] ?? '';
+            if ($coverImage && !preg_match('#^https?://#', $coverImage)) {
+                $baseUrl = 'http://localhost:8080/';
+                $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
+                $coverImage = $baseUrl . ltrim($coverImage, '/');
+            }
+
+            // Передаем данные в форму
+            include __DIR__ . '/../../views/authorized_users/form_article.php';
+        }
     }
+
     public function create_article()
     {
 //        session_start();
@@ -299,6 +313,7 @@ class ArticleController
             'difficulty' => $_POST['difficulty'],
             'read_time' => $_POST['read_time'],
             'tags' => $_POST['tags'],
+            'cover_image' => $_POST['cover_image'],
             'author' => $_SESSION['user']['user_login'],
             'user_id' => $_SESSION['user']['user_id']
         ];

@@ -16,11 +16,13 @@ document.getElementById('cover_image').addEventListener('change', function (even
 
 // Функция для удаления изображения
 document.getElementById('remove_button').addEventListener('click', function (event) {
+    event.preventDefault();  // Предотвращаем отправку формы
+
     const preview = document.getElementById('cover_image_preview');
     const fileInput = document.getElementById('cover_image');
 
-    preview.src = '';
-    preview.style.display = 'none';
-    this.style.display = 'none';
-    fileInput.value = '';  // Сбросить выбранное изображение
+    preview.src = '';  // Очистить изображение
+    preview.style.display = 'none';  // Скрыть превью
+    this.style.display = 'none';  // Скрыть кнопку удаления
+    fileInput.value = '';  // Сбросить выбранное изображение в input
 });

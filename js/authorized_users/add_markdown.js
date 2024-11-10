@@ -163,11 +163,37 @@ document.addEventListener('DOMContentLoaded', function() {
             plainText = plainText.replace(/>\s*\[!spoiler\]\s*(.*)/g, '<details><summary>Spoiler</summary>$1</details>');
 
 
-            // Обработка изображений
+            // Определяем базовый URL для сайта
+            const baseUrl = 'http://localhost:8080/';
+
+            // Обработка изображений в формате ![image_id](url)
+            plainText = plainText.replace(/!\[(.*?)\]\((.*?)\)/g, function(match, altText, url) {
+                // Если URL не абсолютный, добавляем базовый путь
+                if (!/^https?:\/\//.test(url)) {
+                    // Убираем '/articles/edit' из пути, если оно есть
+                    let cleanUrl = url.replace('/articles/edit', ''); // убираем '/articles/edit'
+                    // Добавляем базовый URL
+                    cleanUrl = baseUrl + cleanUrl.replace(/^\//, ''); // убираем ведущий /, если есть
+                    return `<img src="${cleanUrl}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+                }
+                // Если путь уже абсолютный, просто возвращаем его
+                return `<img src="${url}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+            });
+
+            // Обработка изображений с использованием imageMap
             for (const [id, url] of Object.entries(imageMap)) {
                 let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
                 plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
             }
+
+            // Дополнительная логика для того, чтобы убедиться, что никаких лишних URL не добавляется
+            plainText = plainText.replace(/<img src="(.*?)"/g, function(match, imgSrc) {
+                // Проверка на то, что путь не является относительным
+                if (imgSrc.indexOf('http') === -1) {
+                    imgSrc = baseUrl + imgSrc.replace(/^\//, ''); // Добавление базового URL, если его нет
+                }
+                return `<img src="${imgSrc}"`;
+            });
 
             return simplemde.markdown(plainText);
         }

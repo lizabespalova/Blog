@@ -7,7 +7,7 @@ use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
 
-function profile_route($uri, $method) {
+function comment_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
@@ -35,5 +35,5 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Запускаем маршрутизатор до вывода содержимого
-profile_route($uri, $method);
+comment_route($uri, $method);
 ?>

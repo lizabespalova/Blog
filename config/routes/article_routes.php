@@ -7,7 +7,7 @@ use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
 
-function profile_route($uri, $method) {
+function article_route($uri, $method) {
     $dbConnection = getDbConnection();
     //error_log("URI: $uri, Method: $method");
 
@@ -16,7 +16,7 @@ function profile_route($uri, $method) {
         case '/create-article':
             $controller = new ArticleController($dbConnection);
             if ($method === 'GET') {
-                $controller->show_article_form();
+                $controller->show_article_form(null);
             }
             else if ($method === 'POST') {
                 $controller->create_article();
@@ -39,8 +39,9 @@ function profile_route($uri, $method) {
             $controller->show_article($slug);
             exit();
         case (bool)preg_match('/^\/articles\/edit\/([\w-]+)$/', $uri, $matches):
+            $slug = $matches[1];
             $controller = new ArticleController(getDbConnection());
-            $controller->show_article_form();
+            $controller->show_article_form($slug);
             exit();
         default:
             return false;
@@ -52,5 +53,5 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Запускаем маршрутизатор до вывода содержимого
-profile_route($uri, $method);
+article_route($uri, $method);
 ?>
