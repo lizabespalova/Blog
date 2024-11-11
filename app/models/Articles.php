@@ -12,9 +12,33 @@ class Articles
     public function __construct($conn) {
         $this->conn = $conn;
     }
+    public function prepare_article_params($inputData, $coverImagePath)
+    {
+        // Массив данных для статьи
+        $params = [
+            $inputData['title'] ?? '',
+            $inputData['content'] ?? '',
+            $inputData['author'] ?? '',
+            $coverImagePath,
+            $inputData['youtube_link'] ?? '',
+            $inputData['category'] ?? '',
+            $inputData['difficulty'] ?? '',
+            $inputData['read_time'] ?? '',
+            $inputData['tags'] ?? ''
+        ];
+
+        // Устанавливаем NULL для пустых значений
+        foreach ($params as &$param) {
+            if ($param === '') {
+                $param = null;
+            }
+        }
+
+        return $params;
+    }
+
     public function add_article($inputData, $coverImagePath)
     {
-        // SQL запрос для вставки статьи
         $stmt = $this->conn->prepare(
             'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags) 
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
@@ -24,41 +48,49 @@ class Articles
             die('Prepare failed: ' . $this->conn->error);
         }
 
-        // Массив данных, который мы передаем для вставки
-        $params = [
-            $inputData['title'] ?? '',         // Заголовок
-            $inputData['content'] ?? '',       // Контент
-            $inputData['author'] ?? '',        // Автор
-            $coverImagePath,                   // Путь к обложке
-            $inputData['youtube_link'] ?? '',  // Ссылка на YouTube
-            $inputData['category'] ?? '',      // Категория
-            $inputData['difficulty'] ?? '',    // Сложность
-            $inputData['read_time'] ?? '',     // Время чтения
-            $inputData['tags'] ?? ''           // Теги
-        ];
-
-        // Установить NULL для пустых значений
-        foreach ($params as &$param) {
-            if ($param === '') {
-                $param = null;
-            }
-        }
-
-        // Привязываем параметры. Используем 's' для строк.
+        // Получаем параметры
+        $params = $this->prepare_article_params($inputData, $coverImagePath);
         $types = str_repeat('s', count($params));
 
         // Привязка параметров
         $stmt->bind_param($types, ...$params);
 
         if ($stmt->execute()) {
-            // Получаем ID вставленной статьи
             $article_id = $stmt->insert_id;
             $stmt->close();
-            return $article_id; // Возвращаем ID статьи
+            return $article_id;
         } else {
-            // Логируем ошибку
             error_log("Execute failed: " . $stmt->error);
-            echo "Execute failed: " . $stmt->error; // Для отладки
+            echo "Execute failed: " . $stmt->error;
+            $stmt->close();
+            return false;
+        }
+    }
+
+    public function update_article($articleId, $inputData, $coverImagePath)
+    {
+        $stmt = $this->conn->prepare(
+            'UPDATE articles SET title = ?, content = ?, author = ?, cover_image = ?, youtube_link = ?, category = ?, difficulty = ?, read_time = ?, tags = ? 
+         WHERE id = ?'
+        );
+
+        if ($stmt === false) {
+            die('Prepare failed: ' . $this->conn->error);
+        }
+
+        // Получаем параметры и добавляем $articleId в конце
+        $params = array_merge($this->prepare_article_params($inputData, $coverImagePath), [$articleId]);
+        $types = str_repeat('s', count($params) - 1) . 'i';
+
+        // Привязка параметров
+        $stmt->bind_param($types, ...$params);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            error_log("Execute failed: " . $stmt->error);
+            echo "Execute failed: " . $stmt->error;
             $stmt->close();
             return false;
         }

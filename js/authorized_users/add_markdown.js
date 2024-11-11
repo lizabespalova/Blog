@@ -186,14 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
             }
 
-            // Дополнительная логика для того, чтобы убедиться, что никаких лишних URL не добавляется
-            plainText = plainText.replace(/<img src="(.*?)"/g, function(match, imgSrc) {
-                // Проверка на то, что путь не является относительным
-                if (imgSrc.indexOf('http') === -1) {
-                    imgSrc = baseUrl + imgSrc.replace(/^\//, ''); // Добавление базового URL, если его нет
-                }
+            // Дополнительная логика для проверки относительных URL, но только если не заданы через imageMap
+            plainText = plainText.replace(/<img src="(?!http|data:image)(.*?)"/g, function(match, imgSrc) {
+                // Добавление базового URL для относительных путей
+                imgSrc = baseUrl + imgSrc.replace(/^\//, '');
                 return `<img src="${imgSrc}"`;
             });
+
 
             return simplemde.markdown(plainText);
         }

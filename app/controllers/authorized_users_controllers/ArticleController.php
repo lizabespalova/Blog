@@ -37,7 +37,6 @@ class ArticleController
     {
         if ($slug) {
             $article = $this->articleModel->get_article_by_slug($slug);
-
             // Проверка и обработка обложки
             $coverImage = $article['cover_image'] ?? '';
             if ($coverImage && !preg_match('#^https?://#', $coverImage)) {
@@ -45,57 +44,61 @@ class ArticleController
                 $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
                 $coverImage = $baseUrl . ltrim($coverImage, '/');
             }
-
-            // Передаем данные в форму
-            include __DIR__ . '/../../views/authorized_users/form_article.php';
         }
+        // Передаем данные в форму
+        include __DIR__ . '/../../views/authorized_users/form_article.php';
     }
-
+//    public function update_article($slug){
+//        $this->loginService->check_authorisation();
+//        $inputData = $this->get_article_input();
+//
+//    }
     public function create_article()
     {
-//        session_start();
         $this->loginService->check_authorisation();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $inputData = $this->get_article_input();
 
-            // Валидация данных
+            // Проверка наличия `article_id`
+            $articleId = $_POST['article_id'] ?? null;
+
             $this->validate_input($inputData['title'], $inputData['content']);
-            // Обрабатываем контент для поиска изображений
             $matches = $this->find_images_in_content($inputData['content']);
-//            // Отладка: выводим массив с найденными изображениями
-//            echo "<pre>Контент";
-//            print_r($content);
-//            echo "</pre>";
 
-            // Добавляем статью в базу данных и получаем её ID
-            $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию
-            $article_id = $this->articleModel->add_article($inputData, $cover_image_path/*$title, '', $author, $cover_image_path, $youtube_link, $category, $difficulty, $read_time, $tags*/);
+            $cover_image_path = 'templates/images/article_logo.png';
 
-            if ($article_id) {
-                $articleDir = $this->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $article_id);
-
-                // Создаем директорию для статьи (и cover)
-                $this->upload_cover_image($article_id, $inputData['user_id']);
-
-                // Генерируем слаг
-                $slug = $this->create_slug($inputData['author'], $article_id, $inputData['title']);
-                $this->articleModel->update_article_slug($article_id, $slug);
-
-                // Обрабатываем и сохраняем все найденные изображения
-                $this->process_images($matches, $articleDir, $article_id, $inputData['content'], $slug);
-
-                header('Location: /articles/' . $slug);
-
-                //Добавляю +1 к статье
-                $this->userModel->set_articles($inputData['user_id']);
-            }else{
-                header('Location: /error');
+            if ($articleId) {
+                // Обновление статьи
+                $result = $this->articleModel->update_article($articleId, $inputData, $cover_image_path);
+            } else {
+                // Создание новой статьи
+                $articleId = $this->articleModel->add_article($inputData, $cover_image_path);
+                $result = $articleId !== false;
             }
 
-            exit(); //exit, чтобы остановить выполнение скрипта после перенаправления
+            if ($result) {
+                $articleDir = $this->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId);
+
+                if ($articleId) {
+                    // Если создается статья, создаем slug для новой статьи
+                    $slug = $this->create_slug($inputData['author'], $articleId, $inputData['title']);
+                    $this->articleModel->update_article_slug($articleId, $slug);
+                } else {
+                    // Если обновляется статья, используем уже существующий slug
+                    $slug = $inputData['slug'];
+                }
+
+                $this->process_images($matches, $articleDir, $articleId, $inputData['content'], $slug);
+                header('Location: /articles/' . $slug);
+                exit();
+            } else {
+                header('Location: /error');
+                exit();
+            }
         }
     }
+
     public function process_images($matches, $articleDir, $article_id, $content, $slug){
         $pattern = '/\[image(\d+)\]\(data:image\/[a-zA-Z]+;base64,([^\)]+)\)/';
         preg_match_all($pattern, $matches[0], $result);
@@ -313,6 +316,7 @@ class ArticleController
             'difficulty' => $_POST['difficulty'],
             'read_time' => $_POST['read_time'],
             'tags' => $_POST['tags'],
+            'slug' => $_POST['slug'],
             'cover_image' => $_POST['cover_image'],
             'author' => $_SESSION['user']['user_login'],
             'user_id' => $_SESSION['user']['user_id']

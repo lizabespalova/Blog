@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
 
     markdownContents.forEach((markdownContent, index) => {
-        console.log(`Original content for rendered-content-${index + 1}:`, markdownContent);
-        console.log(`Original content for rendered-content-2:`, markdownContent.innerHTML);
+        // console.log(`Original content for rendered-content-${index + 1}:`, markdownContent);
+        // console.log(`Original content for rendered-content-2:`, markdownContent.innerHTML);
 
         if (markdownContent) {
             console.log(`Обработка: rendered-content-${index + 1}`);

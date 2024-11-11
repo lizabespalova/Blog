@@ -47,3 +47,5 @@ function updateTagsField() {
     const tags = getTags();
     document.getElementById('tags').value = tags.join(','); // Обновляем значение скрытого поля
 }
+
+

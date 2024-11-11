@@ -40,50 +40,57 @@
      <label for="category">Category:</label>
      <select id="category" name="category" required>
          <option value="" disabled selected>Select a category</option>
-         <option value="programming" <?= $article['category'] === 'programming' ? 'selected' : '' ?>>Programming</option>
-         <option value="ai" <?= $article['category'] === 'ai' ? 'selected' : '' ?> >Artificial Intelligence</option>
-         <option value="web_development" <?= $article['category'] === 'web_development' ? 'selected' : '' ?>>Web Development</option>
-         <option value="data_science" <?= $article['category'] === 'data_science' ? 'selected' : '' ?>>Data Science</option>
-         <option value="cyber_security" <?= $article['category'] === 'cyber_security' ? 'selected' : '' ?>>Cyber Security</option>
-         <option value="cloud_computing"  <?= $article['category'] === 'cloud_computing' ? 'selected' : '' ?>>Cloud Computing</option>
-         <option value="machine_learning"  <?= $article['category'] === 'machine_learning' ? 'selected' : '' ?>>Machine Learning</option>
-         <option value="it_news" <?= $article['category'] === 'it_news' ? 'selected' : '' ?>>IT News</option>
-         <option value="software_testing" <?= $article['category'] === 'software_testing' ? 'selected' : '' ?>>Software Testing</option>
+         <option value="programming" <?= ($article['category'] ?? '') === 'programming' ? 'selected' : '' ?>>Programming</option>
+         <option value="ai" <?= ($article['category'] ?? '') === 'ai' ? 'selected' : '' ?>>Artificial Intelligence</option>
+         <option value="web_development" <?= ($article['category'] ?? '') === 'web_development' ? 'selected' : '' ?>>Web Development</option>
+         <option value="data_science" <?= ($article['category'] ?? '') === 'data_science' ? 'selected' : '' ?>>Data Science</option>
+         <option value="cyber_security" <?= ($article['category'] ?? '') === 'cyber_security' ? 'selected' : '' ?>>Cyber Security</option>
+         <option value="cloud_computing" <?= ($article['category'] ?? '') === 'cloud_computing' ? 'selected' : '' ?>>Cloud Computing</option>
+         <option value="machine_learning" <?= ($article['category'] ?? '') === 'machine_learning' ? 'selected' : '' ?>>Machine Learning</option>
+         <option value="it_news" <?= ($article['category'] ?? '') === 'it_news' ? 'selected' : '' ?>>IT News</option>
+         <option value="software_testing" <?= ($article['category'] ?? '') === 'software_testing' ? 'selected' : '' ?>>Software Testing</option>
      </select><br>
 
      <label for="difficulty">Difficulty:</label>
      <select id="difficulty" name="difficulty" required>
-         <option value="" >Select difficulty</option>
-         <option value="beginner" <?= $article['difficulty'] === 'beginner' ? 'selected' : '' ?>>Beginner</option>
-         <option value="intermediate"  <?= $article['difficulty'] === 'intermediate' ? 'selected' : '' ?>>Intermediate</option>
-         <option value="advanced"  <?= $article['difficulty'] === 'advanced' ? 'selected' : '' ?>>Advanced</option>
+         <option value="">Select difficulty</option>
+         <option value="beginner" <?= ($article['difficulty'] ?? '') === 'beginner' ? 'selected' : '' ?>>Beginner</option>
+         <option value="intermediate" <?= ($article['difficulty'] ?? '') === 'intermediate' ? 'selected' : '' ?>>Intermediate</option>
+         <option value="advanced" <?= ($article['difficulty'] ?? '') === 'advanced' ? 'selected' : '' ?>>Advanced</option>
      </select><br>
+
 
      <label for="read_time">Estimated Read Time (in minutes):</label>
      <input type="number" id="read_time" name="read_time" min="1" value="<?= htmlspecialchars($article['read_time'] ?? '') ?>" required><br>
 
-     <label for="tags">Tags such IT languages (comma-separated):</label>
+     <label for="tags">Tags such as IT languages (comma-separated):</label>
      <div class="tag-container">
-         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" value="<?= htmlspecialchars(implode(', ', $article['tags'] ?? [])) ?>">
+         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" value="<?= htmlspecialchars(implode(', ', is_array($article['tags']) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
          <span id="tag-warning" style="color: red; display: none; margin-left: 10px;">❗ No more than 10 tags!</span>
      </div>
      <input type="hidden" id="tags" name="tags">
 
-
      <label for="youtube_link">YouTube Link:</label>
-     <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz" value="<?= htmlspecialchars(implode(', ', $article['youtube_link'] ?? [])) ?>">
+     <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz" value="<?= htmlspecialchars($article['youtube_link'] ?? '') ?>">
 
      <label for="cover_image">Upload cover image:</label>
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*">
-         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($coverImage) ?>" alt="Cover Image Preview" style="display:<?= $coverImage ? 'block' : 'none' ?>;">
-         <button id="remove_button" class="remove-button" style="display: <?= $article['cover_image'] ? 'block' : 'none' ?>;">×</button>
+         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($coverImage ?? '') ?>" alt="Cover Image Preview" style="display:<?= !empty($coverImage) ? 'block' : 'none' ?>;">
+         <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
 
-<!--          <input type="file" name="article_images[]" id="fileInput" multiple>-->
+
+     <!--          <input type="file" name="article_images[]" id="fileInput" multiple>-->
+     <input type="hidden" name="article_id" value="<?= $article['id'] ?? '' ?>">
+     <?php if (isset($article['slug'])): ?>
+         <input type="hidden" name="slug" value="<?= htmlspecialchars($article['slug']) ?>">
+     <?php endif; ?>
+     <!-- Остальные поля формы, такие как заголовок, контент и т.д. -->
      <button type="submit" class="custom-submit-button">
          <?= isset($article['slug']) ? 'Save Changes' : 'Create Article' ?>
      </button>
+
  </form>
  <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
  <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
