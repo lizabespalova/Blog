@@ -50,6 +50,66 @@ class ArticleImages
             return false;
         }
     }
+    public function get_images_by_article_slug($slug){
+        // SQL-запрос для получения изображений по slug статьи
+        $query = "
+        SELECT ai.id, ai.image_path
+        FROM article_images ai
+        INNER JOIN articles a ON ai.article_id = a.id
+        WHERE a.slug = ?
+    ";
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt) {
+            die("Ошибка подготовки запроса: " . $this->conn->error);
+        }
+
+        // Привязываем параметр
+        $stmt->bind_param('s', $slug);
+
+        // Выполняем запрос
+        $stmt->execute();
+
+        // Получаем результат
+        $result = $stmt->get_result();
+
+        // Проверяем, есть ли данные
+        if ($result->num_rows > 0) {
+            $images = [];
+            while ($row = $result->fetch_assoc()) {
+                $images[] = $row;
+            }
+            return $images;
+        }
+
+        // Если данных нет, возвращаем пустой массив
+        return [];
+    }
+    public function delete_image($id)
+    {
+        // Подключение к базе данных (замените $this->db на ваше подключение)
+
+        // SQL-запрос для удаления изображения
+        $query = "DELETE FROM article_images WHERE id = ?";
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt) {
+            die("Ошибка подготовки запроса: " .  $this->conn->error);
+        }
+
+        // Привязываем параметр
+        $stmt->bind_param('i', $id);
+
+        // Выполняем запрос
+        if ($stmt->execute()) {
+            // Успешное удаление
+            return true;
+        } else {
+            // Ошибка при удалении
+            return false;
+        }
+    }
 
 
 }

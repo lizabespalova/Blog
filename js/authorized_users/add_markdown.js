@@ -21,22 +21,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.accept = "image/*";
 
                     input.onchange = function() {
+
                         let file = input.files[0];
-
                         let reader = new FileReader();
+
                         reader.onload = function(e) {
-                            let imageUrl = e.target.result;
-                            let imageId = `image${Object.keys(imageMap).length + 1}`;
-                            imageMap[imageId] = imageUrl;
-
-                            // Сохраняем файл в массив с использованием его идентификатора
+                            let imageId = `image${Date.now()}`;
+                            imageMap[imageId] = e.target.result;
                             uploadedFiles.push(file); // Добавляем только файл в массив
-
-                            let markdownImage = `[${imageId}]`;
-                            editor.codemirror.replaceSelection(markdownImage + "\n");
+                            simplemde.codemirror.replaceSelection(`[${imageId}]\n`);
                         };
 
-                        reader.readAsDataURL(file);
+
+                        reader.readAsDataURL(file)
                     };
 
                     input.click();
@@ -163,6 +160,14 @@ document.addEventListener('DOMContentLoaded', function() {
             plainText = plainText.replace(/>\s*\[!spoiler\]\s*(.*)/g, '<details><summary>Spoiler</summary>$1</details>');
 
 
+            // Обработка изображений с использованием imageMap
+            for (const [id, url] of Object.entries(imageMap)) {
+                // Удаляем "articles/edit/" из пути, если он там есть
+                let correctedUrl = url.replace(/^.*?uploads\//, '/uploads/');
+                let imageTag = `<img src="${correctedUrl}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+                plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
+            }
+
             // Определяем базовый URL для сайта
             const baseUrl = 'http://localhost:8080/';
 
@@ -180,20 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return `<img src="${url}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
             });
 
-            // Обработка изображений с использованием imageMap
-            for (const [id, url] of Object.entries(imageMap)) {
-                let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
-                plainText = plainText.replace(new RegExp(`\\[${id}\\]`, 'g'), imageTag);
-            }
-
-            // Дополнительная логика для проверки относительных URL, но только если не заданы через imageMap
-            plainText = plainText.replace(/<img src="(?!http|data:image)(.*?)"/g, function(match, imgSrc) {
-                // Добавление базового URL для относительных путей
-                imgSrc = baseUrl + imgSrc.replace(/^\//, '');
-                return `<img src="${imgSrc}"`;
-            });
-
-
             return simplemde.markdown(plainText);
         }
     });
@@ -208,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let reader = new FileReader();
 
                 reader.onload = function(e) {
-                    let imageId = `image${Object.keys(imageMap).length + 1}`;
+                    let imageId = `image${Date.now()}`;
                     imageMap[imageId] = e.target.result;
                     uploadedFiles.push(file); // Добавляем только файл в массив
                     simplemde.codemirror.replaceSelection(`[${imageId}]\n`);

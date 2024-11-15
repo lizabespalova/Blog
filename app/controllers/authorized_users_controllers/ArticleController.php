@@ -44,15 +44,14 @@ class ArticleController
                 $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
                 $coverImage = $baseUrl . ltrim($coverImage, '/');
             }
+            $title = $article['title'] ?? '';
+            $content = $article['content'] ?? '';
+
         }
         // Передаем данные в форму
         include __DIR__ . '/../../views/authorized_users/form_article.php';
     }
-//    public function update_article($slug){
-//        $this->loginService->check_authorisation();
-//        $inputData = $this->get_article_input();
-//
-//    }
+
     public function create_article()
     {
         $this->loginService->check_authorisation();
@@ -62,11 +61,13 @@ class ArticleController
 
             // Проверка наличия `article_id`
             $articleId = $_POST['article_id'] ?? null;
-
+            // Проверка и загрузка обложки
+            $cover_image_path = $this->upload_cover_image($articleId, $inputData['user_id']);
+            if (!$cover_image_path) {
+                $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию, если загрузка не удалась
+            }
             $this->validate_input($inputData['title'], $inputData['content']);
             $matches = $this->find_images_in_content($inputData['content']);
-
-            $cover_image_path = 'templates/images/article_logo.png';
 
             if ($articleId) {
                 // Обновление статьи
@@ -74,10 +75,12 @@ class ArticleController
             } else {
                 // Создание новой статьи
                 $articleId = $this->articleModel->add_article($inputData, $cover_image_path);
+
                 $result = $articleId !== false;
             }
 
             if ($result) {
+
                 $articleDir = $this->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId);
 
                 if ($articleId) {
@@ -89,7 +92,7 @@ class ArticleController
                     $slug = $inputData['slug'];
                 }
 
-                $this->process_images($matches, $articleDir, $articleId, $inputData['content'], $slug);
+                $this->process_images( $articleDir, $articleId, $inputData['content'], $slug, $inputData['user_id'], $matches);
                 header('Location: /articles/' . $slug);
                 exit();
             } else {
@@ -99,31 +102,6 @@ class ArticleController
         }
     }
 
-    public function process_images($matches, $articleDir, $article_id, $content, $slug){
-        $pattern = '/\[image(\d+)\]\(data:image\/[a-zA-Z]+;base64,([^\)]+)\)/';
-        preg_match_all($pattern, $matches[0], $result);
-
-        foreach ($result[2] as $index => $base64Data) {
-            $photoNumber = $result[1][$index];
-
-            // Генерация уникального имени файла для каждого изображения
-            $fileName = "image_" . $photoNumber . ".jpg";
-            $imagePath =  $articleDir . '/' . $fileName;
-
-            // Сохраняем изображение на сервере
-            if ($this->save_Base64Image($base64Data, $imagePath)) {
-                // Если изображение успешно сохранено, сохраняем путь в базу данных
-                $this->articleImagesModel->save_image_path_to_db($article_id, $imagePath,$slug);
-            }
-        }
-        // Заменяем base64 код в контенте на путь к изображению
-        $content = preg_replace(
-            $pattern,
-            '[image' . $photoNumber . '](' . $imagePath . ')',
-            $content
-        );
-        $this->articleModel->update_content($article_id, $content);
-    }
 
     private function validate_input($title, $content)
     {
@@ -144,21 +122,87 @@ class ArticleController
     }
     private function upload_cover_image($article_id, $user_id)
     {
-
         if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0) {
             // Создаем директорию для обложки
             $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id . '/cover');
-            // Получаем имя файла обложки
+
+            // Удаляем старое изображение, если оно существует, чтобы в директории оставалось только одно
+            $existingFiles = glob($coverDir . '/*'); // Получаем все файлы в папке cover
+            foreach ($existingFiles as $file) {
+                if (is_file($file)) {
+                    unlink($file); // Удаляем файл
+                }
+            }
+
+            // Получаем новое имя файла обложки
             $cover_image_name = basename($_FILES['cover_image']['name']);
-            // Полный путь для сохранения файла на сервере
             $cover_image_path = $coverDir . '/' . $cover_image_name;
-            // Перемещаем загруженный файл из временной директории в указанную директорию
-            if (!move_uploaded_file($_FILES['cover_image']['tmp_name'], $cover_image_path)) {
+
+            // Перемещаем загруженный файл
+            if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $cover_image_path)) {
+                // Возвращаем путь для сохранения в базе данных
+                return $cover_image_path;
+            } else {
                 echo "Error uploading cover image.";
-                return;
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    // Генерация пути для изображения
+    private function generate_image_path($user_id, $article_id, $photoNumber) {
+        $fileName = "image_" . $photoNumber . ".jpg";
+        return 'uploads/' . $user_id . '/article_photos/' . $article_id . '/' . $fileName;
+    }
+
+    public function process_images($articleDir, $article_id, $content, $slug, $userId, $matches) {
+        foreach ($matches[2] as $index => $base64Data) {
+            $photoNumber = $matches[1][$index];
+            $imagePath = $this->generate_image_path($userId, $article_id, $photoNumber);
+
+            // Сохраняем изображение на сервере
+            if ($this->save_Base64Image($base64Data, $articleDir . '/' . basename($imagePath))) {
+                // Сохраняем путь к изображению в базе данных
+                $this->articleImagesModel->save_image_path_to_db($article_id, $imagePath, $slug);
+
+                // Заменяем base64-код на путь к изображению в контенте
+                $currentMatch = $matches[0][$index];
+                $content = str_replace($currentMatch, '[image' . $photoNumber . '](' . $imagePath . ')', $content);
+            }
+        }
+
+        // Обновляем контент статьи в базе данных
+        $this->articleModel->update_content($article_id, $content);
+
+        // Удаляем лишние изображения
+       $this->delete_unused_images($content, $slug);
+    }
+
+    public function delete_unused_images( $content, $slug)
+    {
+        // Получить все изображения, связанные со статьей, из базы данных
+        $existingImages = $this->articleImagesModel->get_images_by_article_slug($slug);
+
+        // Найти пути к изображениям в контенте
+        $contentImagePaths = $this->find_images_pathes_in_content($content);
+
+        // Проверить, какие изображения в базе данных больше не используются
+        foreach ($existingImages as $image) {
+            if (!in_array($image['image_path'], $contentImagePaths)) {
+                // Удалить файл с сервера, если он больше не используется
+                if (file_exists($image['image_path'])) {
+                    unlink($image['image_path']);
+                }
+
+                // Удалить запись из базы данных
+                $this->articleImagesModel->delete_image($image['id']);
             }
         }
     }
+
+
 
     public function create_slug($author, $article_id, $title): string
     {
@@ -317,15 +361,21 @@ class ArticleController
             'read_time' => $_POST['read_time'],
             'tags' => $_POST['tags'],
             'slug' => $_POST['slug'],
-            'cover_image' => $_POST['cover_image'],
+            'cover_image' => $_FILES['cover_image'],
             'author' => $_SESSION['user']['user_login'],
             'user_id' => $_SESSION['user']['user_id']
         ];
     }
     private function find_images_in_content($content): array
     {
-        preg_match('/\[image\d+\]\(data:image\/(png|jpg|jpeg|gif);base64,([^"]+)\)/', $content, $matches);
+        preg_match_all('/\[image(\d+)\]\(data:image\/[a-zA-Z]+;base64,([^\)]+)\)/', $content, $matches);
         return $matches;
+    }
+    private function find_images_pathes_in_content($content): array
+    {
+        // Регулярное выражение для извлечения путей из контента
+        preg_match_all('/!\[image\d+\]\(([^)]+)\)/', $content, $matches);
+        return $matches[1]; // Возвращаем массив путей
     }
     public function delete_article($slug){
             if ($this->articleModel->delete_article($slug)) {
@@ -460,53 +510,7 @@ class ArticleController
         ]);
     }
 
-//    public function check_comment_data($input){
-//        if (!isset($input['comment_id'], $input['reaction_type'], $input['user_id'])) {
-//            $missingParams = [];
-//
-//            // Проверяем, какие параметры отсутствуют
-//            if (!isset($input['comment_id'])) {
-//                $missingParams[] = 'comment_id';
-//            }
-//            if (!isset($input['reaction_type'])) {
-//                $missingParams[] = 'reaction_type';
-//            }
-//            if (!isset($input['user_id'])) {
-//                $missingParams[] = 'user_id';
-//            }
-//
-//            echo json_encode([
-//                'success' => false,
-//                'error' => 'Missing parameters',
-//                'missing' => $missingParams
-//            ]);
-//            exit();
-//        }
-//    }
 
-//    public function check_article_data($input){
-//        if (!isset($input['slug'], $input['reaction_type'], $input['user_id'])) {
-//            $missingParams = [];
-//
-//            // Проверяем, какие параметры отсутствуют
-//            if (!isset($input['slug'])) {
-//                $missingParams[] = 'slug';
-//            }
-//            if (!isset($input['reaction_type'])) {
-//                $missingParams[] = 'reaction_type';
-//            }
-//            if (!isset($input['user_id'])) {
-//                $missingParams[] = 'user_id';
-//            }
-//
-//            echo json_encode([
-//                'success' => false,
-//                'error' => 'Missing parameters',
-//                'missing' => $missingParams
-//            ]);
-//            exit();
-//        }
-//    }
 
 
 }

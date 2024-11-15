@@ -18,11 +18,11 @@
  <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm">
 
      <label for="title">Title:</label>
-     <input type="text" id="title" name="title" placeholder="Title" required value="<?= htmlspecialchars($article['title'] ?? '') ?>"><br>
+     <input type="text" id="title" name="title" placeholder="Title" required value="<?= htmlspecialchars($title) ?>"><br>
 
      <label for="markdown-editor">Content:</label>
      <!-- Для вывода контента статьи -->
-     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= htmlspecialchars($article['content'] ?? '') ?></textarea>
+     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= htmlspecialchars($content) ?></textarea>
      <!-- Модальное окно для таблиц -->
      <div id="tableModal" class="modal" style="display: none;">
          <div class="modal-content">
