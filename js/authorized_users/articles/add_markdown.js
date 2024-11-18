@@ -21,19 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     input.accept = "image/*";
 
                     input.onchange = function() {
-
                         let file = input.files[0];
-                        let reader = new FileReader();
-
-                        reader.onload = function(e) {
-                            let imageId = `image${Date.now()}`;
-                            imageMap[imageId] = e.target.result;
-                            uploadedFiles.push(file); // Добавляем только файл в массив
+                        handleImageUpload(file, (imageId) => {
                             simplemde.codemirror.replaceSelection(`[${imageId}]\n`);
-                        };
-
-
-                        reader.readAsDataURL(file)
+                        });
                     };
 
                     input.click();
@@ -196,16 +187,9 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let item of items) {
             if (item.type.includes("image")) {
                 let file = item.getAsFile();
-                let reader = new FileReader();
-
-                reader.onload = function(e) {
-                    let imageId = `image${Date.now()}`;
-                    imageMap[imageId] = e.target.result;
-                    uploadedFiles.push(file); // Добавляем только файл в массив
+                handleImageUpload(file, (imageId) => {
                     simplemde.codemirror.replaceSelection(`[${imageId}]\n`);
-                };
-
-                reader.readAsDataURL(file);
+                });
             }
         }
     });
@@ -239,5 +223,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     });
+    // Функция проверки изображения
+    function handleImageUpload(file, callback) {
+        if (!file) return;
+
+        if (uploadedFiles.length >= 5) {
+            showError("You can upload up to 5 images only.");
+            return;
+        }
+
+        if (!isValidImage(file)) {
+            showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
+            return;
+        }
+
+        if (!isValidSize(file)) {
+            showError("File size exceeds the limit of 5 MB.");
+            return;
+        }
+
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let imageId = `image${Date.now()}`;
+            imageMap[imageId] = e.target.result;
+            uploadedFiles.push(file); // Добавляем только файл в массив
+            callback(imageId);
+        };
+        reader.readAsDataURL(file);
+    }
+
 
 });

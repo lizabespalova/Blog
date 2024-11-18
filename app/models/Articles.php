@@ -24,7 +24,7 @@ class Articles
             $inputData['category'] ?? '',
             $inputData['difficulty'] ?? '',
             $inputData['read_time'] ?? '',
-            $inputData['tags'] ?? ''
+            $inputData['tags'] ?? '',
         ];
 
         // Устанавливаем NULL для пустых значений
@@ -33,7 +33,6 @@ class Articles
                 $param = null;
             }
         }
-
         return $params;
     }
 
@@ -116,6 +115,14 @@ class Articles
         $stmt->bind_param('s', $slug);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
+    }
+    public function get_cover_image_by_slug($slug) {
+        $query = "SELECT cover_image FROM articles WHERE slug = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['cover_image'] ?? null; // Возвращаем значение или null, если не найдено
     }
 
     public function delete_article($slug) {

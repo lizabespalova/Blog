@@ -8,24 +8,19 @@ function isValidImage(file) {
 function isValidSize(file, maxSizeMB = 5) {
     return file.size <= maxSizeMB * 1024 * 1024;
 }
-
-// Функция для отображения превью изображения
-function displayImagePreview(file, previewElement, removeButton) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        previewElement.src = e.target.result;
-        previewElement.style.display = 'block'; // Показываем превью
-        removeButton.style.display = 'block'; // Показываем кнопку удаления
-    };
-    reader.readAsDataURL(file);
-}
-
-// Функция удаления изображения
-function removeImage(previewElement, fileInput, removeButton) {
-    previewElement.src = '';
-    previewElement.style.display = 'none'; // Скрываем превью
-    removeButton.style.display = 'none'; // Скрываем кнопку удаления
-    fileInput.value = ''; // Очищаем input
+function showError(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: message,
+        confirmButtonText: 'OK',
+        customClass: {
+            popup: 'swal2-popup',
+            title: 'swal2-title',
+            htmlContainer: 'swal2-html-container',
+            confirmButton: 'swal2-confirm'
+        }
+    });
 }
 
 // Общая функция загрузки файла

@@ -1,5 +1,15 @@
 document.getElementById('cover_image').addEventListener('change', function (event) {
     const file = event.target.files[0];
+    if (!isValidImage(file)) {
+        showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
+        return;
+    }
+
+    if (!isValidSize(file)) {
+        showError("File size exceeds the limit of 5 MB.");
+        return;
+    }
+
     const preview = document.getElementById('cover_image_preview');
     const removeButton = document.getElementById('remove_button');
 

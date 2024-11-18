@@ -38,12 +38,10 @@ class ArticleController
         if ($slug) {
             $article = $this->articleModel->get_article_by_slug($slug);
             // Проверка и обработка обложки
-            $coverImage = $article['cover_image'] ?? '';
-            if ($coverImage && !preg_match('#^https?://#', $coverImage)) {
-                $baseUrl = 'http://localhost:8080/';
-                $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
-                $coverImage = $baseUrl . ltrim($coverImage, '/');
-            }
+            $coverImage = $this->articleModel->get_cover_image_by_slug($slug) ?? '';
+            $baseUrl = 'http://localhost:8080/';
+            $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
+            $coverImage = $baseUrl . ltrim($coverImage, '/');
             $title = $article['title'] ?? '';
             $content = $article['content'] ?? '';
 
@@ -59,6 +57,7 @@ class ArticleController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $inputData = $this->get_article_input();
 
+//            var_dump($inputData);
             // Проверка наличия `article_id`
             $articleId = $_POST['article_id'] ?? null;
             // Проверка и загрузка обложки
@@ -71,6 +70,7 @@ class ArticleController
 
             if ($articleId) {
                 // Обновление статьи
+//                file_put_contents('inputData_log.txt', print_r($inputData, true), FILE_APPEND);
                 $result = $this->articleModel->update_article($articleId, $inputData, $cover_image_path);
             } else {
                 // Создание новой статьи
@@ -154,7 +154,7 @@ class ArticleController
     // Генерация пути для изображения
     private function generate_image_path($user_id, $article_id, $photoNumber) {
         $fileName = "image_" . $photoNumber . ".jpg";
-        return 'uploads/' . $user_id . '/article_photos/' . $article_id . '/' . $fileName;
+        return 'http://' . $_SERVER['HTTP_HOST'] . '/uploads/' . $user_id . '/article_photos/' . $article_id . '/' . $fileName;
     }
 
     public function process_images($articleDir, $article_id, $content, $slug, $userId, $matches) {
@@ -221,6 +221,7 @@ class ArticleController
 
     public function show_article($slug)
     {
+
         // Ищем статью по слагу
         $article = $this->articleModel->get_article_by_slug($slug);
 
@@ -236,28 +237,20 @@ class ArticleController
             // Получаем YouTube ссылку
             $youtube_link = $article['youtube_link'];
             $youtube_embed_url = !empty($youtube_link) ? $this->getYouTubeEmbedUrl($youtube_link) : null;
-            //comments
-            // Получаем неструктурированные комментарии
-            $unstructuredComments = $this->articleCommentsModel->get_comments_by_slug($article['slug']);
-
-            // Убедимся, что функция structure_comments возвращает массив комментариев
-            $commentsArray = $this->structure_comments($unstructuredComments);
-
-            // Парсим каждый комментарий и собираем массив с распарсенными данными
-            $comments = array_map(function($comment) {
-                // Проверяем, существует ли 'comment_text' и парсим его
-                if (isset($comment['comment_text'])) {
-                    $parsedText = $this->parseMarkdown($comment['comment_text']); // Парсим текст комментария
-
-                    $comment['comment_text'] = $parsedText; // Присваиваем распарсенный текст обратно
-                }
-                return $comment; // Возвращаем весь комментарий с распарсенным текстом
-            }, $commentsArray);
-
-//            var_dump($comments); // Проверка распарсенного массива комментариев перед отправкой на вывод
-
 
             $comment_count = $this->articleCommentsModel->get_comments_amount($article['slug']);
+            // Обработка тегов
+            $tagsOutput = '-'; // Значение по умолчанию
+
+            if (!empty($article['tags'])) {
+                // Разбиваем строку на массив
+                $tagsArray = explode(',', $article['tags']);
+                // Преобразуем массив обратно в строку с использованием implode
+                $tagsOutput = htmlspecialchars(implode(', ', $tagsArray));
+            }
+
+//            var_dump($tagsOutput); // Проверка распарсенного массива комментариев перед отправкой на вывод
+
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';
         } else {
@@ -489,12 +482,38 @@ class ArticleController
         exit();
     }
 
+
+    public function delete_comment() {
+        header('Content-Type: application/json'); // Установите заголовок JSON
+
+        // Получаем данные из JSON-запроса
+        $input = json_decode(file_get_contents('php://input'), true);
+        $commentId = $input['comment_id'] ?? null;
+
+        if (!$commentId) {
+            echo json_encode(['success' => false, 'error' => 'Comment ID is required.']);
+            exit;
+        }
+
+        // Удаляем комментарий
+        $result = $this->commentModel->delete_comment($commentId);
+
+        // Проверяем результат и возвращаем ответ
+        if ($result['success']) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $result['error']]);
+        }
+        exit;
+    }
+
     public function get_comments()
     {
         $slug = $_GET['article_slug'] ?? '';
         if ($slug) {
             $comments = $this->articleCommentsModel->get_comments_by_slug($slug);
             $structuredComments = $this->structure_comments($comments);
+            $user = $this->userModel->get_user_by_login($_SESSION['user']['user_login']);
             include __DIR__ . '/../../views/authorized_users/comments_template.php'; // шаблон только для комментариев
         } else {
             echo "Comments not found.";

@@ -18,11 +18,11 @@
  <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm">
 
      <label for="title">Title:</label>
-     <input type="text" id="title" name="title" placeholder="Title" required value="<?= htmlspecialchars($title) ?>"><br>
+     <input type="text" id="title" name="title" placeholder="Title" required value="<?= !empty($title) ? htmlspecialchars($title) : '' ?>"><br>
 
      <label for="markdown-editor">Content:</label>
      <!-- Для вывода контента статьи -->
-     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= htmlspecialchars($content) ?></textarea>
+     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= isset($content) ? htmlspecialchars($content) : '' ?></textarea>
      <!-- Модальное окно для таблиц -->
      <div id="tableModal" class="modal" style="display: none;">
          <div class="modal-content">
@@ -97,8 +97,10 @@
  <script src="/js/authorized_users/files_uploads/show_preview.js"></script>
  <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
 <script src="/js/authorized_users/files_uploads/form_actions.js"></script>
- <script src="/js/authorized_users/add_markdown.js"></script>
+ <script src="/js/authorized_users/articles/add_markdown.js"></script>
  <script src="/js/authorized_users/menu.js"></script>
  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 </body>
 </html>

@@ -33,6 +33,11 @@ function article_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->handle_reaction('article');
             exit();
+            //Стоит тут из-за конфликта со следующим путем. Пока не знаю, как перенести в comments_routes
+        case $method === 'GET' && (bool)preg_match('/^\/articles\/get_comments$/', $uri, $matches):
+            $controller = new ArticleController($dbConnection);
+            $controller->get_comments();
+            exit();
         case $method === 'GET' && (bool)preg_match('/^\/articles\/([\w-]+)$/', $uri, $matches):
             $slug = $matches[1]; // Извлекаем слаг из URL
             $controller = new ArticleController($dbConnection);

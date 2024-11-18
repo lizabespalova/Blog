@@ -42,8 +42,18 @@
                             <span class="dislike-count"><?= htmlspecialchars($comment['dislikes']); ?></span>
                         </button>
                         </div>
+                        <!-- Кнопка ответа -->
                         <button class="btn-reply" data-comment-id="<?= $comment['id']; ?>"><i class="fas fa-reply"></i></button>
-                        <button class="btn-toggle-replies">⮟</button> <!-- Кнопка для раскрытия ответов -->
+
+                        <!-- Кнопка для раскрытия ответов -->
+                        <button class="btn-toggle-replies">⮟</button>
+
+                        <!-- Кнопка удаления, доступна только автору комментария -->
+                        <?php if ($comment['user_id'] === $user['user_id']): ?>
+                            <button class="btn-delete" data-comment-id="<?= $comment['id']; ?>" title="Delete Comment">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -80,6 +90,12 @@
                                             <i class="fas fa-thumbs-down"></i>
                                             <span class="dislike-count"><?= htmlspecialchars($reply['dislikes']); ?></span>
                                         </button>
+                                            <!-- Кнопка удаления, доступна только автору комментария -->
+                                            <?php if ($comment['user_id'] === $user['user_id']): ?>
+                                                <button class="btn-delete" data-comment-id="<?= $comment['id']; ?>" title="Delete Comment">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

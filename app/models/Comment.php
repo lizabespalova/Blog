@@ -2,6 +2,8 @@
 
 namespace models;
 
+use Exception;
+
 class Comment
 {
     private $conn;
@@ -69,4 +71,55 @@ class Comment
         }
         return 0; // Если запись не найдена
     }
+    public function delete_comment($commentId) {
+        $this->conn->begin_transaction();
+
+        try {
+            // Получаем информацию о комментарии
+            $checkCommentQuery = $this->conn->prepare("SELECT parent_id FROM comments WHERE id = ?");
+            $checkCommentQuery->bind_param('i', $commentId);
+            $checkCommentQuery->execute();
+            $result = $checkCommentQuery->get_result();
+            $comment = $result->fetch_assoc();
+
+            if (!$comment) {
+                throw new Exception("Comment not found.");
+            }
+
+            // Если комментарий основной (parent_id IS NULL), то удаляем все ответы на него
+            if (is_null($comment['parent_id'])) {
+                // Удаляем реакции для основного комментария
+                $deleteReactionsQuery = $this->conn->prepare("DELETE FROM comment_reactions WHERE comment_id = ?");
+                $deleteReactionsQuery->bind_param('i', $commentId);
+                $deleteReactionsQuery->execute();
+
+                // Удаляем все ответы на основной комментарий
+                $deleteRepliesQuery = $this->conn->prepare("DELETE FROM comments WHERE parent_id = ?");
+                $deleteRepliesQuery->bind_param('i', $commentId);
+                $deleteRepliesQuery->execute();
+            }
+
+            // Удаляем реакции для данного комментария (основного или ответа)
+            $deleteReactionsQuery = $this->conn->prepare("DELETE FROM comment_reactions WHERE comment_id = ?");
+            $deleteReactionsQuery->bind_param('i', $commentId);
+            $deleteReactionsQuery->execute();
+
+            // Удаляем сам комментарий
+            $deleteCommentQuery = $this->conn->prepare("DELETE FROM comments WHERE id = ?");
+            $deleteCommentQuery->bind_param('i', $commentId);
+            $deleteCommentQuery->execute();
+
+            $this->conn->commit();
+            return ['success' => true];
+        } catch (Exception $e) {
+            $this->conn->rollback();
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+
+
+
+
+
 }

@@ -1,14 +1,3 @@
-<?php
-// Обработка тегов
-$tagsOutput = '-'; // Значение по умолчанию
-
-if (!empty($article['tags'])) {
-    // Разбиваем строку на массив
-    $tagsArray = explode(',', $article['tags']);
-    // Преобразуем массив обратно в строку с использованием implode
-    $tagsOutput = htmlspecialchars(implode(', ', $tagsArray));
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,10 +150,10 @@ if (!empty($article['tags'])) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
-<script src="/js/authorized_users/add_markdown_comments.js"></script>
-<script src="/js/authorized_users/get_markdown.js"></script>
-<script src="/js/authorized_users/articles_reactions.js"></script>
-<script src="/js/authorized_users/articles_comments.js"></script>
+<script src="/js/authorized_users/articles/add_markdown_comments.js"></script>
+<script src="/js/authorized_users/articles/get_markdown.js"></script>
+<script src="/js/authorized_users/articles/articles_reactions.js"></script>
+<script src="/js/authorized_users/articles/articles_comments.js"></script>
 <script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->

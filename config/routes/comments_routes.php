@@ -15,10 +15,11 @@ function comment_route($uri, $method) {
             $controller = new ArticleController($dbConnection);
             $controller->handle_add_comment();
             exit();
-        case $method === 'GET' && (bool)preg_match('/^\/articles\/get_comments$/', $uri, $matches):
+        case $method === 'POST' && $uri === '/delete-comment':
             $controller = new ArticleController($dbConnection);
-            $controller->get_comments(); // Создайте метод get_comments
+            $controller->delete_comment();
             exit();
+
 
         case $method === 'POST' && $uri === '/comments/react':
             $controller = new ArticleController($dbConnection);

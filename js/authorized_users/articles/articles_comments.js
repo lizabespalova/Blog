@@ -33,8 +33,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 initializeCommentVisibility();
                 initializeReplyButtons();
                 initializeToggleReplies();
+                initializeDeleteButtons();
             })
             .catch(error => console.error('Error loading comments:', error));
+    }
+    function initializeDeleteButtons() {
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.getAttribute('data-comment-id');
+                    console.log("delete pressed")
+                    deleteComment(commentId);
+            });
+        });
+    }
+
+    function deleteComment(commentId) {
+        fetch('/delete-comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ comment_id: commentId }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    loadComments(articleSlug); // Перезагрузка комментариев
+                } else {
+                    alert(data.error || 'Failed to delete the comment.');
+                }
+            })
+            .catch(error => console.error('Error deleting comment:', error));
     }
 
     function initializeCommentVisibility() {
