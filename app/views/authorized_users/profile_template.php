@@ -1,16 +1,16 @@
 <?php
-session_start();
-
-// Проверка, что данные пользователя есть в сессии
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user']; // Получаем данные из сессии
-//    print_r($user);
-} else {
-    // Если пользователь не аутентифицирован
-    header('Location: /login');
-    exit();
-}
-?>
+//session_start();
+//
+//// Проверка, что данные пользователя есть в сессии
+//if (isset($_SESSION['user'])) {
+//    $user = $_SESSION['user']; // Получаем данные из сессии
+////    print_r($user);
+//} else {
+//    // Если пользователь не аутентифицирован
+//    header('Location: /login');
+//    exit();
+//}
+//?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

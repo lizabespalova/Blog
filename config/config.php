@@ -28,6 +28,8 @@ function getEmailPassword(){return $_ENV['EMAIL_PASSWORD'];}
 function getPort(){return $_ENV['PORT'];}
 function getHost(){return $_ENV['HOST'];}
 function getSmptSecure(){return $_ENV['SMTP_SECURE'];}
-
-
+function getBaseUrl() {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    return $protocol . "://" . $_SERVER['HTTP_HOST'];
+}
 ?>

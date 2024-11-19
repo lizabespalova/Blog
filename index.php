@@ -3,6 +3,8 @@ require_once __DIR__ . '/config/routes/authorization_routes.php';
 require_once __DIR__ . '/config/routes/profile_routes.php';
 require_once __DIR__ . '/config/routes/article_routes.php';
 require_once __DIR__ . '/config/routes/comments_routes.php';
+require_once __DIR__ . '/config/routes/favourites_routes.php';
+
 
 // Подключение к базе данных
 $dbConnection = getDbConnection();

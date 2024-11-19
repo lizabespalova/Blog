@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) loadComments(articleSlug);
+                if (data.success)
+                {
+                    loadComments(articleSlug);
+                    simplemde.value('');
+                }
             });
     });
 
@@ -41,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.btn-delete').forEach(button => {
             button.addEventListener('click', function () {
                 const commentId = this.getAttribute('data-comment-id');
-                    console.log("delete pressed")
+                    console.log("delete pressed for: " + commentId)
                     deleteComment(commentId);
             });
         });
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    replyForm.reset();//не работает
+                    replyForm.reset();
                     loadComments(articleSlug);
                 }
             })

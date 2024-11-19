@@ -91,8 +91,8 @@
                                             <span class="dislike-count"><?= htmlspecialchars($reply['dislikes']); ?></span>
                                         </button>
                                             <!-- Кнопка удаления, доступна только автору комментария -->
-                                            <?php if ($comment['user_id'] === $user['user_id']): ?>
-                                                <button class="btn-delete" data-comment-id="<?= $comment['id']; ?>" title="Delete Comment">
+                                            <?php if ($reply['user_id'] === $user['user_id']): ?>
+                                                <button class="btn-delete" data-comment-id="<?= $reply['id']; ?>" title="Delete Comment">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             <?php endif; ?>

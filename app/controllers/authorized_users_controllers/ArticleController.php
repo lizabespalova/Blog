@@ -39,9 +39,9 @@ class ArticleController
             $article = $this->articleModel->get_article_by_slug($slug);
             // Проверка и обработка обложки
             $coverImage = $this->articleModel->get_cover_image_by_slug($slug) ?? '';
-            $baseUrl = 'http://localhost:8080/';
+//            $baseUrl = 'http://localhost:8080/';
             $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
-            $coverImage = $baseUrl . ltrim($coverImage, '/');
+            $coverImage = /*$baseUrl*/ getBaseUrl() . ltrim($coverImage, '/');
             $title = $article['title'] ?? '';
             $content = $article['content'] ?? '';
 

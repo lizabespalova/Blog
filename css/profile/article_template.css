@@ -199,7 +199,8 @@
 }
 
 .reaction-buttons .btn-like:hover,
-.reaction-buttons .btn-repost:hover {
+.reaction-buttons .btn-repost:hover,
+.btn-share:hover{
     color: #5380e3;
 }
 
@@ -294,16 +295,19 @@
     flex-direction: column;
 }
 
-.add-comment-form .comment-input {
-    resize: none;
-    width: 97%;
-    height: 80px;
-    padding: 10px; /* отступ */
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
+/*.add-comment-form .comment-input {*/
+/*    font-family: Arial, sans-serif;*/
+/*    resize: none;*/
+/*    width: 97%;*/
+/*    height: 80px;*/
+/*    padding: 10px; !* отступ *!*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 6px;*/
+/*    margin-bottom: 10px;*/
+/*    font-size: 14px;*/
+/*}*/
+/* Указываем шрифт для textarea внутри SimpleMDE */
+
 
 .add-comment-form .btn-add-comment {
     align-self: flex-end;
@@ -422,11 +426,6 @@
     outline: none; /* Убирает обводку при фокусе */
 }
 
-/*Для формы комментариев*/
-.comment-input-wrapper {
-    position: relative;
-}
-
 .char-count {
     position: absolute;
     right: 10px;
@@ -457,6 +456,15 @@ h3 .comment-count {
 .comment-input-wrapper {
     position: relative;
     margin-top: 15px;
+}
+
+
+/*Стили для отображения кнопки поделиться*/
+.share-menu a {
+    display: block;
+    margin: 5px 0;
+    text-decoration: none;
+    color: #333;
 }
 
 

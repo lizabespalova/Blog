@@ -15,12 +15,6 @@ function authorization_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
-        case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
-            $controller = new ProfileController($dbConnection);
-            if ($method === 'GET') {
-                $controller->showProfile();
-            }
-            exit();  // Остановка выполнения после маршрута
 
         case '/login':
             $controller = new LoginController($dbConnection);

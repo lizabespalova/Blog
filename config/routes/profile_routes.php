@@ -3,6 +3,7 @@
 use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\ArticleImagesController;
 use controllers\authorized_users_controllers\EditProfileController;
+use controllers\authorized_users_controllers\ProfileController;
 use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
@@ -12,6 +13,13 @@ function profile_route($uri, $method) {
     //error_log("URI: $uri, Method: $method");
 
     switch ($uri) {
+        case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
+            $controller = new ProfileController($dbConnection);
+            if ($method === 'GET') {
+                $controller->showProfile();
+            }
+            exit();  // Остановка выполнения после маршрута
+
         case '/update-description':
             $controller = new EditProfileController($dbConnection);
             if ($method === 'POST') {

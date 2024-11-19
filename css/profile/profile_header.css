@@ -114,13 +114,12 @@ body {
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.3s ease;
-    z-index: 1001; /* Устанавливаем высокий z-index для кнопки меню */
+    z-index: 1001;
 }
 
+/* Общий стиль для контента меню */
 .menu-content {
-    position: fixed; /* Меню фиксировано относительно окна браузера */
-    top: 50px; /* Располагаем меню чуть ниже хедера */
-    right: 0;
+    position: absolute; /* По умолчанию относительно кнопки */
     background-color: white;
     border: 1px solid #ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -130,7 +129,14 @@ body {
     transform: scaleY(0);
     transform-origin: top;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    z-index: 1000; /* Устанавливаем высокий z-index для контента меню */
+    z-index: 1000;
+}
+/* Стили меню в хедере */
+.header-menu .menu-content {
+    position: fixed; /* Закреплено относительно окна браузера */
+    top: 50px; /* Располагается ниже кнопки */
+    right: 10px;
+    width: 250px; /* Немного больше ширина для хедера */
 }
 
 .menu-content.show {

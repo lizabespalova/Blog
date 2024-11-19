@@ -106,15 +106,54 @@
                         <span class="dislike-count"><?php echo htmlspecialchars($article['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
                     </button>
 
-                    <!-- Избранное -->
-                    <button class="btn-favorite" title="Add to Favorites">
+                    <!-- Избранное-->
+                    <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
+                            data-article-id="<?= $article['id'] ?>"
+                            title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
                         <i class="fas fa-star"></i>
                     </button>
 
+
+
                     <!-- Репост -->
-                    <button class="btn-repost" title="Repost">
-                        <i class="fas fa-share-alt"></i>
+                    <button class="btn-repost" title="Share">
+                        <i class="fas fa-share"></i>
                     </button>
+
+                    <!-- Поделиться -->
+                    <div class="menu share-menu">
+                        <button title="Share" class="menu-toggle" onclick="toggleMenu(this)">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <div class="menu-content">
+                            <!-- Facebook -->
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode(getBaseUrl(). '/articles/' . $article['slug']) ?>" target="_blank" class="share-facebook">
+                                Facebook <i class="fab fa-facebook"></i>
+                            </a>
+                            <!-- Twitter -->
+                            <a href="https://twitter.com/intent/tweet?url=<?= urlencode(getBaseUrl(). '/articles/' . $article['slug']) ?>&text=Check%20this%20out!" target="_blank" class="share-twitter">
+                                Twitter <i class="fab fa-twitter"></i>
+                            </a>
+                            <!-- Telegram -->
+                            <a href="https://t.me/share/url?url=<?= urlencode(getBaseUrl(). '/articles/' . $article['slug']) ?>&text=Check%20this%20out!" target="_blank" class="share-telegram">
+                                Telegram <i class="fab fa-telegram"></i>
+                            </a>
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?= urlencode(getBaseUrl(). '/articles/' . $article['slug']) ?>" target="_blank" class="share-linkedin">
+                                LinkedIn <i class="fab fa-linkedin"></i>
+                            </a>
+                            <!-- WhatsApp -->
+                            <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%20<?= urlencode(getBaseUrl(). '/articles/' . $article['slug']) ?>" target="_blank" class="share-whatsapp">
+                                WhatsApp <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <!-- Instagram (не поддерживает прямой шеринг ссылок) -->
+                            <a href="https://www.instagram.com/" target="_blank" class="share-instagram">
+                                Instagram <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
             </section>
             <!-- Блок с комментариями -->
@@ -129,7 +168,8 @@
                         <textarea id="markdown-comment-input" placeholder="Add a comment..." class="comment-input"></textarea>
                         <div class="comment-editor-wrapper">
                             <span class="char-count">0/500</span>
-                        </div>                    </div>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-add-comment">
                         <i class="fas fa-paper-plane"></i> <!-- Иконка для отправки -->
                     </button>
@@ -153,8 +193,9 @@
 <script src="/js/authorized_users/articles/add_markdown_comments.js"></script>
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
 <script src="/js/authorized_users/articles/articles_reactions.js"></script>
+<script src="/js/authorized_users/favourites/toogle_favourites.js"></script>
 <script src="/js/authorized_users/articles/articles_comments.js"></script>
-<script src="/js/authorized_users/set_alert_to_delete_article.js"></script>
+<script src="/js/authorized_users/articles/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->
 

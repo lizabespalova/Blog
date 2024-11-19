@@ -30,16 +30,16 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
                 </div>
             </form>
             <button class="edit-button" onclick="window.location.href='/edit'">✎</button>
-            <div class="menu">
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <div class="menu header-menu">
+                <button class="menu-toggle" onclick="toggleMenu(this)">☰</button>
                 <div class="menu-content">
                     <a href="/profile/<?php echo $user['user_login']; ?>">My profile <i class="fas fa-user"></i></a>
-                    <a href="#my_article"> My articles <i class="fas fa-newspaper"></i></a>
+                    <a href="#my_article">My articles <i class="fas fa-newspaper"></i></a>
                     <a href="#subscription">My subscriptions <i class="fas fa-bell"></i></a>
-                    <a href="/create-article"> Write an article <i class="fas fa-pen"></i></a>
-                    <a href="#favourites"> Favourites <i class="fas fa-heart"></i></a>
-                    <a href="#settings"> Settings <i class="fas fa-cog"></i></a>
-                    <a href="/logout"> Logout <i class="fas fa-sign-out-alt"></i></a>
+                    <a href="/create-article">Write an article <i class="fas fa-pen"></i></a>
+                    <a href="/favourites/<?php echo $user['user_login']; ?>">Favorites <i class="fas fa-star"></i></a>
+                    <a href="#settings">Settings <i class="fas fa-cog"></i></a>
+                    <a href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>
         </div>
