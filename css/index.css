@@ -35,6 +35,21 @@ h1 {
     animation: fadeIn 2s ease-in-out; /* Анимация появления */
 }
 
+.header-container {
+    background-color:  #343333; /* Цвет фона для заголовка */
+    padding: 20px; /* Внутренний отступ */
+    text-align: center; /* Центрируем текст заголовка */
+}
+
+.header-container h1 {
+    margin: 0; /* Убираем внешние отступы у заголовка */
+    background-color: #be3d3d; /* Цвет фона заголовка */
+    color: #fff; /* Цвет текста заголовка */
+    padding: 10px; /* Внутренний отступ вокруг текста заголовка */
+    display: inline-block; /* Размещаем в блочном контексте */
+    border-radius: 8px; /* Закругляем углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+}
 .dynamic-elements-wrapper {
     width: 100%;
     padding: 20px 0; /* Внутренний отступ сверху и снизу */
@@ -53,21 +68,6 @@ h1 {
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.header-container {
-    background-color:  #343333; /* Цвет фона для заголовка */
-    padding: 20px; /* Внутренний отступ */
-    text-align: center; /* Центрируем текст заголовка */
-}
-
-.header-container h1 {
-    margin: 0; /* Убираем внешние отступы у заголовка */
-    background-color: #be3d3d; /* Цвет фона заголовка */
-    color: #fff; /* Цвет текста заголовка */
-    padding: 10px; /* Внутренний отступ вокруг текста заголовка */
-    display: inline-block; /* Размещаем в блочном контексте */
-    border-radius: 8px; /* Закругляем углы */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
 }
 .dynamic-elements-container h1 {
     font-size: 16px;

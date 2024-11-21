@@ -18,13 +18,14 @@ function favourites_route($uri, $method) {
             if ($method === 'POST') {
                 $controller->toggleFavourites();
             }
+            exit();
         case (preg_match('/^\/favourites\/([\w-]+)$/', $uri) ? true : false):
+            $controller = new FavouriteController($dbConnection);
             if ($method === 'GET') {
                 $controller->showFavourites();
             }
             exit();  // Остановка выполнения после маршрута
 
-            exit();
         default:
             return false;
     }

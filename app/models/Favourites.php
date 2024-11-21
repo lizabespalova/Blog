@@ -48,5 +48,23 @@ class Favourites
         }
         return $favorites;
     }
+    public function getUserFavoriteArticles($userId)
+    {
+        $stmt = $this->conn->prepare("
+        SELECT articles.id, articles.title, articles.slug, articles.cover_image, articles.created_at, articles.author
+        FROM favorites
+        JOIN articles ON favorites.article_id = articles.id
+        WHERE favorites.user_id = ?
+    ");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $articles = [];
+        while ($row = $result->fetch_assoc()) {
+            $articles[] = $row;
+        }
+        return $articles;
+    }
 
 }

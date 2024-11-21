@@ -13,13 +13,11 @@ class FavouriteController
 
     }
     public function showFavourites(){
-////        Массив с данными с запросов и сессий
-//        $inputFavouriteData = $this->get_favourites_input();
-//
-//        // Проверяем, есть ли статья в избранном
-//        $action = $this->toggle($inputFavouriteData['user_id'], $inputFavouriteData['article_id']);
-//        echo json_encode(['success' => true, 'action' => $action]);
-        // Подключение шаблона и передача данных пользователя
+        // Получаем ID пользователя из сессии
+        $userId = $_SESSION['user']['user_id'];
+
+        // Получаем список избранных статей с деталями
+        $favorites = $this->favouriteModel->getUserFavoriteArticles($userId);
         include __DIR__ . '/../../views/authorized_users/favourites/favourite_template.php';
     }
 

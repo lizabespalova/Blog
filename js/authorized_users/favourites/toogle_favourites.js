@@ -10,11 +10,14 @@ document.querySelectorAll('.btn-favorite').forEach(button => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Переключаем класс, который отвечает за стиль
+                    // Переключаем класс
                     this.classList.toggle('added', data.action === 'added');
                     this.title = data.action === 'added'
                         ? 'Remove from Favorites'
                         : 'Add to Favorites';
+
+                    // Применяем стиль
+                    this.style.borderColor = data.action === 'added' ? '#ffa500' : '';
                 } else {
                     alert('Error: ' + data.message);
                 }

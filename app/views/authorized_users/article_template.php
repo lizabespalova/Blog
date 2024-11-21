@@ -107,11 +107,11 @@
                     </button>
 
                     <!-- Избранное-->
-                        <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
-                                data-article-id="<?= $article['id'] ?>"
-                                title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
-                            <i class="fas fa-star"></i>
-                        </button>
+                    <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
+                            data-article-id="<?= $article['id'] ?>"
+                            title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
+                        <i class="fas fa-star"></i>
+                    </button>
 
 
 

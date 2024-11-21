@@ -255,10 +255,10 @@ class ArticleController
             // Получаем избранные статьи для пользователя
             $favorites = $this->favouriteModel->getUserFavorites($_SESSION['user']['user_id']);
             // Проверяем, находится ли текущая статья в избранных
-            $is_favorite = in_array($article['id'], array_column($favorites, 'article_id'), true);
+            $is_favorite = in_array($article['id'], $favorites, true);
 
 
-//            var_dump($tagsOutput); // Проверка распарсенного массива комментариев перед отправкой на вывод
+//            var_dump($is_favorite); // Проверка
 
             // Передаем данные в шаблон
             include __DIR__ . '/../../views/authorized_users/article_template.php';

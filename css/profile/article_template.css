@@ -213,10 +213,36 @@
 }
 
 
-/* Добавлена в избранное */
-.btn-favorite.added {
-    border-color: #ffa500; /* Оранжевый бордер */
+/* Базовый стиль кнопки */
+.btn-favorite {
+    border: 1px solid transparent; /* По умолчанию прозрачная рамка */
+    padding: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    transition: all 0.3s ease;
 }
+
+/* Стили для иконки звездочки */
+.btn-favorite i {
+    font-size: 18px;
+    color: #ccc; /* По умолчанию серый цвет звездочки */
+    transition: color 0.3s ease;
+}
+
+/* Стиль для избранного */
+.btn-favorite.added {
+    border-color: #ffa500; /* Оранжевая рамка для избранного */
+    background-color: rgba(255, 165, 0, 0.1); /* Легкий оранжевый фон */
+}
+
+.btn-favorite.added i {
+    color: #ffa500; /* Оранжевая звездочка */
+}
+
+
 
 /*Комментарии*/
 /*.comments-section {*/
