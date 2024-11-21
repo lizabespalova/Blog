@@ -1,7 +1,6 @@
 document.querySelectorAll('.btn-favorite').forEach(button => {
     button.addEventListener('click', function () {
-        const articleId = this.dataset.articleId; // ID статьи
-        const isFavorite = this.classList.contains('added'); // Проверяем текущее состояние
+        const articleId = this.dataset.articleId;
 
         fetch('/favourites/toggle', {
             method: 'POST',
@@ -11,7 +10,7 @@ document.querySelectorAll('.btn-favorite').forEach(button => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Изменяем состояние кнопки
+                    // Переключаем класс, который отвечает за стиль
                     this.classList.toggle('added', data.action === 'added');
                     this.title = data.action === 'added'
                         ? 'Remove from Favorites'

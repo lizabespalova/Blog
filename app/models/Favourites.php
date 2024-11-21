@@ -34,8 +34,10 @@ class Favourites
         $stmt->store_result();
         return $stmt->num_rows > 0;
     }
+
+
     // Получить список избранных статей пользователя
-    public function getAll($userId) {
+    public function getUserFavorites($userId) {
         $stmt = $this->conn->prepare("SELECT article_id FROM favorites WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
         $stmt->execute();

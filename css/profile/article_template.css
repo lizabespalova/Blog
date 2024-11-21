@@ -212,6 +212,12 @@
     color: #f0c040;
 }
 
+
+/* Добавлена в избранное */
+.btn-favorite.added {
+    border-color: #ffa500; /* Оранжевый бордер */
+}
+
 /*Комментарии*/
 /*.comments-section {*/
 /*    margin-top: 30px;*/

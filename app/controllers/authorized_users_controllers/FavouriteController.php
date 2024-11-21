@@ -1,6 +1,7 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
+use Exception;
 use models\Favourites;
 
 require_once 'app/services/helpers/session_check.php';
@@ -21,7 +22,9 @@ class FavouriteController
         // Подключение шаблона и передача данных пользователя
         include __DIR__ . '/../../views/authorized_users/favourites/favourite_template.php';
     }
-    public function toggle($userId, $articleId) {
+
+    public function toggle($userId, $articleId): string
+    {
         if ($this->favouriteModel->exists($userId, $articleId)) {
             $this->favouriteModel->remove($userId, $articleId);
             return 'removed';
@@ -35,17 +38,29 @@ class FavouriteController
     {
         return [
             'article_id' => $_POST['article_id'],
-            'slug' => $_POST['slug'],
             'user_id' => $_SESSION['user']['user_id']
         ];
     }
 
     public function toggleFavourites() {
-        $inputFavouriteData = $this->get_favourites_input();
 
-        // Проверяем, есть ли статья в избранном
-        $action = $this->toggle($inputFavouriteData['user_id'], $inputFavouriteData['article_id']);
-        echo json_encode(['success' => true, 'action' => $action]);
+        header('Content-Type: application/json'); // Указываем, что возвращаем JSON
+
+        try {
+            $inputFavouriteData = $this->get_favourites_input(); // Получаем входные данные
+
+            // Проверяем и переключаем состояние избранного
+            $action = $this->toggle($inputFavouriteData['user_id'], $inputFavouriteData['article_id']);
+
+            // Возвращаем JSON
+            echo json_encode(['success' => true, 'action' => $action]);
+        } catch (Exception $e) {
+            // Возвращаем ошибку, если что-то пошло не так
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+        exit; // Обязательно завершаем выполнение
     }
+
 
 }

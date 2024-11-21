@@ -7,6 +7,7 @@ use models\ArticleImages;
 use models\ArticleReactions;
 use models\Articles;
 use models\Comment;
+use models\Favourites;
 use models\User;
 use Parsedown;
 use services\LoginService;
@@ -21,6 +22,8 @@ class ArticleController
     private $articleCommentsModel;
     private $loginService;
     private $commentModel;
+    private $favouriteModel;
+
 
     public function __construct($conn)
     {
@@ -31,6 +34,7 @@ class ArticleController
         $this->articleReactionsModel = new ArticleReactions($conn);
         $this->articleCommentsModel = new ArticleComments(getDbConnection());
         $this->commentModel = new Comment(getDbConnection());
+        $this->favouriteModel = new Favourites(getDbConnection());
     }
 
     public function show_article_form($slug)
@@ -248,6 +252,11 @@ class ArticleController
                 // Преобразуем массив обратно в строку с использованием implode
                 $tagsOutput = htmlspecialchars(implode(', ', $tagsArray));
             }
+            // Получаем избранные статьи для пользователя
+            $favorites = $this->favouriteModel->getUserFavorites($_SESSION['user']['user_id']);
+            // Проверяем, находится ли текущая статья в избранных
+            $is_favorite = in_array($article['id'], array_column($favorites, 'article_id'), true);
+
 
 //            var_dump($tagsOutput); // Проверка распарсенного массива комментариев перед отправкой на вывод
 
@@ -273,7 +282,7 @@ class ArticleController
 
         // Проверяем, удалось ли декодировать данные
         if ($imageData === false) {
-            echo "Ошибка: не удалось декодировать base64 данные.\n";
+            echo "Error: didn`t decode base64 data.\n";
             return false;
         }
 
@@ -282,11 +291,11 @@ class ArticleController
 
         // Проверяем, удалось ли сохранить файл
         if ($result === false) {
-            echo "Ошибка: не удалось сохранить файл по пути {$imagePath}.\n";
+            echo "Error during saving in path: {$imagePath}.\n";
             return false;
         }
 
-        echo "Изображение успешно сохранено по пути {$imagePath}.\n";
+        echo "Image successfully saved in path {$imagePath}.\n";
         return true;
     }
 

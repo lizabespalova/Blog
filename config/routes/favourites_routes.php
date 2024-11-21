@@ -12,17 +12,18 @@ function favourites_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
-        case (preg_match('/^\/favourites\/([\w-]+)$/', $uri) ? true : false):
-            $controller = new FavouriteController($dbConnection);
-            if ($method === 'GET') {
-                $controller->showFavourites();
-            }
-            exit();  // Остановка выполнения после маршрута
+
         case (preg_match('/^\/favourites\/toggle$/', $uri) ? true : false):
             $controller = new FavouriteController($dbConnection);
             if ($method === 'POST') {
                 $controller->toggleFavourites();
             }
+        case (preg_match('/^\/favourites\/([\w-]+)$/', $uri) ? true : false):
+            if ($method === 'GET') {
+                $controller->showFavourites();
+            }
+            exit();  // Остановка выполнения после маршрута
+
             exit();
         default:
             return false;
