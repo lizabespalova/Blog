@@ -9,10 +9,45 @@
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/favourite_template.css">
     <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/search/search.css">
 </head>
 <body>
 <!-- Header Section -->
 <?php include __DIR__ . '/../../../views/base/profile_header.php'; ?>
+
+<!-- Search Form -->
+<?php include __DIR__ . '/../../partials/search_field.php'; ?>
+
+
+<!-- Filter Form -->
+
+<div class="filter-section">
+    <form action="/favourites/filter" method="GET" class="filter-form">
+        <div class="filter-group">
+            <label for="author">Author:</label>
+            <input type="text" class="filter-input" placeholder="Authors name">
+        </div>
+
+        <div class="filter-group">
+            <?php include __DIR__ . '/../../partials/categories.php'; ?>
+        </div>
+
+        <div class="filter-group">
+            <label for="date-from">Date From:</label>
+            <input type="date" name="date_from" id="date-from" class="filter-input">
+        </div>
+
+        <div class="filter-group">
+            <label for="date-to">Date To:</label>
+            <input type="date" name="date_to" id="date-to" class="filter-input">
+        </div>
+
+        <button type="submit" class="filter-button">Apply Filter</button>
+    </form>
+</div>
+
+
+
 
 <!-- Основной контент -->
 <div class="favorite-articles-container">
