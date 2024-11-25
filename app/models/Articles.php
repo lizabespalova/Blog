@@ -203,4 +203,97 @@ class Articles
         }
         return 0; // Если запись не найдена
     }
+
+    public function getUserArticles($userLogin, $title = '', $author = '', $category = '', $dateFrom = '', $dateTo = '') {
+        // Базовый SQL-запрос
+        $query = "SELECT * FROM articles WHERE author = ?";
+
+        $params = [$userLogin];
+        $types = 's'; // Тип параметра для user_login
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+        if ($stmt === false) {
+            throw new Exception("SQL error: " . $this->conn->error);
+        }
+
+        // Привязка параметров
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        // Выполнение запроса
+        $stmt->execute();
+
+        // Получение результатов
+        $result = $stmt->get_result();
+        $articles = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $articles;
+    }
+    public function getFilteredArticles($userLogin, $title = '', $author = '', $category = '', $dateFrom = '', $dateTo = '') {
+        // Базовый SQL-запрос
+        $query = "SELECT * FROM articles WHERE author = ?";
+
+        $params = [$userLogin];
+        $types = 's'; // Тип параметра для user_id
+
+        // Фильтр по названию статьи
+        if (!empty($title)) {
+            $query .= " AND title LIKE ?";
+            $params[] = '%' . $title . '%';
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по автору
+        if (!empty($author)) {
+            $query .= " AND author LIKE ?";
+            $params[] = '%' . $author . '%';
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по категории
+        if (!empty($category)) {
+            $query .= " AND category = ?";
+            $params[] = $category;
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по дате "от"
+        if (!empty($dateFrom)) {
+            $query .= " AND created_at >= ?";
+            $params[] = $dateFrom;
+            $types .= 's'; // Строковый параметр (дата)
+        }
+
+        // Фильтр по дате "до"
+        if (!empty($dateTo)) {
+            $query .= " AND created_at <= ?";
+            $params[] = $dateTo;
+            $types .= 's'; // Строковый параметр (дата)
+        }
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+        if ($stmt === false) {
+            throw new Exception("SQL error: " . $this->conn->error);
+        }
+
+        // Привязка параметров
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        // Выполнение запроса
+        $stmt->execute();
+
+        // Получение результатов
+        $result = $stmt->get_result();
+        $articles = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $articles;
+    }
 }

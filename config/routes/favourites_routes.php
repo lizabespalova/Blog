@@ -1,10 +1,6 @@
 <?php
 
-use controllers\authorized_users_controllers\ArticleController;
-use controllers\authorized_users_controllers\ArticleImagesController;
-use controllers\authorized_users_controllers\EditProfileController;
 use controllers\authorized_users_controllers\FavouriteController;
-use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
 
@@ -12,7 +8,12 @@ function favourites_route($uri, $method) {
     $dbConnection = getDbConnection();
 
     switch ($uri) {
-
+        case (preg_match('/^\/favourites\/filter$/', $uri)? true : false):
+            $controller = new FavouriteController($dbConnection);
+            if ($method === 'GET') {
+                $controller->filterFavourites();
+            }
+            exit();
         case (preg_match('/^\/favourites\/toggle$/', $uri) ? true : false):
             $controller = new FavouriteController($dbConnection);
             if ($method === 'POST') {

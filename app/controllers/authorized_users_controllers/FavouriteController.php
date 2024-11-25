@@ -17,7 +17,7 @@ class FavouriteController
         $userId = $_SESSION['user']['user_id'];
 
         // Получаем список избранных статей с деталями
-        $favorites = $this->favouriteModel->getUserFavoriteArticles($userId);
+        $article_cards = $this->favouriteModel->getUserFavoriteArticles($userId);
         include __DIR__ . '/../../views/authorized_users/favourites/favourite_template.php';
     }
 
@@ -58,6 +58,35 @@ class FavouriteController
         }
 
         exit; // Обязательно завершаем выполнение
+    }
+
+    public function filterFavourites() {
+        $title = $_GET['title'] ?? null;
+        $author = $_GET['author'] ?? null;
+        $category = $_GET['category'] ?? null;
+        $date_from = $_GET['date_from'] ?? null;
+        $date_to = $_GET['date_to'] ?? null;
+
+        if (!$title && !$author && !$category && !$date_from && !$date_to) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'error', 'message' => 'No filters applied']);
+            exit;
+        }
+
+        try {
+            $results = $this->favouriteModel->getFilteredFavourites($title, $author, $date_from, $date_to, $category);
+
+            // Если $results является объектом, преобразуем его в массив
+            if (is_object($results)) {
+                $results = json_decode(json_encode($results), true);
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'data' => $results]);
+        } catch (Exception $e) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 
 

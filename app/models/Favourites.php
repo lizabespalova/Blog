@@ -67,4 +67,72 @@ class Favourites
         return $articles;
     }
 
+    public function getFilteredFavourites($title,$author, $dateFrom, $dateTo, $category) {
+        // Базовый SQL-запрос
+        $query = "SELECT f.*, a.title, a.author, a.cover_image, a.slug
+              FROM favorites f
+              INNER JOIN articles a ON f.article_id = a.id
+              WHERE 1=1";
+
+        $params = [];
+        $types = ''; // Типы параметров для mysqli (s, i, d, etc.)
+
+        // Фильтр по названию статьи
+        if (!empty($title)) {
+            $query .= " AND a.title LIKE ?";
+            $params[] = '%' . $title . '%';
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по автору
+        if (!empty($author)) {
+            $query .= " AND a.author LIKE ?";
+            $params[] = '%' . $author . '%';
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по категории
+        if (!empty($category)) {
+            $query .= " AND a.category = ?"; // Пример, если у вас есть поле category в таблице articles
+            $params[] = $category;
+            $types .= 's'; // Строковый параметр
+        }
+
+        // Фильтр по дате "от"
+        if (!empty($dateFrom)) {
+            $query .= " AND f.created_at >= ?";
+            $params[] = $dateFrom;
+            $types .= 's'; // Строковый параметр (дата)
+        }
+
+        // Фильтр по дате "до"
+        if (!empty($dateTo)) {
+            $query .= " AND f.created_at <= ?";
+            $params[] = $dateTo;
+            $types .= 's'; // Строковый параметр (дата)
+        }
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+        if ($stmt === false) {
+            throw new Exception("Sql error: " . $this->conn->error);
+        }
+
+        // Привязка параметров
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        // Выполнение запроса
+        $stmt->execute();
+
+        // Получение результатов
+        $result = $stmt->get_result();
+        $favourites = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $favourites;
+    }
+
 }
