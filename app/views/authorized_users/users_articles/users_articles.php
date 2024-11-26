@@ -16,7 +16,10 @@
 <?php include __DIR__ . '/../../../views/base/profile_header.php'; ?>
 
 <!-- Filter Form -->
-<?php include __DIR__ . '/../../../views/partials/filter.php'; ?>
+<?php
+$action = "/users-articles/filter";
+include __DIR__ . '/../../../views/partials/filter.php';
+?>
 
 <!-- Main Content -->
 <?php include __DIR__ . '/../../../views/partials/cards.php'; ?>

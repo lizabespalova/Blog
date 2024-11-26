@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('filter-form');
+    console.log(form.action)
     const resultsContainer = document.getElementById('filter-results');
 
     form.addEventListener('submit', function (event) {
@@ -9,9 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData(form);
         const queryString = new URLSearchParams(formData).toString();
         console.log(queryString);
+        // Получаем путь действия из атрибута action формы
+        const actionUrl = form.getAttribute('action');
+        console.log(actionUrl);
 
         // Отправляем запрос с параметрами
-        fetch(`/favourites/filter?${queryString}`, {
+        fetch(`${actionUrl}?${queryString}`, {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

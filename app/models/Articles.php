@@ -232,7 +232,9 @@ class Articles
 
         return $articles;
     }
-    public function getFilteredArticles($userLogin, $title = '', $author = '', $category = '', $dateFrom = '', $dateTo = '') {
+
+
+    public function getFilteredArticles($userLogin, $title, $author, $category, $dateFrom, $dateTo) {
         // Базовый SQL-запрос
         $query = "SELECT * FROM articles WHERE author = ?";
 

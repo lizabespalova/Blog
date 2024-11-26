@@ -17,8 +17,11 @@
 
 
 <!-- Filter Form -->
+<?php
+$action = "/favourites/filter";
+include __DIR__ . '/../../../views/partials/filter.php';
+?>
 
-<?php include __DIR__ . '/../../../views/partials/filter.php'; ?>
 
 
 

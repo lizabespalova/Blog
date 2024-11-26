@@ -19,21 +19,25 @@ class UserArticleController
 
         // Получаем список избранных статей с деталями
         $article_cards = $this->articleModel->getUserArticles($userLogin);
-        include __DIR__ . '/../../views/authorized_users/favourites/favourite_template.php';
+        include __DIR__ . '/../../views/authorized_users/users_articles/users_articles.php';
     }
     public function filterUsersArticles() {
-        $inputFavouriteData = $this->get_users_articles_input(); // Получаем входные данные
+        $title = $_GET['title'] ?? null;
+        $author = $_GET['author'] ?? null;
+        $category = $_GET['category'] ?? null;
+        $date_from = $_GET['date_from'] ?? null;
+        $date_to = $_GET['date_to'] ?? null;
+        $userLogin = $_SESSION['user']['user_login'];
 
-        if (!$inputFavouriteData['title'] && !$inputFavouriteData['author'] && !$inputFavouriteData['category'] &&
-            !$inputFavouriteData['date_from'] && !$inputFavouriteData['date_to']) {
+        if (!$title && !$author && !$category && !$date_from && !$date_to) {
             header('Content-Type: application/json');
             echo json_encode(['status' => 'error', 'message' => 'No filters applied']);
             exit;
         }
 
         try {
-            $results = $this->articleModel->getFilteredArticles($inputFavouriteData['title'],$inputFavouriteData['author'],
-                $inputFavouriteData['date_from'], $inputFavouriteData['date_to'], $inputFavouriteData['category']);
+            $results = $this->articleModel->getFilteredArticles($userLogin,$title,$author,
+                $category, $date_from, $date_to);
 
 //            // Проверяем корректность результатов
 //            if (!$results) {
@@ -47,15 +51,6 @@ class UserArticleController
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-    private function get_users_articles_input(): array
-    {
-        return [
-            'title' => $_GET['title'] ?? null,
-            'author' => $_GET['author'] ?? null,
-            'category' => $_GET['category'] ?? null,
-            'date_from' => $_GET['date_from'] ?? null,
-            '$date_to' => $_GET['$date_to'] ?? null,
-        ];
-    }
+
 
 }
