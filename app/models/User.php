@@ -188,9 +188,32 @@ class User
 
         return $result; // Возвращает true при успешном выполнении
     }
-    public function set_articles($userId) {
+    public function add_one_articles_to_user($userId) {
         // Подготовка запроса для увеличения значения столбца user_articles
         $query = "UPDATE users SET user_amount_of_articles = user_amount_of_articles + 1 WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+
+        if ($stmt === false) {
+            throw new Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $userId);
+
+        // Выполнение запроса
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
+
+        // Закрытие соединения
+        $stmt->close();
+
+        return $result;
+    }
+    public function delete_one_articles_from_user($userId) {
+        // Подготовка запроса для увеличения значения столбца user_articles
+        $query = "UPDATE users SET user_amount_of_articles = user_amount_of_articles - 1 WHERE user_id = ?";
         $stmt = $this->conn->prepare($query);
 
         if ($stmt === false) {
@@ -230,6 +253,33 @@ class User
         // Возвращаем аватар автора
         return $author;
     }
+    public function getUserArticlesCount($userId) {
+        // SQL-запрос для получения количества статей
+        $query = "SELECT user_amount_of_articles FROM users WHERE user_id = ?";
+
+        // Подготавливаем запрос
+        $stmt = $this->conn->prepare($query);
+//        if (!$stmt) {
+//            error_log("Ошибка подготовки запроса: " . $this->conn->error);
+//            return 0;
+//        }
+
+        // Привязываем параметры
+        $stmt->bind_param("i", $userId);
+
+        // Выполняем запрос
+        $stmt->execute();
+
+        // Получаем результат
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            return $row['user_amount_of_articles'];
+        }
+
+        // Если данных нет, возвращаем 0
+        return 0;
+    }
+
 
 
 

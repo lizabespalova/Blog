@@ -97,6 +97,8 @@ class ArticleController
                 }
 
                 $this->process_images( $articleDir, $articleId, $inputData['content'], $slug, $inputData['user_id'], $matches);
+                // Добавить +1 к статьям пользователя
+                $this->userModel->add_one_articles_to_user($inputData['user_id']);
                 header('Location: /articles/' . $slug);
                 exit();
             } else {
@@ -381,6 +383,9 @@ class ArticleController
     }
     public function delete_article($slug){
             if ($this->articleModel->delete_article($slug)) {
+                $inputData = $this->get_article_input();
+
+                $this->userModel->delete_one_articles_from_user($inputData['user_id']);
 //                header('Location: /articles?status=deleted');
 //                exit();
                 return true;

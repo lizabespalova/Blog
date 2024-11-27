@@ -29,6 +29,7 @@ class ProfileController
             if (!$user) {
                 throw new Exception("User not found.");
             }
+            $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
 
             // Подключение шаблона и передача данных пользователя
             include __DIR__ . '/../../views/authorized_users/profile_template.php';

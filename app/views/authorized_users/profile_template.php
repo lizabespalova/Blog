@@ -55,7 +55,7 @@
                     </span>
                 </p>
                 <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
-                <p><strong>Articles:</strong> <?= htmlspecialchars($user['user_articles']) ?></p>
+                <p><strong>Articles:</strong> <?= htmlspecialchars($userArticlesCount) ?></p>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
             </div>
 
