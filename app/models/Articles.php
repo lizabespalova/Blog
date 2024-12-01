@@ -298,4 +298,54 @@ class Articles
 
         return $articles;
     }
+
+    // Метод для сохранения репоста в таблице reposts
+    public function create_repost($userId, $articleId, $message) {
+        // Экранируем сообщение, чтобы избежать XSS-атак
+        $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+
+        // Запрос на вставку нового репоста в таблицу reposts
+        $query = "INSERT INTO reposts (user_id, article_id, message) VALUES (?, ?, ?)";
+
+        // Подготовка запроса с параметрами
+        if ($stmt = $this->conn->prepare($query)) {
+            // Привязываем параметры к запросу
+            $stmt->bind_param('iis', $userId, $articleId, $message);
+
+            // Выполняем запрос
+            if ($stmt->execute()) {
+                return ['status' => 'success', 'message' => 'Repost successful'];
+            } else {
+                return ['status' => 'error', 'message' => 'Failed to create repost'];
+            }
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to prepare query'];
+        }
+    }
+    public function getReposts($userId) {
+        $query = "
+        SELECT 
+            r.message AS repost_message,
+            r.created_at AS reposted_at,
+            a.id AS article_id,
+            a.title AS article_title,
+            a.content AS article_content
+        FROM reposts r
+        JOIN articles a ON r.article_id = a.id
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $reposts = [];
+        while ($row = $result->fetch_assoc()) {
+            $reposts[] = $row;
+        }
+
+        return $reposts;
+    }
 }

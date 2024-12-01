@@ -458,7 +458,7 @@
     outline: none; /* Убирает обводку при фокусе */
 }
 
-.char-count {
+.char-count, .char-count-form {
     position: absolute;
     right: 10px;
     bottom: 20px;
@@ -499,4 +499,119 @@ h3 .comment-count {
     color: #333;
 }
 
+/* Кнопка репоста */
+.btn-repost {
+    background-color: #ff7f50; /* Яркий цвет */
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
+.btn-repost:hover {
+    background-color: #ff6347; /* Немного более яркий */
+    transform: scale(1.05); /* Эффект увеличения при наведении */
+}
+
+/* Модальное окно */
+.repost-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Темный фон */
+    display: none; /* Скрыто по умолчанию */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Когда окно открыто */
+.repost-form-overlay.show {
+    display: flex;
+}
+
+/* Контейнер модального окна */
+.repost-form-container {
+    position: relative; /* Чтобы разместить крестик в правом верхнем углу */
+    background-color: white;
+    padding: 100px;
+    border-radius: 12px;
+    width: 600px;
+    max-width: 100%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Крестик для закрытия формы */
+.repost-form-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.repost-form-close:hover {
+    color: #ff7f50; /* Цвет при наведении */
+}
+
+/* Ввод сообщения */
+.repost-input {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    resize: none;
+}
+
+.repost-input:focus {
+    border-color: #ff7f50;
+    outline: none;
+}
+
+/* Кнопки (постить и отмена) */
+.repost-buttons {
+    display: flex;
+    justify-content: flex-end; /* Выравнивание кнопок справа */
+    gap: 10px;
+}
+
+.repost-submit, .repost-cancel {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.repost-submit {
+    background-color: #28a745;
+    color: white;
+}
+
+.repost-submit:hover {
+    background-color: #218838;
+}
+
+.repost-cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+.repost-cancel:hover {
+    background-color: #c82333;
+}

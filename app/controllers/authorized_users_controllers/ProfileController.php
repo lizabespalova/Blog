@@ -8,9 +8,13 @@ use Exception;
 class ProfileController
 {
     private $userModel;
+    private $articleModel;
+
 
     public function __construct($dbConnection) {
         $this->userModel = new \models\User($dbConnection);
+        $this->articleModel = new \models\Articles($dbConnection);
+
     }
 
     public function showProfile()
@@ -30,6 +34,7 @@ class ProfileController
                 throw new Exception("User not found.");
             }
             $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
+            $reposts = $this->articleModel->getReposts($user_id);
 
             // Подключение шаблона и передача данных пользователя
             include __DIR__ . '/../../views/authorized_users/profile_template.php';

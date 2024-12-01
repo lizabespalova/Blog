@@ -48,6 +48,11 @@ function article_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->show_article_form($slug);
             exit();
+        case $method === 'POST' && $uri === '/repost':
+            $controller = new ArticleController(getDbConnection());
+            $controller->repost();
+            exit();
+
         default:
             return false;
     }

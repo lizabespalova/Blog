@@ -36,6 +36,6 @@
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 <script src="/js/authorized_users/menu.js"></script>
-<script src="/js/authorized_users/count_symbols_in_description.js"></script>
+<script src="/js/authorized_users/count_symbols.js"></script>
 </body>
 </html>

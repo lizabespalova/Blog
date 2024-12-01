@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     const markdownContents = [
         document.getElementById('rendered-content-1'),
-        document.getElementById('rendered-content-2')
+        document.getElementById('rendered-content-2'),
+        document.getElementById('rendered-content-3')
     ];
 
     markdownContents.forEach((markdownContent, index) => {

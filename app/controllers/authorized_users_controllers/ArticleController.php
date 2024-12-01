@@ -367,7 +367,8 @@ class ArticleController
             'slug' => $_POST['slug'],
             'cover_image' => $_FILES['cover_image'],
             'author' => $_SESSION['user']['user_login'],
-            'user_id' => $_SESSION['user']['user_id']
+            'user_id' => $_SESSION['user']['user_id'],
+
         ];
     }
     private function find_images_in_content($content): array
@@ -543,7 +544,27 @@ class ArticleController
         ]);
     }
 
+    // Метод для обработки запроса на репост
+    public function repost() {
+        // Получаем данные из тела запроса
+        $data = json_decode(file_get_contents('php://input'), true);
 
+        // Проверяем, что все необходимые данные присутствуют
+        if (empty($data['user_id']) || empty($data['article_id']) || empty($data['message'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+            exit();
+        }
+
+        $userId = $data['user_id'];
+        $articleId = $data['article_id'];
+        $message = $data['message'];
+
+        // Вызываем метод модели для репоста
+        $result = $this->articleModel->create_repost($userId, $articleId, $message);
+
+        // Отправляем результат
+        echo json_encode($result);
+    }
 
 
 }

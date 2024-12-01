@@ -116,10 +116,34 @@
 
 
 
-                    <!-- Репост -->
-                    <button class="btn-repost" title="Share">
+                    <!-- Кнопка репоста -->
+                    <button class="btn-repost" title="Share" onclick="openRepostForm()">
                         <i class="fas fa-share"></i>
                     </button>
+
+                    <!-- Модальное окно для репоста -->
+                    <div id="repost-form" class="repost-form-overlay">
+                        <div class="repost-form-container">
+                            <!-- Крестик для закрытия -->
+                            <span class="repost-form-close" onclick="closeRepostForm()">&times;</span>
+
+
+                            <!-- Поле для ввода сообщения -->
+                            <textarea id="repost-message" placeholder="Add a message..." class="repost-input"></textarea>
+                            <!-- Кнопки (отправить и отменить) -->
+                            <div class="repost-buttons">
+<!--                                <div class="comment-editor-wrapper">-->
+<!--                                    <span class="char-count-form">0/500</span>-->
+<!--                                </div>-->
+                                <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($user['user_id']); ?>">
+                                <input type="hidden" id="article-id" value="<?php echo htmlspecialchars($article['id']);; ?>">
+                                <button onclick="submitRepost()" class="repost-submit">Post to Wall</button>
+
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <!-- Поделиться -->
                     <div class="menu share-menu">
@@ -198,7 +222,7 @@
 <script src="/js/authorized_users/articles/articles_comments.js"></script>
 <script src="/js/authorized_users/articles/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>-->
+<script src="/js/authorized_users/articles/repost_article.js"></script>
 
 
 </body>
