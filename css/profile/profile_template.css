@@ -204,62 +204,17 @@
 }
 
 /*Стили репостов*/
-#publications-list {
+.reposts-articles-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center; /* Горизонтальное выравнивание */
+    align-items: center;    /* Вертикальное выравнивание */
+    flex-wrap: wrap;        /* Для переноса строк при большом количестве карточек */
+    gap: 20px;              /* Расстояние между карточками */
+    margin: 0 auto;         /* Выравнивание по центру */
+    max-width: 1200px;      /* Ограничение ширины контейнера */
+    padding: 20px;          /* Внутренний отступ */
+    text-align: center;     /* Выравнивание текста внутри карточек */
 }
-
-.repost-item {
-    max-width: 800px;
-    width: 100%;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-.repost-item:hover {
-    transform: scale(1.02);
-}
-
-.repost-item h4 {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.repost-item .markdown-content {
-    font-size: 16px;
-    line-height: 1.5;
-    color: #444;
-    padding: 10px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-}
-
-.repost-item a {
-    display: inline-block;
-    margin-top: 10px;
-    text-align: center;
-    text-decoration: none;
-    color: #007BFF;
-    font-weight: bold;
-}
-
-.repost-item a:hover {
-    text-decoration: underline;
-    color: #0056b3;
-}
-.centered-link {
-    margin-left: 45%;
-}
-
 
 
 /* Адаптивные стили */

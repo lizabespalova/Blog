@@ -324,16 +324,19 @@ class Articles
     }
     public function getReposts($userId) {
         $query = "
-        SELECT 
-            r.message AS repost_message,
-            r.created_at AS reposted_at,
-            a.id AS article_id,
-            a.title AS article_title,
-            a.content AS article_content
-        FROM reposts r
-        JOIN articles a ON r.article_id = a.id
-        WHERE r.user_id = ?
-        ORDER BY r.created_at DESC
+    SELECT 
+        r.message AS message,
+        r.created_at AS created_at,
+        a.id AS id,
+        a.title AS title,
+        a.author AS author,
+        a.content AS content,
+        a.slug AS slug,
+        a.cover_image AS cover_image
+    FROM reposts r
+    JOIN articles a ON r.article_id = a.id
+    WHERE r.user_id = ?
+    ORDER BY r.created_at DESC
     ";
 
         $stmt = $this->conn->prepare($query);
@@ -348,4 +351,5 @@ class Articles
 
         return $reposts;
     }
+
 }

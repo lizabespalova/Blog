@@ -4,17 +4,18 @@ namespace controllers\authorized_users_controllers;
 
 use models\User;
 use Exception;
+use services\MarkdownService;
 
 class ProfileController
 {
     private $userModel;
     private $articleModel;
 
-
+    private $markdownService;
     public function __construct($dbConnection) {
         $this->userModel = new \models\User($dbConnection);
         $this->articleModel = new \models\Articles($dbConnection);
-
+        $this->markdownService = new MarkdownService();
     }
 
     public function showProfile()
@@ -34,7 +35,8 @@ class ProfileController
                 throw new Exception("User not found.");
             }
             $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
-            $reposts = $this->articleModel->getReposts($user_id);
+
+            $article_cards =  $this->articleModel->getReposts($user_id);
 
             // Подключение шаблона и передача данных пользователя
             include __DIR__ . '/../../views/authorized_users/profile_template.php';

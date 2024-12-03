@@ -61,3 +61,16 @@
     font-size: 14px; /* Увеличиваем шрифт */
     color: #666;
 }
+.card-container {
+    margin-bottom: 20px; /* Разделяет карточки друг от друга */
+}
+
+.card-message {
+    text-align: center; /* Центрирование текста */
+    margin-bottom: 10px; /* Отступ от карточки */
+    font-size: 16px; /* Размер шрифта для сообщения */
+    font-weight: bold;
+    color: #333; /* Цвет текста */
+}
+
+

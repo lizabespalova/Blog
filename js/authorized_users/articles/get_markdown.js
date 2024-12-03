@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // 3 потому что начинаю с 3 ходить по репостам, решение не оптимальное, надо изменить
+    let index = 3;
     const markdownContents = [
         document.getElementById('rendered-content-1'),
         document.getElementById('rendered-content-2'),
-        document.getElementById('rendered-content-3')
+        document.getElementById(`rendered-content-${index + 1}`)
     ];
 
     markdownContents.forEach((markdownContent, index) => {
@@ -34,7 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
             htmlContent = htmlContent.replace(/\[!spoiler\]\s*(.*?)\s*(\n|$)/g, '<details><summary>Spoiler</summary>$1</details>');
 
             // Обработка формул
-            htmlContent = htmlContent.replace(/\$\$([\s\S]*?)\$\$/g, '<div class="formula-container">$1</div>');
+            htmlContent = htmlContent.replace(/\$\$([\s\S]*?)\$\$/g, (_, formula) => {
+                return `<div class="formula-container">${formula}</div>`;
+            });
             console.log(`Processed HTML Content for rendered-content-${index + 1}:`, htmlContent);
 
             // Обновляем содержимое элемента

@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="/css/profile/profile_template.css">
     <link rel="stylesheet" href="/css/profile/navigation.css">
     <link rel="stylesheet" href="/css/profile/content.css">
+    <link rel="stylesheet" href="/css/profile/markdown.css">
+    <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
 </head>
 <body>
@@ -114,33 +116,27 @@
     </div>
 </div>
 
-<!-- Секция для публикаций пользователя -->
-<div id="publications-list">
-    <?php if (!empty($reposts)): ?>
-        <?php foreach ($reposts as $repost): ?>
-            <div class="repost-item" id="rendered-content-3">
-                <h4><?= htmlspecialchars($repost['article_title']) ?></h4>
-                <div class="markdown-content">
-                    <?= htmlspecialchars($repost['article_content'], ENT_QUOTES, 'UTF-8') ?>
-                </div>
-                <small>Reposted on <?= htmlspecialchars($repost['reposted_at']) ?></small>
-                <a href="/article.php?id=<?= htmlspecialchars($repost['article_id']) ?>" class="centered-link">Read more</a>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+<!-- Reposts -->
+<div class="parent-container">
+    <div class="reposts-articles-container">
+        <?php include __DIR__ . '/../../views/partials/cards.php'; ?>
+    </div>
 </div>
+
+
+
 
 
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
+<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
+
 <script src="/js/authorized_users/add_dialog_window.js"></script>
 <script src="/js/authorized_users/show_edit_form.js"></script>
 <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
-<script src="/js/authorized_users/articles/get_markdown.js"></script>
 <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 

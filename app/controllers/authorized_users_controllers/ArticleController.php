@@ -11,6 +11,7 @@ use models\Favourites;
 use models\User;
 use Parsedown;
 use services\LoginService;
+use services\MarkdownService;
 use function Symfony\Component\String\s;
 require_once 'app/services/helpers/session_check.php';
 class ArticleController
@@ -23,7 +24,7 @@ class ArticleController
     private $loginService;
     private $commentModel;
     private $favouriteModel;
-
+    private $markdownService;
 
     public function __construct($conn)
     {
@@ -35,6 +36,7 @@ class ArticleController
         $this->articleCommentsModel = new ArticleComments(getDbConnection());
         $this->commentModel = new Comment(getDbConnection());
         $this->favouriteModel = new Favourites(getDbConnection());
+        $this->markdownService = new MarkdownService();
     }
 
     public function show_article_form($slug)
@@ -238,7 +240,7 @@ class ArticleController
             // Получаем данные автора (аватар)
             $author_info = $this->userModel->get_author_avatar($article['author']);
             // Парсим содержимое статьи из Markdown в HTML
-            $parsedContent = $this->parseMarkdown($article['content']);
+            $parsedContent = $this->markdownService->parseMarkdown($article['content']);
 
             // Получаем YouTube ссылку
             $youtube_link = $article['youtube_link'];
@@ -338,11 +340,7 @@ class ArticleController
 
 
 
-    // Функция для парсинга Markdown
-    public function parseMarkdown($markdownContent): string
-    {
-        return (new Parsedown())->text($markdownContent);
-    }
+
     // Функция для получения правильной ссылки на YouTube видео
     private function getYouTubeEmbedUrl($youtube_link)
     {
