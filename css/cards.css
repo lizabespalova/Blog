@@ -65,12 +65,45 @@
     margin-bottom: 20px; /* Разделяет карточки друг от друга */
 }
 
-.card-message {
-    text-align: center; /* Центрирование текста */
+.card-repost {
+    display: flex;
+    align-items: center;
     margin-bottom: 10px; /* Отступ от карточки */
-    font-size: 16px; /* Размер шрифта для сообщения */
-    font-weight: bold;
-    color: #333; /* Цвет текста */
+    background-color: #f9f9f9; /* Светлый фон для репоста */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+
+.repost-avatar img {
+    width: 40px; /* Размер аватара */
+    height: 40px;
+    border-radius: 50%; /* Круглый аватар */
+    object-fit: cover; /* Корректное отображение изображения */
+}
+
+.repost-message p {
+    margin-left: 2%;
+    padding: 0;
+    text-align: left; /* Выравнивание текста по левому краю */
+    font-size: 14px; /* Размер текста */
+    line-height: 1.4; /* Межстрочный интервал */
+}
+
+
+.repost-message {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #555;
+}
+
+/*.card-message {*/
+/*    text-align: center; !* Центрирование текста *!*/
+/*    margin-bottom: 10px; !* Отступ от карточки *!*/
+/*    font-size: 16px; !* Размер шрифта для сообщения *!*/
+/*    font-weight: bold;*/
+/*    color: #333; !* Цвет текста *!*/
+/*}*/
 
 

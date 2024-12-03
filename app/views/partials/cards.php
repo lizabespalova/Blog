@@ -3,10 +3,18 @@
         <?php foreach ($article_cards as $article): ?>
             <div class="card-container">
                 <?php if (!empty($article['message'])): ?>
-                    <div class="card-message">
-                        <p><?= htmlspecialchars($article['message'], ENT_QUOTES) ?></p>
+                    <div class="card-repost">
+                        <?php if (!empty($user['user_avatar'])): ?>
+                            <div class="repost-avatar">
+                                <img src="<?= htmlspecialchars($user['user_avatar'], ENT_QUOTES) ?>" alt="User Avatar">
+                            </div>
+                        <?php endif; ?>
+                        <div class="repost-message">
+                            <p><?= htmlspecialchars($article['message'], ENT_QUOTES) ?></p>
+                        </div>
                     </div>
                 <?php endif; ?>
+
                 <div class="card">
                     <div class="card-image">
                         <img src="/<?= htmlspecialchars($article['cover_image'], ENT_QUOTES) ?>" alt="<?= htmlspecialchars($article['title'], ENT_QUOTES) ?>">

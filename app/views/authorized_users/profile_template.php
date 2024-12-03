@@ -43,8 +43,20 @@
         </div>
 
         <div class="profile-container">
+
             <div class="profile-info" id="profile-info">
-                <h1><?= htmlspecialchars($user['user_login']) ?></h1>
+                <!-- Секция для подписчиков и подписок -->
+                <div class="profile-header">
+                    <h1><?= htmlspecialchars($user['user_login']) ?></h1>
+                    <div class="profile-stats">
+                        <button class="stat">
+                            Followers: <span id="followers-count">123</span>
+                        </button>
+                        <button class="stat">
+                            Following: <span id="following-count">45</span>
+                        </button>
+                    </div>
+                </div>
                 <p>
                     <strong>Specialization:</strong>
                     <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
@@ -101,7 +113,6 @@
     <div class="menu-indicator"></div>
 </div>
 
-
 <!-- Content Section -->
 <div class="content-section">
     <div class="content-text">
@@ -115,6 +126,7 @@
         <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
     </div>
 </div>
+
 
 <!-- Reposts -->
 <div class="parent-container">
