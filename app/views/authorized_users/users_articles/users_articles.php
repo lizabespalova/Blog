@@ -22,9 +22,13 @@ include __DIR__ . '/../../../views/partials/filter.php';
 ?>
 
 <!-- Main Content -->
-<?php include __DIR__ . '/../../../views/partials/cards.php'; ?>
-
-
+<div id="filter-results" class="favorite-articles-container">
+    <?php if (!empty($article_cards)): ?>
+        <?php foreach ($article_cards as $article): ?>
+            <?php include __DIR__ . '/../../../views/partials/card.php'; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../../views/base/profile_footer.php'; ?>
 

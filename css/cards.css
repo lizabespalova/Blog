@@ -5,13 +5,14 @@
     align-items: center;
     border: 1px solid #ddd;
     border-radius: 10px;
-    overflow: hidden;
     width: 400px; /* Увеличиваем ширину */
     height: 150px; /* Увеличиваем высоту */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background-color: #fff;
     margin-bottom: 20px; /* Отступ между карточками */
+    position: relative; /* Ограничиваем область для абсолютного позиционирования дочерних элементов */
+    overflow: hidden; /* Убираем видимость выпадающего меню за пределами карточки */
 }
 
 .card:hover {
@@ -65,45 +66,98 @@
     margin-bottom: 20px; /* Разделяет карточки друг от друга */
 }
 
-.card-repost {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* Отступ от карточки */
-    background-color: #f9f9f9; /* Светлый фон для репоста */
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.card-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2; /* Обеспечиваем отображение поверх содержимого карточки */
 }
 
-
-.repost-avatar img {
-    width: 40px; /* Размер аватара */
-    height: 40px;
-    border-radius: 50%; /* Круглый аватар */
-    object-fit: cover; /* Корректное отображение изображения */
+/* Блок с тремя точками */
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
 
-.repost-message p {
-    margin-left: 2%;
-    padding: 0;
-    text-align: left; /* Выравнивание текста по левому краю */
-    font-size: 14px; /* Размер текста */
-    line-height: 1.4; /* Межстрочный интервал */
-}
-
-
-.repost-message {
-    flex-grow: 1;
-    font-size: 14px;
+.dropdown-toggle {
+    background: none;
+    border: none;
     color: #555;
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
 }
 
-/*.card-message {*/
-/*    text-align: center; !* Центрирование текста *!*/
-/*    margin-bottom: 10px; !* Отступ от карточки *!*/
-/*    font-size: 16px; !* Размер шрифта для сообщения *!*/
-/*    font-weight: bold;*/
-/*    color: #333; !* Цвет текста *!*/
-/*}*/
+.dropdown-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
 
 
+/* Блок с тремя точками */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Кнопка с тремя точками */
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 20px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Меню */
+.dropdown-menu {
+    display: none;
+    position: fixed; /* Меню фиксируется на экране */
+    top: 50%; /* Центрировать по вертикали */
+    right: 20px; /* Позиционирование справа */
+    transform: translateY(-50%); /* Центрирование по вертикали */
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000; /* Обеспечить, чтобы меню было поверх других элементов */
+    min-width: 150px;
+    overflow: visible;
+}
+
+
+/* Элементы меню */
+.dropdown-menu .dropdown-item {
+    padding: 10px 15px;
+    text-align: left;
+    background: none;
+    border: none;
+    width: 100%;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Показ меню при наведении */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

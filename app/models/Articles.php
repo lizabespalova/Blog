@@ -325,6 +325,7 @@ class Articles
     public function getReposts($userId) {
         $query = "
     SELECT 
+        r.id AS repost_id,
         r.message AS message,
         r.created_at AS created_at,
         a.id AS id,

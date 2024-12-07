@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/css/profile/content.css">
     <link rel="stylesheet" href="/css/profile/markdown.css">
     <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/repost.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
 </head>
 <body>
@@ -131,7 +132,7 @@
 <!-- Reposts -->
 <div class="parent-container">
     <div class="reposts-articles-container">
-        <?php include __DIR__ . '/../../views/partials/cards.php'; ?>
+        <?php include __DIR__ . '/../../views/partials/repost.php'; ?>
     </div>
 </div>
 

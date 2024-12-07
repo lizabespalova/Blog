@@ -18,7 +18,7 @@ class ProfileController
         $this->markdownService = new MarkdownService();
     }
 
-    public function showProfile()
+    public function showProfile($profileUserLogin)
     {
         try {
             // Проверка, установлен ли cookie с идентификатором пользователя
@@ -26,13 +26,13 @@ class ProfileController
                 throw new Exception("User not authenticated.");
             }
 
-            $user_id = intval($_COOKIE['id']);
+//            $user_id = intval($_COOKIE['id']);
 
             // Получение данных пользователя из базы данных
-            $user = $this->userModel->get_user_by_id($user_id);
-
+            $user = $this->userModel->get_user_by_login($profileUserLogin);
+            $user_id = $user['user_id'];
             if (!$user) {
-                throw new Exception("User not found.");
+                throw new Exception($profileUserLogin );
             }
             $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
 

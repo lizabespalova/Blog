@@ -16,8 +16,8 @@ function profile_route($uri, $method) {
         case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
             $controller = new ProfileController($dbConnection);
             if ($method === 'GET') {
-                $controller->showProfile();
-            }
+                $userLogin = $matches[1];
+                $controller->showProfile($userLogin);            }
             exit();  // Остановка выполнения после маршрута
 
         case '/update-description':
