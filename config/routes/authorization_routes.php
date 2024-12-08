@@ -70,6 +70,14 @@ function authorization_route($uri, $method) {
             $controller = new LogoutController();
             $controller->logout();
             exit();
+        case '/google-register':
+            $controller = new RegisterController($dbConnection);
+            if ($method === 'GET') {
+                $controller->redirectToGoogle();
+            } elseif ($method === 'POST') {
+                $controller->handleGoogleCallback();
+            }
+            exit(); // Остановка выполнения после маршрута
 
         default:
             return false;

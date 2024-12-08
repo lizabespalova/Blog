@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/authorization.css">
+    <link rel="stylesheet" href="/css/google/google_services.css">
     <title>Register</title>
 </head>
 <body>
@@ -37,6 +38,11 @@
                 <a href="/login">Log in</a>
             </p>
         </div>
+        <a href="/google-register" class="google-signin-button">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+            <span>Sign in with Google</span>
+        </a>
+
     </form>
 </section>
 <img id="women" src="/templates/images/women_at_the_computer.png" alt="Women">

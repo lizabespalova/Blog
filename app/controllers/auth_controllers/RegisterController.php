@@ -142,25 +142,85 @@ class RegisterController {
             echo 'No token provided.';
         }
     }
-//    private function isTokenExpired($createdAt): bool {
-//        $expiration = new \DateTime($createdAt);
-//        $now = new \DateTime();
-//        $interval = $now->diff($expiration);
-//
-//        return $interval->i >= 30; // Проверка на истечение срока в минутах
-//    }
+     public function getClient(){
+         $client = new \Google_Client();
+         $client->setClientId(getGoogleClientId());
+         $client->setClientSecret(getenv(getGoogleClientSecret()));
+         $client->setRedirectUri(getRedirectUri());
+         $client->addScope(['email', 'profile']);
+         return $client;
+     }
+     public function redirectToGoogle() {
+        // Логика для редиректа на Google
+        $client = $this->getClient();
 
+        $authUrl = $client->createAuthUrl();
+        header('Location: ' . $authUrl);
+        exit();
+    }
+    public function handleGoogleCallback() {
+        try {
+            // Инициализация Google Client
+            $client = $this->getClient();
+
+            // Получение токена доступа с кодом авторизации
+            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+            if (isset($token['error'])) {
+                throw new Exception("Authorization error: " . $token['error']);
+            }
+            $client->setAccessToken($token);
+
+            // Получение информации о пользователе
+            $oauth2 = new \Google_Service_Oauth2($client);
+            $userInfo = $oauth2->userinfo->get();
+            $email = $userInfo->email;
+            $name = $userInfo->name;
+
+            // Проверка существования пользователя
+            $existingUser = $this->userModel->get_user_by_email($email);
+            if (!$existingUser) {
+                // Если пользователя нет, регистрируем его
+                $googleId = $userInfo->id; // Уникальный ID от Google
+                $login = $name; // Используем имя от Google как логин
+                $link = ""; // Дополнительная информация (если нужна)
+
+                // Сохраняем нового пользователя
+                $this->userModel->move_to_main_table($login, $email, $googleId, $link);
+
+                // Авторизуем пользователя, используя данные Google
+                $_SESSION['user_id'] = $googleId; // Сохраняем Google ID
+                $_SESSION['user_email'] = $email;
+                $_SESSION['user_login'] = $login;
+
+                header('Location: /profile' . '/'. $login); // Перенаправление для нового пользователя
+                exit();
+            } else {
+                // Если пользователь уже существует, авторизуем его
+                $_SESSION['user_id'] = $existingUser['google_id']; // Google ID
+                $_SESSION['user_email'] = $existingUser['user_email'];
+                $_SESSION['user_login'] = $existingUser['user_login'];
+
+                header('Location: /profile' . '/'. $existingUser['user_login']); // Перенаправление для нового пользователя
+                exit();
+            }
+        } catch (Exception $e) {
+            // Обработка ошибок
+            error_log($e->getMessage());
+            header("Location: /error");
+            exit();
+        }
+    }
 
     private function show_errors($errors) {
-        $errorMessages = implode(" ", $errors);
-//        echo "<script>
-//            alert('The following errors occurred during registration:\\n{$errorMessages}');
-//            window.location.href = '/register';
-//          </script>";
-        $encodedMessage = urlencode($errorMessages); // Кодируем сообщение для URL
+            $errorMessages = implode(" ", $errors);
+    //        echo "<script>
+    //            alert('The following errors occurred during registration:\\n{$errorMessages}');
+    //            window.location.href = '/register';
+    //          </script>";
+            $encodedMessage = urlencode($errorMessages); // Кодируем сообщение для URL
 
-        header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
-        exit(); // Завершаем выполнение текущего скрипта
+            header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
+            exit(); // Завершаем выполнение текущего скрипта
+        }
     }
-}
 ?>

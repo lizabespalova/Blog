@@ -3,7 +3,8 @@
     "vlucas/phpdotenv": "^5.4",
     "ext-mysqli": "*",
     "erusev/parsedown": "^1.7",
-    "ext-json": "*"
+    "ext-json": "*",
+    "google/apiclient": "2.0"
   },
   "autoload": {
     "psr-4": {
