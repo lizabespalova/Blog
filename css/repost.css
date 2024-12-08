@@ -1,43 +1,33 @@
-/* Стили репостов */
-.reposts-articles-container {
-    display: flex;
-    justify-content: center; /* Горизонтальное выравнивание контейнера */
-    flex-wrap: wrap;        /* Перенос карточек на новую строку */
-    gap: 20px;              /* Расстояние между карточками */
-    margin: 0 auto;         /* Центрирование контейнера */
-    max-width: 1200px;      /* Ограничение ширины контейнера */
-    padding: 20px;          /* Внутренний отступ */
-}
-
 .card-repost {
     display: flex;
-    align-items: flex-start; /* Выравнивание элементов сверху */
-    padding: 15px;
-    background-color: #f9f9f9; /* Светлый фон */
+    align-items: flex-start;
+    padding: 10px; /* Уменьшить отступы */
+    background-color: #f9f9f9;
     border-radius: 8px;
-    border: 1px solid #ddd; /* Разделение */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
-    max-width: 600px; /* Опционально: ограничение ширины карточки */
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Меньшая тень */
+    max-width: 800px; /* Ограничение ширины */
+    margin: 0 auto; /* Центрирование */
 }
 
 .repost-avatar {
-    margin-right: 15px; /* Отступ между аватаром и текстом */
+    flex-shrink: 0;
+    margin-right: 10px; /* Меньший отступ */
 }
 
 .repost-avatar img {
-    width: 50px; /* Размер аватара */
-    height: 50px;
-    border-radius: 50%; /* Круглый аватар */
-    object-fit: cover; /* Соответствие размерам */
-    border: 2px solid #ccc; /* Рамка для аватара */
+    width: 40px; /* Меньший аватар */
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc; /* Тоньше рамка */
 }
 
 .repost-message {
     flex-grow: 1;
-    font-size: 14px;
+    font-size: 13px; /* Меньший шрифт */
     color: #555;
-    line-height: 1.6;
-    text-align: left; /* Выравнивание текста по левому краю */
+    line-height: 1.4;
     display: flex;
     flex-direction: column;
 }
@@ -46,8 +36,8 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
-    font-size: 13px; /* Размер для имени и времени */
-    color: #888; /* Более светлый цвет */
+    font-size: 12px;
+    color: #888;
 }
 
 .repost-username {
@@ -57,5 +47,32 @@
 
 .repost-time {
     font-style: italic;
-    font-size: 12px; /* Меньший размер шрифта */
+    font-size: 11px;
+}
+
+/* Контейнер для всех карточек */
+.reposts-articles-container {
+    display: flex;
+    flex-direction: column; /* Вертикальная ориентация */
+    align-items: center; /* Центрирование карточек */
+    gap: 15px; /* Расстояние между блоками */
+    margin: 0 auto;
+    max-width: 800px; /* Ограничить ширину всего контейнера */
+    padding: 10px;
+}
+
+/* Карточка репоста */
+.repost-card {
+    background-color: #fff;
+    padding: 15px; /* Меньший отступ */
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1); /* Меньшая тень */
+}
+
+/* Текст внутри карточки */
+.repost-message {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #333;
 }

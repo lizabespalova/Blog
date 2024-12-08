@@ -2,6 +2,8 @@
 
 namespace controllers\authorized_users_controllers;
 
+use models\Articles;
+use models\Reposts;
 use models\User;
 use Exception;
 use services\MarkdownService;
@@ -10,11 +12,13 @@ class ProfileController
 {
     private $userModel;
     private $articleModel;
+    private $repostModel;
 
     private $markdownService;
     public function __construct($dbConnection) {
-        $this->userModel = new \models\User($dbConnection);
-        $this->articleModel = new \models\Articles($dbConnection);
+        $this->userModel = new User($dbConnection);
+        $this->articleModel = new Articles($dbConnection);
+        $this->repostModel = new Reposts($dbConnection);
         $this->markdownService = new MarkdownService();
     }
 
@@ -36,8 +40,8 @@ class ProfileController
             }
             $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
 
-            $article_cards =  $this->articleModel->getReposts($user_id);
-
+            $article_cards =  $this->repostModel->getReposts($user_id);
+            $reposts = $article_cards;
             // Подключение шаблона и передача данных пользователя
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {

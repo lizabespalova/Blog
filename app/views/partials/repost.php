@@ -1,7 +1,7 @@
 <div class="repost-wrapper">
-    <?php if (!empty($article_cards)): ?>
-        <?php foreach ($article_cards as $article): ?>
-            <?php if (!empty($article['message'])): ?>
+    <?php if (!empty($reposts)): ?>
+        <?php foreach ($reposts as $article): ?>
+            <?php if (!empty($article['created_at'])): ?>
                 <div class="card-repost">
                     <?php if (!empty($user['user_avatar'])): ?>
                         <div class="repost-avatar">

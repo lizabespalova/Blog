@@ -8,6 +8,7 @@ use models\ArticleReactions;
 use models\Articles;
 use models\Comment;
 use models\Favourites;
+use models\Reposts;
 use models\User;
 use Parsedown;
 use services\LoginService;
@@ -24,6 +25,7 @@ class ArticleController
     private $loginService;
     private $commentModel;
     private $favouriteModel;
+    private $repostModel;
     private $markdownService;
 
     public function __construct($conn)
@@ -36,6 +38,7 @@ class ArticleController
         $this->articleCommentsModel = new ArticleComments(getDbConnection());
         $this->commentModel = new Comment(getDbConnection());
         $this->favouriteModel = new Favourites(getDbConnection());
+        $this->repostModel = new Reposts(getDbConnection());
         $this->markdownService = new MarkdownService();
     }
 
@@ -548,7 +551,7 @@ class ArticleController
         $data = json_decode(file_get_contents('php://input'), true);
 
         // Проверяем, что все необходимые данные присутствуют
-        if (empty($data['user_id']) || empty($data['article_id']) || empty($data['message'])) {
+        if (empty($data['user_id']) || empty($data['article_id'])) {
             echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
             exit();
         }
@@ -558,11 +561,24 @@ class ArticleController
         $message = $data['message'];
 
         // Вызываем метод модели для репоста
-        $result = $this->articleModel->create_repost($userId, $articleId, $message);
+        $result = $this->repostModel->create_repost($userId, $articleId, $message);
 
         // Отправляем результат
         echo json_encode($result);
     }
+    public function delete_repost(){
+        if (!empty($_POST['repost_id'])) {
+            $repostId = $_POST['repost_id'];
 
+            // Удаление репоста из базы данных
+
+            $isDeleted = $this->repostModel->deleteRepost($repostId);
+
+            // Возвращаем JSON-ответ
+            echo json_encode(['success' => $isDeleted]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Invalid request']);
+        }
+    }
 
 }

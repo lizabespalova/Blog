@@ -5,7 +5,7 @@
                 <button class="dropdown-toggle">⋮</button>
                 <div class="dropdown-menu">
                     <?php if (!empty($article['repost_id'])): ?>
-                        <button class="dropdown-item delete-card" data-repost-id="<?php echo htmlspecialchars($article['repost_id']); ?>">Delete</button>
+                        <button class="dropdown-item delete-card" data-repost-id="<?php echo htmlspecialchars($article['repost_id']); ?>" onclick="deleteRepost(this)">Delete</button>
                     <?php endif; ?>
                     <button class="dropdown-item edit-text" data-article-id="<?php echo htmlspecialchars($article['id']); ?>">Change description</button>
                 </div>

@@ -52,6 +52,10 @@ function article_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->repost();
             exit();
+        case $method === 'POST' && $uri === '/repost-delete':
+            $controller = new ArticleController(getDbConnection());
+            $controller->delete_repost();
+            exit();
 
         default:
             return false;

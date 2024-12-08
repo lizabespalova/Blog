@@ -150,6 +150,7 @@
 <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
 <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
+<script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 

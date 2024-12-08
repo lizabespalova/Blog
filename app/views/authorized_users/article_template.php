@@ -129,16 +129,13 @@
 
 
                             <!-- Поле для ввода сообщения -->
-                            <textarea id="repost-message" placeholder="Add a message..." class="repost-input"></textarea>
+                            <textarea id="repost-message" placeholder="Add a message..." class="repost-input" maxlength="250"></textarea>
+                            <div id="repost-char-count">0/250</div>
                             <!-- Кнопки (отправить и отменить) -->
                             <div class="repost-buttons">
-<!--                                <div class="comment-editor-wrapper">-->
-<!--                                    <span class="char-count-form">0/500</span>-->
-<!--                                </div>-->
                                 <input type="hidden" id="user-id" value="<?php echo htmlspecialchars($user['user_id']); ?>">
-                                <input type="hidden" id="article-id" value="<?php echo htmlspecialchars($article['id']);; ?>">
+                                <input type="hidden" id="article-id" value="<?php echo htmlspecialchars($article['id']); ?>">
                                 <button onclick="submitRepost()" class="repost-submit">Post to Wall</button>
-
                             </div>
                         </div>
                     </div>

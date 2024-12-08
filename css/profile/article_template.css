@@ -615,3 +615,11 @@ h3 .comment-count {
 .repost-cancel:hover {
     background-color: #c82333;
 }
+#repost-char-count {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+#repost-char-count.error {
+    color: red;
+}

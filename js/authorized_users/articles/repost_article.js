@@ -1,3 +1,18 @@
+// Подсчет введенных символов
+const messageInput = document.getElementById('repost-message');
+const charCount = document.getElementById('repost-char-count');
+const maxLength = 250;
+if (messageInput) {
+    messageInput.addEventListener('input', () => {
+        if (messageInput.value.length > maxLength) {
+            // Убираем лишние символы
+            messageInput.value = messageInput.value.substring(0, maxLength);
+        }
+        // Обновляем счетчик символов
+        charCount.textContent = `${messageInput.value.length}/${maxLength}`;
+    });
+}
+
 // Функция для открытия формы репоста
 function openRepostForm() {
     document.getElementById('repost-form').classList.add('show');
@@ -17,35 +32,67 @@ function submitRepost() {
     console.log("userId: " + userId);
     console.log("articleId: " + articleId);
 
-    if (message.trim() !== '') {
-        // Отправка данных на сервер через fetch
-        fetch('/repost', {
+    // Отправка данных на сервер через fetch
+    fetch('/repost', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            article_id: articleId,
+            message: message
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // alert('Repost successful!');
+                closeRepostForm();
+                // displayRepost(message); // Отображаем репост на странице
+                // closeRepostForm(); // Закрываем форму
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred: ' + error);
+        });
+}
+// Функция для удаления репоста
+function deleteRepost(button) {
+    const repostId = button.getAttribute('data-repost-id');
+
+    if (repostId && confirm('Are you sure you want to delete this repost?')) {
+        fetch('/repost-delete', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({
-                user_id: userId,
-                article_id: articleId,
-                message: message
-            })
+            body: `repost_id=${encodeURIComponent(repostId)}`,
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // alert('Repost successful!');
-                    closeRepostForm();
-                    displayRepost(message); // Отображаем репост на странице
-                    // closeRepostForm(); // Закрываем форму
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to connect to the server.');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    const repostContainer = document.querySelector('.reposts-articles-container');
+                    if (repostContainer) {
+                        repostContainer.innerHTML = ''; // Очистить контейнер
+                        location.reload(); // Обновить страницу (если хотите перезагрузить страницу, если хотите)
+                    } else {
+                        console.warn('Could not find the card element for deletion.');
+                    }
                 } else {
-                    alert('Error: ' + data.message);
+                    alert(data.error || 'Failed to delete the repost.');
                 }
             })
-            .catch(error => {
-                alert('An error occurred: ' + error);
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the repost.');
             });
-    } else {
-        alert('Please enter a message.');
     }
 }
-
