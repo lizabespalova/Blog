@@ -122,6 +122,16 @@ button:hover{
 .forget-link {
     margin-left: 65px; /* Отступ */
 }
+.inputbox .toggle-password {
+    position: absolute;
+    right: 8px; /* Расположение значка глаза */
+    top: 20px;
+    color: #fefffe;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
 
 #women {
     position: fixed;

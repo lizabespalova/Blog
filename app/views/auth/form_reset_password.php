@@ -57,13 +57,15 @@ if (isset($_POST['set_new_password'])) {
         <p>Set new password</p>
         <input type="hidden" name="key" value="<?php echo htmlspecialchars($data['key']); ?>">
         <div class="inputbox">
-            <i class="bi bi-envelope"></i>
             <input type="password" name="password" required>
             <label>Password</label>
+            <i class="toggle-password bi bi-eye-slash" onclick="togglePasswordVisibility('password', this)"></i>
         </div>
         <button type="submit" name="set_new_password">Reset password</button>
     </form>
 </section>
 <img id="women" src="/templates/images/women_at_the_computer.png" alt="Women">
+<script src="/js/auth/toogle_eye_visibility.js"></script>
+
 </body>
 </html>

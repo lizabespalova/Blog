@@ -30,7 +30,8 @@ function getHost(){return $_ENV['HOST'];}
 function getSmptSecure(){return $_ENV['SMTP_SECURE'];}
 function getGoogleClientId(){return $_ENV['GOOGLE_CLIENT_ID'];}
 function getGoogleClientSecret(){return $_ENV['GOOGLE_CLIENT_SECRET'];}
-function getRedirectUri(){return $_ENV['REDIRECT_URI'];}
+function getRedirectUriRegister(){return $_ENV['REDIRECT_URI_REGISTER'];}
+function getRedirectUriLogin(){return $_ENV['REDIRECT_URI_LOGIN'];}
 
 
 function getBaseUrl() {

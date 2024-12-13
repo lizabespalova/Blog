@@ -72,13 +72,24 @@ function authorization_route($uri, $method) {
             exit();
         case '/google-register':
             $controller = new RegisterController($dbConnection);
-            if ($method === 'GET') {
-                $controller->redirectToGoogle();
-            } elseif ($method === 'POST') {
-                $controller->handleGoogleCallback();
+            if ($method === 'GET' && isset($_GET['code'])) {
+             $controller->handleGoogleCallback();
+            } elseif ($method === 'GET') {
+                $controller->redirectToGoogle("register");
             }
             exit(); // Остановка выполнения после маршрута
-
+        case '/google-login':
+            $controller = new RegisterController($dbConnection);
+            if ($method === 'GET' && isset($_GET['code'])) {
+                $controller->googleAuthorization();
+            } elseif ($method === 'GET') {
+                $controller->redirectToGoogle("login");
+            }
+            exit(); // Остановка выполнения после маршрута
+        case '/set_password':
+            $controller = new RegisterController($dbConnection);
+            $controller->setPassword();
+            exit();
         default:
             return false;
     }

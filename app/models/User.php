@@ -136,6 +136,15 @@ class User
         $stmt->close();
         return $user;
     }
+    public function get_temporary_user_by_id($userId) {
+        $stmt = $this->conn->prepare("SELECT * FROM temporary_users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        return $user;
+    }
 
     // Перемещение временного пользователя в основную таблицу
     public function move_to_main_table($login, $email, $password, $link) {
@@ -146,9 +155,9 @@ class User
     }
 
     // Удаление временного пользователя
-    public function delete_temporary_user($token) {
-        $stmt = $this->conn->prepare("DELETE FROM temporary_users WHERE confirmation_token = ?");
-        $stmt->bind_param("s", $token);
+    public function delete_temporary_user($userId) {
+        $stmt = $this->conn->prepare("DELETE FROM temporary_users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
         $stmt->execute();
         $stmt->close();
     }
@@ -280,6 +289,34 @@ class User
         return 0;
     }
 
+    // Поиск пользователя по Google ID
+    public function findUserByGoogleId($googleId) {
+        // Подготовка SQL-запроса
+        $stmt = $this->conn->prepare('SELECT * FROM users WHERE google_id = ?');
+        if ($stmt === false) {
+            die('Prepare failed: ' . $this->conn->error);
+        }
+
+        // Привязываем параметры
+        $stmt->bind_param('s', $googleId);
+
+        // Выполняем запрос
+        $stmt->execute();
+
+        // Получаем результат
+        $result = $stmt->get_result();
+
+        // Проверяем наличие записи
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+
+        // Закрываем запрос
+        $stmt->close();
+
+        // Возвращаем null, если пользователь не найден
+        return null;
+    }
 
 
 

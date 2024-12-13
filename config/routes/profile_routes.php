@@ -16,10 +16,10 @@ function profile_route($uri, $method) {
         case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
             $controller = new ProfileController($dbConnection);
             if ($method === 'GET') {
-                $userLogin = $matches[1];
-                $controller->showProfile($userLogin);            }
+                $userLogin = rawurldecode($matches[1]); // Декодируем значение
+                $controller->showProfile($userLogin);  // Передаем декодированный логин
+            }
             exit();  // Остановка выполнения после маршрута
-
         case '/update-description':
             $controller = new EditProfileController($dbConnection);
             if ($method === 'POST') {
