@@ -2,6 +2,7 @@
 namespace controllers\auth_controllers;
 
 use models\User;
+use services\AuthService;
 use services\ErrorService;
 
 require_once __DIR__ . '/../../models/User.php';
@@ -11,10 +12,11 @@ class LoginController {
 
     private $userModel;
     private $errorService;
-
+    private $authService;
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
         $this->errorService = new ErrorService();
+        $this->authService = new AuthService($dbConnection);
     }
 
     public function login() {
@@ -27,7 +29,7 @@ class LoginController {
                 // Проверяем введенный пароль
                 if (password_verify($_POST['password'], $data['user_password'])) {
                     // Генерируем случайный код для хеша авторизации
-                    $hash = $this->generate_code(10);
+                    $hash = $this->authService->generate_code(10);
 
                     // Если пользователь выбрал привязку к IP
                     $attach_ip = !empty($_POST['not_attach_ip']);
@@ -90,15 +92,15 @@ class LoginController {
         include __DIR__ . '/../../views/auth/form_login.php';
     }
 
-    private function generate_code($length = 6) {
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
-        $code = "";
-        $clen = strlen($chars) - 1;
-        while (strlen($code) < $length) {
-            $code .= $chars[mt_rand(0, $clen)];
-        }
-        return $code;
-    }
+//    private function generate_code($length = 6) {
+//        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
+//        $code = "";
+//        $clen = strlen($chars) - 1;
+//        while (strlen($code) < $length) {
+//            $code .= $chars[mt_rand(0, $clen)];
+//        }
+//        return $code;
+//    }
 
 
 }

@@ -5,6 +5,7 @@ use GuzzleHttp\Client;
 use Exception;
 use models\User;
 use PHPMailer;
+use services\AuthService;
 
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ .'/../../../config/config.php';
@@ -15,10 +16,13 @@ class RegisterController {
 
     private $userModel;
     private $mailer;
+    private $authService;
+
 
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
         $this->mailer = new PHPMailer(true);
+        $this->authService = new AuthService($dbConnection);
         $this->configure_mailer();
     }
 
@@ -101,7 +105,7 @@ class RegisterController {
     }
 
     private function send_confirmation_email($email, $token) {
-        $confirmationUrl = 'http://localhost:8000/confirm?user_key=' . $token;
+        $confirmationUrl = 'http://localhost:8080/confirm?user_key=' . $token;
 
         $this->mailer->setFrom(getEmail());
         $this->mailer->addAddress($email);
@@ -386,14 +390,24 @@ class RegisterController {
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
 
-        $_SESSION['user_id'] = $existingUser['user_id'];
-        $_SESSION['user_email'] = $existingUser['user_email'];
-        $_SESSION['user_login'] = $existingUser['user_login'];
-        header('Location: /profile/' . $existingUser['user_login']);
+//        $_SESSION['user_id'] = $existingUser['user_id'];
+//        $_SESSION['user_email'] = $existingUser['user_email'];
+//        $_SESSION['user_login'] = $existingUser['user_login'];
+//        $this->show_errors($existingUser['user_id']);
+        $hash = $this->authService->generate_code(10);
+        // Обновляем хеш авторизации и IP в базе данных
+        $this->userModel->update_user_hash($existingUser['user_id'], $hash);
+
+        setcookie('id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
+        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
+
+        header("Location: app/services/helpers/check.php");
+
+//        header('Location: /profile/' . $existingUser['user_login']);
         exit();
     }
 
-    private function show_errors($errors) {
+    public function show_errors($errors) {
         // Проверяем, является ли $errors массивом
         if (!is_array($errors)) {
             $errors = [$errors]; // Если это не массив, преобразуем в массив
