@@ -140,7 +140,7 @@ class RegisterController {
                 } else {
                     // Если пароль есть, перемещаем в основную таблицу и благодарим
                     $link = '/profile/' . $user['user_login'];
-                    $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password'], $link);
+                    $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password'], $link, $user['created_at']);
 
                     // Удаляем временного пользователя
                     $this->userModel->delete_temporary_user($user['user_id']);
@@ -179,7 +179,7 @@ class RegisterController {
         // Перемещаем пользователя в основную таблицу без пароля
         if (isset($user)) {
             $link = '/profile/' . $user['user_login'];
-            $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $hashedPassword, $link);
+            $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $hashedPassword, $link, $user['created_at']);
 
             // Удаляем временного пользователя
             $this->userModel->delete_temporary_user($user['id']);
@@ -191,58 +191,64 @@ class RegisterController {
         }
     }
 
-    public function getClient($flag){
-         $client = new \Google_Client();
-         $client->setClientId(getGoogleClientId());
-         $client->setClientSecret(getGoogleClientSecret());
-         if ($flag==="register") {
-             $client->setRedirectUri(getRedirectUriRegister());
-         }
-         else{
-             $client->setRedirectUri(getRedirectUriLogin());
-         }
-         $client->setDefer(true);
-         $client->setHttpClient(new Client(['verify' => false]));
-         $client->addScope(['email', 'profile']);
-         return $client;
-     }
-     public function redirectToGoogle($flag) {
+    public function getClient($flag) {
+        $client = new \Google_Client();
+        $client->setClientId(getGoogleClientId());
+        $client->setClientSecret(getGoogleClientSecret());
+
+        if ($flag === "register") {
+            $client->setRedirectUri(getRedirectUriRegister());
+        } else {
+            $client->setRedirectUri(getRedirectUriLogin());
+        }
+
+        $client->setDefer(true);
+        $client->setHttpClient(new Client(['verify' => false]));
+        $client->addScope(['email', 'profile']);
+        $client->setPrompt('select_account');
+        // Применение prompt=select_account
+        $authUrl = $client->createAuthUrl() ;
+
+        return $authUrl;
+    }
+
+
+    public function redirectToGoogle($flag) {
         // Логика для редиректа на Google
         $client = $this->getClient($flag);
 
-        $authUrl = $client->createAuthUrl();
-        header('Location: ' . $authUrl);
+//        $authUrl = $client->createAuthUrl();
+        header('Location: ' . $client);
         exit();
     }
 
     public function googleAuthorization(){
         try {
-            if (isset($_GET['code']) && !empty($_GET['code'])) {
-                $authCode = $_GET['code'];
+            $authCode = $_GET['code'];
 
-                // Получаем токен доступа
-                $token = $this->getAccessToken($authCode, "login");
-                if (!$token) {
-                    throw new Exception('Error fetching access token!');
-                }
+            // Получаем токен доступа
+            $token = $this->getAccessToken($authCode, "login");
 
-                // Получаем данные пользователя
-                $userInfo = $this->getUserInfo($token['access_token']);
-                $googleId = $userInfo->id;
-                $user = $this->userModel->findUserByGoogleId($googleId);
+            if (!$token) {
+                throw new Exception('Error fetching access token!');
+            }
 
-                if ($user) {
-                    // Пользователь найден, авторизуем
-                    $_SESSION['user_id'] = $user['user_id'];
-                    header('Location:' . $user['user_link']); // Перенаправление на профиль
-                    exit();
-                } else {
-                    header('Location: /register'); // Перенаправление на регистрацию
-                    exit();
-                }
+            // Получаем данные пользователя
+            $userInfo = $this->getUserInfo($token['access_token']);
+            if (!$userInfo || !isset($userInfo['email'])) {
+                throw new Exception('Error fetching user info!');
+            }
 
+            // Обрабатываем авторизацию или регистрацию пользователя
+            $email = $userInfo['email'];
+            $existingUser = $this->userModel->get_user_by_email($email);
+
+            if (!$existingUser) {
+                // Если пользователя нет, говорим, что нет такого пользователя
+                $this->show_errors("This user doesn`t exist ");
             } else {
-                throw new Exception('Authorization code is missing!');
+                // Если пользователь уже существует, выполняем авторизацию
+                $this->loginUser($existingUser);
             }
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -379,10 +385,10 @@ class RegisterController {
 
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
-        $_SESSION['user_id'] = $existingUser['google_id'];
+
+        $_SESSION['user_id'] = $existingUser['user_id'];
         $_SESSION['user_email'] = $existingUser['user_email'];
         $_SESSION['user_login'] = $existingUser['user_login'];
-
         header('Location: /profile/' . $existingUser['user_login']);
         exit();
     }

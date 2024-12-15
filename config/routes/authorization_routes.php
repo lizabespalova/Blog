@@ -50,7 +50,6 @@ function authorization_route($uri, $method) {
             if ($method === 'POST') {
                 $controller->handleRequest();
             }
-
             exit();  // Остановка выполнения после маршрута
 
         case '/confirm':
@@ -85,6 +84,7 @@ function authorization_route($uri, $method) {
             } elseif ($method === 'GET') {
                 $controller->redirectToGoogle("login");
             }
+
             exit(); // Остановка выполнения после маршрута
         case '/set_password':
             $controller = new RegisterController($dbConnection);

@@ -147,9 +147,9 @@ class User
     }
 
     // Перемещение временного пользователя в основную таблицу
-    public function move_to_main_table($login, $email, $password, $link) {
-        $stmt = $this->conn->prepare("INSERT INTO users (user_login, user_email, user_password, link) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $login, $email, $password, $link);
+    public function move_to_main_table($login, $email, $password, $link, $created_at) {
+        $stmt = $this->conn->prepare("INSERT INTO users (user_login, user_email, user_password, link, created_at) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $login, $email, $password, $link, $created_at);
         $stmt->execute();
         $stmt->close();
     }
