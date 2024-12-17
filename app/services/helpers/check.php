@@ -30,7 +30,8 @@ if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
                 'user_company' => $userdata['user_company'],
                 'user_experience' => $userdata['user_experience'],
                 'user_articles' => $userdata['user_articles'],
-                'login_error_message'=> $userdata['login_error_message']
+                'login_error_message'=> $userdata['login_error_message'],
+                'created_at'=> $userdata['created_at']
             ];
             $userModel = new User(getDbConnection());
             $user = $userModel->get_user_by_id($userdata['user_id']);

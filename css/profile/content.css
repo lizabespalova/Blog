@@ -24,3 +24,23 @@
     height: auto; /* Высота будет автоматически изменяться в соответствии с пропорциями */
     border-radius: 5px;
 }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+#content-section {
+    padding: 20px;
+}
+
+.content-page {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.hidden {
+    display: none;
+}

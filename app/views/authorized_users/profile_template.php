@@ -1,16 +1,16 @@
 <?php
-session_start();
-
-// Проверка, что данные пользователя есть в сессии
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user']; // Получаем данные из сессии
-//    print_r($user);
-} else {
-    // Если пользователь не аутентифицирован
-    header('Location: /login');
-    exit();
-}
-?>
+//session_start();
+//
+//// Проверка, что данные пользователя есть в сессии
+//if (isset($_SESSION['user'])) {
+//    $user = $_SESSION['user']; // Получаем данные из сессии
+////    print_r($user);
+//} else {
+//    // Если пользователь не аутентифицирован
+//    header('Location: /login');
+//    exit();
+//}
+//?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,6 +58,12 @@ if (isset($_SESSION['user'])) {
                         </button>
                     </div>
                 </div>
+                <p>
+                    <strong>Registered:</strong>
+                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>">
+                        <?= htmlspecialchars($user['created_at']) ?>
+                    </span>
+                </p>
                 <p>
                     <strong>Specialization:</strong>
                     <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
@@ -109,7 +115,7 @@ if (isset($_SESSION['user'])) {
     <div class="menu-items">
         <a href="#" class="navigation-item active" data-page="profile">Profile</a>
         <a href="#" class="navigation-item" data-page="publication">My publications</a>
-        <a href="#" class="navigation-item" data-page="video">My videos</a>
+        <a href="#" class="navigation-item" data-page="video">My courses</a>
     </div>
     <div class="menu-indicator"></div>
 </div>
@@ -125,6 +131,12 @@ if (isset($_SESSION['user'])) {
     </div>
     <div class="content-image">
         <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
+    </div>
+    <div class="content-page hidden" id="publication-content">
+        <p>Here are your publications. Upload your work here!</p>
+    </div>
+    <div class="content-page hidden" id="courses-content">
+        <p>These are your courses. Start learning now!</p>
     </div>
 </div>
 
@@ -151,6 +163,7 @@ if (isset($_SESSION['user'])) {
 <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
+<script src="/js/authorized_users/turn_profile_page_parts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 

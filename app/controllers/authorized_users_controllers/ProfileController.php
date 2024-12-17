@@ -43,6 +43,17 @@ class ProfileController
             $article_cards =  $this->repostModel->getReposts($user_id);
             $reposts = $article_cards;
             // Подключение шаблона и передача данных пользователя
+            session_start();
+
+            // Проверка, что данные пользователя есть в сессии
+            if (isset($_SESSION['user'])) {
+                $user = $_SESSION['user']; // Получаем данные из сессии
+/*                print_r($user);*/
+            } else {
+                // Если пользователь не аутентифицирован
+                header('Location: /login');
+                exit();
+            }
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок
