@@ -115,7 +115,7 @@
     <div class="menu-items">
         <a href="#" class="navigation-item active" data-page="profile">Profile</a>
         <a href="#" class="navigation-item" data-page="publication">My publications</a>
-        <a href="#" class="navigation-item" data-page="video">My courses</a>
+        <a href="#" class="navigation-item" data-page="courses">My courses</a>
     </div>
     <div class="menu-indicator"></div>
 </div>
