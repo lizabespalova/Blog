@@ -26,10 +26,9 @@ class ProfileController
     {
         try {
             // Проверка, установлен ли cookie с идентификатором пользователя
-            if (!isset($_COOKIE['id'])) {
-                throw new Exception("User not authenticated.");
-            }
-
+//            if (!isset($_COOKIE['id'])) {
+//                throw new Exception("User not authenticated.");
+//            }
 //            $user_id = intval($_COOKIE['id']);
 
             // Получение данных пользователя из базы данных
@@ -42,18 +41,21 @@ class ProfileController
 
             $article_cards =  $this->repostModel->getReposts($user_id);
             $reposts = $article_cards;
+            $article_cards =  $this->userModel->getPublications($profileUserLogin);
+            $publications = $article_cards;
+//            var_dump($publications);
             // Подключение шаблона и передача данных пользователя
-            session_start();
-
-            // Проверка, что данные пользователя есть в сессии
-            if (isset($_SESSION['user'])) {
-                $user = $_SESSION['user']; // Получаем данные из сессии
-/*                print_r($user);*/
-            } else {
-                // Если пользователь не аутентифицирован
-                header('Location: /login');
-                exit();
-            }
+//            session_start();
+//
+//            // Проверка, что данные пользователя есть в сессии
+//            if (isset($_SESSION['user'])) {
+//                $user = $_SESSION['user']; // Получаем данные из сессии
+///*                print_r($user);*/
+//            } else {
+//                // Если пользователь не аутентифицирован
+//                header('Location: /login');
+//                exit();
+//            }
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

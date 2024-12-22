@@ -5,15 +5,15 @@ use controllers\authorized_users_controllers\ProfileController;
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$user = $_SESSION['user'] ?? null; // Получаем данные пользователя из сессии
+$currentUser = $_SESSION['user'] ?? null; // Получаем данные пользователя из сессии
 
 ?>
 <header class="header">
     <div class="header-content">
         <div class="header-left">
             <div class="avatar-container" onclick="document.getElementById('avatar').click();">
-                <?php if (!empty($user['user_avatar'])): ?>
-                    <img src="<?= htmlspecialchars($user['user_avatar']) ?>" alt="Your Avatar">
+                <?php if (!empty($currentUser['user_avatar'])): ?>
+                    <img src="<?= htmlspecialchars($currentUser['user_avatar']) ?>" alt="Your Avatar">
                 <?php else: ?>
                     <img src="/templates/images/profile.jpg" alt="Default Avatar">
                 <?php endif; ?>
@@ -33,11 +33,11 @@ $user = $_SESSION['user'] ?? null; // Получаем данные пользо
             <div class="menu header-menu">
                 <button class="menu-toggle" onclick="toggleMenu(this)">☰</button>
                 <div class="menu-content">
-                    <a href="/profile/<?php echo $user['user_login']; ?>">My profile <i class="fas fa-user"></i></a>
-                    <a href="/users-articles/<?php echo $user['user_login']; ?>">My articles <i class="fas fa-newspaper"></i></a>
+                    <a href="/profile/<?php echo $currentUser['user_login']; ?>">My profile <i class="fas fa-user"></i></a>
+                    <a href="/users-articles/<?php echo $currentUser['user_login']; ?>">My articles <i class="fas fa-newspaper"></i></a>
                     <a href="#subscription">My subscriptions <i class="fas fa-bell"></i></a>
                     <a href="/create-article">Write an article <i class="fas fa-pen"></i></a>
-                    <a href="/favourites/<?php echo $user['user_login']; ?>">Favorites <i class="fas fa-star"></i></a>
+                    <a href="/favourites/<?php echo $currentUser['user_login']; ?>">Favorites <i class="fas fa-star"></i></a>
                     <a href="#settings">Settings <i class="fas fa-cog"></i></a>
                     <a href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
                 </div>

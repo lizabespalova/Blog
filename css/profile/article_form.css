@@ -223,3 +223,63 @@ form input[type="file"] {
     color: #ff0000;
 }
 
+/*Переключатель*/
+
+/* Контейнер переключателя */
+.switch-container {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание */
+    justify-content: space-between; /* Расположение текста слева и переключателя справа */
+    gap: 15px; /* Расстояние между текстом и переключателем */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+/* Переключатель */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Ширина переключателя */
+    height: 34px; /* Высота переключателя */
+}
+
+/* Скрытый чекбокс */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Ползунок переключателя */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* Цвет в выключенном состоянии */
+    transition: 0.4s;
+    border-radius: 34px; /* Полностью овальная форма */
+}
+
+/* Индикатор (ползунок) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 28px; /* Высота индикатора */
+    width: 28px; /* Ширина индикатора */
+    left: 3px; /* Начальная позиция */
+    bottom: 3px;
+    background-color: white; /* Цвет индикатора */
+    transition: 0.4s;
+    border-radius: 50%; /* Круглая форма */
+}
+
+/* Активное состояние */
+input:checked + .slider {
+    background-color: #007bff; /* Зеленый цвет в активном состоянии */
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px); /* Сдвиг индикатора вправо */
+}

@@ -50,7 +50,12 @@ class ArticleController
             $coverImage = $this->articleModel->get_cover_image_by_slug($slug) ?? '';
 //            $baseUrl = 'http://localhost:8080/';
             $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
-            $coverImage = /*$baseUrl*/ getBaseUrl() . ltrim($coverImage, '/');
+            $coverImage = getBaseUrl() ."/". ltrim($coverImage, '/');
+
+        // Обработка пробелов в пути, если они не закодированы
+            $article['cover_image'] = preg_replace('/\s+/', '%20', $coverImage);
+
+//            var_dump($coverImage);
             $title = $article['title'] ?? '';
             $content = $article['content'] ?? '';
 
@@ -70,7 +75,7 @@ class ArticleController
             // Проверка наличия `article_id`
             $articleId = $_POST['article_id'] ?? null;
             // Проверка и загрузка обложки
-            $cover_image_path = $this->upload_cover_image($articleId, $inputData['user_id']);
+            $cover_image_path = $this->upload_cover_image(/*$articleId,*/ $inputData['user_id'], $inputData['cover_image']);
             if (!$cover_image_path) {
                 $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию, если загрузка не удалась
             }
@@ -84,7 +89,8 @@ class ArticleController
             } else {
                 // Создание новой статьи
                 $articleId = $this->articleModel->add_article($inputData, $cover_image_path);
-
+                // Добавить +1 к статьям пользователя
+                $this->userModel->add_one_articles_to_user($inputData['user_id']);
                 $result = $articleId !== false;
             }
 
@@ -96,14 +102,13 @@ class ArticleController
                     // Если создается статья, создаем slug для новой статьи
                     $slug = $this->create_slug($inputData['author'], $articleId, $inputData['title']);
                     $this->articleModel->update_article_slug($articleId, $slug);
+
                 } else {
                     // Если обновляется статья, используем уже существующий slug
                     $slug = $inputData['slug'];
                 }
-
                 $this->process_images( $articleDir, $articleId, $inputData['content'], $slug, $inputData['user_id'], $matches);
-                // Добавить +1 к статьям пользователя
-                $this->userModel->add_one_articles_to_user($inputData['user_id']);
+
                 header('Location: /articles/' . $slug);
                 exit();
             } else {
@@ -131,11 +136,11 @@ class ArticleController
         }
         return $userDir;
     }
-    private function upload_cover_image($article_id, $user_id)
+    private function upload_cover_image(/*$article_id,*/ $user_id, $coverImage)
     {
-        if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0) {
+        if (/*isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0*/$coverImage) {
             // Создаем директорию для обложки
-            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id . '/cover');
+            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' ./* $article_id .*/ '/cover');
 
             // Удаляем старое изображение, если оно существует, чтобы в директории оставалось только одно
             $existingFiles = glob($coverDir . '/*'); // Получаем все файлы в папке cover
@@ -366,6 +371,7 @@ class ArticleController
             'read_time' => $_POST['read_time'],
             'tags' => $_POST['tags'],
             'slug' => $_POST['slug'],
+            'is_published' => $_POST['is_published'],
             'cover_image' => $_FILES['cover_image'],
             'author' => $_SESSION['user']['user_login'],
             'user_id' => $_SESSION['user']['user_id'],

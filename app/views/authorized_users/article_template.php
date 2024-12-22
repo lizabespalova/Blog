@@ -26,8 +26,11 @@
             <div class="author-card">
                 <!-- Аватар -->
                 <a href="/profile/<?php echo urlencode($article['author']); ?>" class="author-avatar-wrapper">
-                    <img src="<?php echo htmlspecialchars($author_info['user_avatar']); ?>" alt="Author Avatar" class="author-avatar">
-                </a>
+                    <?php if (!empty($author_info['user_avatar'])): ?>
+                        <img src="<?= htmlspecialchars($author_info['user_avatar']) ?>" alt="Your Avatar">
+                    <?php else: ?>
+                        <img src="/templates/images/profile.jpg" alt="Default Avatar">
+                    <?php endif; ?>                </a>
                 <!-- Заголовок статьи -->
                 <h2 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h2>
                 <?php if ($_SESSION['user']['user_login'] === $article['author']) : ?>

@@ -262,6 +262,36 @@ class User
         // Возвращаем аватар автора
         return $author;
     }
+    public function getPublications($userLogin) {
+        // Подготавливаем SQL-запрос
+        $sql = "SELECT * 
+            FROM articles 
+            WHERE author = ? AND is_published = 1 
+            ORDER BY created_at DESC";
+
+        // Подготовка запроса
+        if ($stmt = $this->conn->prepare($sql)) {
+            // Привязываем параметры
+            $stmt->bind_param('s', $userLogin); // 'i' обозначает integer
+
+            // Выполняем запрос
+            $stmt->execute();
+
+            // Получаем результат
+            $result = $stmt->get_result();
+            $articles = $result->fetch_all(MYSQLI_ASSOC); // Получаем данные в виде ассоциативного массива
+
+            // Закрываем подготовленный запрос
+            $stmt->close();
+
+            // Возвращаем массив статей
+            return $articles;
+        } else {
+            // В случае ошибки возвращаем пустой массив
+            return [];
+        }
+    }
+
     public function getUserArticlesCount($userId) {
         // SQL-запрос для получения количества статей
         $query = "SELECT user_amount_of_articles FROM users WHERE user_id = ?";

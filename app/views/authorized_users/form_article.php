@@ -54,7 +54,7 @@
 
      <label for="tags">Tags such as IT languages (comma-separated):</label>
      <div class="tag-container">
-         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" value="<?= htmlspecialchars(implode(', ', is_array($article['tags']) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
+         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" value="<?= htmlspecialchars(implode(', ', isset($article['tags']) && is_array($article['tags']) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
          <span id="tag-warning" style="color: red; display: none; margin-left: 10px;">❗ No more than 10 tags!</span>
      </div>
      <input type="hidden" id="tags" name="tags">
@@ -65,12 +65,20 @@
      <label for="cover_image">Upload cover image:</label>
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*">
-         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($coverImage ?? '') ?>" alt="Cover Image Preview" style="display:<?= !empty($coverImage) ? 'block' : 'none' ?>;">
+         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars( $article['cover_image'] ?? '') ?>" alt="Cover Image Preview" style="display:<?= !empty($coverImage) ? 'block' : 'none' ?>;">
          <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
 
+     <div class="switch-container">
+         <span>Publish</span>
+         <label class="switch">
+             <input type="checkbox" id="is_published" name="is_published" value="1"
+                 <?= isset($article['is_published']) && $article['is_published'] ? 'checked' : '' ?>>
+             <span class="slider"></span>
+         </label>
+     </div>
 
-     <!--          <input type="file" name="article_images[]" id="fileInput" multiple>-->
+
      <input type="hidden" name="article_id" value="<?= $article['id'] ?? '' ?>">
      <?php if (isset($article['slug'])): ?>
          <input type="hidden" name="slug" value="<?= htmlspecialchars($article['slug']) ?>">

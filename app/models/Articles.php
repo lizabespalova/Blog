@@ -25,6 +25,7 @@ class Articles
             $inputData['difficulty'] ?? '',
             $inputData['read_time'] ?? '',
             $inputData['tags'] ?? '',
+            $inputData['is_published'] ?? '',
         ];
 
         // Устанавливаем NULL для пустых значений
@@ -39,8 +40,8 @@ class Articles
     public function add_article($inputData, $coverImagePath)
     {
         $stmt = $this->conn->prepare(
-            'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags, is_published) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
 
         if ($stmt === false) {
@@ -69,7 +70,9 @@ class Articles
     public function update_article($articleId, $inputData, $coverImagePath)
     {
         $stmt = $this->conn->prepare(
-            'UPDATE articles SET title = ?, content = ?, author = ?, cover_image = ?, youtube_link = ?, category = ?, difficulty = ?, read_time = ?, tags = ? 
+            'UPDATE articles SET title = ?, content = ?, author = ?, cover_image = ?, 
+                    youtube_link = ?, category = ?, difficulty = ?, read_time = ?, 
+                    tags = ? , is_published = ? 
          WHERE id = ?'
         );
 

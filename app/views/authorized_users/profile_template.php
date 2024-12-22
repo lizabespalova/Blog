@@ -1,16 +1,3 @@
-<?php
-//session_start();
-//
-//// Проверка, что данные пользователя есть в сессии
-//if (isset($_SESSION['user'])) {
-//    $user = $_SESSION['user']; // Получаем данные из сессии
-////    print_r($user);
-//} else {
-//    // Если пользователь не аутентифицирован
-//    header('Location: /login');
-//    exit();
-//}
-//?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,6 +23,7 @@
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-photo">
+
             <?php if (!empty($user['user_avatar'])): ?>
                 <img src="<?= htmlspecialchars($user['user_avatar']) ?>" alt="Your Avatar">
             <?php else: ?>
@@ -48,7 +36,8 @@
             <div class="profile-info" id="profile-info">
                 <!-- Секция для подписчиков и подписок -->
                 <div class="profile-header">
-                    <h1><?= htmlspecialchars($user['user_login']) ?></h1>
+
+                    <h1><?=  htmlspecialchars($user['user_login']) ?></h1>
                     <div class="profile-stats">
                         <button class="stat">
                             Followers: <span id="followers-count">123</span>
@@ -122,18 +111,38 @@
 
 <!-- Content Section -->
 <div class="content-section">
-    <div class="content-text">
-        <?php if (!empty($user['user_description'])): ?>
-            <p><?php echo htmlspecialchars($user['user_description']); ?></p>
-        <?php else: ?>
-            <p>For adding a description, click on the edit button above.</p>
-        <?php endif; ?>
+    <div class="content-description">
+        <div class="content-text">
+
+            <?php if (!empty($user['user_description'])): ?>
+                <p><?php echo htmlspecialchars($user['user_description']); ?></p>
+            <?php else: ?>
+                <p>For adding a description, click on the edit button above.</p>
+            <?php endif; ?>
+            <div class="content-image">
+                <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
+            </div>
+            <!-- Reposts -->
+            <div class="parent-container">
+                <div class="reposts-articles-container">
+                    <?php include __DIR__ . '/../../views/partials/repost.php'; ?>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div class="content-image">
-        <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
-    </div>
+
     <div class="content-page hidden" id="publication-content">
-        <p>Here are your publications. Upload your work here!</p>
+        <?php if (!empty($publications)): ?>
+            <!-- Publications -->
+            <div class="parent-container">
+                <div class="reposts-articles-container">
+                    <?php include __DIR__ . '/../../views/partials/publication.php'; ?>
+                </div>
+            </div>
+        <?php else: ?>
+            <p>Here are your publications. Upload your work here!</p>
+        <?php endif; ?>
     </div>
     <div class="content-page hidden" id="courses-content">
         <p>These are your courses. Start learning now!</p>
@@ -141,12 +150,7 @@
 </div>
 
 
-<!-- Reposts -->
-<div class="parent-container">
-    <div class="reposts-articles-container">
-        <?php include __DIR__ . '/../../views/partials/repost.php'; ?>
-    </div>
-</div>
+
 
 
 

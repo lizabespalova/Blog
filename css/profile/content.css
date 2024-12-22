@@ -6,12 +6,6 @@
     margin: 80px auto; /* 80 px - отступление после строки и перед футером */
 }
 
-.content-text {
-    font-size: 1em;
-    line-height: 1.5em;
-    margin-left: 220px; /* Увеличьте значение, чтобы подвинуть текст ближе к изображению */
-}
-
 
 .content-image {
     float: right;
@@ -24,6 +18,17 @@
     height: auto; /* Высота будет автоматически изменяться в соответствии с пропорциями */
     border-radius: 5px;
 }
+.content-text {
+    font-size: 1em;
+    line-height: 1.5em;
+    display: flex; /* Горизонтальное расположение текста и изображения */
+    align-items: center; /* Вертикальное выравнивание */
+    gap: 20px; /* Расстояние между текстом и изображением */
+    max-width: 1000px; /* Ограничение ширины для более аккуратного отображения */
+    margin: 0 auto; /* Центрирование секции */
+}
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;

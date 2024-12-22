@@ -46,6 +46,8 @@ function addTag(tagText) {
 function updateTagsField() {
     const tags = getTags();
     document.getElementById('tags').value = tags.join(','); // Обновляем значение скрытого поля
+    console.log("Tags field updated:", document.getElementById('tags').value); // Проверка
 }
+
 
 
