@@ -3,10 +3,9 @@
     font-size: 10px; /* Уменьшаем размер шрифта */
     line-height: 0; /* Сокращаем расстояние между строками */
     text-align: left;
-    height: 300px; /* Позволяем карточке адаптироваться по высоте */
-    width: auto; /* Устанавливаем автоматическую ширину */
     flex-grow: 1; /* Заставляем блок информации занимать доступное пространство */
     padding: 10px; /* Дополнительные отступы */
+    height: auto;
 }
 
 .profile-info, #edit-form {
@@ -214,7 +213,6 @@
 .profile-header h1 {
     font-size: 24px;
     margin: 0;
-    margin-right: 20px;
 }
 
 .profile-stats {
@@ -242,7 +240,24 @@
 .stat span {
     font-weight: bold;
 }
+.follow-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-left: 85%;
+}
 
+.follow-button:hover {
+    background-color: #0056b3;
+}
 /* Стили для карточки */
 .card-container {
     background-color: #f9f9f9;

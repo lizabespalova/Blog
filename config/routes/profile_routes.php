@@ -3,6 +3,7 @@
 use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\ArticleImagesController;
 use controllers\authorized_users_controllers\EditProfileController;
+use controllers\authorized_users_controllers\FollowController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\search_controllers\SearchController;
 
@@ -46,6 +47,15 @@ function profile_route($uri, $method) {
                 $controller->show_search_form();
             }
             exit();  // Остановка выполнения после маршрута
+        case '/follow/([\d]+)':  // Путь для подписки на пользователя
+            $controller = new FollowController($dbConnection);
+            if ($method === 'POST') {
+                $followerId = $_SESSION['user_id'];  // ID текущего пользователя
+                $followedId = $matches[1];  // ID пользователя, на которого подписываются
+                $controller->follow($followerId, $followedId);
+            }
+            exit();  // Остановка выполнения после маршрута
+
         default:
             return false;
     }

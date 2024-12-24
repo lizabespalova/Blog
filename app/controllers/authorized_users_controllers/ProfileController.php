@@ -3,6 +3,7 @@
 namespace controllers\authorized_users_controllers;
 
 use models\Articles;
+use models\Follows;
 use models\Reposts;
 use models\User;
 use Exception;
@@ -13,12 +14,14 @@ class ProfileController
     private $userModel;
     private $articleModel;
     private $repostModel;
+    private $followModel;
 
     private $markdownService;
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
         $this->articleModel = new Articles($dbConnection);
         $this->repostModel = new Reposts($dbConnection);
+        $this->followModel = new Follows($dbConnection);
         $this->markdownService = new MarkdownService();
     }
 
@@ -43,6 +46,8 @@ class ProfileController
             $reposts = $article_cards;
             $article_cards =  $this->userModel->getPublications($profileUserLogin);
             $publications = $article_cards;
+            $followersCount = $this->followModel->getFollowersCount($user_id);
+            $followingCount = $this->followModel->getFollowingCount($user_id);
 //            var_dump($publications);
             // Подключение шаблона и передача данных пользователя
 //            session_start();

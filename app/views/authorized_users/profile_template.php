@@ -40,10 +40,10 @@
                     <h1><?=  htmlspecialchars($user['user_login']) ?></h1>
                     <div class="profile-stats">
                         <button class="stat">
-                            Followers: <span id="followers-count">123</span>
+                            Followers: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
                         </button>
                         <button class="stat">
-                            Following: <span id="following-count">45</span>
+                            Following: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
                         </button>
                     </div>
                 </div>
@@ -67,7 +67,12 @@
                 </p>
                 <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
                 <p><strong>Articles:</strong> <?= htmlspecialchars($userArticlesCount) ?></p>
+                <?php if ($currentUser['user_id'] === $user['user_id']): ?>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
+                <?php else: ?>
+                    <input type="hidden" id="user-id" value="<?= $_SESSION['user_id'] ?>">
+                    <button class="follow-button" onclick="followUser(<?= htmlspecialchars($user['user_id']) ?>//)">Follow</button>
+                <?php endif; ?>
             </div>
 
             <div id="edit-form" style="display: none;">
@@ -166,6 +171,7 @@
 <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
 <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
+<script src="/js/authorized_users/follow.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/authorized_users/turn_profile_page_parts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
