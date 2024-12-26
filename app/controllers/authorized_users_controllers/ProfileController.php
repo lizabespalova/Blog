@@ -28,13 +28,16 @@ class ProfileController
     public function showProfile($profileUserLogin)
     {
         try {
-            // Проверка, установлен ли cookie с идентификатором пользователя
-//            if (!isset($_COOKIE['id'])) {
-//                throw new Exception("User not authenticated.");
-//            }
-//            $user_id = intval($_COOKIE['id']);
-
             session_start();
+            // Проверка, что данные пользователя есть в сессии
+            if (isset($_SESSION['user'])) {
+                $user = $_SESSION['user']; // Получаем данные из сессии
+                /*                print_r($user);*/
+            } else {
+                // Если пользователь не аутентифицирован
+                header('Location: /login');
+                exit();
+            }
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
             $profileUserId = $user['user_id'];
@@ -52,18 +55,8 @@ class ProfileController
             $isFollowing = $this->followModel->isFollowing($_SESSION['user']['user_id'], $profileUserId);
 
 //            var_dump($publications);
-            // Подключение шаблона и передача данных пользователя
-//            session_start();
-//
-//            // Проверка, что данные пользователя есть в сессии
-//            if (isset($_SESSION['user'])) {
-//                $user = $_SESSION['user']; // Получаем данные из сессии
-///*                print_r($user);*/
-//            } else {
-//                // Если пользователь не аутентифицирован
-//                header('Location: /login');
-//                exit();
-//            }
+
+
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

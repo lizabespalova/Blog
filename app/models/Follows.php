@@ -79,4 +79,36 @@ class Follows
 
         return $row['following_count'];
     }
+
+    public function getFollowers($userId)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM followers WHERE follower_id = ?");
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $followers = [];
+        while ($row = $result->fetch_assoc()) {
+            $followers[] = $row;
+        }
+
+        $stmt->close();
+        return $followers;
+    }
+
+    public function getFollowings($userId)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM followers WHERE following_id = ?");
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $followings = [];
+        while ($row = $result->fetch_assoc()) {
+            $followings[] = $row;
+        }
+
+        $stmt->close();
+        return $followings;
+    }
 }

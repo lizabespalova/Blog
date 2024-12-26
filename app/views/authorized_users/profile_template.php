@@ -39,10 +39,10 @@
 
                     <h1><?=  htmlspecialchars($user['user_login']) ?></h1>
                     <div class="profile-stats">
-                        <button class="stat">
+                        <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
                             Followers: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
                         </button>
-                        <button class="stat">
+                        <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followings')">
                             Followings: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
                         </button>
                     </div>

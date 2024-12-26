@@ -54,4 +54,21 @@ class FollowController
         exit();
     }
 
+    public function showFollowers($userId)
+    {
+        // Получаем подписчиков через модель
+        $followers = $this->followModel->getFollowers($userId);
+
+        // Подключаем представление
+        include 'app/views/common_templates/followers_template.php';
+    }
+
+    public function showFollowings($userId)
+    {
+        // Получаем подписки через модель
+        $followings = $this->followModel->getFollowings($userId);
+
+        // Подключаем представление
+        include 'app/views/common_templates/followings_template.php';
+    }
 }

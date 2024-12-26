@@ -44,3 +44,6 @@ document.querySelectorAll('form').forEach(form => {
             });
     });
 });
+function navigateTo(url) {
+    window.location.href = url;
+}

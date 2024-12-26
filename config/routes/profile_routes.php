@@ -25,6 +25,17 @@ function profile_route($uri, $method) {
                 $controller->follow($followerId, $followedId);
             }
             exit();
+        case preg_match('/^\/user\/(\d+)\/followers$/', $uri, $matches) ? true : false:
+            $userId = (int)$matches[1];
+            $controller = new FollowController($dbConnection);
+            $controller->showFollowers($userId);
+            exit();
+
+        case preg_match('/^\/user\/(\d+)\/followings$/', $uri, $matches) ? true : false:
+            $userId = (int)$matches[1];
+            $controller = new FollowController($dbConnection);
+            $controller->showFollowings($userId);
+            exit();
         case (explode('/', $uri)[1] == 'unfollow' && is_numeric(explode('/', $uri)[2])):
             session_start();
             header('Content-Type: application/json'); // Установить JSON-заголовок
