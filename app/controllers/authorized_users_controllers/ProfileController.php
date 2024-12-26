@@ -34,20 +34,23 @@ class ProfileController
 //            }
 //            $user_id = intval($_COOKIE['id']);
 
+            session_start();
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
-            $user_id = $user['user_id'];
+            $profileUserId = $user['user_id'];
             if (!$user) {
                 throw new Exception($profileUserLogin );
             }
-            $userArticlesCount = $this->userModel->getUserArticlesCount($user_id);
+            $userArticlesCount = $this->userModel->getUserArticlesCount($profileUserId);
 
-            $article_cards =  $this->repostModel->getReposts($user_id);
+            $article_cards =  $this->repostModel->getReposts($profileUserId);
             $reposts = $article_cards;
             $article_cards =  $this->userModel->getPublications($profileUserLogin);
             $publications = $article_cards;
-            $followersCount = $this->followModel->getFollowersCount($user_id);
-            $followingCount = $this->followModel->getFollowingCount($user_id);
+            $followersCount = $this->followModel->getFollowersCount($profileUserId);
+            $followingCount = $this->followModel->getFollowingCount($profileUserId);
+            $isFollowing = $this->followModel->isFollowing($_SESSION['user']['user_id'], $profileUserId);
+
 //            var_dump($publications);
             // Подключение шаблона и передача данных пользователя
 //            session_start();

@@ -43,7 +43,7 @@
                             Followers: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
                         </button>
                         <button class="stat">
-                            Following: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
+                            Followings: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
                         </button>
                     </div>
                 </div>
@@ -70,9 +70,19 @@
                 <?php if ($currentUser['user_id'] === $user['user_id']): ?>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
                 <?php else: ?>
-                    <input type="hidden" id="user-id" value="<?= $_SESSION['user_id'] ?>">
-                    <button class="follow-button" onclick="followUser(<?= htmlspecialchars($user['user_id']) ?>//)">Follow</button>
+                    <?php if ($isFollowing): ?>
+                        <form id="unfollowForm" method="POST" action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>">
+                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($_SESSION['user']['user_id']) ?>">
+                            <button class="follow-button" type="submit">Unfollow</button>
+                        </form>
+                    <?php else: ?>
+                        <form id="followForm" method="POST" action="/follow/<?= htmlspecialchars($user['user_id']) ?>">
+                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($_SESSION['user']['user_id']) ?>">
+                            <button class="follow-button" type="submit">Follow</button>
+                        </form>
+                    <?php endif; ?>
                 <?php endif; ?>
+
             </div>
 
             <div id="edit-form" style="display: none;">

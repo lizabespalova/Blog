@@ -10,10 +10,33 @@ use controllers\search_controllers\SearchController;
 require_once __DIR__ . '/../../config/config.php';
 
 function profile_route($uri, $method) {
-    $dbConnection = getDbConnection();
-    //error_log("URI: $uri, Method: $method");
 
+    $dbConnection = getDbConnection();
+//    var_dump($uri);
     switch ($uri) {
+
+        case (explode('/', $uri)[1] == 'follow' && is_numeric(explode('/', $uri)[2])):
+            session_start();
+            header('Content-Type: application/json'); // Установить JSON-заголовок
+            $controller = new FollowController($dbConnection);
+            if ($method === 'POST') {
+                $followerId = $_SESSION['user']['user_id'];
+                $followedId = explode('/', $uri)[2];
+                $controller->follow($followerId, $followedId);
+            }
+            exit();
+        case (explode('/', $uri)[1] == 'unfollow' && is_numeric(explode('/', $uri)[2])):
+            session_start();
+            header('Content-Type: application/json'); // Установить JSON-заголовок
+            $controller = new FollowController($dbConnection);
+            if ($method === 'POST') {
+                $followerId = $_SESSION['user']['user_id'];
+                $followedId = explode('/', $uri)[2];
+                $controller->unfollow($followerId, $followedId);
+            }
+            exit();
+
+
         case (preg_match('/^\/profile\/([\w-]+)$/', $uri, $matches) ? true : false):
             $controller = new ProfileController($dbConnection);
             if ($method === 'GET') {
@@ -47,14 +70,8 @@ function profile_route($uri, $method) {
                 $controller->show_search_form();
             }
             exit();  // Остановка выполнения после маршрута
-        case '/follow/([\d]+)':  // Путь для подписки на пользователя
-            $controller = new FollowController($dbConnection);
-            if ($method === 'POST') {
-                $followerId = $_SESSION['user_id'];  // ID текущего пользователя
-                $followedId = $matches[1];  // ID пользователя, на которого подписываются
-                $controller->follow($followerId, $followedId);
-            }
-            exit();  // Остановка выполнения после маршрута
+
+
 
         default:
             return false;
