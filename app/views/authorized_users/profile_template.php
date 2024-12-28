@@ -76,7 +76,7 @@
                             <button class="follow-button" type="submit">Unfollow</button>
                         </form>
                     <?php else: ?>
-                        <form id="followForm" method="POST" action="/follow/<?= htmlspecialchars($user['user_id']) ?>">
+                        <form id="followForm" class="follow-unfollow" method="POST" action="/follow/<?= htmlspecialchars($user['user_id']) ?>">
                             <input type="hidden" name="follower_id" value="<?= htmlspecialchars($_SESSION['user']['user_id']) ?>">
                             <button class="follow-button" type="submit">Follow</button>
                         </form>

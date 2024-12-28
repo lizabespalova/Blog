@@ -58,7 +58,10 @@ class FollowController
     {
         // Получаем подписчиков через модель
         $followers = $this->followModel->getFollowers($userId);
+        $followersCount = $this->followModel->getFollowersCount($userId);
 
+//        var_dump($userId);
+//        var_dump($followers);
         // Подключаем представление
         include 'app/views/common_templates/followers_template.php';
     }
@@ -67,6 +70,7 @@ class FollowController
     {
         // Получаем подписки через модель
         $followings = $this->followModel->getFollowings($userId);
+        $followingsCount = $this->followModel->getFollowingCount($userId);
 
         // Подключаем представление
         include 'app/views/common_templates/followings_template.php';

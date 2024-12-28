@@ -80,35 +80,60 @@ class Follows
         return $row['following_count'];
     }
 
-    public function getFollowers($userId)
-    {
-        $stmt = $this->conn->prepare("SELECT * FROM followers WHERE follower_id = ?");
-        $stmt->bind_param('i', $userId);
-        $stmt->execute();
+    public function getFollowers($userId) {
+        $sql = " SELECT 
+            u.user_id,
+            u.user_login,
+            u.user_avatar
+        FROM 
+            followers f
+        INNER JOIN 
+            users u ON f.follower_id = u.user_id
+        WHERE 
+            f.following_id = ?
+    ";
 
-        $result = $stmt->get_result();
+        $stmt = $this->conn->prepare($sql); // Подготовка SQL-запроса
+        $stmt->bind_param('i', $userId);  // Привязываем параметр $userId как integer
+        $stmt->execute();                // Выполняем запрос
+        $result = $stmt->get_result();   // Получаем результат
+
         $followers = [];
         while ($row = $result->fetch_assoc()) {
-            $followers[] = $row;
+            $followers[] = $row;         // Преобразуем результат в массив
         }
 
-        $stmt->close();
+        $stmt->close();                  // Закрываем подготовленный запрос
+
         return $followers;
     }
 
     public function getFollowings($userId)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM followers WHERE following_id = ?");
-        $stmt->bind_param('i', $userId);
-        $stmt->execute();
+        $sql = " SELECT 
+            u.user_id,
+            u.user_login,
+            u.user_avatar
+        FROM 
+            followers f
+        INNER JOIN 
+            users u ON f.following_id = u.user_id
+        WHERE 
+            f.follower_id = ?
+    ";
 
-        $result = $stmt->get_result();
-        $followings = [];
+        $stmt = $this->conn->prepare($sql); // Подготовка SQL-запроса
+        $stmt->bind_param('i', $userId);  // Привязываем параметр $userId как integer
+        $stmt->execute();                // Выполняем запрос
+        $result = $stmt->get_result();   // Получаем результат
+
+        $followers = [];
         while ($row = $result->fetch_assoc()) {
-            $followings[] = $row;
+            $followers[] = $row;         // Преобразуем результат в массив
         }
 
-        $stmt->close();
-        return $followings;
+        $stmt->close();                  // Закрываем подготовленный запрос
+
+        return $followers;
     }
 }

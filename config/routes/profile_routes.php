@@ -12,6 +12,8 @@ require_once __DIR__ . '/../../config/config.php';
 function profile_route($uri, $method) {
 
     $dbConnection = getDbConnection();
+//    var_dump($_SESSION['user']);
+
 //    var_dump($uri);
     switch ($uri) {
 
@@ -19,6 +21,7 @@ function profile_route($uri, $method) {
             session_start();
             header('Content-Type: application/json'); // Установить JSON-заголовок
             $controller = new FollowController($dbConnection);
+
             if ($method === 'POST') {
                 $followerId = $_SESSION['user']['user_id'];
                 $followedId = explode('/', $uri)[2];
