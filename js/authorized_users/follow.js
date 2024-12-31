@@ -41,7 +41,7 @@ function handleFollowUnfollowForm(form) {
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while processing your request.');
+                // alert('An error occurred while processing your request.');
             });
     });
 }

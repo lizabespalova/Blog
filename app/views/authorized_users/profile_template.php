@@ -184,6 +184,8 @@
 <script src="/js/authorized_users/follow.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/authorized_users/turn_profile_page_parts.js"></script>
+<script src="/js/async_tasks/send_notifications.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 

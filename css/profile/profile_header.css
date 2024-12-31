@@ -168,3 +168,72 @@ body {
     font-size: 18px;
 }
 
+
+.notification-container {
+    position: fixed;
+    bottom: 10px;  /* Перемещаем уведомления в правый нижний угол */
+    right: 10px;   /* Устанавливаем на правую сторону */
+    width: 300px;
+    z-index: 1000;
+}
+
+.notification-container .notification {
+    background-color: #f0f0f0;  /* Светлый фон */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.notification-container .notification .notification-logo {
+    margin-right: 10px;
+}
+
+.notification-container .notification .logo-image {
+    width: 40px;  /* Размер логотипа */
+    height: 40px;
+    border-radius: 50%;  /* Круглый логотип */
+    object-fit: cover;
+}
+
+.notification-container .notification .notification-text {
+    flex-grow: 1;
+}
+
+.notification-container .notification .notification-text p {
+    margin: 0;
+    color: #333;  /* Цвет текста */
+    font-size: 14px;
+}
+
+.notification-container .notification .notification-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.notification-container .notification.success {
+    background-color: #d4edda;  /* Зеленый фон для успеха */
+    border-left: 5px solid #28a745;
+}
+
+.notification-container .notification.error {
+    background-color: #f8d7da;  /* Красный фон для ошибки */
+    border-left: 5px solid #dc3545;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

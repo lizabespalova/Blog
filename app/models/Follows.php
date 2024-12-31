@@ -6,9 +6,11 @@ class Follows
 {
     public $follower_id;
     public $following_id;
+    private $notifications;
     private $conn;
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->notifications = new Notifications($conn);
     }
     // Метод для поиска подписки по follower_id и following_id
     public function findByFollowerAndFollowed($follower_id, $following_id) {
@@ -46,7 +48,12 @@ class Follows
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ii', $this->follower_id, $this->following_id);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            // После успешного добавления подписки создаем уведомление
+            $this->notifications->addNotification($this->following_id, 'subscription', 'You have a new follower!');
+            return true;
+        }
+        return false;
     }
     // Метод для удаления подписки
     public function delete() {

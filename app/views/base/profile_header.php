@@ -44,4 +44,9 @@ $currentUser = $_SESSION['user'] ?? null; // Получаем данные по�
             </div>
         </div>
     </div>
+
+    <!-- Контейнер для всплывающих уведомлений -->
+    <div id="notification-container" class="notification-container">
+        <!-- Уведомления добавляются здесь через JavaScript -->
+    </div>
 </header>
