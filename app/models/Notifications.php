@@ -30,5 +30,11 @@ class Notifications
         }
         return $notifications;
     }
+    public function markAsRead($notificationIds) {
+        // Помечаем уведомления как прочитанные
+        $query = "UPDATE notifications SET is_read = 1 WHERE id IN (" . implode(',', array_map('intval', $notificationIds)) . ")";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
 
 }

@@ -7,10 +7,12 @@ class Follows
     public $follower_id;
     public $following_id;
     private $notifications;
+    private $user;
     private $conn;
     public function __construct($conn) {
         $this->conn = $conn;
         $this->notifications = new Notifications($conn);
+        $this->user = new User($conn);
     }
     // Метод для поиска подписки по follower_id и following_id
     public function findByFollowerAndFollowed($follower_id, $following_id) {
@@ -49,8 +51,14 @@ class Follows
         $stmt->bind_param('ii', $this->follower_id, $this->following_id);
 
         if ($stmt->execute()) {
-            // После успешного добавления подписки создаем уведомление
-            $this->notifications->addNotification($this->following_id, 'subscription', 'You have a new follower!');
+            // Получаем логин пользователя, который подписался
+            $followerLogin = $this->user->getLoginById($this->follower_id);
+            // Формируем уведомление
+            $message = "User '{$followerLogin}' has started following you!";
+
+            // Добавляем уведомление
+            $this->notifications->addNotification($this->following_id, 'subscription', $message);
+
             return true;
         }
         return false;

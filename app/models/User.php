@@ -262,6 +262,17 @@ class User
         // Возвращаем аватар автора
         return $author;
     }
+    public function getLoginById($userId) {
+        $userQuery = "SELECT user_login FROM users WHERE user_id = ?";
+        $userStmt = $this->conn->prepare($userQuery);
+        $userStmt->bind_param('i', $userId);
+        $userStmt->execute();
+        $userStmt->bind_result($userLogin);
+        $userStmt->fetch();
+        $userStmt->close();
+        return $userLogin;
+    }
+
     public function getPublications($userLogin) {
         // Подготавливаем SQL-запрос
         $sql = "SELECT * 

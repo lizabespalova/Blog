@@ -223,6 +223,7 @@
 <script src="/js/authorized_users/articles/set_alert_to_delete_article.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
+<script src="/js/async_tasks/send_notifications.js"></script>
 
 
 </body>

@@ -8,6 +8,7 @@ use models\ArticleReactions;
 use models\Articles;
 use models\Comment;
 use models\Favourites;
+use models\Notifications;
 use models\Reposts;
 use models\User;
 use Parsedown;
@@ -26,6 +27,7 @@ class ArticleController
     private $commentModel;
     private $favouriteModel;
     private $repostModel;
+    private $notificationModel;
     private $markdownService;
 
     public function __construct($conn)
@@ -39,6 +41,7 @@ class ArticleController
         $this->commentModel = new Comment(getDbConnection());
         $this->favouriteModel = new Favourites(getDbConnection());
         $this->repostModel = new Reposts(getDbConnection());
+        $this->notificationModel = new Notifications(getDbConnection());
         $this->markdownService = new MarkdownService();
     }
 
@@ -268,7 +271,7 @@ class ArticleController
             $favorites = $this->favouriteModel->getUserFavorites($_SESSION['user']['user_id']);
             // Проверяем, находится ли текущая статья в избранных
             $is_favorite = in_array($article['id'], $favorites, true);
-
+            $user = $this->userModel->get_user_by_login($article['author']);
 
 //            var_dump($is_favorite); // Проверка
 
@@ -408,6 +411,7 @@ class ArticleController
         $data = $this->get_posted_data($entityType);
 
         $userId = $data['user_id'];
+        $userLogin = $this->userModel->getLoginById($userId);
         $reactionType = $data['reaction_type'];
         $entityId = $data['id'];  // ID статьи или комментария
 
@@ -430,14 +434,19 @@ class ArticleController
                 $reactionModel->update_reaction($userId, $entityId, $reactionType);
                 $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
                 $this->update_reaction_count($entityModel, $entityId, $existingReaction['reaction_type'], 'decrement');
-                $message = 'Reaction updated';
+                $message = 'User '. $userLogin.' added '. $reactionType;
+
+                // Отправить уведомление при обновлении
+                $this->notificationModel->addNotification($userId, 'like', $message);
             }
         } else {
             // Добавить новую реакцию
             $reactionModel->add_reaction($userId, $entityId, $reactionType);
             $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
-            $message = 'Reaction added';
-        }
+            $message = 'User '. $userLogin.' added '. $reactionType;
+
+            // Отправить уведомление при обновлении
+            $this->notificationModel->addNotification($userId, 'like', $message);        }
 
         // Получаем актуальное количество лайков и дизлайков
         $updated_likes = $entityModel->get_likes_count($entityId);
@@ -490,6 +499,7 @@ class ArticleController
 
         $article_slug = $input['article_slug'];
         $user_id = $input['user_id'];
+        $user_login = $this->userModel->getLoginById($user_id);
         $comment_text = $input['comment_text'];
         $parent_id = !empty($input['parent_id']) ? $input['parent_id'] : null;
 
@@ -498,6 +508,10 @@ class ArticleController
 
         if ($isAdded) {
             echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
+            $message = 'User '. $user_login.' added a comment';
+
+            // Отправить уведомление при обновлении
+            $this->notificationModel->addNotification($user_id, 'comment', $message);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment']);
         }
