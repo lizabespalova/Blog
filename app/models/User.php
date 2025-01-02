@@ -8,8 +8,8 @@ class User
 {
     private $conn;
 
-    public function __construct($link) {
-        $this->conn = $link;
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
     public function get_user_by_login($login) {

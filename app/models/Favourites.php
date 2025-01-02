@@ -7,15 +7,30 @@ use Exception;
 class Favourites
 {
     private $conn;
+    private $notifications;
+    private $user;
+    private $article;
+
+
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->notifications = new Notifications($conn);
+        $this->user = new User($conn);
+        $this->article = new Articles($conn);
     }
 
     // Добавить в избранное
     public function add($userId, $articleId) {
         $stmt = $this->conn->prepare("INSERT INTO favorites (user_id, article_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $userId, $articleId);
+        $uerLogin = $this->user->getLoginById($userId);
+        $articleTitle = $this->article->getTitleByArticleId($articleId);
+        // Формируем уведомление
+        $message = "User '{$uerLogin}' has added your article '$articleTitle' to favourites!";
+
+        // Добавляем уведомление
+        $this->notifications->addNotification($userId, 'subscription', $message);
         return $stmt->execute();
     }
 
