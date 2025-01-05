@@ -26,12 +26,8 @@ class ArticleComments
     public function add_comment($article_slug, $user_id, $comment_text, $parent_id ) {
         $query = "INSERT INTO comments (article_slug, user_id, comment_text, parent_id) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('siss', $article_slug, $user_id, $comment_text, $parent_id);
-
-        $result = $stmt->execute(); // Выполнение запроса
-
-        $stmt->close();
-        return $result;
+        $stmt->execute([$article_slug, $user_id, $comment_text, $parent_id]);
+        return $this->conn->lastInsertId(); // Возвращает ID добавленного комментария
     }
     public function get_comments_amount($slug){
         $query = "SELECT COUNT(*) as comment_count FROM comments WHERE article_slug = ?";

@@ -21,18 +21,28 @@ class Favourites
     }
 
     // Добавить в избранное
-    public function add($userId, $articleId) {
+    public function add($reactionerId, $articleId) {
+        // Добавляем статью в избранное
         $stmt = $this->conn->prepare("INSERT INTO favorites (user_id, article_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $userId, $articleId);
-        $uerLogin = $this->user->getLoginById($userId);
+        $stmt->bind_param("ii", $reactionerId, $articleId);
+
+        // Получаем логин пользователя, который добавил в избранное
+        $userLogin = $this->user->getLoginById($reactionerId);
+
+        // Получаем заголовок статьи
         $articleTitle = $this->article->getTitleByArticleId($articleId);
+
+        $authorId = $this->article->getAuthorId($articleId);
+
         // Формируем уведомление
-        $message = "User '{$uerLogin}' has added your article '$articleTitle' to favourites!";
+        $message = "User '{$userLogin}' has added your article '{$articleTitle}' to favourites!";
 
         // Добавляем уведомление
-        $this->notifications->addNotification($userId, 'subscription', $message);
+        $this->notifications->addNotification($authorId, $reactionerId, 'favorite', $message, $articleId);
+
         return $stmt->execute();
     }
+
 
     // Удалить из избранного
     public function remove($userId, $articleId) {

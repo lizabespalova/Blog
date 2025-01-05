@@ -78,7 +78,7 @@ class ArticleController
             // Проверка наличия `article_id`
             $articleId = $_POST['article_id'] ?? null;
             // Проверка и загрузка обложки
-            $cover_image_path = $this->upload_cover_image(/*$articleId,*/ $inputData['user_id'], $inputData['cover_image']);
+            $cover_image_path = $this->upload_cover_image($articleId, $inputData['user_id'], $inputData['cover_image']);
             if (!$cover_image_path) {
                 $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию, если загрузка не удалась
             }
@@ -139,11 +139,11 @@ class ArticleController
         }
         return $userDir;
     }
-    private function upload_cover_image(/*$article_id,*/ $user_id, $coverImage)
+    private function upload_cover_image($article_id, $user_id, $coverImage)
     {
         if (/*isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0*/$coverImage) {
             // Создаем директорию для обложки
-            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' ./* $article_id .*/ '/cover');
+            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id . '/cover');
 
             // Удаляем старое изображение, если оно существует, чтобы в директории оставалось только одно
             $existingFiles = glob($coverDir . '/*'); // Получаем все файлы в папке cover
@@ -409,46 +409,47 @@ class ArticleController
     public function handle_reaction($entityType) {
         // Получаем данные из POST-запроса
         $data = $this->get_posted_data($entityType);
-
+        $reactionerId = $_SESSION['user']['user_id'];
         $userId = $data['user_id'];
-        $userLogin = $this->userModel->getLoginById($userId);
+        $userLogin = $this->userModel->getLoginById($reactionerId);
         $reactionType = $data['reaction_type'];
         $entityId = $data['id'];  // ID статьи или комментария
-
         // Определяем соответствующую модель и счетчик
         $reactionModel = $entityType === 'article' ? $this->articleReactionsModel : $this->articleCommentsModel;
         $entityModel = $entityType === 'article' ? $this->articleModel : $this->commentModel;
+        $notificationType = $entityType === 'article' ? 'article_reaction' : 'comment_reaction';
 
         // Проверка существующей реакции
-        $existingReaction = $reactionModel->get_reaction($userId, $entityId);
+        $existingReaction = $reactionModel->get_reaction($reactionerId, $entityId);
 
         if ($existingReaction) {
             // Если реакция уже есть
             if ($existingReaction['reaction_type'] === $reactionType) {
                 // Удалить реакцию, если та же
-                $reactionModel->remove_reaction($userId, $entityId);
+                $reactionModel->remove_reaction($reactionerId, $entityId);
                 $this->update_reaction_count($entityModel, $entityId, $reactionType, 'decrement');
                 $message = 'Reaction removed';
             } else {
                 // Обновить, если реакция отличается
-                $reactionModel->update_reaction($userId, $entityId, $reactionType);
+                $reactionModel->update_reaction($reactionerId, $entityId, $reactionType);
                 $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
                 $this->update_reaction_count($entityModel, $entityId, $existingReaction['reaction_type'], 'decrement');
                 $message = 'User '. $userLogin.' added '. $reactionType;
 
                 // Отправить уведомление при обновлении
-                $this->notificationModel->addNotification($userId, 'like', $message);
+                $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
             }
         } else {
             // Добавить новую реакцию
-            $reactionModel->add_reaction($userId, $entityId, $reactionType);
+            $reactionModel->add_reaction($reactionerId, $entityId, $reactionType);
             $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
             $message = 'User '. $userLogin.' added '. $reactionType;
 
             // Отправить уведомление при обновлении
-            $this->notificationModel->addNotification($userId, 'like', $message);        }
+            $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
+        }
 
-        // Получаем актуальное количество лайков и дизлайков
+        // Получаем актуальное кол ичество лайков и дизлайков
         $updated_likes = $entityModel->get_likes_count($entityId);
         $updated_dislikes = $entityModel->get_dislikes_count($entityId);
 
@@ -498,20 +499,21 @@ class ArticleController
         }
 
         $article_slug = $input['article_slug'];
-        $user_id = $input['user_id'];
-        $user_login = $this->userModel->getLoginById($user_id);
+        $reactionerId = $input['user_id'];
+        $userId = $_SESSION['user']['user_id'];
+        $user_login = $this->userModel->getLoginById($reactionerId);
         $comment_text = $input['comment_text'];
         $parent_id = !empty($input['parent_id']) ? $input['parent_id'] : null;
 
         // Используем модель для сохранения комментария
-        $isAdded = $this->articleCommentsModel->add_comment($article_slug, $user_id, $comment_text, $parent_id);
+        $commentId = $this->articleCommentsModel->add_comment($article_slug, $reactionerId, $comment_text, $parent_id);
 
-        if ($isAdded) {
+        if ($commentId) {
             echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
             $message = 'User '. $user_login.' added a comment';
 
             // Отправить уведомление при обновлении
-            $this->notificationModel->addNotification($user_id, 'comment', $message);
+            $this->notificationModel->addNotification($userId, $reactionerId, 'comment_reaction', $message, $commentId);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment']);
         }

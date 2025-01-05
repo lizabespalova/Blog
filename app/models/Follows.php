@@ -55,9 +55,8 @@ class Follows
             $followerLogin = $this->user->getLoginById($this->follower_id);
             // Формируем уведомление
             $message = "User '{$followerLogin}' has started following you!";
-
             // Добавляем уведомление
-            $this->notifications->addNotification($this->following_id, 'subscription', $message);
+            $this->notifications->addNotification($this->following_id, $this->follower_id, 'subscription', $message);
 
             return true;
         }

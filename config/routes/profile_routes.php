@@ -4,6 +4,7 @@ use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\ArticleImagesController;
 use controllers\authorized_users_controllers\EditProfileController;
 use controllers\authorized_users_controllers\FollowController;
+use controllers\authorized_users_controllers\NotificationController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\search_controllers\SearchController;
 
@@ -84,7 +85,12 @@ function profile_route($uri, $method) {
                 $controller->show_search_form();
             }
             exit();  // Остановка выполнения после маршрута
-
+        case '/notifications':
+            $controller = new NotificationController($dbConnection);
+            if ($method === 'GET') {
+                $controller->showNotifications(); // Отображение уведомлений
+            }
+            exit();  // Остановка выполнения после маршрута
 
 
         default:

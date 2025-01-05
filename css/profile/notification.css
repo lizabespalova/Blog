@@ -1,0 +1,63 @@
+/* Центрирование заголовка */
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    color: #2d6fa3;
+    margin-top: 20px;
+}
+
+/* Общие стили для уведомлений */
+.notifications-list {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 10px;
+    background-color: #f4f7fc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    background-color: #e6f0ff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.notification-avatar {
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.notification-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2d6fa3;
+}
+
+.notification-content {
+    flex-grow: 1;
+}
+
+.notification-title {
+    font-weight: bold;
+    color: #2d6fa3;
+}
+
+.notification-date {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+}
+
+/* Стиль для пустых уведомлений */
+.no-notifications {
+    text-align: center;
+    font-size: 18px;
+    color: #aaa;
+    margin-top: 20px;
+}

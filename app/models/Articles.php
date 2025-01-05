@@ -28,6 +28,7 @@ class Articles
             $inputData['read_time'] ?? '',
             $inputData['tags'] ?? '',
             $inputData['is_published'] ?? '',
+            $inputData['user_id'] ?? '',
         ];
 
         // Устанавливаем NULL для пустых значений
@@ -42,8 +43,8 @@ class Articles
     public function add_article($inputData, $coverImagePath)
     {
         $stmt = $this->conn->prepare(
-            'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags, is_published) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO articles (title, content, author, cover_image, youtube_link, category, difficulty, read_time, tags, is_published, user_id) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
 
         if ($stmt === false) {
@@ -74,7 +75,7 @@ class Articles
         $stmt = $this->conn->prepare(
             'UPDATE articles SET title = ?, content = ?, author = ?, cover_image = ?, 
                     youtube_link = ?, category = ?, difficulty = ?, read_time = ?, 
-                    tags = ? , is_published = ? 
+                    tags = ? , is_published = ?, user_id = ? 
          WHERE id = ?'
         );
 
@@ -336,5 +337,19 @@ class Articles
         $stmt->close();
 
         return $title;
+    }
+    public function getAuthorId($articleId){  // Получаем автора статьи
+        $stmt2 = $this->conn->prepare("SELECT user_id FROM articles WHERE id = ?");
+        $stmt2->bind_param("i", $articleId);
+        $stmt2->execute();
+        $stmt2->bind_result($authorId);
+        $stmt2->fetch();
+        $stmt2->close();
+
+        if (empty($authorId)) {
+            // Если автор не найден, вернуть ошибку
+            return false;
+        }
+        return $authorId;
     }
 }

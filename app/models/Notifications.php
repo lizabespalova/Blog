@@ -11,12 +11,14 @@ class Notifications
     }
 
     // Метод для добавления уведомления
-    public function addNotification($userId, $type, $message, $relatedId = null) {
-        $query = "INSERT INTO notifications (user_id, type, message, related_id) VALUES (?, ?, ?, ?)";
+    public function addNotification($userId, $reactionerId, $type, $message, $relatedId = null) {
+        $query = "INSERT INTO notifications (user_id, reactioner_id, type, message, related_id) 
+              VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('issi', $userId, $type, $message, $relatedId);
+        $stmt->bind_param('iissi', $userId, $reactionerId, $type, $message, $relatedId);
         $stmt->execute();
     }
+
     public function getUnreadNotifications($userId) {
         $query = "SELECT id, type, message, related_id FROM notifications WHERE user_id = ? AND is_read = 0 ORDER BY created_at DESC";
         $stmt = $this->conn->prepare($query);
@@ -35,6 +37,18 @@ class Notifications
         $query = "UPDATE notifications SET is_read = 1 WHERE id IN (" . implode(',', array_map('intval', $notificationIds)) . ")";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
+    }
+    public function getNotificationsByUser($userId) {
+        $stmt = $this->conn->prepare("
+        SELECT n.id, n.message, n.created_at, u.user_login AS reactioner_login, u.user_avatar AS reactioner_avatar
+        FROM notifications n
+        LEFT JOIN users u ON n.reactioner_id = u.user_id
+        WHERE n.user_id = ?
+        ORDER BY n.created_at DESC
+    ");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
 }
