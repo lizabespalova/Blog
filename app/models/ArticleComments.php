@@ -2,6 +2,8 @@
 
 namespace models;
 
+use Exception;
+
 class ArticleComments
 {
     private $conn;
@@ -23,12 +25,46 @@ class ArticleComments
         return $comments;
     }
     // Метод для добавления комментария
-    public function add_comment($article_slug, $user_id, $comment_text, $parent_id ) {
+    public function add_comment($article_slug, $user_id, $comment_text, $parent_id) {
         $query = "INSERT INTO comments (article_slug, user_id, comment_text, parent_id) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$article_slug, $user_id, $comment_text, $parent_id]);
-        return $this->conn->lastInsertId(); // Возвращает ID добавленного комментария
+        // Проверяем успешность подготовки запроса
+        if (!$stmt) {
+            throw new Exception("SQL error: " . $this->conn->error);
+        }
+        // Привязываем параметры
+        $stmt->bind_param("sisi", $article_slug, $user_id, $comment_text, $parent_id);
+        // Выполняем запрос
+        if (!$stmt->execute()) {
+            throw new Exception("SQL error: " . $stmt->error);
+        }
+        // Получаем ID последней вставленной записи
+        $lastInsertId = $this->conn->insert_id;
+        $stmt->close(); // Закрываем подготовленный запрос
+        return $lastInsertId; // Возвращаем ID добавленного комментария
     }
+    public function get_comment_by_id($comment_id) {
+        // Подготовленный запрос для получения комментария по ID
+        $query = "SELECT id, parent_id, article_slug, user_id, comment_text, likes, dislikes, reaction_type, created_at 
+              FROM comments 
+              WHERE id = ?";
+
+        // Подготовка и выполнение запроса
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $comment_id); // Привязываем параметр (i - integer)
+        $stmt->execute();
+
+        // Получение результата
+        $result = $stmt->get_result();
+
+        // Проверяем, есть ли данные
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc(); // Возвращаем строку как ассоциативный массив
+        } else {
+            return null; // Возвращаем null, если комментарий не найден
+        }
+    }
+
     public function get_comments_amount($slug){
         $query = "SELECT COUNT(*) as comment_count FROM comments WHERE article_slug = ?";
         $stmt = $this->conn->prepare($query);

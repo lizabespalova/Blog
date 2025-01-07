@@ -1,5 +1,28 @@
 let notificationsQueue = []; // Массив для хранения уведомлений
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Проверяем поддержку уведомлений
+    if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                console.log(`Permission: ${permission}`);
+            });
+        }
+    } else {
+        console.error("Уведомления не поддерживаются этим браузером.");
+    }
+
+    const notificationId = getNotificationIdFromURL();
+    if (notificationId) {
+        highlightNotification(notificationId);
+    }
+});
+
+function getNotificationIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id'); // Вернет значение параметра id
+}
+
 async function fetchNotifications() {
     try {
         const response = await fetch('/api/get_notifications.php');
@@ -27,52 +50,31 @@ async function fetchNotifications() {
 
 function displayNotification() {
     if (notificationsQueue.length > 0) {
-        const notificationContainer = document.getElementById('notification-container');
-        const notification = notificationsQueue.shift();  // Извлекаем первое уведомление из очереди
+        const notification = notificationsQueue.shift(); // Извлекаем первое уведомление из очереди
 
-        const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification';
+        // Проверяем разрешение
+        if (Notification.permission === 'granted') {
+            const notificationOptions = {
+                body: notification.message,
+                icon: '/templates/images/profile.jpg',
+                tag: notification.id, // Для предотвращения дублирования уведомлений
+            };
 
-        // Создание ссылки для перехода
-        const notificationLink = document.createElement('a');
-        notificationLink.href = `/notifications`;  // Переход по маршруту /notification
-        notificationLink.classList.add('notification-link');  // Класс для ссылки, если нужно
+            const desktopNotification = new Notification("Новое уведомление", notificationOptions);
 
-        // Составляем контент уведомления
-        let notificationContent = `
-            <div class="notification-logo">
-                <img src="/templates/images/profile.jpg" alt="Site Logo" class="logo-image">
-            </div>
-            <div class="notification-text">
-                <p>${notification.message}</p>
-            </div>
-        `;
+            // Переход по клику
+            desktopNotification.onclick = () => {
+                window.open(`/notifications?id=${notification.id}`, '_blank');
+            };
 
-        // Если есть изображение в уведомлении, добавляем его
-        if (notification.image) {
-            notificationContent = ` 
-                <div class="notification-logo">
-                    <img src="/templates/images/profile.jpg" alt="Site Logo" class="logo-image">
-                </div>
-                <div class="notification-text">
-                    <img src="${notification.image}" alt="Notification image" class="notification-image">
-                    <p>${notification.message}</p>
-                </div>
-            `;
+            // Автоматическое скрытие через 5 секунд
+            setTimeout(() => desktopNotification.close(), 5000);
+        } else {
+            console.warn("Нет разрешения на показ уведомлений.");
         }
-
-        notificationElement.innerHTML = notificationContent;
-        notificationLink.appendChild(notificationElement);  // Вставляем уведомление в ссылку
-
-        notificationContainer.appendChild(notificationLink);  // Добавляем ссылку с уведомлением в контейнер
-
-        // Убираем уведомление через 5 секунд
-        setTimeout(() => {
-            notificationElement.style.opacity = 0;
-            setTimeout(() => notificationElement.remove(), 1000); // Удаляем уведомление после анимации
-        }, 5000);
     }
 }
+
 function highlightNotification(notificationId) {
     // Найдем уведомление по его ID
     const notification = document.querySelector(`.notification-item[data-id="${notificationId}"]`);

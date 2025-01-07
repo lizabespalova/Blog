@@ -1,32 +1,58 @@
 .content-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1000px; /* Ограничение по ширине для улучшенного выравнивания */
-    margin: 80px auto; /* 80 px - отступление после строки и перед футером */
+    max-width: 1000px;
+    margin: 80px auto; /* Отступ сверху и снизу */
 }
 
+.content-description {
+    display: block; /* Блоковый элемент для размещения всех элементов вертикально */
+    margin-bottom: 20px; /* Отступ между описанием и репостами */
+}
 
-.content-image {
-    float: right;
-    margin-left: 20px;
+.description-container {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание текста и изображения */
+    gap: 20px; /* Отступ между текстом и изображением */
+    margin-bottom: 20px; /* Отступ снизу */
 }
 
 .content-image img {
     max-width: 100%;
-    width: 350px; /* Установите желаемую ширину */
-    height: auto; /* Высота будет автоматически изменяться в соответствии с пропорциями */
+    width: 150px; /* Установите желаемую ширину изображения */
+    height: auto;
     border-radius: 5px;
 }
+
+
+.content-image img {
+    max-width: 100%;
+    width: 350px; /* Ширина изображения */
+    height: auto;
+    border-radius: 5px;
+}
+
 .content-text {
     font-size: 1em;
     line-height: 1.5em;
-    display: flex; /* Горизонтальное расположение текста и изображения */
-    align-items: center; /* Вертикальное выравнивание */
-    gap: 20px; /* Расстояние между текстом и изображением */
-    max-width: 1000px; /* Ограничение ширины для более аккуратного отображения */
-    margin: 0 auto; /* Центрирование секции */
+    max-width: 1000px;
+    margin: 0 auto; /* Центрируем текст */
 }
+
+.reposts-articles-container {
+    display: flex;
+    flex-direction: column; /* Репосты будут располагаться вертикально */
+    gap: 15px; /* Расстояние между репостами */
+    margin-top: 20px; /* Отступ сверху для отделения от описания */
+}
+
+.repost-card {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Растягиваем карточку на всю ширину контейнера */
+}
+
 
 
 @keyframes fadeIn {

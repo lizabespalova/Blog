@@ -241,6 +241,14 @@ body {
 .notification-item:hover {
     background-color: #f0f0f0;  /* Легкое выделение при наведении */
 }
+.notification-link {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Сохраняем текущий цвет текста */
+}
+
+.notification-link:hover {
+    text-decoration: none; /* Убираем подчеркивание при наведении */
+}
 
 @keyframes fadeIn {
     from {

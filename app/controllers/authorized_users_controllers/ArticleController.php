@@ -413,7 +413,8 @@ class ArticleController
         $userId = $data['user_id'];
         $userLogin = $this->userModel->getLoginById($reactionerId);
         $reactionType = $data['reaction_type'];
-        $entityId = $data['id'];  // ID статьи или комментария
+        $entityId = $data['id'];  // ID статьи (слаг) или комментария (число)
+
         // Определяем соответствующую модель и счетчик
         $reactionModel = $entityType === 'article' ? $this->articleReactionsModel : $this->articleCommentsModel;
         $entityModel = $entityType === 'article' ? $this->articleModel : $this->commentModel;
@@ -422,19 +423,23 @@ class ArticleController
         // Проверка существующей реакции
         $existingReaction = $reactionModel->get_reaction($reactionerId, $entityId);
 
+        // Определяем, статья или комментарий
+        $isComment = is_numeric($entityId); // Проверка: число означает, что это комментарий
+        $entityDescription = $isComment ? 'comment' : 'article';
+
         if ($existingReaction) {
             // Если реакция уже есть
             if ($existingReaction['reaction_type'] === $reactionType) {
                 // Удалить реакцию, если та же
                 $reactionModel->remove_reaction($reactionerId, $entityId);
                 $this->update_reaction_count($entityModel, $entityId, $reactionType, 'decrement');
-                $message = 'Reaction removed';
+                $message = "Reaction removed from the $entityDescription";
             } else {
                 // Обновить, если реакция отличается
                 $reactionModel->update_reaction($reactionerId, $entityId, $reactionType);
                 $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
                 $this->update_reaction_count($entityModel, $entityId, $existingReaction['reaction_type'], 'decrement');
-                $message = 'User '. $userLogin.' added '. $reactionType;
+                $message = "User $userLogin changed reaction to $reactionType on the $entityDescription";
 
                 // Отправить уведомление при обновлении
                 $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
@@ -443,19 +448,20 @@ class ArticleController
             // Добавить новую реакцию
             $reactionModel->add_reaction($reactionerId, $entityId, $reactionType);
             $this->update_reaction_count($entityModel, $entityId, $reactionType, 'increment');
-            $message = 'User '. $userLogin.' added '. $reactionType;
+            $message = "User $userLogin added $reactionType on the $entityDescription";
 
-            // Отправить уведомление при обновлении
+            // Отправить уведомление
             $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
         }
 
-        // Получаем актуальное кол ичество лайков и дизлайков
+        // Получаем актуальное количество лайков и дизлайков
         $updated_likes = $entityModel->get_likes_count($entityId);
         $updated_dislikes = $entityModel->get_dislikes_count($entityId);
 
         $this->show_json($message, $updated_likes, $updated_dislikes);
         exit();
     }
+
 
     // Универсальная функция для обновления счетчиков реакции
     private function update_reaction_count($entityModel, $entityId, $reactionType, $action) {
@@ -499,8 +505,8 @@ class ArticleController
         }
 
         $article_slug = $input['article_slug'];
-        $reactionerId = $input['user_id'];
-        $userId = $_SESSION['user']['user_id'];
+        $userId = $input['user_id'];
+        $reactionerId = $_SESSION['user']['user_id'];
         $user_login = $this->userModel->getLoginById($reactionerId);
         $comment_text = $input['comment_text'];
         $parent_id = !empty($input['parent_id']) ? $input['parent_id'] : null;
@@ -514,6 +520,17 @@ class ArticleController
 
             // Отправить уведомление при обновлении
             $this->notificationModel->addNotification($userId, $reactionerId, 'comment_reaction', $message, $commentId);
+            // Если это ответ, уведомить автора родительского комментария
+            if ($parent_id) {
+                $parentComment = $this->articleCommentsModel->get_comment_by_id($parent_id);
+                if ($parentComment) {
+                    $parentAuthorId = $parentComment['user_id']; // ID автора родительского комментария
+                    if ($parentAuthorId !== $reactionerId) { // Чтобы не отправлять уведомление самому себе
+                        $replyMessage = "User $user_login replied to your comment.";
+                        $this->notificationModel->addNotification($parentAuthorId, $reactionerId, 'comment_reply', $replyMessage, $commentId);
+                    }
+                }
+            }
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment']);
         }

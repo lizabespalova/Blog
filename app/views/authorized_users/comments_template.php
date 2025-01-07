@@ -10,7 +10,9 @@
             <div class="comment" style="display: <?= $index <= 3 ? 'block' : 'none'; ?>">
                 <div class="comment-author">
                     <a href="<?= htmlspecialchars($comment['link']); ?>" class="comment-author-link">
-                        <img src="<?= htmlspecialchars($comment['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
+                        <img src="<?= htmlspecialchars($comment['user_avatar'] ?? '/templates/images/profile.jpg'); ?>"
+                                alt="Author Avatar"
+                                class="comment-author-avatar">
                         <span class="comment-author-name"><?= htmlspecialchars($comment['user_login']); ?></span>
                     </a>
                 </div>
@@ -68,7 +70,9 @@
                             <div class="comment reply" style="display: <?= $replyCount <= 3 ? 'block' : 'none'; ?>">
                                 <div class="comment-author">
                                     <a href="<?= htmlspecialchars($reply['link']); ?>" class="comment-author-link">
-                                        <img src="<?= htmlspecialchars($reply['user_avatar']); ?>" alt="Author Avatar" class="comment-author-avatar">
+                                        <img src="<?= htmlspecialchars($reply['user_avatar'] ?? '/templates/images/profile.jpg'); ?>"
+                                             alt="Author Avatar"
+                                             class="comment-author-avatar">
                                         <span class="comment-author-name"><?= htmlspecialchars($reply['user_login']); ?></span>
                                     </a>
                                 </div>

@@ -278,7 +278,7 @@
     width: 50px; /* размер аватара */
     height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-left: 15px;
 }
 
 .comment-author-name {

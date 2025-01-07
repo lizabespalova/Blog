@@ -15,9 +15,10 @@ class Notifications
         $query = "INSERT INTO notifications (user_id, reactioner_id, type, message, related_id) 
               VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('iissi', $userId, $reactionerId, $type, $message, $relatedId);
+        $stmt->bind_param('iisss', $userId, $reactionerId, $type, $message, $relatedId); // 's' для строки
         $stmt->execute();
     }
+
 
     public function getUnreadNotifications($userId) {
         $query = "SELECT id, type, message, related_id FROM notifications WHERE user_id = ? AND is_read = 0 ORDER BY created_at DESC";

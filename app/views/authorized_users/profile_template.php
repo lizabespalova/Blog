@@ -132,11 +132,14 @@
             <?php if (!empty($user['user_description'])): ?>
                 <p><?php echo htmlspecialchars($user['user_description']); ?></p>
             <?php else: ?>
-                <p>For adding a description, click on the edit button above.</p>
+                <div class="description-container">
+                    <p>For adding a description, click on the edit button above.</p>
+                    <div class="content-image">
+                        <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
+                    </div>
+                </div>
             <?php endif; ?>
-            <div class="content-image">
-                <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
-            </div>
+
             <!-- Reposts -->
             <div class="parent-container">
                 <div class="reposts-articles-container">
@@ -163,15 +166,6 @@
         <p>These are your courses. Start learning now!</p>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
