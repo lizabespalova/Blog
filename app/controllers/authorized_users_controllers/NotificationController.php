@@ -29,4 +29,9 @@ class NotificationController
         // Подключение представления
         include __DIR__ . '/../../views/authorized_users/notification_template.php';
     }
+    public function deleteOldNotifications() {
+        $deletedCount = $this->notificationModel->deleteNotificationsOlderThan(14); // Удаление старше 14 дней
+        echo json_encode(['success' => true, 'deleted' => $deletedCount]);
+    }
+
 }

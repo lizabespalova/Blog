@@ -92,6 +92,12 @@ function profile_route($uri, $method) {
             }
             exit();  // Остановка выполнения после маршрута
 
+        case '/notifications/cleanup':
+            $controller = new NotificationController($dbConnection);
+            if ($method === 'POST') {
+                $controller->deleteOldNotifications(); // Удаление старых уведомлений
+            }
+            exit(); // Остановка выполнения после маршрута
 
         default:
             return false;

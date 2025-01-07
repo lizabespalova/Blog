@@ -19,7 +19,7 @@
 <div class="notifications-list">
     <?php if (!empty($notifications)): ?>
         <?php foreach ($notifications as $notif): ?>
-            <div class="notification-item" data-id="<?= htmlspecialchars($notif['id']) ?>">
+            <div class="notification-item" data-id="<?= htmlspecialchars($notif['id']) ?>" onclick="highlightNotification(<?= htmlspecialchars($notif['id']) ?>)">
                 <div class="notification-avatar">
                     <a href="/profile/<?= htmlspecialchars($notif['reactioner_login']) ?>">
                         <img src="<?= htmlspecialchars($notif['reactioner_avatar'] ?? '/templates/images/profile.jpg') ?>" alt="Avatar">
@@ -35,6 +35,7 @@
         <p class="no-notifications">You don't have notifications.</p>
     <?php endif; ?>
 </div>
+
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>

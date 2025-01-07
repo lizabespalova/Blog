@@ -6,16 +6,6 @@
     margin-top: 20px;
 }
 
-/* Общие стили для уведомлений */
-.notifications-list {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 10px;
-    background-color: #f4f7fc;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
 .notification-item {
     display: flex;
     align-items: center;

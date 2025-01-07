@@ -50,5 +50,26 @@ class Notifications
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+    public function deleteNotificationsOlderThan($days) {
+        $sql = "DELETE FROM notifications WHERE created_at < NOW() - INTERVAL ? DAY";
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Error: " . $this->conn->error);
+        }
+        // Привязка параметров
+        $stmt->bind_param("i", $days);
+        // Выполнение запроса
+        if (!$stmt->execute()) {
+            die("Error: " . $stmt->error);
+        }
+        // Возвращаем количество удаленных записей
+        $deletedRows = $stmt->affected_rows;
+        // Закрываем запрос
+        $stmt->close();
+
+        return $deletedRows;
+    }
 
 }

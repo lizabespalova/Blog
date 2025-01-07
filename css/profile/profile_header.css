@@ -226,6 +226,21 @@ body {
     background-color: #f8d7da;  /* Красный фон для ошибки */
     border-left: 5px solid #dc3545;
 }
+.notification-item {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer; /* Указатель на курсор при наведении */
+    transition: background-color 0.3s ease;
+}
+.notification-item.highlighted {
+    background-color: #fffae6;  /* Подсветка уведомления */
+}
+
+.notification-item:hover {
+    background-color: #f0f0f0;  /* Легкое выделение при наведении */
+}
 
 @keyframes fadeIn {
     from {

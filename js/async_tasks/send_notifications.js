@@ -33,6 +33,12 @@ function displayNotification() {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification';
 
+        // Создание ссылки для перехода
+        const notificationLink = document.createElement('a');
+        notificationLink.href = `/notifications`;  // Переход по маршруту /notification
+        notificationLink.classList.add('notification-link');  // Класс для ссылки, если нужно
+
+        // Составляем контент уведомления
         let notificationContent = `
             <div class="notification-logo">
                 <img src="/templates/images/profile.jpg" alt="Site Logo" class="logo-image">
@@ -44,7 +50,7 @@ function displayNotification() {
 
         // Если есть изображение в уведомлении, добавляем его
         if (notification.image) {
-            notificationContent = `
+            notificationContent = ` 
                 <div class="notification-logo">
                     <img src="/templates/images/profile.jpg" alt="Site Logo" class="logo-image">
                 </div>
@@ -56,13 +62,29 @@ function displayNotification() {
         }
 
         notificationElement.innerHTML = notificationContent;
-        notificationContainer.appendChild(notificationElement);
+        notificationLink.appendChild(notificationElement);  // Вставляем уведомление в ссылку
+
+        notificationContainer.appendChild(notificationLink);  // Добавляем ссылку с уведомлением в контейнер
 
         // Убираем уведомление через 5 секунд
         setTimeout(() => {
             notificationElement.style.opacity = 0;
             setTimeout(() => notificationElement.remove(), 1000); // Удаляем уведомление после анимации
         }, 5000);
+    }
+}
+function highlightNotification(notificationId) {
+    // Найдем уведомление по его ID
+    const notification = document.querySelector(`.notification-item[data-id="${notificationId}"]`);
+
+    // Добавим класс для подсветки
+    if (notification) {
+        notification.classList.add('highlighted');
+
+        // Через 2 секунды удалим подсветку
+        setTimeout(() => {
+            notification.classList.remove('highlighted');
+        }, 2000);
     }
 }
 
