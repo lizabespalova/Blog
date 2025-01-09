@@ -352,4 +352,12 @@ class Articles
         }
         return $authorId;
     }
+    function getArticleById($id) {
+        $query = "SELECT * FROM articles WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 }

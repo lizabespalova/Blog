@@ -34,6 +34,7 @@ include __DIR__ . '/../../../views/partials/filter.php';
 
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/favourites/filter_favourites.js"></script>
+<script src="/js/authorized_users/articles/repost_article.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 2em;
+    color: #333;
+}
+.statistic-item {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 10px;
+}
+.statistic-item strong {
+    color: #333;
+}
+.statistic-item i {
+    color: #007bff;
+}
+.statistic-item span {
+    margin-left: 5px;
+}
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Включаем вертикальную прокрутку, если контент не помещается */
+}
+/* Стили для контейнера с графиками */
+.chart-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 400px; /* Ограничиваем высоту графиков */
+}

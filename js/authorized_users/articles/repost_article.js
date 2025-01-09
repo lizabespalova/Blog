@@ -96,3 +96,7 @@ function deleteRepost(button) {
             });
     }
 }
+function viewStatistics(articleId) {
+    // Перенаправление на страницу со статистикой статьи
+    window.location.href = `/articles/statistics/${articleId}`;
+}

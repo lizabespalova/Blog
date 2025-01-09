@@ -130,7 +130,7 @@
     display: none;
     position: fixed; /* Меню фиксируется на экране */
     top: 50%; /* Центрировать по вертикали */
-    right: 20px; /* Позиционирование справа */
+    right:20px; /* Позиционирование справа */
     transform: translateY(-50%); /* Центрирование по вертикали */
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -143,16 +143,21 @@
 
 /* Элементы меню */
 .dropdown-menu .dropdown-item {
-    padding: 10px 15px;
-    text-align: left;
-    background: none;
+    display: flex; /* Используем flexbox */
+    align-items: center; /* Центрируем по вертикали */
+    justify-content: space-between; /* Текст слева, значок справа */
+    gap: 8px; /* Расстояние между текстом и значком */
+    padding: 10px; /* Увеличиваем область клика */
+    cursor: pointer; /* Указатель мыши */
     border: none;
-    width: 100%;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background: none;
+    text-align: left;
+    width: 100%; /* Полная ширина */
 }
-
+.dropdown-item i {
+    font-size: 16px; /* Размер значка */
+    color: #555; /* Цвет значка */
+}
 .dropdown-menu .dropdown-item:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }

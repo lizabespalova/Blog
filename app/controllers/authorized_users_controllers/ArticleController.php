@@ -619,5 +619,27 @@ class ArticleController
             echo json_encode(['success' => false, 'error' => 'Invalid request']);
         }
     }
+    public function getArticleStatistics($articleId){
+        // Получаем данные статьи
+        $article = $this->articleModel->getArticleById($articleId);
+        if (!$article) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Article not found']);
+            return;
+        }
+        // Формируем статистику
+        $statistics = $this->getStatistics($article);
 
+        include __DIR__ . '/../../views/authorized_users/users_articles/statistic_template.php';
+    }
+    public function getStatistics($article){
+            return [
+                'likes' => (int)$article['likes'],
+                'dislikes' => (int)$article['dislikes'],
+                'views' => (int)$article['views'],
+                'author' => $article['author'],
+                'title' => $article['title'],
+                'created_at' => $article['created_at'],
+            ];
+    }
 }

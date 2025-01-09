@@ -37,6 +37,7 @@ class Reposts
                 r.id AS repost_id,
                 r.message AS message,
                 r.created_at AS created_at,
+                r.user_id AS user_id,
                 a.id AS id,
                 a.title AS title,
                 a.author AS author,
