@@ -30,5 +30,35 @@ class ArticleReactions
         $stmt->bind_param("is", $userId, $slug);
         $stmt->execute();
     }
+    // Метод для получения пользователей, поставивших лайк
+    public function getLikesBySlug($slug)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT users.user_id, users.user_login, users.user_email, users.link, users.user_avatar
+            FROM article_reactions
+            JOIN users ON article_reactions.user_id = users.user_id
+            WHERE article_reactions.article_slug = ?
+            AND article_reactions.reaction_type = 'like'
+        ");
+        $stmt->bind_param("s", $slug);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 
+    // Метод для получения пользователей, поставивших дизлайк
+    public function getDislikesBySlug($slug)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT users.user_id, users.user_login, users.user_email, users.link, users.user_avatar
+            FROM article_reactions
+            JOIN users ON article_reactions.user_id = users.user_id
+            WHERE article_reactions.article_slug = ?
+            AND article_reactions.reaction_type = 'dislike'
+        ");
+        $stmt->bind_param("s", $slug);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }

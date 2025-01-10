@@ -642,4 +642,18 @@ class ArticleController
                 'created_at' => $article['created_at'],
             ];
     }
+    public function getArticleReactioners($slug)
+    {
+        // Получаем данные из модели
+        $likes = $this->articleReactionsModel->getLikesBySlug($slug);
+        $dislikes = $this->articleReactionsModel->getDislikesBySlug($slug);
+
+        // Возвращаем данные в формате JSON
+        header('Content-Type: application/json');
+        echo json_encode([
+            'likes' => $likes,
+            'dislikes' => $dislikes
+        ]);
+    }
+
 }

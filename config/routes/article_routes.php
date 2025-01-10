@@ -61,6 +61,11 @@ function article_route($uri, $method) {
             $articleId = $matches[1]; // Извлекаем ID статьи из URI
             $controller->getArticleStatistics($articleId); // Передаём ID и соединение с БД
             exit();
+        case $method === 'GET' && preg_match('/article\/([^\/]+)\/reactions/', $uri, $matches):
+            $slug = $matches[1]; // Извлекаем параметр slug из URI
+            $controller = new ArticleController(getDbConnection());
+            $controller->getArticleReactioners($slug); // Передаем slug в метод контроллера
+            exit();
 
         default:
             return false;
