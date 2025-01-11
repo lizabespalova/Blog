@@ -6,8 +6,10 @@
     <title>Search</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/search/search.css">
+    <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
+    <link rel="stylesheet" href="/css/profile/favourite_template.css">
 </head>
 <body>
 <!-- Header -->
@@ -24,9 +26,22 @@
     <a href="/it-events" class="menu-item">IT-events</a>
     <a href="/it-news" class="menu-item">IT news</a>
 </div>
+
+<!-- Main Content -->
+<div id="filter-results" class="favorite-articles-container">
+    <?php if (!empty($article_cards)): ?>
+        <?php foreach ($article_cards as $article): ?>
+            <?php include __DIR__ . '/../../views/partials/card.php'; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+
 <!-- Footer -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
 <script src="/js/authorized_users/menu.js"></script>
+<script src="/js/authorized_users/articles/repost_article.js"></script>
+<script src="/js/filter_articles.js"></script>
+
 </body>
 </html>

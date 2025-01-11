@@ -29,6 +29,7 @@
 
     <!-- Search Form -->
     <?php include __DIR__ . '/../partials/search_field.php'; ?>
+    <!-- Followers list -->
     <div class="followers-list">
         <?php if (!empty($followers)): ?>
             <?php foreach ($followers as $follower): ?>
@@ -55,5 +56,7 @@
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
 <script src="/js/authorized_users/follow.js"></script>
+<script src="/js/filter_follower-ings_search_field.js"></script>
+
 </body>
 </html>

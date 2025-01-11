@@ -18,7 +18,7 @@
 
     <!-- Секция для подписчиков -->
     <div class="followers-section">
-        <h2>Followers</h2>
+        <h2>Followings</h2>
         <?php if (!empty($followingsCount)): ?>
             <span class="followers-count"><?= htmlspecialchars($followingsCount) ?></span>
         <?php else: ?>
@@ -54,5 +54,7 @@
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
 <script src="/js/authorized_users/follow.js"></script>
+<script src="/js/filter_follower-ings_search_field.js"></script>
+
 </body>
 </html>

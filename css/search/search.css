@@ -73,3 +73,8 @@
     color: #0056b3; /* Цвет при наведении */
     text-decoration: underline; /* Подчеркивание при наведении */
 }
+.highlight {
+    background-color: yellow;
+    color: black;
+    font-weight: bold;
+}

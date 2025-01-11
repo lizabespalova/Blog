@@ -8,7 +8,8 @@ function showList(type, slug) {
 
             // Заголовок модального окна
             modalTitle.textContent = type === 'likes' ? 'List of Likes' : 'List of Dislikes';
-
+            modalTitle.style.textAlign = 'center';  // Центрирование текста
+            modalTitle.style.margin = '0';  // Убирает возможные отступы, которые могут мешать центрированию
             // Формирование списка с аватарами, именами и email
             const users = data[type];
             modalList.innerHTML = users.map(user => `
