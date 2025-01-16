@@ -360,4 +360,40 @@ class Articles
         $result = $stmt->get_result();
         return $result->fetch_assoc();
     }
+    /**
+     * Увеличивает количество просмотров статьи.
+     *
+     * @param int $articleId ID статьи.
+     * @return int Новое количество просмотров.
+     */
+    public function incrementViews($articleId)
+    {
+        // Увеличиваем количество просмотров
+        $stmt = $this->conn->prepare("UPDATE articles SET views = views + 1 WHERE id = ?");
+        $stmt->bind_param('i', $articleId);
+        $stmt->execute();
+        $stmt->close();
+
+        // Возвращаем обновленное количество просмотров
+        return $this->getViews($articleId);
+    }
+
+    /**
+     * Получает текущее количество просмотров статьи.
+     *
+     * @param int $articleId ID статьи.
+     * @return int Количество просмотров.
+     */
+    public function getViews($articleId)
+    {
+        $stmt = $this->conn->prepare("SELECT views FROM articles WHERE id = ?");
+        $stmt->bind_param('i', $articleId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+        $stmt->close();
+
+        return $data ? (int)$data['views'] : 0;
+    }
 }

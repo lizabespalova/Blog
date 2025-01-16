@@ -39,7 +39,7 @@ $currentUser = $_SESSION['user'] ?? null; // Получаем данные по�
                     <a href="/create-article">Write an article <i class="fas fa-pen"></i></a>
                     <a href="/favourites/<?php echo $currentUser['user_login']; ?>">Favorites <i class="fas fa-star"></i></a>
                     <a href="/notifications">Notifications <i class="fas fa-bell"></i></a>
-                    <a href="#settings">Settings <i class="fas fa-cog"></i></a>
+                    <a href="/settings">Settings <i class="fas fa-cog"></i></a>
                     <a href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>

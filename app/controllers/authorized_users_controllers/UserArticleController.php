@@ -51,6 +51,8 @@ class UserArticleController
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-
+//    public function handleUserInterest($userId,$category){
+//
+//    }
 
 }

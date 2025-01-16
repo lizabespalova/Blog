@@ -17,8 +17,8 @@ class SearchController
     public function show_search_form()
     {
         // Проверяем, авторизован ли пользователь
+        session_start();
         $userId = $_SESSION['user']['user_id'] ?? null;
-
         if ($userId) {
             // Если пользователь авторизован, показываем статьи по его интересам
             $article_cards = $this->searchModel->getArticlesByUserInterests($userId, ARTICLES_LIMIT);

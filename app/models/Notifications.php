@@ -12,11 +12,13 @@ class Notifications
 
     // Метод для добавления уведомления
     public function addNotification($userId, $reactionerId, $type, $message, $relatedId = null) {
-        $query = "INSERT INTO notifications (user_id, reactioner_id, type, message, related_id) 
+        if($userId!=$reactionerId) {
+            $query = "INSERT INTO notifications (user_id, reactioner_id, type, message, related_id) 
               VALUES (?, ?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('iisss', $userId, $reactionerId, $type, $message, $relatedId); // 's' для строки
-        $stmt->execute();
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('iisss', $userId, $reactionerId, $type, $message, $relatedId); // 's' для строки
+            $stmt->execute();
+        }
     }
 
 

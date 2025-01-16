@@ -271,6 +271,7 @@ class ArticleController
             $favorites = $this->favouriteModel->getUserFavorites($_SESSION['user']['user_id']);
             // Проверяем, находится ли текущая статья в избранных
             $is_favorite = in_array($article['id'], $favorites, true);
+            $viewsAmount = $this->articleModel->incrementViews($article['id']);
             $user = $this->userModel->get_user_by_login($article['author']);
 
 //            var_dump($is_favorite); // Проверка
@@ -443,6 +444,12 @@ class ArticleController
 
                 // Отправить уведомление при обновлении
                 $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
+
+                // Если лайк на статью, то добавить как интересы пользователя
+                if($entityDescription == 'article' && $reactionType == 'like'){
+                    $article = $this->articleModel->get_article_by_slug($entityId);
+                    $this->userModel->trackUserInterest($reactionerId, $article['category']);
+                }
             }
         } else {
             // Добавить новую реакцию
@@ -452,6 +459,11 @@ class ArticleController
 
             // Отправить уведомление
             $this->notificationModel->addNotification($userId, $reactionerId, $notificationType, $message, $entityId);
+            // Если лайк на статью, то добавить как интересы пользователя
+            if($entityDescription == 'article' && $reactionType == 'like'){
+                $article = $this->articleModel->get_article_by_slug($entityId);
+                $this->userModel->trackUserInterest($reactionerId, $article['category']);
+            }
         }
 
         // Получаем актуальное количество лайков и дизлайков

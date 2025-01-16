@@ -18,53 +18,25 @@ class Search
      * @return array Статьи по интересам
      */
     public function getArticlesByUserInterests(int $userId, int $limit = 10): array {
-        // Шаг 1: Получаем интересы пользователя
         $query = "
-            SELECT category, interest_level 
-            FROM user_interests 
-            WHERE user_id = ? 
-            ORDER BY interest_level DESC
-        ";
+        SELECT a.*,
+               (COALESCE(ui.interest_level, 0) * (a.views + a.likes)) AS weighted_score
+        FROM articles a
+        LEFT JOIN user_interests ui
+            ON a.category LIKE CONCAT('%', ui.category, '%') AND ui.user_id = ?
+        WHERE a.is_published = 1
+        ORDER BY weighted_score DESC, a.created_at DESC
+        LIMIT ?
+    ";
+
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $userId);
+        $stmt->bind_param("ii", $userId, $limit);
         $stmt->execute();
         $result = $stmt->get_result();
-        $interests = $result->fetch_all(MYSQLI_ASSOC);
-
-        if (empty($interests)) {
-            return []; // Если нет интересов, возвращаем пустой массив
-        }
-
-        // Шаг 2: Собираем статьи по категориям интересов
-        $articles = [];
-        foreach ($interests as $interest) {
-            $category = $interest['category'];
-            $query = "
-                SELECT a.*, (a.views + a.likes) AS popularity
-                FROM articles a
-                WHERE a.category LIKE ? 
-                AND a.is_published = 1
-                ORDER BY popularity DESC
-                LIMIT ?
-            ";
-            $stmt = $this->conn->prepare($query);
-            $likeParam = '%' . $category . '%';
-            $stmt->bind_param("si", $likeParam, $limit);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $articlesByCategory = $result->fetch_all(MYSQLI_ASSOC);
-
-            $articles = array_merge($articles, $articlesByCategory);
-
-            // Уменьшаем лимит
-            $limit -= count($articlesByCategory);
-            if ($limit <= 0) {
-                break; // Достаточно статей
-            }
-        }
-
-        return $articles;
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+
 
     /**
      * Получить самые популярные статьи (резервный вариант)

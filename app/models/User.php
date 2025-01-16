@@ -358,7 +358,17 @@ class User
         // Возвращаем null, если пользователь не найден
         return null;
     }
-
-
+    public function trackUserInterest(int $userId, string $category): void
+    {
+        $query = "
+        INSERT INTO user_interests (user_id, category, interest_level)
+        VALUES (?, ?, 1)
+        ON DUPLICATE KEY UPDATE
+            interest_level = interest_level + 1
+    ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("is", $userId, $category);
+        $stmt->execute();
+    }
 
 }

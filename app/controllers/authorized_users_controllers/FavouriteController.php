@@ -2,15 +2,21 @@
 
 namespace controllers\authorized_users_controllers;
 use Exception;
+use models\Articles;
 use models\Favourites;
+use models\User;
 
 require_once 'app/services/helpers/session_check.php';
 class FavouriteController
 {
     private $favouriteModel;
+    private $userModel;
+    private $articleModel;
+
     public function __construct($conn) {
         $this->favouriteModel = new Favourites($conn);
-
+        $this->userModel = new User($conn);
+        $this->articleModel = new Articles($conn);
     }
     public function showFavourites(){
         // Получаем ID пользователя из сессии
@@ -28,6 +34,9 @@ class FavouriteController
             return 'removed';
         } else {
             $this->favouriteModel->add($userId, $articleId);
+            // Если избранное, то добавить как интересы пользователя
+            $article = $this->articleModel->getArticleById($articleId);
+            $this->userModel->trackUserInterest($userId, $article['category']);
             return 'added';
         }
     }
