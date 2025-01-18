@@ -1,0 +1,99 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.settings-container {
+    display: flex;
+    min-height: 100vh; /* Растягиваем на всю высоту окна */
+}
+
+/* Меню настроек */
+.settings-menu {
+    width: 20%;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+}
+
+.settings-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.settings-menu li {
+    margin: 0;
+}
+
+.settings-menu a {
+    display: block;
+    padding: 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.settings-menu a.active,
+.settings-menu a:hover {
+    background: #007BFF;
+    color: #fff;
+}
+
+/* Контент настроек */
+.settings-content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #f9f9f9;
+}
+
+/* Секция настроек */
+.settings-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: #333;
+}
+
+.settings-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.settings-section select,
+.settings-section input[type="range"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+/* Кнопка сохранения */
+.settings-section .save-settings {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

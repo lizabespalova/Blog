@@ -1,0 +1,42 @@
+/* Секция настроек конфиденциальности */
+.settings-section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.settings-section select:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.settings-section .form-group {
+    margin-bottom: 15px;
+}
+
+.settings-section input[type="checkbox"] {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.settings-section label {
+    font-size: 1em;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.settings-section label input[type="checkbox"] + span {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.settings-section .save-settings:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,26 @@
+/* Секция настроек уведомлений */
+.settings-section .form-group {
+    margin-bottom: 15px;
+}
+
+.settings-section input[type="checkbox"] {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.settings-section label {
+    font-size: 1em;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Стили для чекбоксов */
+.settings-section label input[type="checkbox"] + span {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.settings-section .save-settings:hover {
+    background-color: #0056b3;
+}

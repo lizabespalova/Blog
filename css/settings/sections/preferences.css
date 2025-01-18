@@ -1,0 +1,64 @@
+/* Общие стили для кастомного селекта */
+.custom-select {
+    position: relative;
+    width: 200px;
+}
+
+.selected-option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: white;
+}
+
+.selected-option .flag {
+    margin-right: 10px;
+    width: 20px;
+    height: auto;
+}
+
+.options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: #f1f1f1;
+}
+
+.option .flag {
+    margin-right: 10px;
+    width: 20px;
+    height: auto;
+}
+
+/* Стили для кнопки */
+.save-settings {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.save-settings:hover {
+    background-color: #45a049;
+}

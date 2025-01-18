@@ -8,13 +8,14 @@ class SettingsController
         $page = $_GET['section'] ?? 'general';
 
         $sections = [
-            'general' => 'General Settings',
-            'profile' => 'Profile Settings',
-            'articles' => 'Article Settings',
-            'notifications' => 'Notifications',
-            'privacy' => 'Privacy'
+            'appearance' => 'Appearance Settings', // Настройки внешнего вида (день/ночь)
+            'personal' => 'Personal Data',         // Настройки личных данных (email, пароль, логин)
+            'privacy' => 'Privacy Settings',       // Настройки конфиденциальности
+            'notifications' => 'Notifications',    // Уведомления
+            'security' => 'Security',              // Безопасность (2FA, активные сессии)
+            'integrations' => 'Integrations',      // Интеграции (подключение соцсетей, API ключи)
+            'preferences' => 'Preferences',        // Общие предпочтения (язык, формат даты/времени)
         ];
-
         if (!array_key_exists($page, $sections)) {
             $page = 'general';
         }

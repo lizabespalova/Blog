@@ -1,0 +1,11 @@
+#font-size-value {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.save-settings:hover {
+    background-color: #0056b3;
+}

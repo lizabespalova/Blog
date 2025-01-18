@@ -1,0 +1,62 @@
+/* Стили для навигации с активным состоянием */
+.settings-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-nav li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.settings-nav a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+.settings-nav a.active {
+    color: #0056b3;
+    font-weight: bold;
+}
+
+.settings-nav a:hover {
+    color: #0056b3;
+}
+
+/* Стили для формы настроек интеграции */
+.integration-form {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+.integration-form h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.integration-form .form-group {
+    margin-bottom: 15px;
+}
+
+.integration-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.integration-form input[type="checkbox"] {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
