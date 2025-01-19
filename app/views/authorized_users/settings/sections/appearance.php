@@ -1,24 +1,38 @@
 <div class="theme-toggle">
-    <label for="theme">Theme:</label>
-    <select id="theme">
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-    </select>
+    <label>Choose Theme:</label>
+    <div class="theme-switch-wrapper">
+        <input type="radio" name="theme" id="light" value="light" class="theme-radio" <?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'light' ? 'checked' : '' ?>>
+        <label for="light" class="theme-switch">
+            <i class="fas fa-sun"></i>
+            <span>Light</span>
+        </label>
+
+        <input type="radio" name="theme" id="dark" value="dark" class="theme-radio" <?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'checked' : '' ?>>
+        <label for="dark" class="theme-switch">
+            <i class="fas fa-moon"></i>
+            <span>Dark</span>
+        </label>
+    </div>
 </div>
+
 
 <div class="font-settings">
     <label for="font-size">Font Size:</label>
-    <input type="range" id="font-size" min="12" max="24" value="16">
-    <span id="font-size-value">16px</span>
+    <input type="range" id="font-size" min="12" max="24" value="<?= $_SESSION['settings']['font_size'] ?? '16' ?>">
+    <span id="font-size-value"><?= $_SESSION['settings']['font_size'] ?? '16' ?>px</span>
 </div>
+
 
 <div class="font-style">
     <label for="font-style">Font Style:</label>
     <select id="font-style">
-        <option value="sans-serif">Sans-serif</option>
-        <option value="serif">Serif</option>
-        <option value="monospace">Monospace</option>
+        <option value="sans-serif" <?= $_SESSION['settings']['font_style'] === 'sans-serif' ? 'selected' : '' ?>>Sans-serif</option>
+        <option value="serif" <?= $_SESSION['settings']['font_style'] === 'serif' ? 'selected' : '' ?>>Serif</option>
+        <option value="monospace" <?= $_SESSION['settings']['font_style'] === 'monospace' ? 'selected' : '' ?>>Monospace</option>
+        <option value="georgia" <?= $_SESSION['settings']['font_style'] === 'georgia' ? 'selected' : '' ?>>Georgia</option>
+        <option value="verdana" <?= $_SESSION['settings']['font_style'] === 'verdana' ? 'selected' : '' ?>>Verdana</option>
     </select>
 </div>
 
-<button class="save-settings">Save Changes</button>
+
+<!--<button id="themeToggle" class="save-settings">Save Changes</button>-->

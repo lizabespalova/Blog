@@ -1,6 +1,6 @@
 
 .profile-info {
-    font-size: 10px; /* Уменьшаем размер шрифта */
+    /*font-size: 10px; !* Уменьшаем размер шрифта *!*/
     line-height: 0; /* Сокращаем расстояние между строками */
     text-align: left;
     flex-grow: 1; /* Заставляем блок информации занимать доступное пространство */
@@ -11,7 +11,7 @@
 .profile-info, #edit-form {
     position: relative;
     padding: 30px;
-    background-color: #fafafa;
+    background-color: transparent;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     flex: 1;
@@ -88,7 +88,7 @@
 }
 
 .profile-info p {
-    font-size: 14px; /* Уменьшаем размер текста в параграфах */
+    /*font-size: 14px; !* Уменьшаем размер текста в параграфах *!*/
     margin: 10px 0; /* Уменьшаем отступы между параграфами */
     line-height: 1.7; /* Добавляем комфортный интервал */
 }
@@ -108,6 +108,7 @@
     flex-direction: column; /* Если элементы располагаются вертикально */
     width: 90%; /* Или другая фиксированная ширина */
     margin: 0 auto; /* Центрируем контейнер, если нужно */
+
 }
 
 .profile-header {

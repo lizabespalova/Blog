@@ -10,8 +10,14 @@
     <link rel="stylesheet" href="/css/profile/favourite_template.css">
     <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/search/search.css">
+    <link rel="stylesheet" href="/css/settings/themes.css">
+
+    <link rel="stylesheet" href="/css/settings/font-size.css">
 </head>
-<body>
+<body
+        class="<?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '' ?>"
+        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;"
+>
 <!-- Header Section -->
 <?php include __DIR__ . '/../../../views/base/profile_header.php'; ?>
 

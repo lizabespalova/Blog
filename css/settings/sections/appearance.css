@@ -1,11 +1,59 @@
-#font-size-value {
-    display: inline-block;
-    margin-left: 10px;
-    font-weight: bold;
-    color: #333;
+/* Общие стили для блока переключателей */
+.theme-switch-wrapper {
+    display: flex;
+    flex-direction: column; /* Размещение элементов вертикально */
+    align-items: flex-start;
 }
 
+.theme-radio {
+    display: none; /* Скрытие стандартных радиокнопок */
+}
 
-.save-settings:hover {
-    background-color: #0056b3;
+/* Стили для меток переключателей */
+.theme-switch {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 120px; /* Установим фиксированную ширину */
+    justify-content: space-between;
+}
+
+.theme-switch:hover {
+    background-color: #e0e0e0;
+}
+
+.theme-switch i {
+    font-size: 20px;
+}
+
+/* Стили для иконок */
+.theme-switch i.fas.fa-sun {
+    color: yellow;
+}
+
+.theme-switch i.fas.fa-moon {
+    color: #fff;
+}
+
+.theme-radio:checked + .theme-switch {
+    background-color: #007bff;
+}
+
+.theme-radio:checked + .theme-switch i {
+    color: #fff;
+}
+
+.theme-radio:checked + .theme-switch span {
+    color: #fff;
+}
+
+/* Стили текста */
+.theme-switch span {
+    margin-left: 10px;
+    font-size: 14px;
 }

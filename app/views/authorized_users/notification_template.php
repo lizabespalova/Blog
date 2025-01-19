@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/notification.css">
+    <link rel="stylesheet" href="/css/settings/themes.css">
+
 </head>
-<body>
+<body class="<?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '' ?>">
 <!-- Header Section -->
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 

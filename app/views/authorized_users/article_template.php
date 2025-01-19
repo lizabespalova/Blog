@@ -12,9 +12,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<!--    <base href="http://localhost:8080/">-->
+
+    <link rel="stylesheet" href="/css/settings/themes.css">
+    <link rel="stylesheet" href="/css/settings/font-style.css">
+    <link rel="stylesheet" href="/css/settings/font-size.css">
+
+
+    <!--    <base href="http://localhost:8080/">-->
 </head>
-<body>
+<body
+        class="<?=
+        isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '';
+        ?>
+    <?= isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'sans-serif'; ?>"
+        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;">
+
 <header>
     <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 </header>

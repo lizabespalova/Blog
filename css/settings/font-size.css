@@ -1,0 +1,125 @@
+/* Для большого размера шрифта */
+body.large-font {
+    font-size: 20px;
+}
+
+/* Для маленького размера шрифта */
+body.small-font {
+    font-size: 12px;
+}
+
+/* Для большого размера шрифта для ссылок */
+body.large-font a {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для ссылок */
+body.small-font a {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для заголовков */
+body.large-font h1,
+body.large-font h2,
+body.large-font h3,
+body.large-font h4,
+body.large-font h5,
+body.large-font h6 {
+    font-size: 24px;
+}
+
+/* Для маленького размера шрифта для заголовков */
+body.small-font h1,
+body.small-font h2,
+body.small-font h3,
+body.small-font h4,
+body.small-font h5,
+body.small-font h6 {
+    font-size: 14px;
+}
+
+/* Для большого размера шрифта для текста в <strong> и <b> */
+body.large-font strong,
+body.large-font b {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для текста в <strong> и <b> */
+body.small-font strong,
+body.small-font b {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для <p> (параграфы) */
+body.large-font p {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для <p> (параграфы) */
+body.small-font p {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для <span> */
+body.large-font span {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для <span> */
+body.small-font span {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для списков (ul, ol, li) */
+body.large-font ul,
+body.large-font ol {
+    font-size: 18px;
+}
+
+body.large-font li {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для списков (ul, ol, li) */
+body.small-font ul,
+body.small-font ol {
+    font-size: 10px;
+}
+
+body.small-font li {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для кнопок */
+body.large-font button {
+    font-size: 18px;
+}
+
+/* Для маленького размера шрифта для кнопок */
+body.small-font button {
+    font-size: 10px;
+}
+
+/* Для большого размера шрифта для параграфов внутри .profile-info */
+body.large-font .profile-info p {
+    font-size: 18px;  /* Большой размер шрифта для текста в параграфах */
+    margin: 10px 0;    /* Уменьшаем отступы между параграфами */
+    line-height: 1.7;  /* Добавляем комфортный интервал */
+}
+
+/* Для маленького размера шрифта для параграфов внутри .profile-info */
+body.small-font .profile-info p {
+    font-size: 10px;  /* Маленький размер шрифта для текста в параграфах */
+    margin: 8px 0;    /* Уменьшаем отступы между параграфами */
+    line-height: 1.5;  /* Уменьшаем интервал между строками */
+}
+
+/* Для большого размера шрифта для лейблов */
+body.large-font label {
+    font-size: 18px;  /* Большой размер шрифта для текста в лейблах */
+}
+
+/* Для маленького размера шрифта для лейблов */
+body.small-font label {
+    font-size: 10px;  /* Маленький размер шрифта для текста в лейблах */
+}

@@ -1,0 +1,43 @@
+/* Текущие стили для light и dark */
+body {
+    /*background-color: #ffffff;*/
+    color: #000000;
+}
+
+body.dark-mode {
+    background-color: #232323;
+    color: #e0e0e0; /* Более мягкий белый цвет для текста */
+}
+
+/* Цвет текста всех label в темном режиме */
+body.dark-mode label {
+    color: #888888; /* Более мягкий оттенок серого */
+}
+
+/* Общие стили заголовков */
+h1, h2, h3, h4, h5, h6 {
+    color: #000; /* Цвет для светлого режима */
+}
+
+/* Заголовки в темном режиме */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #e0e0e0; /* Мягкий белый цвет для темного режима */
+}
+/* Стиль для <strong> в темном режиме */
+body.dark-mode strong,span {
+    color: #9d9d9d; /* Мягкий белый цвет для темного режима */
+}
+/* Стиль ссылок в темном режиме */
+body.dark-mode a {
+    color: #3172b0; /* Мягкий голубой цвет ссылок для темного режима */
+}
+/* Стиль для <strong> в темном режиме */
+body.dark-mode .stat {
+    color: #9d9d9d; /* Мягкий серый цвет для темного режима */
+    background-color: #3172b0;
+}

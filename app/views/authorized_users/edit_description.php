@@ -9,8 +9,17 @@
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/edit_description.css">
+    <link rel="stylesheet" href="/css/settings/themes.css">
+    <link rel="stylesheet" href="/css/settings/font-style.css">
+    <link rel="stylesheet" href="/css/settings/font-size.css">
+
 </head>
-<body>
+<body
+        class="<?=
+        isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '';
+        ?>
+    <?= isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'sans-serif'; ?>"
+        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;">
 <!-- Header Section -->
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 

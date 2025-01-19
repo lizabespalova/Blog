@@ -56,6 +56,7 @@ class FollowController
 
     public function showFollowers($userId)
     {
+        session_start();
         // Получаем подписчиков через модель
         $followers = $this->followModel->getFollowers($userId);
         $followersCount = $this->followModel->getFollowersCount($userId);
@@ -68,6 +69,7 @@ class FollowController
 
     public function showFollowings($userId)
     {
+        session_start();
         // Получаем подписки через модель
         $followings = $this->followModel->getFollowings($userId);
         $followingsCount = $this->followModel->getFollowingCount($userId);

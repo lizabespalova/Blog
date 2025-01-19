@@ -10,9 +10,18 @@
     <link rel="stylesheet" href="/css/profile/article_form.css">
     <link rel="stylesheet" href="/css/profile/markdown.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <link rel="stylesheet" href="/css/settings/themes.css">
+    <link rel="stylesheet" href="/css/settings/font-style.css">
+    <link rel="stylesheet" href="/css/settings/font-size.css">
 
 </head>
-<body>
+<body
+        class="<?=
+        isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '';
+        ?>
+    <?= isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'sans-serif'; ?>"
+        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;">
+
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
  <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm">
@@ -70,7 +79,7 @@
      </div>
 
      <div class="switch-container">
-         <span>Publish</span>
+         <label for="publish">Publish:</label>
          <label class="switch">
              <input type="checkbox" id="is_published" name="is_published" value="1"
                  <?= isset($article['is_published']) && $article['is_published'] ? 'checked' : '' ?>>

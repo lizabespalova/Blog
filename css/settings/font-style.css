@@ -1,0 +1,21 @@
+/* Применяем стандартные шрифты для разных типов */
+body.sans-serif {
+    font-family: 'Arial', sans-serif;
+}
+
+body.serif {
+    font-family: 'Times New Roman', serif;
+}
+
+body.monospace {
+    font-family: 'Courier New', monospace;
+}
+
+/* Добавим классические шрифты для статей */
+body.georgia {
+    font-family: 'Georgia', serif;
+}
+
+body.verdana {
+    font-family: 'Verdana', sans-serif;
+}

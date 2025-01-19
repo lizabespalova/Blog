@@ -99,12 +99,6 @@ function profile_route($uri, $method) {
                 $controller->deleteOldNotifications(); // Удаление старых уведомлений
             }
             exit(); // Остановка выполнения после маршрута
-        case '/settings':
-            $controller = new SettingsController();
-            if ($method === 'GET') {
-                $controller->showSettingsTemplate(); // Удаление старых уведомлений
-            }
-            exit(); // Остановка выполнения после маршрута
         default:
             return false;
     }
