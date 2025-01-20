@@ -56,7 +56,7 @@ class ForgetPasswordController {
         try {
             $login = $user['user_login'];
             $resetKey = $this->generateResetKey($login);
-            $resetUrl = 'http://localhost:8000/app/views/auth/form_reset_password.php?key=' . $resetKey;
+            $resetUrl = 'http://localhost:8080/app/views/auth/form_reset_password.php?key=' . $resetKey;
 
             // Настройка письма
             $this->mailer->setFrom(getEmail());

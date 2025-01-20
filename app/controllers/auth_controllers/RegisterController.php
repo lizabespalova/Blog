@@ -6,6 +6,7 @@ use Exception;
 use models\User;
 use PHPMailer;
 use services\AuthService;
+use services\ErrorService;
 
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ .'/../../../config/config.php';
@@ -17,12 +18,13 @@ class RegisterController {
     private $userModel;
     private $mailer;
     private $authService;
-
+    private $errorService;
 
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
         $this->mailer = new PHPMailer(true);
         $this->authService = new AuthService($dbConnection);
+        $this->errorService = new ErrorService();
         $this->configure_mailer();
     }
 
@@ -52,7 +54,7 @@ class RegisterController {
                 header('Location: /confirmation_pending');
                 exit();
             } else {
-                $this->show_errors($errors);
+                $this->errorService->show_error($errors);
             }
         }
     }
@@ -165,8 +167,9 @@ class RegisterController {
 
         // Убедитесь, что пользователь авторизован
         if (!isset($_SESSION['user_id'])) {
-        $this->show_errors("User wasn`t found");
-        exit();
+//        $this->show_errors("User wasn`t found");
+          $this->errorService->show_error("User wasn`t found");
+            exit();
         }
         $user = $this->userModel->get_temporary_user_by_id($_SESSION['user_id']);
         // Получаем данные из формы
@@ -175,7 +178,8 @@ class RegisterController {
 
         // Проверяем, что пароли совпадают
         if ($password !== $passwordConfirmation) {
-            $this->show_errors("Passwords don`t match");
+//            $this->show_errors("Passwords don`t match");
+            $this->errorService->show_error("Passwords don`t match");
         }
 
         // Хэшируем пароль
@@ -191,7 +195,8 @@ class RegisterController {
             header('Location:'.$link);
             exit();
         }else{
-            $this->show_errors("User wasn`t found");
+//            $this->show_errors("User wasn`t found");
+            $this->errorService->show_error("User wasn`t found");
         }
     }
 
@@ -249,7 +254,9 @@ class RegisterController {
 
             if (!$existingUser) {
                 // Если пользователя нет, говорим, что нет такого пользователя
-                $this->show_errors("This user doesn`t exist ");
+                $this->errorService->show_error("This user doesn`t exist ");
+
+//                $this->show_errors("This user doesn`t exist ");
             } else {
                 // Если пользователь уже существует, выполняем авторизацию
                 $this->loginUser($existingUser);
@@ -407,21 +414,21 @@ class RegisterController {
         exit();
     }
 
-    public function show_errors($errors) {
-        // Проверяем, является ли $errors массивом
-        if (!is_array($errors)) {
-            $errors = [$errors]; // Если это не массив, преобразуем в массив
-        }
-
-        // Соединяем сообщения в одну строку
-        $errorMessages = implode(" ", $errors);
-
-        // Кодируем сообщение для URL
-        $encodedMessage = urlencode($errorMessages);
-
-        // Перенаправляем на страницу ошибки с сообщением
-        header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
-        exit(); // Завершаем выполнение текущего скрипта
-    }
+//    public function show_errors($errors) {
+//        // Проверяем, является ли $errors массивом
+//        if (!is_array($errors)) {
+//            $errors = [$errors]; // Если это не массив, преобразуем в массив
+//        }
+//
+//        // Соединяем сообщения в одну строку
+//        $errorMessages = implode(" ", $errors);
+//
+//        // Кодируем сообщение для URL
+//        $encodedMessage = urlencode($errorMessages);
+//
+//        // Перенаправляем на страницу ошибки с сообщением
+//        header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
+//        exit(); // Завершаем выполнение текущего скрипта
+//    }
 }
 ?>

@@ -19,27 +19,33 @@ function setting_route($uri, $method) {
 //    var_dump($uri);
     switch ($uri) {
         case '/settings':
-            $controller = new SettingsController();
+            $controller = new SettingsController(getDbConnection());
             if ($method === 'GET') {
                 $controller->showSettingsTemplate(); // Удаление старых уведомлений
             }
             exit(); // Остановка выполнения после маршрута
         case '/settings/save':
-            $controller = new SettingsController();
+            $controller = new SettingsController(getDbConnection());
             if ($method === 'POST') {
-                $controller->saveSettings();
+                $controller->saveTheme();
             }
             exit(); // Остановка выполнения после маршрута
         case '/settings/font-size':
-            $controller = new SettingsController();
+            $controller = new SettingsController(getDbConnection());
             if ($method === 'POST') {
                 $controller->saveFontSize();
             }
             exit();
         case '/settings/font-style':
-            $controller = new SettingsController();
+            $controller = new SettingsController(getDbConnection());
             if ($method === 'POST') {
-                $controller->actionSaveFontStyle();
+                $controller->saveFontStyle();
+            }
+            exit();
+        case '/settings/update-user':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->updateUser();
             }
             exit();
         default:

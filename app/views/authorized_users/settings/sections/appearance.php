@@ -26,13 +26,11 @@
 <div class="font-style">
     <label for="font-style">Font Style:</label>
     <select id="font-style">
-        <option value="sans-serif" <?= $_SESSION['settings']['font_style'] === 'sans-serif' ? 'selected' : '' ?>>Sans-serif</option>
-        <option value="serif" <?= $_SESSION['settings']['font_style'] === 'serif' ? 'selected' : '' ?>>Serif</option>
-        <option value="monospace" <?= $_SESSION['settings']['font_style'] === 'monospace' ? 'selected' : '' ?>>Monospace</option>
-        <option value="georgia" <?= $_SESSION['settings']['font_style'] === 'georgia' ? 'selected' : '' ?>>Georgia</option>
-        <option value="verdana" <?= $_SESSION['settings']['font_style'] === 'verdana' ? 'selected' : '' ?>>Verdana</option>
+        <option value="sans-serif" <?= (!isset($_SESSION['settings']['font_style']) || $_SESSION['settings']['font_style'] === 'sans-serif') ? 'selected' : '' ?>>Sans-serif</option>
+        <option value="serif" <?= (isset($_SESSION['settings']['font_style']) && $_SESSION['settings']['font_style'] === 'serif') ? 'selected' : '' ?>>Serif</option>
+        <option value="monospace" <?= (isset($_SESSION['settings']['font_style']) && $_SESSION['settings']['font_style'] === 'monospace') ? 'selected' : '' ?>>Monospace</option>
+        <option value="georgia" <?= (isset($_SESSION['settings']['font_style']) && $_SESSION['settings']['font_style'] === 'georgia') ? 'selected' : '' ?>>Georgia</option>
+        <option value="verdana" <?= (isset($_SESSION['settings']['font_style']) && $_SESSION['settings']['font_style'] === 'verdana') ? 'selected' : '' ?>>Verdana</option>
     </select>
 </div>
-
-
 <!--<button id="themeToggle" class="save-settings">Save Changes</button>-->

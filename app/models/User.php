@@ -370,5 +370,44 @@ class User
         $stmt->bind_param("is", $userId, $category);
         $stmt->execute();
     }
+    public function updateUser($userId, $login, $email = null) {
+        // Формируем SQL-запрос
+        $query = "UPDATE users SET user_login = ? ";
+
+        // Если почта передана, обновляем её
+        if (!is_null($email)) {
+            $query .= ", user_email = ? ";
+        }
+
+        $query .= "WHERE user_id = ?";
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+
+        if (!is_null($email)) {
+            $stmt->bind_param('ssi', $login, $email, $userId);
+        } else {
+            $stmt->bind_param('si', $login, $userId);
+        }
+
+        return $stmt->execute();
+    }
+
+    public function getPasswordByUserId($userId) {
+        $stmt = $this->conn->prepare("SELECT user_password FROM users WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+    public function isEmailExist($email, $userId) {
+        $query = "SELECT COUNT(*) FROM users WHERE user_email = ? AND user_id != ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('si', $email, $userId);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        return $count > 0; // Возвращает true, если email уже занят
+    }
 
 }

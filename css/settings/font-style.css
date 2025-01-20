@@ -8,7 +8,7 @@ body.serif {
 }
 
 body.monospace {
-    font-family: 'Courier New', monospace;
+    font-family: monospace;
 }
 
 /* Добавим классические шрифты для статей */
