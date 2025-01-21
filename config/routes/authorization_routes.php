@@ -8,6 +8,7 @@ use controllers\authorized_users_controllers\ArticleController;
 use controllers\authorized_users_controllers\LogoutController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\ErrorController;
+use services\EmailService;
 
 require_once __DIR__ . '/../../config/config.php';
 
@@ -53,10 +54,13 @@ function authorization_route($uri, $method) {
             exit();  // Остановка выполнения после маршрута
 
         case '/confirm':
-            $controller = new RegisterController(getDbConnection());
-            $controller->confirmRegistration();
+            $service = new EmailService();
+            $service->confirmRegistration();
             exit();
-
+        case '/update-email':
+            $service = new EmailService();
+            $service->confirmEmailUpdate();
+            exit();
         case '/confirmation_pending':
             $controller = new RegisterController(getDbConnection());
             $controller->registration_pending();
@@ -64,6 +68,10 @@ function authorization_route($uri, $method) {
         case '/error':
             $controller = new ErrorController();
             $controller->show_error();
+            exit();
+        case '/success':
+            $controller = new ErrorController();
+            $controller->show_success();
             exit();
         case '/logout':
             $controller = new LogoutController();

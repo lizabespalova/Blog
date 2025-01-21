@@ -6,6 +6,7 @@ use Exception;
 use models\User;
 use PHPMailer;
 use services\AuthService;
+use services\EmailService;
 use services\ErrorService;
 
 require_once __DIR__ . '/../../models/User.php';
@@ -16,16 +17,17 @@ require_once __DIR__ . '/../../views/auth/phpmailer/PHPMailerAutoload.php';
 class RegisterController {
 
     private $userModel;
-    private $mailer;
+//    private $mailer;
     private $authService;
     private $errorService;
-
+    private $emailService;
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
-        $this->mailer = new PHPMailer(true);
+//        $this->mailer = new PHPMailer(true);
         $this->authService = new AuthService($dbConnection);
         $this->errorService = new ErrorService();
-        $this->configure_mailer();
+        $this->emailService = new EmailService();
+        $this->emailService->configure_mailer();
     }
 
     public function show_register_form() {
@@ -42,13 +44,16 @@ class RegisterController {
 
             if (empty($errors)) {
                 // Генерируем токен для подтверждения
-                $token = md5($login . mt_rand(1000, 9999));
+                $token = $this->emailService->generateResetKey($login);
 
                 // Создаем временного пользователя
                 $this->userModel->create_temporary_user($login, $email, password_hash($password, PASSWORD_DEFAULT), $token);
 
                 // Отправляем письмо с подтверждением
-                $this->send_confirmation_email($email, $token);
+                $confirmationUrl = getConfirmationUrl() . $token;
+                $body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
+                $subject = 'Confirm Your Registration';
+                $this->emailService->sendConfirmationEmail($email, $subject, $body);
 
                 // Перенаправляем на страницу ожидания подтверждения
                 header('Location: /confirmation_pending');
@@ -96,72 +101,36 @@ class RegisterController {
         return $errors;
     }
 
-    private function configure_mailer() {
-        $this->mailer->isSMTP();
-        $this->mailer->Host = getHost();
-        $this->mailer->Port = getPort();
-        $this->mailer->SMTPSecure = getSmptSecure();
-        $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = getEmail();
-        $this->mailer->Password = getEmailPassword();
-    }
+//    private function configure_mailer() {
+//        $this->mailer->isSMTP();
+//        $this->mailer->Host = getHost();
+//        $this->mailer->Port = getPort();
+//        $this->mailer->SMTPSecure = getSmptSecure();
+//        $this->mailer->SMTPAuth = true;
+//        $this->mailer->Username = getEmail();
+//        $this->mailer->Password = getEmailPassword();
+//    }
+//
+//    private function send_confirmation_email($email, $token) {
+//        $confirmationUrl = 'http://localhost:8080/confirm?user_key=' . $token;
+//
+//        $this->mailer->setFrom(getEmail());
+//        $this->mailer->addAddress($email);
+//        $this->mailer->isHTML(true);
+//        $this->mailer->Subject = 'Confirm Your Registration';
+//        $this->mailer->Body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
+//
+//        try {
+//            $this->mailer->send();
+//            echo '<script type="text/javascript">
+//            alert("Confirmation email sent successfully!");
+//            window.location.href = "/confirmation_pending";
+//        </script>';
+//        } catch (Exception $e) {
+//            echo 'Error: ', $this->mailer->ErrorInfo;
+//        }
+//    }
 
-    private function send_confirmation_email($email, $token) {
-        $confirmationUrl = 'http://localhost:8080/confirm?user_key=' . $token;
-
-        $this->mailer->setFrom(getEmail());
-        $this->mailer->addAddress($email);
-        $this->mailer->isHTML(true);
-        $this->mailer->Subject = 'Confirm Your Registration';
-        $this->mailer->Body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
-
-        try {
-            $this->mailer->send();
-            echo '<script type="text/javascript">
-            alert("Confirmation email sent successfully!");
-            window.location.href = "/confirmation_pending";
-        </script>';
-        } catch (Exception $e) {
-            echo 'Error: ', $this->mailer->ErrorInfo;
-        }
-    }
-
-
-    public function confirmRegistration() {
-        session_start();
-        $token = $_GET['user_key'] ?? '';
-
-        if ($token) {
-            $user = $this->userModel->get_temporary_user_by_token($token);
-
-            if ($user) {
-                // Проверяем, есть ли пароль
-                if (empty($user['user_password'])) {
-                    // Сохраняем пользователя в сессии
-
-                    $_SESSION['user_id'] = $user['id'];
-                    // Перенаправляем на страницу установки пароля
-                    header('Location: /app/views/auth/set_password.php');
-                    exit();
-                } else {
-                    // Если пароль есть, перемещаем в основную таблицу и благодарим
-                    $link = '/profile/' . $user['user_login'];
-                    $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $user['user_password'], $link, $user['created_at']);
-
-                    // Удаляем временного пользователя
-                    $this->userModel->delete_temporary_user($user['user_id']);
-
-                    // Перенаправляем на страницу благодарности
-                    header('Location: /app/views/authorized_users/thank_to_authorized_user.php');
-                    exit();
-                }
-            } else {
-                echo 'Invalid or expired token.';
-            }
-        } else {
-            echo 'No token provided.';
-        }
-    }
     public function setPassword() {
         session_start();
 
@@ -381,13 +350,16 @@ class RegisterController {
         }
 
         // Генерация временного токена
-        $token = md5($login . mt_rand(1000, 9999));
+        $token = $this->emailService->generateResetKey($login);
 
         // Создаем временного пользователя
         $this->userModel->create_temporary_user($login, $email, "", $token); // Пароль будет null, потому что его нет в случае регистрации через Google
 
         // Отправляем письмо с подтверждением
-        $this->send_confirmation_email($email, $token);
+        $confirmationUrl = getConfirmationUrl() . $token;
+        $body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
+        $subject = 'Confirm Your Registration';
+        $this->emailService->sendConfirmationEmail($email, $subject, $body);
 
         // Перенаправляем на страницу ожидания подтверждения
         header('Location: /confirmation_pending');

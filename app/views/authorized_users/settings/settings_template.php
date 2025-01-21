@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/css/settings/sections/security.css">
     <link rel="stylesheet" href="/css/settings/sections/integrations.css">
     <link rel="stylesheet" href="/css/settings/sections/preferences.css">
+    <link rel="stylesheet" href="/css/settings/sections/credentionals_icon.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
 
@@ -62,6 +63,7 @@
 <script src="/js/authorized_users/settings/switch_font-size.js"></script>
 <script src="/js/authorized_users/settings/switch_font-style.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_show_updates.js"></script>
+<script src="/js/authorized_users/settings/set_alert_to_send_confirmation_email.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 

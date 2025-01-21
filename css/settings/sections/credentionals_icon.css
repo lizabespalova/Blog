@@ -1,0 +1,26 @@
+/* Стили для иконки */
+.info-icon {
+    font-size: 1.2em; /* Уменьшаем размер иконки */
+    margin-left: 5px;
+    cursor: pointer;
+    color: #007bff;
+    border-bottom: 1px dotted #007bff;
+    position: relative;
+}
+
+/* Стили для всплывающей подсказки */
+.info-icon:hover::after {
+    content: attr(data-info); /* Используем data-info атрибут для отображения текста */
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 4px 8px; /* Уменьшаем отступы */
+    border-radius: 4px;
+    top: 20px;  /* Расположим подсказку чуть ниже */
+    left: 0;
+    white-space: nowrap;
+    font-size: 0.8em; /* Уменьшаем размер текста */
+    z-index: 1000;
+    width: max-content;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

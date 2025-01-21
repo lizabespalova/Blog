@@ -1,7 +1,10 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
+require_once 'app/services/helpers/session_check.php';
+
 use models\User;
+use services\EmailService;
 
 require_once 'app/services/helpers/session_check.php';
 
@@ -9,9 +12,13 @@ class SettingsController
 {
     private $userModel;
 
+    private $emailService;
+
 
     public function __construct($conn) {
         $this->userModel = new User($conn);
+        $this->emailService = new EmailService();
+        $this->emailService->configure_mailer();
     }
     public function showSettingsTemplate(){
         $page = $_GET['section'] ?? 'general';
@@ -32,6 +39,8 @@ class SettingsController
 //            $_SESSION['settings']['font_style'] = 'serif';
 //        }
 
+        $currentLogin = $_SESSION['user']['user_login'];
+        $currentEmail = $this->userModel->getUserEmail($_SESSION['user']['user_id']);
         include __DIR__ . '/../../views/authorized_users/settings/settings_template.php';
     }
 
@@ -83,23 +92,45 @@ class SettingsController
             return;
         }
 
-        // Получение данных из POST-запроса
-        $login = trim($_POST['login']);
-        $email = trim($_POST['email']);
-        $password = $_POST['password'];
+        // Получаем данные из тела запроса
+        $data = json_decode(file_get_contents('php://input'), true);
 
+        if (!$data) {
+            echo json_encode(['success' => false, 'message' => 'Invalid JSON']);
+            return;
+        }
+
+        // Получаем текущие данные из сессии
         $userId = $_SESSION['user']['user_id'];
+        $currentLogin = $_SESSION['user']['user_login'];
+        $currentEmail = $this->userModel->getUserEmail($userId);
+
+        // Данные из запроса
+        $login = trim($data['login'] ?? $currentLogin); // Если логин пустой, берем из сессии
+        // Проверка на уникальность логина
+        if ($login !== $currentLogin && $this->userModel->get_user_by_login($login)) {
+            // Если логин уже существует, возвращаем ошибку
+            echo json_encode([
+                'success' => false,
+                'message' => 'The provided login is already in use. Please choose a different one.'
+            ]);
+            exit; // Прекращаем выполнение
+        }
+        $email = trim($data['email'] ?? $currentEmail); // Если email пустой, берем из сессии
+        $password = $data['password'] ?? '';
 
         // Проверка пароля
-        $user = $this->userModel->getPasswordByUserId($userId);
-
+        $user = $this->userModel->get_user_by_id($userId);
         if (!$user || !password_verify($password, $user['user_password'])) {
             echo json_encode(['success' => false, 'message' => 'Invalid password']);
             return;
         }
 
-        // Если email не пустой, то проверяем его
-        if (!empty($email)) {
+        // Проверка на изменение email
+        $isEmailChanged = $email !== $currentEmail;
+
+        // Если email изменен, выполняем проверки
+        if ($isEmailChanged) {
             // Проверка на уникальность email
             if ($this->userModel->isEmailExist($email, $userId)) {
                 echo json_encode(['success' => false, 'message' => 'Email is already in use']);
@@ -111,15 +142,47 @@ class SettingsController
                 echo json_encode(['success' => false, 'message' => 'Invalid email format']);
                 return;
             }
+
+            // Генерация токена для подтверждения email
+            $token = $this->emailService->generateResetKey($login);
+
+            // Сохранение изменений во временную таблицу
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $this->userModel->create_temporary_user($login, $email, $hashedPassword, $token, $userId);
+
+            // Отправка подтверждающего письма
+            $confirmationUrl = getUpdateEmailUrl() . $token;
+            $subject = 'Confirm Your Email Change';
+            $body = 'You requested to change your email. Please confirm by clicking the link below:<br>
+                 <a href="' . $confirmationUrl . '">Confirm Email Change</a>';
+            $emailSentResponse = $this->emailService->sendUpdateEmail($email, $subject, $body);
+
+            // Преобразование строки JSON в массив
+            $response = json_decode($emailSentResponse, true);
+
+            if ($response['success']) {
+                // Если отправка успешна
+                echo json_encode(['success' => true, 'message' => 'A confirmation email has been sent to your new address']);
+            } else {
+                // Если произошла ошибка, передаем детальную информацию
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Failed to send confirmation email',
+                    'error' => $response['error'] ?? 'Unknown error'
+                ]);
+            }
+
+            return;
         }
 
-        // Обновляем только логин и, если нужно, email
-        $result = $this->userModel->updateUser($userId, $login, $email);
-
-        if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to update profile']);
+        // Если только логин изменен, обновляем логин
+        if ($login !== $currentLogin) {
+            $link = '/profile/' . $login;
+            $this->userModel->updateUser($userId, $login, $link, $currentEmail);
         }
+        $_SESSION['user']['user_login'] = $login;
+        echo json_encode(['success' => true, 'message' => 'User data updated successfully']);
     }
+
+
 }

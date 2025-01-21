@@ -1,0 +1,64 @@
+/* Основные стили для страницы успеха */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #28a745; /* Цвет для успеха */
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.25rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Стиль для ссылок */
+a {
+    font-size: 1.1rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для SweetAlert2 */
+.swal2-popup {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #28a745; /* Цвет для успеха */
+}
+
+.swal2-html-container {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.swal2-confirm {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.swal2-confirm:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}

@@ -32,10 +32,10 @@ function getGoogleClientId(){return $_ENV['GOOGLE_CLIENT_ID'];}
 function getGoogleClientSecret(){return $_ENV['GOOGLE_CLIENT_SECRET'];}
 function getRedirectUriRegister(){return $_ENV['REDIRECT_URI_REGISTER'];}
 function getRedirectUriLogin(){return $_ENV['REDIRECT_URI_LOGIN'];}
-
-
 function getBaseUrl() {
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
     return $protocol . "://" . $_SERVER['HTTP_HOST'];
 }
+function getConfirmationUrl(){return $_ENV['CONFIRMATION_URL'];}
+function getUpdateEmailUrl(){return $_ENV['UPDATE_EMAIL_URL'];}
 ?>

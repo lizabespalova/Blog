@@ -49,23 +49,23 @@ class User
         $createdAt = date('Y-m-d H:i:s'); // Текущее время
         mysqli_query($this->conn, "UPDATE users SET user_key='$key', key_created_at='$createdAt' WHERE user_login='$login'");
     }
-
-    public function get_key($email) {
-        $stmt = $this->conn->prepare("SELECT user_key FROM users WHERE user_email = ?");
-        $stmt->bind_param("s", $email);
+    public function getUserEmail($userId){
+        $stmt = $this->conn->prepare("SELECT user_email FROM users WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
         $stmt->execute();
-        $user_key = null;
-        $stmt->bind_result($user_key);
-        $stmt->fetch();
-        $stmt->close();
-        return $user_key;
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['user_email'];
     }
-
-//    public function activateUser($user_id) {
-//        $stmt = $this->link->prepare("UPDATE users SET is_active = 1, user_key = NULL WHERE user_id = ?");
-//        $stmt->bind_param("i", $user_id);
+//    public function get_key($email) {
+//        $stmt = $this->conn->prepare("SELECT user_key FROM users WHERE user_email = ?");
+//        $stmt->bind_param("s", $email);
 //        $stmt->execute();
+//        $user_key = null;
+//        $stmt->bind_result($user_key);
+//        $stmt->fetch();
 //        $stmt->close();
+//        return $user_key;
 //    }
 
     public function update_password($login, $newPassword) {
@@ -102,6 +102,19 @@ class User
         // Мы считаем, что успешное выполнение запроса всегда возвращает true
         return true;
     }
+    public function updateUserLink($userId, $newLink) {
+        $query = "UPDATE users SET link = ? WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("si", $newLink, $userId);
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+    }
+
     public function get_user_by_id($userId) {
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $userId);
@@ -119,9 +132,18 @@ class User
         return $stmt->execute();
     }
     // Создание временного пользователя
-    public function create_temporary_user($login, $email, $password, $token) {
-        $stmt = $this->conn->prepare("INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $login, $email, $password, $token);
+    public function create_temporary_user($login, $email, $password, $token, $userId = null) {
+        // Подготовка SQL-запроса с ON DUPLICATE KEY UPDATE
+        $stmt = $this->conn->prepare("
+        INSERT INTO temporary_users (user_login, user_email, user_password, confirmation_token,  user_id)
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        user_login = VALUES(user_login),
+        user_password = VALUES(user_password),
+        confirmation_token = VALUES(confirmation_token),
+        user_id = VALUES(user_id)
+    ");
+        $stmt->bind_param("ssssi", $login, $email, $password, $token, $userId);
         $stmt->execute();
         $stmt->close();
     }
@@ -329,35 +351,35 @@ class User
         // Если данных нет, возвращаем 0
         return 0;
     }
-
-    // Поиск пользователя по Google ID
-    public function findUserByGoogleId($googleId) {
-        // Подготовка SQL-запроса
-        $stmt = $this->conn->prepare('SELECT * FROM users WHERE google_id = ?');
-        if ($stmt === false) {
-            die('Prepare failed: ' . $this->conn->error);
-        }
-
-        // Привязываем параметры
-        $stmt->bind_param('s', $googleId);
-
-        // Выполняем запрос
-        $stmt->execute();
-
-        // Получаем результат
-        $result = $stmt->get_result();
-
-        // Проверяем наличие записи
-        if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
-        }
-
-        // Закрываем запрос
-        $stmt->close();
-
-        // Возвращаем null, если пользователь не найден
-        return null;
-    }
+//
+//    // Поиск пользователя по Google ID
+//    public function findUserByGoogleId($googleId) {
+//        // Подготовка SQL-запроса
+//        $stmt = $this->conn->prepare('SELECT * FROM users WHERE google_id = ?');
+//        if ($stmt === false) {
+//            die('Prepare failed: ' . $this->conn->error);
+//        }
+//
+//        // Привязываем параметры
+//        $stmt->bind_param('s', $googleId);
+//
+//        // Выполняем запрос
+//        $stmt->execute();
+//
+//        // Получаем результат
+//        $result = $stmt->get_result();
+//
+//        // Проверяем наличие записи
+//        if ($result->num_rows > 0) {
+//            return $result->fetch_assoc();
+//        }
+//
+//        // Закрываем запрос
+//        $stmt->close();
+//
+//        // Возвращаем null, если пользователь не найден
+//        return null;
+//    }
     public function trackUserInterest(int $userId, string $category): void
     {
         $query = "
@@ -370,28 +392,29 @@ class User
         $stmt->bind_param("is", $userId, $category);
         $stmt->execute();
     }
-    public function updateUser($userId, $login, $email = null) {
+    public function updateUser($userId, $login, $link, $email = null) {
         // Формируем SQL-запрос
-        $query = "UPDATE users SET user_login = ? ";
+        $query = "UPDATE users SET user_login = ?,link = ?";
 
-        // Если почта передана, обновляем её
+        // Если почта передана, добавляем её в запрос
         if (!is_null($email)) {
-            $query .= ", user_email = ? ";
+            $query .= ", user_email = ?";
         }
-
-        $query .= "WHERE user_id = ?";
+        $query .= " WHERE user_id = ?";
 
         // Подготовка запроса
         $stmt = $this->conn->prepare($query);
 
+        // Привязываем параметры
         if (!is_null($email)) {
-            $stmt->bind_param('ssi', $login, $email, $userId);
+            $stmt->bind_param('sssi', $login, $link, $email, $userId);
         } else {
-            $stmt->bind_param('si', $login, $userId);
+            $stmt->bind_param('ssi', $login, $link, $userId);
         }
 
         return $stmt->execute();
     }
+
 
     public function getPasswordByUserId($userId) {
         $stmt = $this->conn->prepare("SELECT user_password FROM users WHERE user_id = ?");
@@ -408,6 +431,29 @@ class User
         $stmt->bind_result($count);
         $stmt->fetch();
         return $count > 0; // Возвращает true, если email уже занят
+    }
+    public function updateUserFromTemporary($userId) {
+        // SQL-запрос для обновления записи по user_id
+        $query = "
+        UPDATE users AS u
+        JOIN temporary_users AS t
+        ON u.user_id = t.user_id
+        SET 
+            u.user_login = t.user_login,
+            u.user_email = t.user_email,
+            u.user_password = t.user_password,
+            u.created_at = t.created_at
+        WHERE t.user_id = ?";
+
+        // Подготовка и выполнение запроса
+        $stmt = $this->conn->prepare($query);
+
+        if ($userId !== null) {
+            $stmt->bind_param("i", $userId);
+        }
+
+        $stmt->execute();
+        $stmt->close();
     }
 
 }
