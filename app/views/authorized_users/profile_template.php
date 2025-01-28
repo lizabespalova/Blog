@@ -46,8 +46,17 @@
             <div class="profile-info" id="profile-info">
                 <!-- Секция для подписчиков и подписок -->
                 <div class="profile-header">
+                    <h1>
+                        <?= htmlspecialchars($user['user_login']) ?>
+                        <?php if ($profileStatus): ?> <!-- добавлено условие для проверки видимости профиля -->
+                            <?php if ($user['is_online']): ?>
+                                <span class="status-indicator online" title="Online"></span>
+                            <?php else: ?>
+                                <span class="status-indicator offline" title="Offline"></span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </h1>
 
-                    <h1><?=  htmlspecialchars($user['user_login']) ?></h1>
                     <div class="profile-stats">
                         <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
                             Followers: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
@@ -80,19 +89,42 @@
                 <?php if ($currentUser['user_id'] === $user['user_id']): ?>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
                 <?php else: ?>
-                    <?php if ($isFollowing): ?>
-                        <form id="unfollowForm" method="POST" action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>">
-                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($_SESSION['user']['user_id']) ?>">
-                            <button class="follow-button" type="submit">Unfollow</button>
-                        </form>
+                    <?php if ($profileVisibility === 'private'): ?>
+                        <?php if ($followStatus === 'pending'): ?>
+                            <button
+                                    class="follow-button"
+                                    data-action="/cancel-follow-request/<?= htmlspecialchars($user['user_id']) ?>"
+                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Cancel Request
+                            </button>
+                        <?php elseif ($followStatus === 'approved'): ?>
+                            <button
+                                    class="follow-button"
+                                    data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
+                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Unfollow
+                            </button>
+                        <?php else: ?>
+                            <button
+                                    class="follow-button"
+                                    data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
+                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Follow
+                            </button>
+                        <?php endif; ?>
                     <?php else: ?>
-                        <form id="followForm" class="follow-unfollow" method="POST" action="/follow/<?= htmlspecialchars($user['user_id']) ?>">
-                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($_SESSION['user']['user_id']) ?>">
-                            <button class="follow-button" type="submit">Follow</button>
-                        </form>
+                        <?php if ($isFollowing): ?>
+                            <button
+                                    class="follow-button"
+                                    data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
+                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Unfollow
+                            </button>
+                        <?php else: ?>
+                            <button
+                                    class="follow-button"
+                                    data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
+                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Follow
+                            </button>
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php endif; ?>
-
             </div>
 
             <div id="edit-form" style="display: none;">
@@ -124,6 +156,8 @@
     </div>
 </div>
 
+<?php
+if ($profileVisibility === 'public' || $profileUserId === $_SESSION['user']['user_id'] || $isFollowing): ?>
 <!-- Navigation Menu -->
 <div class="profile-navigation">
     <div class="menu-items">
@@ -176,6 +210,17 @@
         <p>These are your courses. Start learning now!</p>
     </div>
 </div>
+<?php else: ?>
+    <!-- Сообщение о приватности -->
+    <div class="profile-restricted">
+        <div class="restricted-message">
+            <img src="/templates/images/locked-profile.png" alt="Locked Profile" class="restricted-icon">
+            <p class="restricted-text">
+                This profile is private. Subscribe to view the content.
+            </p>
+        </div>
+    </div>
+<?php endif; ?>
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>

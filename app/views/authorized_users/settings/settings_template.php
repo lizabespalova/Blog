@@ -62,6 +62,7 @@
 <script src="/js/authorized_users/settings/switch_theme.js"></script>
 <script src="/js/authorized_users/settings/switch_font-size.js"></script>
 <script src="/js/authorized_users/settings/switch_font-style.js"></script>
+<script src="/js/authorized_users/settings/switch_privacy_settings.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_show_updates.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_send_confirmation_email.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>

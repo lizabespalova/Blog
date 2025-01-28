@@ -267,6 +267,69 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/*Значки онлайн, офлайн*/
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.status-indicator.online {
+    background-color: green;
+}
+
+.status-indicator.offline {
+    background-color: red;
+}
+
+
+/*Профиль приватный*/
+.profile-restricted {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.restricted-message {
+    max-width: 400px;
+}
+
+.restricted-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.restricted-text {
+    font-size: 16px;
+    color: #495057;
+    margin: 0;
+}
+
+.subscribe-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subscribe-link:hover {
+    text-decoration: underline;
+}
+
+
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .repost-card {

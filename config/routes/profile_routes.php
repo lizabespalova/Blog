@@ -99,6 +99,31 @@ function profile_route($uri, $method) {
                 $controller->deleteOldNotifications(); // Удаление старых уведомлений
             }
             exit(); // Остановка выполнения после маршрута
+        case '/notifications/approve':
+            if ($method === 'POST') {
+                $notificationId = $_POST['notification_id'];
+                $followerId = $_POST['follower_id'];
+
+                $controller = new NotificationController($dbConnection);
+                $controller->approveRequest($notificationId, $followerId);
+            }
+            break;
+
+        case '/notifications/reject':
+            if ($method === 'POST') {
+                $notificationId = $_POST['notification_id'];
+
+                $controller = new NotificationController($dbConnection);
+                $controller->rejectRequest($notificationId);
+            }
+            break;
+        case '/cancel-follow-request':
+            $controller = new FollowController($dbConnection);
+            if ($method === 'POST') {
+                $controller->cancelFollowRequest();
+            }
+            exit();
+
         default:
             return false;
     }

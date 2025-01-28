@@ -48,6 +48,12 @@ function setting_route($uri, $method) {
                 $controller->updateUser();
             }
             exit();
+        case '/settings/privacy':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->updatePrivacySettings();
+            }
+            exit();
         default:
             return false;
     }

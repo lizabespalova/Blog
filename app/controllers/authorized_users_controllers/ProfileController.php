@@ -1,20 +1,26 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
+require_once 'app/services/helpers/update_status.php';
 
 use models\Articles;
 use models\Follows;
+use models\Notifications;
 use models\Reposts;
 use models\User;
 use Exception;
 use services\MarkdownService;
-
+use services\StatusService;
+use models\Settings;
 class ProfileController
 {
     private $userModel;
     private $articleModel;
     private $repostModel;
     private $followModel;
+    private $settingModel;
+    private $notificationModel;
+    private $statusService;
 
     private $markdownService;
     public function __construct($dbConnection) {
@@ -22,13 +28,16 @@ class ProfileController
         $this->articleModel = new Articles($dbConnection);
         $this->repostModel = new Reposts($dbConnection);
         $this->followModel = new Follows($dbConnection);
+        $this->settingModel = new Settings($dbConnection);
+        $this->notificationModel = new Notifications($dbConnection);
         $this->markdownService = new MarkdownService();
+        $this->statusService = new StatusService();
     }
 
     public function showProfile($profileUserLogin)
     {
         try {
-            session_start();
+//            session_start();
             // Проверка, что данные пользователя есть в сессии
             if (isset($_SESSION['user'])) {
                 $user = $_SESSION['user']; // Получаем данные из сессии
@@ -53,7 +62,16 @@ class ProfileController
             $followersCount = $this->followModel->getFollowersCount($profileUserId);
             $followingCount = $this->followModel->getFollowingCount($profileUserId);
             $isFollowing = $this->followModel->isFollowing($_SESSION['user']['user_id'], $profileUserId);
-
+            $user['is_online'] = $this->statusService->isUserOnline($user['last_active_at']);
+            $profileStatus = $this->settingModel->getShowLastSeen($profileUserId);
+            $profileVisibility = $this->settingModel->getProfileVisibility($profileUserId);
+            $followStatus = $this->notificationModel->getFollowStatus($profileUserId, $_SESSION['user']['user_id']);
+//            var_dump($profileUserId);
+//            var_dump($profileVisibility);
+//            var_dump($followStatus);
+//            $showLastSeen = $this->userModel->getStatus($profileUserId);
+//            $user['settings']['profile_visibility'] = $profileVisibility;
+//            $user['settings']['show_last_seen'] = $showLastSeen;
 //            var_dump($publications);
 
 

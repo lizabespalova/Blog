@@ -173,7 +173,9 @@ class User
         $stmt = $this->conn->prepare("INSERT INTO users (user_login, user_email, user_password, link, created_at) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $login, $email, $password, $link, $created_at);
         $stmt->execute();
+        $newUserId = $this->conn->insert_id; // Получаем ID вставленной записи
         $stmt->close();
+        return $newUserId; // Возвращаем ID нового пользователя
     }
 
     // Удаление временного пользователя
@@ -456,4 +458,47 @@ class User
         $stmt->close();
     }
 
+    public function setStatus($userId){
+        $currentTime = date('Y-m-d H:i:s');
+        // Подготавливаем SQL-запрос
+        $stmt = $this->conn->prepare("UPDATE users SET last_active_at = ? WHERE user_id = ?");
+        if ($stmt === false) {
+            die("Ошибка подготовки запроса: " . $this->conn->error);
+        }
+        // Привязываем параметры
+        $stmt->bind_param("si", $currentTime, $userId);
+        // Выполняем запрос
+        if (!$stmt->execute()) {
+            die("Ошибка выполнения запроса: " . $stmt->error);
+        }
+        // Закрываем подготовленный запрос и соединение
+        $stmt->close();
+        $this->conn->close();
+    }
+    public function getStatus($userId) {
+        // Подготавливаем SQL-запрос для получения времени последней активности
+        $stmt = $this->conn->prepare("SELECT last_active_at FROM users WHERE user_id = ?");
+
+        if ($stmt === false) {
+            die("Ошибка подготовки запроса: " . $this->conn->error);
+        }
+
+        // Привязываем параметры
+        $stmt->bind_param("i", $userId);
+
+        // Выполняем запрос
+        if (!$stmt->execute()) {
+            die("Ошибка выполнения запроса: " . $stmt->error);
+        }
+
+        // Получаем результат
+        $stmt->bind_result($lastActiveAt);
+        $stmt->fetch();
+
+        // Закрываем подготовленный запрос и соединение
+        $stmt->close();
+
+        // Возвращаем результат
+        return $lastActiveAt;
+    }
 }

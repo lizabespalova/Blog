@@ -3,6 +3,7 @@
 namespace controllers\authorized_users_controllers;
 require_once 'app/services/helpers/session_check.php';
 
+use models\Settings;
 use models\User;
 use services\EmailService;
 
@@ -11,12 +12,14 @@ require_once 'app/services/helpers/session_check.php';
 class SettingsController
 {
     private $userModel;
+    private $settingModel;
 
     private $emailService;
 
 
     public function __construct($conn) {
         $this->userModel = new User($conn);
+        $this->settingModel = new Settings($conn);
         $this->emailService = new EmailService();
         $this->emailService->configure_mailer();
     }
@@ -38,50 +41,47 @@ class SettingsController
 //        if (empty($_SESSION['settings']['font_style'])) {
 //            $_SESSION['settings']['font_style'] = 'serif';
 //        }
-
+        $userId = $_SESSION['user']['user_id'];
         $currentLogin = $_SESSION['user']['user_login'];
-        $currentEmail = $this->userModel->getUserEmail($_SESSION['user']['user_id']);
+        $currentEmail = $this->userModel->getUserEmail($userId);
+        $profileVisibility = $this->settingModel->getProfileVisibility($userId);
+        $showLastSeen = $this->settingModel->getShowLastSeen($userId);
         include __DIR__ . '/../../views/authorized_users/settings/settings_template.php';
     }
 
     public function saveTheme()
     {
-        // Получение данных из запроса
+        $userId = $_SESSION['user']['user_id'];
         $theme = $_POST['theme'] ?? 'light';
-        $fontSize = $_POST['font_size'] ?? 16;
-        $fontStyle = $_POST['font_style'] ?? 'sans-serif';
-
-        // Сохранение в сессию
-        $_SESSION['settings'] = [
-            'theme' => $theme,
-            'font_size' => $fontSize,
-            'font_style' => $fontStyle,
-        ];
-
-        // Возврат успешного ответа
-        echo json_encode(['success' => true]);
+        $_SESSION['settings']['theme'] = $theme;
+        if ($this->settingModel->setTheme($userId, $theme)) {
+            echo json_encode(['success' => true, 'message' => 'Theme saved.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to save theme.']);
+        }
     }
+
     public function saveFontSize()
     {
+        $userId = $_SESSION['user']['user_id'];
         $fontSize = $_POST['font_size'] ?? null;
-
-        if ($fontSize && is_numeric($fontSize)) {
-            // Сохраняем размер шрифта в сессии
-            $_SESSION['settings']['font_size'] = $fontSize;
-            echo json_encode(['success' => true, 'message' => 'Font size updated.']);
+        $_SESSION['settings']['font_size'] = $fontSize;
+        if ($fontSize && $this->settingModel->setFontSize($userId, $fontSize)) {
+            echo json_encode(['success' => true, 'message' => 'Font size saved.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid font size.']);
         }
-        exit();
     }
-    // Сохранение выбранного стиля шрифта
+
     public function saveFontStyle()
     {
-        if (isset($_POST['font_style'])) {
-            $_SESSION['settings']['font_style'] = $_POST['font_style'];
-            echo json_encode(['success' => true]);
+        $userId = $_SESSION['user']['user_id'];
+        $fontStyle = $_POST['font_style'] ?? 'sans-serif';
+        $_SESSION['settings']['font_style'] = $fontStyle;
+        if ($this->settingModel->setFontStyle($userId, $fontStyle)) {
+            echo json_encode(['success' => true, 'message' => 'Font style saved.']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Font style not specified']);
+            echo json_encode(['success' => false, 'message' => 'Failed to save font style.']);
         }
     }
 
@@ -184,5 +184,21 @@ class SettingsController
         echo json_encode(['success' => true, 'message' => 'User data updated successfully']);
     }
 
+    public function updatePrivacySettings(){
+        $userId = $_SESSION['user']['user_id'];  // Получаем user_id из сессии
+        $profileVisibility = $_POST['profile_visibility'];
+        $showLastSeen = $_POST['show_last_seen'];
+        // Обновление данных в базе
+        $success = $this->settingModel->setProfileVisibility($userId, $profileVisibility);
+        $success &= $this->settingModel->setShowLastSeen($userId, $showLastSeen);
+        $_SESSION['settings']['profile_visibility'] = $profileVisibility;
+        $_SESSION['settings']['show_last_seen'] = $showLastSeen;
 
+        // Ответ на запрос
+        if ($success) {
+            echo json_encode(['success' => true, 'message' => 'Settings saved successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to save settings']);
+        }
+    }
 }

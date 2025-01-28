@@ -4,6 +4,7 @@ namespace controllers\authorized_users_controllers;
 
 
 
+use models\Follows;
 use models\Notifications;
 require_once 'app/services/helpers/session_check.php';
 
@@ -11,10 +12,11 @@ require_once 'app/services/helpers/session_check.php';
 class NotificationController
 {
     private $notificationModel;
+    private $followModel;
 
     public function __construct($dbConnection) {
         $this->notificationModel = new Notifications($dbConnection);
-
+        $this->followModel = new Follows(getDbConnection());
     }
     public function showNotifications() {
 //        session_start();
@@ -33,5 +35,24 @@ class NotificationController
         $deletedCount = $this->notificationModel->deleteNotificationsOlderThan(14); // Удаление старше 14 дней
         echo json_encode(['success' => true, 'deleted' => $deletedCount]);
     }
+    // Утверждение запроса на подписку
+    public function approveRequest($notificationId, $followerId)
+    {
+        // Обновить статус уведомления
+        if ($this->notificationModel->updateStatus($notificationId, 'approved')) {
+            // Добавить подписку
+            $this->followModel->save($followerId, $_SESSION['user']['user_id']);
+        }
+        $this->showNotifications();
+         exit();
+    }
 
+    // Отклонение запроса на подписку
+    public function rejectRequest($notificationId)
+    {
+        $this->notificationModel->updateStatus($notificationId, 'rejected');
+
+        $this->showNotifications();
+        exit();
+    }
 }

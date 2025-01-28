@@ -37,6 +37,20 @@
                 <div class="notification-content">
                     <p class="notification-title"><?= htmlspecialchars($notif['message']) ?></p>
                     <p class="notification-date"><?= htmlspecialchars($notif['created_at']) ?></p>
+
+                    <!-- Кнопки только для подписок с ожидающим статусом -->
+                    <?php if ($notif['type'] === 'subscription' && $notif['status'] === 'pending'): ?>
+                        <form class="notification-actions" method="POST" action="/notifications/approve">
+                            <input type="hidden" name="notification_id" value="<?= htmlspecialchars($notif['id']) ?>">
+                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($notif['reactioner_id']) ?>">
+                            <button class="btn-approve" type="submit">Approve</button>
+                        </form>
+                        <form class="notification-actions" method="POST" action="/notifications/reject">
+                            <input type="hidden" name="notification_id" value="<?= htmlspecialchars($notif['id']) ?>">
+                            <input type="hidden" name="follower_id" value="<?= htmlspecialchars($notif['reactioner_id']) ?>">
+                            <button class="btn-reject" type="submit">Reject</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -44,6 +58,7 @@
         <p class="no-notifications">You don't have notifications.</p>
     <?php endif; ?>
 </div>
+
 
 
 <!-- Footer Section -->

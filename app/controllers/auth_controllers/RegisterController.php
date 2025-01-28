@@ -3,6 +3,7 @@ namespace controllers\auth_controllers;
 
 use GuzzleHttp\Client;
 use Exception;
+use models\Settings;
 use models\User;
 use PHPMailer;
 use services\AuthService;
@@ -17,13 +18,14 @@ require_once __DIR__ . '/../../views/auth/phpmailer/PHPMailerAutoload.php';
 class RegisterController {
 
     private $userModel;
+    private $settingModel;
 //    private $mailer;
     private $authService;
     private $errorService;
     private $emailService;
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
-//        $this->mailer = new PHPMailer(true);
+        $this->settingModel = new Settings($dbConnection);
         $this->authService = new AuthService($dbConnection);
         $this->errorService = new ErrorService();
         $this->emailService = new EmailService();
@@ -156,10 +158,11 @@ class RegisterController {
         // Перемещаем пользователя в основную таблицу без пароля
         if (isset($user)) {
             $link = '/profile/' . $user['user_login'];
-            $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $hashedPassword, $link, $user['created_at']);
+            $userId = $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $hashedPassword, $link, $user['created_at']);
 
             // Удаляем временного пользователя
             $this->userModel->delete_temporary_user($user['id']);
+            $this->settingModel->createDefaultSettings($userId);
             // Перенаправляем на профиль или другую страницу
             header('Location:'.$link);
             exit();

@@ -45,10 +45,11 @@ class Follows
     }
 
     // Метод для сохранения новой подписки в базе данных
-    public function save() {
+
+    public function save($follower_id, $following_id) {
         $query = "INSERT INTO followers (follower_id, following_id) VALUES (?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('ii', $this->follower_id, $this->following_id);
+        $stmt->bind_param('ii', $follower_id, $following_id);
 
         if ($stmt->execute()) {
             // Получаем логин пользователя, который подписался
@@ -56,17 +57,18 @@ class Follows
             // Формируем уведомление
             $message = "User '{$followerLogin}' has started following you!";
             // Добавляем уведомление
-            $this->notifications->addNotification($this->following_id, $this->follower_id, 'subscription', $message);
+            $this->notifications->addNotification($following_id, $follower_id, 'subscription', $message);
 
             return true;
         }
         return false;
     }
     // Метод для удаления подписки
-    public function delete() {
+
+    public function delete($follower_id, $following_id) {
         $query = "DELETE FROM followers WHERE follower_id = ? AND following_id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param('ii', $this->follower_id, $this->following_id);
+        $stmt->bind_param('ii', $follower_id, $following_id);
 
         return $stmt->execute();
     }
@@ -150,4 +152,18 @@ class Follows
 
         return $followers;
     }
+    public function createFollowRequest($follower_id, $following_id) {
+        $query = "INSERT INTO follow_requests (follower_id, following_id, status) VALUES (?, ?, 'pending')";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ii', $follower_id, $following_id);
+
+        return $stmt->execute();
+    }
+    public function cancelRequest($follower_id, $following_id) {
+        $query = "DELETE FROM follow_requests WHERE follower_id = ? AND following_id = ? AND status = 'pending'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('ii', $follower_id, $following_id);
+        $stmt->execute();
+    }
+
 }

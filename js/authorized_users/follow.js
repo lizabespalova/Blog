@@ -1,54 +1,60 @@
-// Функция для обработки формы Follow/Unfollow
-function handleFollowUnfollowForm(form) {
-    form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Останавливаем стандартное поведение формы
+// Функция для обработки кнопок Follow/Unfollow
+function handleFollowUnfollowButton(button) {
+    button.addEventListener('click', function () {
+        const actionUrl = button.getAttribute('data-action'); // Получаем URL действия
+        const followedUserId = button.getAttribute('data-followed-user-id'); // ID пользователя
+        const followersCountSpan = document.getElementById('followers-count'); // Счетчик подписчиков
 
-        const actionUrl = form.action; // Текущий action формы
-        const formData = new FormData(form); // Данные формы
+        const isFollowing = button.textContent.trim() === 'Unfollow'; // Проверяем текущее состояние
+        const previousText = button.textContent; // Сохраняем текст кнопки
+        button.textContent = isFollowing ? 'Follow' : 'Unfollow'; // Обновляем текст кнопки
+        button.disabled = true; // Блокируем кнопку на время запроса
+
+        if (followersCountSpan) {
+            const currentCount = parseInt(followersCountSpan.textContent, 10);
+            followersCountSpan.textContent = isFollowing ? currentCount - 1 : currentCount + 1; // Обновляем счетчик
+        }
 
         // Отправляем запрос
         fetch(actionUrl, {
             method: 'POST',
-            body: formData
+            body: new URLSearchParams({ followed_user_id: followedUserId }),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         })
-            .then(response => response.json()) // Ожидаем JSON
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const button = form.querySelector('button');
-                    const followersCountSpan = document.getElementById('followers-count');
-
-                    // Изменение состояния кнопки и URL действия
-                    if (button.textContent.trim() === 'Follow') {
-                        button.textContent = 'Unfollow';
-                        form.setAttribute('action', actionUrl.replace('/follow/', '/unfollow/'));
-
-                        // Увеличиваем количество подписчиков
-                        if (followersCountSpan) {
-                            followersCountSpan.textContent = parseInt(followersCountSpan.textContent) + 1;
-                        }
-                    } else {
-                        button.textContent = 'Follow';
-                        form.setAttribute('action', actionUrl.replace('/unfollow/', '/follow/'));
-
-                        // Уменьшаем количество подписчиков
-                        if (followersCountSpan) {
-                            followersCountSpan.textContent = parseInt(followersCountSpan.textContent) - 1;
-                        }
-                    }
+                    // Обновляем URL действия
+                    button.setAttribute('data-action', isFollowing
+                        ? `/follow/${followedUserId}`
+                        : `/unfollow/${followedUserId}`);
                 } else {
-                    alert('Something went wrong!');
+                    // Возвращаем предыдущее состояние в случае ошибки
+                    button.textContent = previousText;
+                    if (followersCountSpan) {
+                        const currentCount = parseInt(followersCountSpan.textContent, 10);
+                        followersCountSpan.textContent = isFollowing ? currentCount + 1 : currentCount - 1;
+                    }
+                    alert(data.message || 'Something went wrong!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                // alert('An error occurred while processing your request.');
+                // Восстанавливаем предыдущее состояние при ошибке
+                button.textContent = previousText;
+                if (followersCountSpan) {
+                    const currentCount = parseInt(followersCountSpan.textContent, 10);
+                    followersCountSpan.textContent = isFollowing ? currentCount + 1 : currentCount - 1;
+                }
+            })
+            .finally(() => {
+                button.disabled = false; // Разблокируем кнопку
             });
     });
 }
 
-// Применение функции ко всем формам Follow/Unfollow
-document.querySelectorAll('form.follow-unfollow').forEach(form => handleFollowUnfollowForm(form));
-
+// Применение функции ко всем кнопкам Follow/Unfollow
+document.querySelectorAll('.follow-button').forEach(button => handleFollowUnfollowButton(button));
 function navigateTo(url) {
     window.location.href = url;
 }
