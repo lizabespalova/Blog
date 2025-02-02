@@ -34,7 +34,17 @@ class Settings
         }
         return false; // Некорректный стиль шрифта
     }
-
+    public function setLanguage($language, $user_id) {
+        $stmt = $this->conn->prepare("UPDATE settings SET language = ? WHERE user_id = ?");
+        if ($stmt) {
+            $stmt->bind_param("si", $language, $user_id);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Database error']);
+            exit;
+        }
+    }
     // Установить размер шрифта
     public function setFontSize($user_id, $fontSize) {
         if (is_numeric($fontSize) && $fontSize > 0 && $fontSize <= 100) { // Проверка на диапазон
@@ -78,6 +88,15 @@ class Settings
         $stmt->bind_param("si", $profileVisibility, $userId);
 
         return $stmt->execute(); // Выполняем запрос
+    }
+    public function getLanguage($userId){
+        $stmt = $this->conn->prepare("SELECT language FROM settings WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->bind_result($language);
+        $stmt->fetch();
+        $stmt->close();
+        return $language;
     }
     public function getProfileVisibility($userId)
     {

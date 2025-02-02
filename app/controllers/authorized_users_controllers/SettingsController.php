@@ -1,8 +1,8 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
-require_once 'app/services/helpers/session_check.php';
 
+use models\Session;
 use models\Settings;
 use models\User;
 use services\EmailService;
@@ -13,6 +13,7 @@ class SettingsController
 {
     private $userModel;
     private $settingModel;
+    private $sessionModel;
 
     private $emailService;
 
@@ -20,20 +21,21 @@ class SettingsController
     public function __construct($conn) {
         $this->userModel = new User($conn);
         $this->settingModel = new Settings($conn);
+        $this->sessionModel = new Session($conn);
         $this->emailService = new EmailService();
         $this->emailService->configure_mailer();
     }
     public function showSettingsTemplate(){
+        require_once 'app/services/helpers/switch_language.php';
+
         $page = $_GET['section'] ?? 'general';
 
         $sections = [
-            'appearance' => 'Appearance Settings', // Настройки внешнего вида (день/ночь)
-            'personal' => 'Personal Data',         // Настройки личных данных (email, пароль, логин)
-            'privacy' => 'Privacy Settings',       // Настройки конфиденциальности
-            'notifications' => 'Notifications',    // Уведомления
-            'security' => 'Security',              // Безопасность (2FA, активные сессии)
-            'integrations' => 'Integrations',      // Интеграции (подключение соцсетей, API ключи)
-            'preferences' => 'Preferences',        // Общие предпочтения (язык, формат даты/времени)
+            'appearance' => $translations['appearance_settings'], // Настройки внешнего вида (день/ночь)
+            'personal' => $translations['personal_data'],         // Настройки личных данных (email, пароль, логин)
+            'privacy' => $translations['privacy_settings'], // Настройки конфиденциальности
+            'security' => $translations['security'],              // Безопасность (2FA, активные сессии)
+            'preferences' => $translations['preferences'], // Общие предпочтения (язык, формат даты/времени)
         ];
         if (!array_key_exists($page, $sections)) {
             $page = 'appearance';
@@ -46,6 +48,31 @@ class SettingsController
         $currentEmail = $this->userModel->getUserEmail($userId);
         $profileVisibility = $this->settingModel->getProfileVisibility($userId);
         $showLastSeen = $this->settingModel->getShowLastSeen($userId);
+        $language = $this->settingModel->getLanguage($userId);
+        $flags = [
+            'en' => 'gb',
+            'ru' => 'ru',
+            'de' => 'de',
+            'ua' => 'ua'
+        ];
+        $selectedFlag = $flags[$language] ?? 'gb';
+
+
+        $sessions = $this->sessionModel->getSessionsByUserId($userId);
+
+        // Определяем текущий сеанс
+        $currentSessionId = session_id();
+        $currentSession = null;
+        $otherSessions = [];
+
+        // Проходим по сеансам и распределяем
+        foreach ($sessions as $session) {
+            if ($session['session_id'] === $currentSessionId) {
+                $currentSession = $session;
+            } else {
+                $otherSessions[] = $session;
+            }
+        }
         include __DIR__ . '/../../views/authorized_users/settings/settings_template.php';
     }
 
@@ -72,7 +99,14 @@ class SettingsController
             echo json_encode(['success' => false, 'message' => 'Invalid font size.']);
         }
     }
+    public function saveLanguage(){
+        $language = in_array($_POST['language'], ['en', 'ru', 'de', 'ua']) ? $_POST['language'] : 'en';
+        $_SESSION['settings']['language'] = $language;
 
+        // Обновляем в БД, если пользователь авторизован
+        $this->settingModel->setLanguage($language, $_SESSION['user']['user_id']);
+        echo json_encode(['success' => true, 'message' => 'Language successfully changed']);
+    }
     public function saveFontStyle()
     {
         $userId = $_SESSION['user']['user_id'];
@@ -201,4 +235,76 @@ class SettingsController
             echo json_encode(['success' => false, 'message' => 'Failed to save settings']);
         }
     }
+    public function updatePassword() {
+        $user = $_SESSION['user'];
+        $login = $user['user_login'];
+
+        header('Content-Type: application/json'); // JSON-ответ
+
+        if (empty($_POST['current_password']) || empty($_POST['new_password']) || empty($_POST['confirm_password'])) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'All fields are required.',
+                'user_login' => $login
+            ]);
+            exit();
+        }
+
+        $currentPassword = $_POST['current_password'];
+        $newPassword = $_POST['new_password'];
+        $confirmPassword = $_POST['confirm_password'];
+
+        if ($newPassword !== $confirmPassword) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'New passwords do not match.',
+                'user_login' => $login
+            ]);
+            exit();
+        }
+
+        $userData = $this->userModel->get_user_by_login($login);
+
+        if (!password_verify($currentPassword, $userData['user_password'])) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Current password is incorrect.',
+                'user_login' => $login
+            ]);
+            exit();
+        }
+
+        // Обновляем пароль
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $this->userModel->update_password($login, $hashedPassword);
+
+        // Отправляем JSON-ответ, а не делаем редирект
+        echo json_encode([
+            'success' => true,
+            'message' => 'Password successfully changed.',
+            'user_login' => $login
+        ]);
+        exit();
+    }
+
+    public function deleteSession(){
+        // Получаем данные из запроса
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($data['session_id'])) {
+            $sessionId = $data['session_id'];
+            // Удаляем сессию
+            $result = $this->sessionModel->deleteSession($sessionId);
+
+            if ($result) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No session ID provided']);
+        }
+    }
+
+
 }

@@ -20,16 +20,16 @@ $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
         // Получаем сообщение из PHP
         const message = <?php echo json_encode($safeMessage); ?>;
         let htmlContent = `
-            <div style="text-align: center;">
-                <p>${message}</p>
-        `;
+        <div style="text-align: center;">
+            <p>${message}</p>
+    `;
 
         // Проверяем, содержит ли сообщение "You entered the wrong password."
         if (message === 'You entered the wrong password.') {
             htmlContent += `
-                <br><br>
-                <a href="/app/views/auth/form_forget.php" style="color: #007bff; text-decoration: underline;">Forgot your password?</a>
-            `;
+            <br><br>
+            <a href="/app/views/auth/form_forget.php" style="color: #007bff; text-decoration: underline;">Forgot your password?</a>
+        `;
         }
 
         htmlContent += '</div>';
@@ -45,12 +45,17 @@ $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
                 htmlContainer: 'swal2-html-container',
                 confirmButton: 'swal2-confirm'
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/app/views/auth/form_login.php'; // Путь к форме логина
+        }).then(() => {
+            // Возвращаем пользователя на предыдущую страницу
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.history.back();
             }
         });
     });
+
+
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use controllers\authorized_users_controllers\ProfileController;
+use models\Session;
 use models\User;
 
 // Подключаем необходимые файлы
@@ -36,16 +37,44 @@ if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
             $userModel = new User(getDbConnection());
             $user = $userModel->get_user_by_id($userdata['user_id']);
 
+            // Создаем объект сессии и добавляем новую сессию
+            $sessionModel = new Session($conn);
+            $sessionId = session_id(); // Получаем ID текущей сессии
+            $userAgent = $_SERVER['HTTP_USER_AGENT']; // Получаем информацию о браузере
+            // Пример использования:
+            $ipAddress = getRealIP();
+            $location = getUserLocation($ipAddress);
+
+            $sessionModel->addSession($user_id, $sessionId, $userAgent, $ipAddress, $location);
 
             header('Location: /profile' . '/'. $user['user_login']); // Путь к странице профиля
             exit();
-    } else {
-//        echo "Authorization error";
-//        echo "Stored hash: " . md5($userdata['user_hash']) . "<br>"; // Используйте md5 для отладки
-//        echo "Cookie hash: " . $_COOKIE['hash'] . "<br>";
     }
 } else {
     echo "Enable cookies";
+}
+function getRealIP() {
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        // Иногда в заголовке X-Forwarded-For может быть несколько IP-адресов, разделенных запятой
+        $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $ip = 'Unknown';
+    }
+    return $ip;
+}
+
+function getUserLocation($ip) {
+    // Если это локальный адрес (например, ::1 или 127.0.0.1), вернем "Unknown"
+    if ($ip == '::1' || $ip == '127.0.0.1') {
+        return "Unknown";
+    }
+
+    // Получаем данные геолокации с помощью ip-api
+    $response = file_get_contents("http://ip-api.com/json/{$ip}?fields=city,country");
+    $data = json_decode($response, true);
+    return ($data && isset($data['city'], $data['country'])) ? "{$data['city']}, {$data['country']}" : "Unknown";
 }
 
 ?>

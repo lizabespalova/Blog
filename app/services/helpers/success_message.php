@@ -46,9 +46,12 @@ $userLogin = $_GET['user_login'] ?? ''; // Получаем логин поль�
                 htmlContainer: 'swal2-html-container',
                 confirmButton: 'swal2-confirm'
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/'; // Перенаправление на главную страницу или другую страницу по вашему выбору
+        }).then(() => {
+            // Возвращаем на предыдущую страницу или в случае отсутствия referrer, используем history.back()
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.history.back();
             }
         });
     });

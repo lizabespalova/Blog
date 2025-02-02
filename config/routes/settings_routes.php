@@ -54,6 +54,24 @@ function setting_route($uri, $method) {
                 $controller->updatePrivacySettings();
             }
             exit();
+        case '/settings/update-password':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->updatePassword();
+            }
+            exit();
+        case '/settings/delete-session':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->deleteSession();
+            }
+            exit();
+        case '/settings/change-language':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->saveLanguage();
+            }
+            exit();
         default:
             return false;
     }
