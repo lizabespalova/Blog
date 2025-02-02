@@ -80,7 +80,7 @@ class FollowController
                 echo json_encode(['success' => false, 'message' => 'Error occurred while unfollowing the user.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'You are not following this user.']);
+            echo json_encode(['success' => true, 'message' => 'You are not following this user.']);
         }
 
         exit();
@@ -109,10 +109,8 @@ class FollowController
         // Подключаем представление
         include 'app/views/common_templates/followings_template.php';
     }
-    public function cancelFollowRequest() {
-        // Получаем ID текущего пользователя и пользователя, на которого отправлен запрос
-        $followerId = $_POST['follower_id']; // ID текущего пользователя
-        $followingId = $_POST['followed_user_id']; // ID пользователя, на которого подписались
+    public function cancelFollowRequest($followerId, $followingId) {
+
         if(!$followerId && !$followingId){
             echo json_encode(['success' => false, 'message' => 'Failed to cancel follow request']);
         exit();

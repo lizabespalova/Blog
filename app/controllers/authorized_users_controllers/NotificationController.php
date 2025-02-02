@@ -42,16 +42,18 @@ class NotificationController
         if ($this->notificationModel->updateStatus($notificationId, 'approved')) {
             // Добавить подписку
             $this->followModel->save($followerId, $_SESSION['user']['user_id']);
+            $this->followModel->cancelRequest($followerId, $_SESSION['user']['user_id']);
         }
         $this->showNotifications();
          exit();
     }
 
     // Отклонение запроса на подписку
-    public function rejectRequest($notificationId)
+    public function rejectRequest($notificationId, $followerId)
     {
         $this->notificationModel->updateStatus($notificationId, 'rejected');
-
+        $this->followModel->cancelRequest($followerId, $_SESSION['user']['user_id']);
+//        echo json_encode(['success' => true, 'message' => 'Follow request cancelled successfully']);
         $this->showNotifications();
         exit();
     }

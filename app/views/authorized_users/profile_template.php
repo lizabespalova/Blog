@@ -89,41 +89,48 @@
                 <?php if ($currentUser['user_id'] === $user['user_id']): ?>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
                 <?php else: ?>
-                    <?php if ($profileVisibility === 'private'): ?>
-                        <?php if ($followStatus === 'pending'): ?>
-                            <button
-                                    class="follow-button"
-                                    data-action="/cancel-follow-request/<?= htmlspecialchars($user['user_id']) ?>"
-                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Cancel Request
-                            </button>
-                        <?php elseif ($followStatus === 'approved'): ?>
-                            <button
-                                    class="follow-button"
-                                    data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
-                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Unfollow
-                            </button>
-                        <?php else: ?>
-                            <button
-                                    class="follow-button"
-                                    data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
-                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Follow
-                            </button>
-                        <?php endif; ?>
+                <?php if ($profileVisibility === 'private'): ?>
+                    <!-- Для приватного профиля -->
+                    <?php if ($followStatus === 'awaiting_approval'): ?>
+                        <button
+                                class="follow-button"
+                                data-action="/cancel-follow-request/<?= htmlspecialchars($user['user_id']) ?>"
+                                data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
+                                data-private="true">Cancel Request
+                        </button>
+                    <?php elseif ($isFollowing): ?>
+                        <button
+                                class="follow-button"
+                                data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
+                                data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
+                                data-private="true">Unfollow
+                        </button>
                     <?php else: ?>
-                        <?php if ($isFollowing): ?>
-                            <button
-                                    class="follow-button"
-                                    data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
-                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Unfollow
-                            </button>
-                        <?php else: ?>
-                            <button
-                                    class="follow-button"
-                                    data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
-                                    data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>">Follow
-                            </button>
-                        <?php endif; ?>
+                        <button
+                                class="follow-button"
+                                data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
+                                data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
+                                data-private="true">Follow
+                        </button>
                     <?php endif; ?>
+                <?php else: ?>
+                    <!-- Для публичного профиля -->
+                    <?php if ($isFollowing): ?>
+                        <button
+                                class="follow-button"
+                                data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
+                                data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
+                                data-private="false">Unfollow
+                        </button>
+                    <?php else: ?>
+                        <button
+                                class="follow-button"
+                                data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
+                                data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
+                                data-private="false">Follow
+                        </button>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
 

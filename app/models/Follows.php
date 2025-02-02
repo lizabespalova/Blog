@@ -47,13 +47,13 @@ class Follows
     // Метод для сохранения новой подписки в базе данных
 
     public function save($follower_id, $following_id) {
-        $query = "INSERT INTO followers (follower_id, following_id) VALUES (?, ?)";
+        $query = "INSERT IGNORE INTO followers (follower_id, following_id) VALUES (?, ?)";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ii', $follower_id, $following_id);
 
         if ($stmt->execute()) {
             // Получаем логин пользователя, который подписался
-            $followerLogin = $this->user->getLoginById($this->follower_id);
+            $followerLogin = $this->user->getLoginById($follower_id);
             // Формируем уведомление
             $message = "User '{$followerLogin}' has started following you!";
             // Добавляем уведомление
@@ -153,17 +153,51 @@ class Follows
         return $followers;
     }
     public function createFollowRequest($follower_id, $following_id) {
-        $query = "INSERT INTO follow_requests (follower_id, following_id, status) VALUES (?, ?, 'pending')";
+        $query = "INSERT INTO follow_requests (follower_id, following_id, status) VALUES (?, ?, 'awaiting_approval')";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ii', $follower_id, $following_id);
-
+        $followerLogin = $this->user->getLoginById($follower_id);
+        $message = "User '{$followerLogin}' requested a subscription";
+        $this->notifications->addNotification($following_id, $follower_id, 'follow_request', $message);
         return $stmt->execute();
     }
     public function cancelRequest($follower_id, $following_id) {
-        $query = "DELETE FROM follow_requests WHERE follower_id = ? AND following_id = ? AND status = 'pending'";
+        $query = "DELETE FROM follow_requests WHERE follower_id = ? AND following_id = ? AND status = 'awaiting_approval'";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param('ii', $follower_id, $following_id);
         $stmt->execute();
     }
 
+    public function getFollowRequestStatus($followingId, $followerId)
+    {
+        $sql = "SELECT status 
+            FROM follow_requests 
+            WHERE following_id = ? AND follower_id = ? 
+            LIMIT 1";
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($sql);
+
+        // Привязываем параметры
+        $stmt->bind_param("ii", $followingId, $followerId);
+
+        // Выполняем запрос
+        $stmt->execute();
+
+        // Получаем результат
+        $result = $stmt->get_result();
+
+        // Извлекаем значение из результата
+        if ($row = $result->fetch_assoc()) {
+            return $row['status'];
+        }
+
+        // Если записи нет, возвращаем 'none'
+        return 'none';
+    }
+//    public function deleteFollowRequest($followingId, $followerId){
+//        $stmt = $this->conn->prepare("DELETE FROM follow_requests WHERE following_id = ? AND follower_id = ?");
+//        $stmt->bind_param("ii", $followingId, $followerId);
+//        $stmt->close();
+//        $this->conn->close();}
 }

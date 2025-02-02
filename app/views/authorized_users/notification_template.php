@@ -39,8 +39,9 @@
                     <p class="notification-date"><?= htmlspecialchars($notif['created_at']) ?></p>
 
                     <!-- Кнопки только для подписок с ожидающим статусом -->
-                    <?php if ($notif['type'] === 'subscription' && $notif['status'] === 'pending'): ?>
-                        <form class="notification-actions" method="POST" action="/notifications/approve">
+                    <?php if ($notif['status'] === 'pending' && $notif['type'] === 'follow_request'): ?>
+                    <div class="notification-actions-container">
+                    <form class="notification-actions" method="POST" action="/notifications/approve">
                             <input type="hidden" name="notification_id" value="<?= htmlspecialchars($notif['id']) ?>">
                             <input type="hidden" name="follower_id" value="<?= htmlspecialchars($notif['reactioner_id']) ?>">
                             <button class="btn-approve" type="submit">Approve</button>
@@ -50,6 +51,7 @@
                             <input type="hidden" name="follower_id" value="<?= htmlspecialchars($notif['reactioner_id']) ?>">
                             <button class="btn-reject" type="submit">Reject</button>
                         </form>
+                    </div>
                     <?php endif; ?>
                 </div>
             </div>

@@ -44,29 +44,45 @@
     <div class="followers-list">
         <?php if (!empty($followers)): ?>
             <?php foreach ($followers as $follower): ?>
-                <a href="/profile/<?= urlencode($follower['user_login']) ?>" class="follower-link">
-                    <div class="follower-card">
+                <div class="follower-card">
+                    <a href="/profile/<?= urlencode($follower['user_login']) ?>" class="follower-link">
                         <img
-                            src="<?= htmlspecialchars($follower['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
-                            alt="Avatar"
-                            class="follower-avatar">
+                                src="<?= htmlspecialchars($follower['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
+                                alt="Avatar"
+                                class="follower-avatar">
                         <div class="follower-info">
                         <span class="follower-login">
                             <?= htmlspecialchars($follower['user_login']) ?>
                         </span>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                    <form method="POST" action="/remove-follower" class="remove-follower-form">
+                        <input type="hidden" name="follower_id" value="<?= htmlspecialchars($follower['user_id']) ?>">
+                        <button type="button" class="remove-follower-button" onclick="confirmDelete(this)">Delete</button>
+                    </form>
+                </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
 
+</div>
+<!--Modal window-->
+<!-- Модальное окно подтверждения -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to remove this follower?</p>
+        <div class="modal-buttons">
+            <button id="confirmYes" class="confirm-button">Yes</button>
+            <button id="confirmNo" class="cancel-button">No</button>
+        </div>
+    </div>
 </div>
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
 <script src="/js/authorized_users/follow.js"></script>
+<script src="/js/authorized_users/show_modal_window_to_delete_followers.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/filter_follower-ings_search_field.js"></script>
 

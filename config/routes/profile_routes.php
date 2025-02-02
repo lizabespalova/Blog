@@ -63,7 +63,7 @@ function profile_route($uri, $method) {
         case '/update-description':
             $controller = new EditProfileController($dbConnection);
             if ($method === 'POST') {
-            //    echo "Hello";
+                //    echo "Hello";
                 $controller->update_profile();
             }
             exit();  // Остановка выполнения после маршрута
@@ -86,44 +86,22 @@ function profile_route($uri, $method) {
                 $controller->show_search_form();
             }
             exit();  // Остановка выполнения после маршрута
-        case '/notifications':
-            $controller = new NotificationController($dbConnection);
-            if ($method === 'GET') {
-                $controller->showNotifications(); // Отображение уведомлений
-            }
-            exit();  // Остановка выполнения после маршрута
-
-        case '/notifications/cleanup':
-            $controller = new NotificationController($dbConnection);
-            if ($method === 'POST') {
-                $controller->deleteOldNotifications(); // Удаление старых уведомлений
-            }
-            exit(); // Остановка выполнения после маршрута
-        case '/notifications/approve':
-            if ($method === 'POST') {
-                $notificationId = $_POST['notification_id'];
-                $followerId = $_POST['follower_id'];
-
-                $controller = new NotificationController($dbConnection);
-                $controller->approveRequest($notificationId, $followerId);
-            }
-            break;
-
-        case '/notifications/reject':
-            if ($method === 'POST') {
-                $notificationId = $_POST['notification_id'];
-
-                $controller = new NotificationController($dbConnection);
-                $controller->rejectRequest($notificationId);
-            }
-            break;
-        case '/cancel-follow-request':
+        case '/remove-follower':
             $controller = new FollowController($dbConnection);
-            if ($method === 'POST') {
-                $controller->cancelFollowRequest();
-            }
+            session_start();
+            $userId = $_SESSION['user']['user_id']; // Текущий пользователь (владелец профиля)
+            $followerId = $_POST['follower_id']; // Тот, кого мы удаляем из подписчиков
+            $controller->unfollow($followerId, $userId); // Вызов метода
             exit();
-
+        case (explode('/', $uri)[1] == 'cancel-follow-request' && is_numeric(explode('/', $uri)[2])):
+        $controller = new FollowController($dbConnection);
+        if ($method === 'POST') {
+            session_start();
+            $followerId = $_SESSION['user']['user_id'];
+            $followedId = explode('/', $uri)[2];
+            $controller->cancelFollowRequest($followerId, $followedId);
+        }
+        exit();
         default:
             return false;
     }

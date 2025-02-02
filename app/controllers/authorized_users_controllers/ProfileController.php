@@ -65,9 +65,10 @@ class ProfileController
             $user['is_online'] = $this->statusService->isUserOnline($user['last_active_at']);
             $profileStatus = $this->settingModel->getShowLastSeen($profileUserId);
             $profileVisibility = $this->settingModel->getProfileVisibility($profileUserId);
-            $followStatus = $this->notificationModel->getFollowStatus($profileUserId, $_SESSION['user']['user_id']);
-//            var_dump($profileUserId);
+            $followStatus = $this->followModel->getFollowRequestStatus($profileUserId, $_SESSION['user']['user_id']); // Проверка активного запроса
 //            var_dump($profileVisibility);
+//            var_dump($followStatus);
+//            var_dump($isFollowing);
 //            var_dump($followStatus);
 //            $showLastSeen = $this->userModel->getStatus($profileUserId);
 //            $user['settings']['profile_visibility'] = $profileVisibility;

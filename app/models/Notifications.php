@@ -83,7 +83,7 @@ class Notifications
         return $stmt->execute();
     }
 
-    function getFollowStatus( $userId, $followerId) {
+    function getFollowType( $userId, $followerId) {
         $query = "
         SELECT status 
         FROM notifications 

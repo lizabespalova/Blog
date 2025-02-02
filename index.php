@@ -6,6 +6,7 @@ require_once __DIR__ . '/config/routes/article_routes.php';
 require_once __DIR__ . '/config/routes/comments_routes.php';
 require_once __DIR__ . '/config/routes/favourites_routes.php';
 require_once __DIR__ . '/config/routes/users_articles_routes.php';
+require_once __DIR__ . '/config/routes/notifications_routes.php';
 
 
 // Подключение к базе данных
