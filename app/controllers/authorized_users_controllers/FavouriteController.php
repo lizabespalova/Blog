@@ -19,9 +19,9 @@ class FavouriteController
         $this->articleModel = new Articles($conn);
     }
     public function showFavourites(){
+        require_once 'app/services/helpers/switch_language.php';
         // Получаем ID пользователя из сессии
         $userId = $_SESSION['user']['user_id'];
-
         // Получаем список избранных статей с деталями
         $article_cards = $this->favouriteModel->getUserFavoriteArticles($userId);
         include __DIR__ . '/../../views/authorized_users/favourites/favourite_template.php';

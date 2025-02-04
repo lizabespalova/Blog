@@ -23,7 +23,7 @@
 
     <div class="form-group">
         <label for="language"><?= $translations['timezone'] ?></label>
-        <input type="text" id="timezone" name="timezone" placeholder="Enter timezone" required />
+        <input type="text" id="timezone" name="timezone" placeholder="<?= $translations['timezone'] ?>" required />
     </div>
 
     <button type="submit" class="save-settings"><?= $translations['save_changes'] ?></button>

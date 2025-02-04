@@ -26,28 +26,36 @@
 <?php include __DIR__ . '/../../../views/base/profile_header.php'; ?>
 <!-- Main Content Section -->
 <div class="container">
-    <h1>Statistics for "<?php echo htmlspecialchars($article['title']); ?>"</h1>
+    <h1><?= sprintf($translations['statistics_for'], htmlspecialchars($article['title'])); ?></h1>
     <div class="statistic-item">
-        <strong><i class="fas fa-thumbs-up"></i> Likes:</strong>
-        <span id="likes"><?php echo $statistics['likes']; ?></span>
-        <button class="stat" onclick="showList('likes', '<?php echo htmlspecialchars($article['slug'], ENT_QUOTES, 'UTF-8'); ?>')">View Likes</button>
+        <strong><i class="fas fa-thumbs-up"></i> <?= $translations['likes']; ?>:</strong>
+        <span id="likes"><?= htmlspecialchars($statistics['likes']); ?></span>
+        <button class="stat" onclick="showList('likes', '<?= htmlspecialchars($article['slug'], ENT_QUOTES, 'UTF-8'); ?>')">
+            <?= $translations['view_likes']; ?>
+        </button>
     </div>
+
     <div class="statistic-item">
-        <strong><i class="fas fa-thumbs-down"></i> Dislikes:</strong>
-        <span id="dislikes"><?php echo $statistics['dislikes']; ?></span>
-        <button class="stat" onclick="showList('dislikes', '<?php echo htmlspecialchars($article['slug'], ENT_QUOTES, 'UTF-8'); ?>')">View Dislikes</button>
+        <strong><i class="fas fa-thumbs-down"></i> <?= $translations['dislikes']; ?>:</strong>
+        <span id="dislikes"><?= htmlspecialchars($statistics['dislikes']); ?></span>
+        <button class="stat" onclick="showList('dislikes', '<?= htmlspecialchars($article['slug'], ENT_QUOTES, 'UTF-8'); ?>')">
+            <?= $translations['view_dislikes']; ?>
+        </button>
     </div>
+
     <div class="statistic-item">
-        <strong><i class="fas fa-eye"></i> Views:</strong>
-        <span id="views"><?php echo $statistics['views']; ?></span>
+        <strong><i class="fas fa-eye"></i> <?= $translations['views']; ?>:</strong>
+        <span id="views"><?= htmlspecialchars($statistics['views']); ?></span>
     </div>
+
     <div class="statistic-item">
-        <strong><i class="fas fa-user"></i> Author:</strong>
-        <span><?php echo htmlspecialchars($article['author']); ?></span>
+        <strong><i class="fas fa-user"></i> <?= $translations['author']; ?>:</strong>
+        <span><?= htmlspecialchars($article['author']); ?></span>
     </div>
+
     <div class="statistic-item">
-        <strong><i class="fas fa-calendar-alt"></i> Created At:</strong>
-        <span><?php echo $article['created_at']; ?></span>
+        <strong><i class="fas fa-calendar-alt"></i> <?= $translations['created_at']; ?>:</strong>
+        <span><?= htmlspecialchars($article['created_at']); ?></span>
     </div>
 
     <!-- График лайков и дизлайков -->

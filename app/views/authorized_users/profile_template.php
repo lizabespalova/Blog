@@ -59,33 +59,33 @@
 
                     <div class="profile-stats">
                         <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
-                            Followers: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
+                            <?= $translations['followers']; ?>: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
                         </button>
                         <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followings')">
-                            Followings: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
+                            <?= $translations['followings']; ?>: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
                         </button>
                     </div>
                 </div>
                 <p>
-                    <strong>Registered:</strong>
-                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>">
-                        <?= htmlspecialchars($user['created_at']) ?>
+                    <strong><?= $translations['registered'] ?>:</strong>
+                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>"><?= htmlspecialchars($user['created_at']) ?></span>
+                </p>
+                <p>
+                    <strong><?= $translations['specialization'] ?>:</strong>
+                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>"><?= htmlspecialchars($user['user_specialisation']) ?></span>
+                </p>
+                <p><strong><?= $translations['company'] ?>:</strong>
+                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>"><?= htmlspecialchars($user['user_company']) ?>
                     </span>
                 </p>
                 <p>
-                    <strong>Specialization:</strong>
-                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
-                        <?= htmlspecialchars($user['user_specialisation']) ?>
-                    </span>
+                    <strong><?= $translations['experience'] ?>:</strong>
+                    <?= htmlspecialchars($user['user_experience']) ?> <?= $translations['years'] ?>
                 </p>
                 <p>
-                    <strong>Company:</strong>
-                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>">
-                        <?= htmlspecialchars($user['user_company']) ?>
-                    </span>
+                    <strong><?= $translations['articles'] ?>:</strong>
+                    <?= htmlspecialchars($userArticlesCount) ?>
                 </p>
-                <p><strong>Experience:</strong> <?= htmlspecialchars($user['user_experience']) ?> years</p>
-                <p><strong>Articles:</strong> <?= htmlspecialchars($userArticlesCount) ?></p>
                 <?php if ($currentUser['user_id'] === $user['user_id']): ?>
                 <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
                 <?php else: ?>
@@ -96,21 +96,24 @@
                                 class="follow-button"
                                 data-action="/cancel-follow-request/<?= htmlspecialchars($user['user_id']) ?>"
                                 data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
-                                data-private="true">Cancel Request
+                                data-private="true">
+                            <?= $translations['cancel_request'] ?>
                         </button>
                     <?php elseif ($isFollowing): ?>
                         <button
                                 class="follow-button"
                                 data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
                                 data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
-                                data-private="true">Unfollow
+                                data-private="true">
+                            <?= $translations['unfollow'] ?>
                         </button>
                     <?php else: ?>
                         <button
                                 class="follow-button"
                                 data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
                                 data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
-                                data-private="true">Follow
+                                data-private="true">
+                            <?= $translations['follow'] ?>
                         </button>
                     <?php endif; ?>
                 <?php else: ?>
@@ -120,14 +123,14 @@
                                 class="follow-button"
                                 data-action="/unfollow/<?= htmlspecialchars($user['user_id']) ?>"
                                 data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
-                                data-private="false">Unfollow
+                                data-private="false">  <?= $translations['unfollow'] ?>
                         </button>
                     <?php else: ?>
                         <button
                                 class="follow-button"
                                 data-action="/follow/<?= htmlspecialchars($user['user_id']) ?>"
                                 data-followed-user-id="<?= htmlspecialchars($user['user_id']) ?>"
-                                data-private="false">Follow
+                                data-private="false">  <?= $translations['follow'] ?>
                         </button>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -136,13 +139,13 @@
 
             <div id="edit-form" style="display: none;">
                 <form id="profile-edit-form">
-                    <label for="specialisation">Specialization:</label>
+                    <label for="specialisation"><?= $translations['specialization'] ?>:</label>
                     <input type="text" id="specialisation" name="user_specialisation" value="<?= htmlspecialchars($user['user_specialisation']) ?>" required>
 
-                    <label for="company">Company:</label>
+                    <label for="company"><?= $translations['company'] ?>:</label>
                     <input type="text" id="company" name="user_company" value="<?= htmlspecialchars($user['user_company']) ?>" required>
 
-                    <label for="experience">Experience:</label>
+                    <label for="experience"><?= $translations['experience'] ?>:</label>
                     <input type="number" id="experience" name="user_experience" value="<?= htmlspecialchars($user['user_experience']) ?>" required>
 
                     <!-- Модальное окно для отображения полного текста -->
@@ -154,8 +157,8 @@
                     </div>
 
                     <div class="button-group">
-                        <button type="button" onclick="submitEditForm()">Save Changes</button>
-                        <button type="button" onclick="toggleEditForm()" class="cancel">Cancel</button>
+                        <button type="button" onclick="submitEditForm()"><?= $translations['save_changes'] ?></button>
+                        <button type="button" onclick="toggleEditForm()" class="cancel"><?= $translations['cancel'] ?></button>
                     </div>
                 </form>
             </div>
@@ -168,9 +171,15 @@ if ($profileVisibility === 'public' || $profileUserId === $_SESSION['user']['use
 <!-- Navigation Menu -->
 <div class="profile-navigation">
     <div class="menu-items">
-        <a href="#" class="navigation-item active" data-page="profile">Profile</a>
-        <a href="#" class="navigation-item" data-page="publication">My publications</a>
-        <a href="#" class="navigation-item" data-page="courses">My courses</a>
+        <a href="#" class="navigation-item active" data-page="profile">
+            <?= $translations['profile'] ?>
+        </a>
+        <a href="#" class="navigation-item" data-page="publication">
+            <?= $translations['my_publications'] ?>
+        </a>
+        <a href="#" class="navigation-item" data-page="courses">
+            <?= $translations['my_courses'] ?>
+        </a>
     </div>
     <div class="menu-indicator"></div>
 </div>
@@ -184,7 +193,7 @@ if ($profileVisibility === 'public' || $profileUserId === $_SESSION['user']['use
                 <p><?php echo htmlspecialchars($user['user_description']); ?></p>
             <?php else: ?>
                 <div class="description-container">
-                    <p>For adding a description, click on the edit button above.</p>
+                    <p><?= $translations['add_description'] ?></p>
                     <div class="content-image">
                         <img src="/templates/images/woman-thinking-concept-illustration.png" alt="Profile Description Image">
                     </div>

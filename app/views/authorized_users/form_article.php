@@ -26,66 +26,83 @@
 
  <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm">
 
-     <label for="title">Title:</label>
+     <label for="title"><?= $translations['title']; ?></label>
      <input type="text" id="title" name="title" placeholder="Title" required value="<?= !empty($title) ? htmlspecialchars($title) : '' ?>"><br>
 
-     <label for="markdown-editor">Content:</label>
+     <label for="markdown-editor"><?= $translations['content']; ?></label>
      <!-- Для вывода контента статьи -->
-     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= isset($content) ? htmlspecialchars($content) : '' ?></textarea>
+     <textarea id="markdown-editor" name="content" placeholder="<?= $translations['write_article_content_placeholder']; ?>">
+    <?= isset($content) ? htmlspecialchars($content) : '' ?>
+    </textarea>
+
      <!-- Модальное окно для таблиц -->
      <div id="tableModal" class="modal" style="display: none;">
          <div class="modal-content">
              <span class="close">&times;</span>
-             <h2>Create table</h2>
-             <label for="rows">Rows:</label>
-             <input type="number" id="rows" min="1" max="20" value="2" >
-             <label for="columns">Columns:</label>
+             <h2><?= $translations['create_table']; ?></h2>
+             <label for="rows"><?= $translations['rows']; ?></label>
+             <input type="number" id="rows" min="1" max="20" value="2">
+             <label for="columns"><?= $translations['columns']; ?></label>
              <input type="number" id="columns" min="1" max="20" value="2">
-             <button id="insertTableBtn" type="button">Create table</button>
+             <button id="insertTableBtn" type="button"><?= $translations['insert_table']; ?></button>
          </div>
      </div>
-
 
      <?php include __DIR__ . '/../partials/categories.php'; ?>
 
 
-     <label for="difficulty">Difficulty:</label>
+     <!-- Поле выбора сложности -->
+     <label for="difficulty"><?= $translations['difficulty'] ?></label>
      <select id="difficulty" name="difficulty" required>
-         <option value="">Select difficulty</option>
-         <option value="beginner" <?= ($article['difficulty'] ?? '') === 'beginner' ? 'selected' : '' ?>>Beginner</option>
-         <option value="intermediate" <?= ($article['difficulty'] ?? '') === 'intermediate' ? 'selected' : '' ?>>Intermediate</option>
-         <option value="advanced" <?= ($article['difficulty'] ?? '') === 'advanced' ? 'selected' : '' ?>>Advanced</option>
+         <option value=""><?= $translations['select_difficulty'] ?></option>
+         <option value="beginner" <?= ($article['difficulty'] ?? '') === 'beginner' ? 'selected' : '' ?>>
+             <?= $translations['beginner'] ?>
+         </option>
+         <option value="intermediate" <?= ($article['difficulty'] ?? '') === 'intermediate' ? 'selected' : '' ?>>
+             <?= $translations['intermediate'] ?>
+         </option>
+         <option value="advanced" <?= ($article['difficulty'] ?? '') === 'advanced' ? 'selected' : '' ?>>
+             <?= $translations['advanced'] ?>
+         </option>
      </select><br>
 
-
-     <label for="read_time">Estimated Read Time (in minutes):</label>
+     <!-- Поле ввода предполагаемого времени чтения -->
+     <label for="read_time"><?= $translations['estimated_read_time'] ?></label>
      <input type="number" id="read_time" name="read_time" min="1" value="<?= htmlspecialchars($article['read_time'] ?? '') ?>" required><br>
 
-     <label for="tags">Tags such as IT languages (comma-separated):</label>
+     <!-- Поле ввода тегов -->
+     <label for="tags"><?= $translations['tags'] ?></label>
      <div class="tag-container">
-         <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" value="<?= htmlspecialchars(implode(', ', isset($article['tags']) && is_array($article['tags']) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
-         <span id="tag-warning" style="color: red; display: none; margin-left: 10px;">❗ No more than 10 tags!</span>
+         <input type="text" id="tags-input" placeholder="<?= $translations['tags_placeholder'] ?>"
+                value="<?= htmlspecialchars(implode(', ', (isset($article['tags']) && is_array($article['tags'])) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
+         <span id="tag-warning" style="color: red; display: none; margin-left: 10px;">
+        <?= $translations['tag_warning'] ?>
+    </span>
      </div>
      <input type="hidden" id="tags" name="tags">
 
-     <label for="youtube_link">YouTube Link:</label>
-     <input type="url" id="youtube_link" name="youtube_link" placeholder="https://www.youtube.com/embed/xyz" value="<?= htmlspecialchars($article['youtube_link'] ?? '') ?>">
+     <!-- Поле ввода ссылки на YouTube -->
+     <label for="youtube_link"><?= $translations['youtube_link'] ?></label>
+     <input type="url" id="youtube_link" name="youtube_link" placeholder="<?= $translations['youtube_link_placeholder'] ?>" value="<?= htmlspecialchars($article['youtube_link'] ?? '') ?>">
 
-     <label for="cover_image">Upload cover image:</label>
+     <!-- Загрузка обложки -->
+     <label for="cover_image"><?= $translations['cover_image'] ?></label>
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*">
-         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars( $article['cover_image'] ?? '') ?>" alt="Cover Image Preview" style="display:<?= !empty($coverImage) ? 'block' : 'none' ?>;">
+         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($article['cover_image'] ?? '') ?>"
+              alt="<?= $translations['cover_image_preview'] ?>" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">
          <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
 
+     <!-- Переключатель публикации -->
      <div class="switch-container">
-         <label for="publish">Publish:</label>
+         <label for="publish"><?= $translations['publish'] ?></label>
          <label class="switch">
-             <input type="checkbox" id="is_published" name="is_published" value="1"
-                 <?= isset($article['is_published']) && $article['is_published'] ? 'checked' : '' ?>>
+             <input type="checkbox" id="is_published" name="is_published" value="1" <?= isset($article['is_published']) && $article['is_published'] ? 'checked' : '' ?>>
              <span class="slider"></span>
          </label>
      </div>
+
 
 
      <input type="hidden" name="article_id" value="<?= $article['id'] ?? '' ?>">
@@ -94,7 +111,7 @@
      <?php endif; ?>
      <!-- Остальные поля формы, такие как заголовок, контент и т.д. -->
      <button type="submit" class="custom-submit-button">
-         <?= isset($article['slug']) ? 'Save Changes' : 'Create Article' ?>
+         <?= isset($article['slug']) ? $translations['save_changes'] : $translations['create_article'] ?>
      </button>
 
  </form>

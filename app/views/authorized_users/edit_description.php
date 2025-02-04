@@ -25,22 +25,23 @@
 
 <main>
     <div class="edit-container">
-        <h1>Edit Description</h1>
+        <h1><?= $translations['edit_description'] ?></h1>
         <form action="/update-main-description" method="POST">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="10" cols="50" maxlength="500" placeholder="Enter your description here..."></textarea>
+            <label for="description"><?= $translations['description'] ?>:</label>
+            <textarea id="description" name="description" rows="10" cols="50" maxlength="500" placeholder="<?= $translations['enter_description_placeholder'] ?>"></textarea>
             <br>
-            <span id="char-count">0/500</span> <!-- Отображение количества введённых символов -->
+            <span id="char-count">0/500</span> <!-- Можно добавить перевод подсказки, если требуется -->
             <br>
 
             <!-- Кнопки внутри формы -->
             <div class="form-actions">
-                <button type="submit" class="save-button">Save</button>
-                <button type="button" class="back-button" onclick="window.location.href='/profile';">Back</button>
+                <button type="submit" class="save-button"><?= $translations['save'] ?></button>
+                <button type="button" class="back-button" onclick="window.location.href='/profile';"><?= $translations['back'] ?></button>
             </div>
         </form>
     </div>
 </main>
+
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>

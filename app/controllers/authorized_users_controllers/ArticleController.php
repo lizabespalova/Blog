@@ -47,6 +47,7 @@ class ArticleController
 
     public function show_article_form($slug)
     {
+        require_once 'app/services/helpers/switch_language.php';
         if ($slug) {
             $article = $this->articleModel->get_article_by_slug($slug);
             // Проверка и обработка обложки
@@ -606,8 +607,8 @@ class ArticleController
             echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
             exit();
         }
-
-        $userId = $data['user_id'];
+//        session_start();
+        $userId = $_SESSION['user']['user_id'];
         $articleId = $data['article_id'];
         $message = $data['message'];
 
@@ -633,6 +634,7 @@ class ArticleController
     }
     public function getArticleStatistics($articleId){
         // Получаем данные статьи
+        require_once 'app/services/helpers/switch_language.php';
         $article = $this->articleModel->getArticleById($articleId);
         if (!$article) {
             http_response_code(404);

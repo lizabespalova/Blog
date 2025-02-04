@@ -89,6 +89,8 @@ class FollowController
     public function showFollowers($userId)
     {
         session_start();
+        require_once 'app/services/helpers/switch_language.php';
+
         // Получаем подписчиков через модель
         $followers = $this->followModel->getFollowers($userId);
         $followersCount = $this->followModel->getFollowersCount($userId);
@@ -102,6 +104,8 @@ class FollowController
     public function showFollowings($userId)
     {
         session_start();
+        require_once 'app/services/helpers/switch_language.php';
+
         // Получаем подписки через модель
         $followings = $this->followModel->getFollowings($userId);
         $followingsCount = $this->followModel->getFollowingCount($userId);

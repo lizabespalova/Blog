@@ -23,7 +23,7 @@
 <!-- Header Section -->
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
-<h1 class="page-title">Your Notifications</h1>
+<h1 class="page-title"><?= $translations['your_notifications']; ?></h1>
 
 <div class="notifications-list">
     <?php if (!empty($notifications)): ?>

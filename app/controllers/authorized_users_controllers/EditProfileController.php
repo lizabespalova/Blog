@@ -58,6 +58,7 @@ class EditProfileController
         }
     }
     public function show_edit_form(){
+        require_once 'app/services/helpers/switch_language.php';
         include __DIR__ . '/../../views/authorized_users/edit_description.php';
     }
 

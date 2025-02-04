@@ -16,8 +16,10 @@ class SearchController
 
     public function show_search_form()
     {
-        // Проверяем, авторизован ли пользователь
         session_start();
+
+        require_once 'app/services/helpers/switch_language.php';
+        // Проверяем, авторизован ли пользователь
         $userId = $_SESSION['user']['user_id'] ?? null;
         if ($userId) {
             // Если пользователь авторизован, показываем статьи по его интересам

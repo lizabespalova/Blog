@@ -2,13 +2,13 @@
     <form id="filter-form" action="<?= htmlspecialchars($action) ?>" method="GET" class="filter-form">
 
         <div class="filter-group">
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title" class="filter-input" placeholder="Article title">
+            <label for="title"><?= $translations['title'] ?></label>
+            <input type="text" name="title" id="title" class="filter-input" placeholder="<?= $translations['filter_title_placeholder'] ?>">
         </div>
 
         <div class="filter-group">
-            <label for="author">Author:</label>
-            <input type="text" name="author" id="author" class="filter-input" placeholder="Authors name">
+            <label for="author"><?= $translations['filter_author'] ?></label>
+            <input type="text" name="author" id="author" class="filter-input" placeholder="<?= $translations['filter_author_placeholder'] ?>">
         </div>
 
         <div class="filter-group">
@@ -16,15 +16,15 @@
         </div>
 
         <div class="filter-group">
-            <label for="date-from">From (save date (approx.)):</label>
+            <label for="date-from"><?= $translations['filter_from_date'] ?></label>
             <input type="date" name="date_from" id="date-from" class="filter-input">
         </div>
 
         <div class="filter-group">
-            <label for="date-to">To (save date (approx.)):</label>
+            <label for="date-to"><?= $translations['filter_to_date'] ?></label>
             <input type="date" name="date_to" id="date-to" class="filter-input">
         </div>
 
-        <button type="submit" class="filter-button">Apply Filter</button>
+        <button type="submit" class="filter-button"><?= $translations['filter_apply'] ?></button>
     </form>
 </div>

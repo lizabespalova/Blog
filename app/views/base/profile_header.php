@@ -33,14 +33,30 @@ $currentUser = $_SESSION['user'] ?? null; // Получаем данные по�
             <div class="menu header-menu">
                 <button class="menu-toggle" onclick="toggleMenu(this)">☰</button>
                 <div class="menu-content">
-                    <a href="/profile/<?php echo $currentUser['user_login']; ?>">My profile <i class="fas fa-user"></i></a>
-                    <a href="/users-articles/<?php echo $currentUser['user_login']; ?>">My articles <i class="fas fa-newspaper"></i></a>
-                    <a href="#subscription">My subscriptions <i class="fas fa-bell"></i></a>
-                    <a href="/create-article">Write an article <i class="fas fa-pen"></i></a>
-                    <a href="/favourites/<?php echo $currentUser['user_login']; ?>">Favorites <i class="fas fa-star"></i></a>
-                    <a href="/notifications">Notifications <i class="fas fa-bell"></i></a>
-                    <a href="/settings">Settings <i class="fas fa-cog"></i></a>
-                    <a href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
+                    <a href="/profile/<?php echo $currentUser['user_login']; ?>">
+                        <?php echo $translations['my_profile']; ?> <i class="fas fa-user"></i>
+                    </a>
+                    <a href="/users-articles/<?php echo $currentUser['user_login']; ?>">
+                        <?php echo $translations['my_articles']; ?> <i class="fas fa-newspaper"></i>
+                    </a>
+                    <a href="#subscription">
+                        <?php echo $translations['my_subscriptions']; ?> <i class="fas fa-bell"></i>
+                    </a>
+                    <a href="/create-article">
+                        <?php echo $translations['write_article']; ?> <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="/favourites/<?php echo $currentUser['user_login']; ?>">
+                        <?php echo $translations['favourites']; ?> <i class="fas fa-star"></i>
+                    </a>
+                    <a href="/notifications">
+                        <?php echo $translations['notifications']; ?> <i class="fas fa-bell"></i>
+                    </a>
+                    <a href="/settings">
+                        <?php echo $translations['settings']; ?> <i class="fas fa-cog"></i>
+                    </a>
+                    <a href="/logout">
+                        <?php echo $translations['logout']; ?> <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 </div>
             </div>
         </div>

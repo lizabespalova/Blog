@@ -27,9 +27,7 @@ class SettingsController
     }
     public function showSettingsTemplate(){
         require_once 'app/services/helpers/switch_language.php';
-
         $page = $_GET['section'] ?? 'general';
-
         $sections = [
             'appearance' => $translations['appearance_settings'], // Настройки внешнего вида (день/ночь)
             'personal' => $translations['personal_data'],         // Настройки личных данных (email, пароль, логин)
@@ -40,9 +38,6 @@ class SettingsController
         if (!array_key_exists($page, $sections)) {
             $page = 'appearance';
         }
-//        if (empty($_SESSION['settings']['font_style'])) {
-//            $_SESSION['settings']['font_style'] = 'serif';
-//        }
         $userId = $_SESSION['user']['user_id'];
         $currentLogin = $_SESSION['user']['user_login'];
         $currentEmail = $this->userModel->getUserEmail($userId);

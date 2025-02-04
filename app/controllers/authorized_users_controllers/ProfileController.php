@@ -36,8 +36,8 @@ class ProfileController
 
     public function showProfile($profileUserLogin)
     {
+        require_once 'app/services/helpers/switch_language.php';
         try {
-//            session_start();
             // Проверка, что данные пользователя есть в сессии
             if (isset($_SESSION['user'])) {
                 $user = $_SESSION['user']; // Получаем данные из сессии
@@ -70,10 +70,6 @@ class ProfileController
 //            var_dump($followStatus);
 //            var_dump($isFollowing);
 //            var_dump($followStatus);
-//            $showLastSeen = $this->userModel->getStatus($profileUserId);
-//            $user['settings']['profile_visibility'] = $profileVisibility;
-//            $user['settings']['show_last_seen'] = $showLastSeen;
-//            var_dump($publications);
 
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';

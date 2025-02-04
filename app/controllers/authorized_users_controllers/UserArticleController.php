@@ -14,6 +14,8 @@ class UserArticleController
         $this->articleModel = new Articles($conn);
     }
     public function showUsersArticles(){
+        require_once 'app/services/helpers/switch_language.php';
+
         // Получаем ID пользователя из сессии
         $userLogin = $_SESSION['user']['user_login'];
 

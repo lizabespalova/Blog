@@ -30,12 +30,13 @@
 
 <!-- Menu Section -->
 <div class="menu-section">
-    <a href="/popular-articles" class="menu-item">Popular articles</a>
-    <a href="/popular-courses" class="menu-item">Popular courses</a>
-    <a href="/popular-writers" class="menu-item">Popular IT-writers</a>
-    <a href="/it-events" class="menu-item">IT-events</a>
-    <a href="/it-news" class="menu-item">IT news</a>
+    <a href="/popular-articles" class="menu-item"><?= $translations['popular_articles'] ?></a>
+    <a href="/popular-courses" class="menu-item"><?= $translations['popular_courses'] ?></a>
+    <a href="/popular-writers" class="menu-item"><?= $translations['popular_writers'] ?></a>
+    <a href="/it-events" class="menu-item"><?= $translations['it_events'] ?></a>
+    <a href="/it-news" class="menu-item"><?= $translations['it_news'] ?></a>
 </div>
+
 
 <!-- Main Content -->
 <div id="filter-results" class="favorite-articles-container">

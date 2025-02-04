@@ -19,11 +19,8 @@ class NotificationController
         $this->followModel = new Follows(getDbConnection());
     }
     public function showNotifications() {
-//        session_start();
-//        if (!isset($_SESSION['user'])) {
-//            header('Location: /login'); // Перенаправление на страницу входа для неавторизованных пользователей
-//            exit();
-//        }
+        require_once 'app/services/helpers/switch_language.php';
+
         // Получение уведомлений из модели
         $userId = $_SESSION['user']['user_id'];
         $notifications = $this->notificationModel->getNotificationsByUser($userId);

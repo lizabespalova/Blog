@@ -28,7 +28,7 @@
 
     <!-- Секция для подписчиков -->
     <div class="followers-section">
-        <h2>Followings</h2>
+        <h2> <?= $translations['followings']; ?></h2>
         <?php if (!empty($followingsCount)): ?>
             <span class="followers-count"><?= htmlspecialchars($followingsCount) ?></span>
         <?php else: ?>
