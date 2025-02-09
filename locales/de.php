@@ -165,4 +165,7 @@ return [
     'save'                       => 'Speichern',
     'back'                       => 'Zurück',
 
+//    Поиск
+    'view_profile'    => 'Profil anzeigen',
+
 ];

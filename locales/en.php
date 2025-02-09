@@ -163,4 +163,8 @@ return [
     'enter_description_placeholder'=> 'Enter your description here...',
     'save'                       => 'Save',
     'back'                       => 'Back',
+
+//    Поиск
+    'view_profile'    => 'View Profile',
+
 ];

@@ -59,4 +59,27 @@ class Search
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    public function getPopularWriters($limit = 10) {
+        $query = "SELECT 
+                  u.user_id, 
+                  u.user_login, 
+                  u.user_avatar, 
+                  u.user_specialisation,
+                  COUNT(f.follower_id) AS followers_count
+              FROM users u
+              LEFT JOIN followers f ON u.user_id = f.following_id
+              GROUP BY u.user_id
+              ORDER BY followers_count DESC
+              LIMIT ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $writers = [];
+        while ($row = $result->fetch_assoc()) {
+            $writers[] = $row;
+        }
+        return $writers;
+    }
+
 }

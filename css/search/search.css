@@ -67,11 +67,72 @@
     /*font-size: 16px;*/
     transition: color 0.3s; /* Плавный переход цвета при наведении */
 }
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .menu-section {
+        display: flex;
+        flex-wrap: nowrap; /* Запрещаем перенос элементов */
+        padding: 10px;
+    }
 
+    .menu-item {
+        padding: 8px 15px;
+        font-size: 14px; /* Уменьшаем размер текста */
+    }
+}
+
+/* Если экран еще уже - переводим в столбец */
+@media (max-width: 480px) {
+    .menu-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-item {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+}
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .search-form {
+        max-width: 100%;
+        border-radius: 30px;
+    }
+
+    .searching-input {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+
+    .searching-button {
+        padding: 14px 18px;
+    }
+}
+
+/* Если экран еще уже */
+@media (max-width: 480px) {
+    .search-form {
+        flex-direction: column;
+        border-radius: 15px;
+        overflow: hidden; /* Чтобы края не выходили */
+    }
+
+    .searching-input {
+        border-radius: 15px 15px 0 0;
+        text-align: center;
+    }
+
+    .searching-button {
+        border-radius: 0 0 15px 15px;
+        width: 100%;
+    }
+}
 /* Стили для элементов меню при наведении */
 .menu-item:hover {
     color: #0056b3; /* Цвет при наведении */
-    text-decoration: underline; /* Подчеркивание при наведении */
 }
 .highlight {
     background-color: yellow;

@@ -7,7 +7,6 @@
                class="searching-input"
                value="<?= htmlspecialchars($_GET['query'] ?? '') ?>"
         >
-
         <button type="button" class="searching-button" id="searchButton">
             <i class="fas fa-search"></i>
         </button>

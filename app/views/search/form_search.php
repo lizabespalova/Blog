@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/settings/themes.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
+    <link rel="stylesheet" href="/css/search/popular_writers.css">
 
 </head>
 <body
@@ -28,24 +29,18 @@
 <!-- Search Form -->
 <?php include __DIR__ . '/../partials/search_field.php'; ?>
 
-<!-- Menu Section -->
+<!-- Меню секций -->
 <div class="menu-section">
-    <a href="/popular-articles" class="menu-item"><?= $translations['popular_articles'] ?></a>
-    <a href="/popular-courses" class="menu-item"><?= $translations['popular_courses'] ?></a>
-    <a href="/popular-writers" class="menu-item"><?= $translations['popular_writers'] ?></a>
-    <a href="/it-events" class="menu-item"><?= $translations['it_events'] ?></a>
-    <a href="/it-news" class="menu-item"><?= $translations['it_news'] ?></a>
+    <a href="?section=popular-articles" class="menu-item" data-section="popular-articles"><?= $translations['popular_articles'] ?></a>
+    <a href="?section=popular-writers" class="menu-item" data-section="popular-writers"><?= $translations['popular_writers'] ?></a>
+</div>
+
+<!-- Контейнер для контента, загружаемого через AJAX -->
+<div id="content-container">
+    <!-- Здесь будет загружаться секция -->
 </div>
 
 
-<!-- Main Content -->
-<div id="filter-results" class="favorite-articles-container">
-    <?php if (!empty($article_cards)): ?>
-        <?php foreach ($article_cards as $article): ?>
-            <?php include __DIR__ . '/../../views/partials/card.php'; ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</div>
 
 <!-- Footer -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
@@ -53,6 +48,7 @@
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/filter_articles.js"></script>
+<script src="/js/search/load_sections.js"></script>
 
 </body>
 </html>

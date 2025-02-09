@@ -2,6 +2,7 @@
 
 
 use controllers\authorized_users_controllers\UserArticleController;
+use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
 
@@ -21,6 +22,15 @@ function users_article_route($uri, $method) {
                 $controller->showUsersArticles();
             }
             exit();  // Остановка выполнения после маршрута
+        case '/sections/popular-articles':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularArticles();
+            exit();
+
+        case '/sections/popular-writers':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularWriters();
+            exit();
 
         default:
             return false;
