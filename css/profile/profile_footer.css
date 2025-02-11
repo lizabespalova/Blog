@@ -4,6 +4,8 @@ html, body {
     /*margin: 0;*/
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;  /* Отключает горизонтальную прокрутку */
+    overflow-y: auto;    /* Включает вертикальную прокрутку */
 }
 
 /* Основной контейнер страницы */
@@ -70,4 +72,16 @@ html, body {
 
 .footer-column a:hover {
     text-decoration: underline;
+}
+
+/* Для экранов шириной от 769px до 1440px (включая Samsung Galaxy S8) */
+@media (max-width: 768px) {
+    .container {
+        width: 100%; /* Убедитесь, что контейнер не превышает ширину экрана */
+        padding: 0 10px; /* Добавьте отступы, если нужно */
+    }
+
+    .footer-container {
+        padding: 10px 0; /* Убедитесь, что футер тоже адаптируется */
+    }
 }
