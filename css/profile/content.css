@@ -75,3 +75,31 @@
 .hidden {
     display: none;
 }
+/* Адаптация под планшеты */
+@media (max-width: 1024px) {
+    .content-section {
+        margin: 50px auto;
+    }
+    .description-container {
+        gap: 15px;
+    }
+    .content-image img {
+        width: 300px;
+    }
+}
+
+/* Адаптация под мобильные */
+@media (max-width: 768px) {
+    .content-section {
+        margin: 40px auto;
+        padding: 0 15px;
+    }
+    .description-container {
+        flex-direction: column; /* Размещаем элементы в колонку */
+    }
+    .content-image img {
+        width: 100%; /* Занимает всю ширину */
+        max-width: 280px; /* Но не больше 280px */
+    }
+
+}

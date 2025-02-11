@@ -241,14 +241,12 @@ class ArticleController
 
     public function show_article($slug)
     {
+        require_once 'app/services/helpers/switch_language.php';
 
         // Ищем статью по слагу
         $article = $this->articleModel->get_article_by_slug($slug);
 
         if ($article) {
-//            echo "<pre>Article";
-//            print_r($article);
-//            echo "</pre>";
             // Получаем данные автора (аватар)
             $author_info = $this->userModel->get_author_avatar($article['author']);
             // Парсим содержимое статьи из Markdown в HTML

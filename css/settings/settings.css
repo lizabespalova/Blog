@@ -92,3 +92,75 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+
+
+
+/* --- АДАПТИВНОСТЬ --- */
+
+/* Планшеты (макс. ширина 1024px) */
+@media (max-width: 1024px) {
+    .settings-menu {
+        width: 25%;
+        padding: 15px;
+    }
+    .settings-menu a {
+        padding: 12px;
+        font-size: 0.95em;
+    }
+    .settings-section {
+        max-width: 90%;
+        padding: 15px;
+    }
+}
+
+/* Мобильные (макс. ширина 768px) */
+@media (max-width: 768px) {
+    .settings-container {
+        flex-direction: column;
+    }
+
+    .settings-menu {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .settings-menu ul {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .settings-menu a {
+        padding: 10px;
+        font-size: 0.9em;
+        border-bottom: none;
+    }
+
+    .settings-content {
+        padding: 20px;
+    }
+
+    .settings-section {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .settings-section h2 {
+        font-size: 1.5em;
+    }
+
+    .settings-section select,
+    .settings-section input[type="range"] {
+        font-size: 0.95em;
+        padding: 6px;
+    }
+
+    .settings-section .save-settings {
+        width: 100%;
+        padding: 10px;
+        font-size: 1em;
+    }
+}

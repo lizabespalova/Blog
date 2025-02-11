@@ -343,6 +343,9 @@
     .card-container {
         padding: 10px;
     }
+    /*.profile-navigation {*/
+    /*    width: auto;*/
+    /*}*/
 }
 /* Адаптивные стили */
 @media (max-width: 768px) {
@@ -356,53 +359,55 @@
 
     .profile-header {
         flex-direction: column;
-        align-items: center;
         text-align: center;
+        padding: 0;
+        margin-top: 10px; /* Подбери значение по вкусу */
+
     }
 
     .profile-photo {
         width: 80%;
         height: auto;
         margin-bottom: 10px;
+
     }
 
     .profile-info {
-        padding: 10px;
+        padding: inherit;
         width: 100%;
         text-align: center;
     }
-
+    .profile-stats{
+        margin-top: 10px;
+    }
     .follow-button {
         width: 100%;
         margin-top: 10px;
     }
 
-    .profile-navigation {
-        flex-direction: column;
-        text-align: center;
-        margin-top: auto; /* Фиксирует навигацию снизу */
-    }
+
 }
 
-/*@media (min-width: 769px) and (max-width: 1024px) {*/
-/*    .profile-container {*/
-/*        flex-direction: row;*/
-/*        align-items: flex-start;*/
-/*        justify-content: space-between;*/
-/*        min-height: 100vh; !* Заполняет весь экран *!*/
-/*    }*/
+@media (min-width: 769px) and (max-width: 1024px) {
+    .profile-container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        min-height: 100vh; /* Заполняет весь экран */
+    }
 
-/*    .profile-photo {*/
-/*        width: 60%;*/
-/*        max-width: 140px;*/
-/*        height: auto;*/
-/*        margin-right: 20px;*/
-/*    }*/
+    .profile-photo {
+        width: 60%;
+        max-width: 140px;
+        height: auto;
+        margin-right: 20px;
+    }
 
-/*    .profile-info {*/
-/*        flex: 1;*/
-/*    }*/
-/*}*/
+    .profile-info {
+        flex: 1;
+    }
+
+}
 
 /*@media (min-width: 1025px) {*/
 /*    .profile-container {*/

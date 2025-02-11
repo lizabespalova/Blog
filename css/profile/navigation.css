@@ -42,3 +42,30 @@
     left: 0;
     width: 100px;
 }
+@media (max-width: 1024px) {
+    .profile-navigation {
+        width: 70%; /* Увеличиваем ширину на планшетах */
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-navigation {
+        width: 90%; /* Уменьшаем ширину для мобильных */
+    }
+
+    .navigation-items {
+        flex-direction: column; /* Располагаем элементы в колонку */
+        align-items: center;
+    }
+
+    .navigation-item {
+        padding: 10px 0; /* Уменьшаем отступы */
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .navigation-indicator {
+        display: none; /* Прячем индикатор на мобильных, если он не нужен */
+    }
+}
