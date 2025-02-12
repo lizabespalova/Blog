@@ -623,3 +623,73 @@ h3 .comment-count {
 #repost-char-count.error {
     color: red;
 }
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+    .article-card {
+        max-width: 90%;
+        padding: 15px;
+    }
+    .article-title {
+        font-size: 20px;
+    }
+    .article-content {
+        font-size: 14px;
+    }
+    .article-details {
+        flex-direction: column; /* Размещаем элементы в колонку */
+        align-items: flex-start; /* Выравниваем по левому краю */
+        font-size: 12px; /* Уменьшаем шрифт */
+    }
+
+    .article-details span {
+        margin-bottom: 5px; /* Добавляем небольшой отступ между элементами */
+    }
+    .reaction-buttons{
+        gap: 10px;
+    }
+    .article-tags{
+        padding: 0;
+        margin-left: 0;
+    }
+    .youtube-video{
+        max-width: 100%;
+    }
+}
+.youtube-video iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9; /* Поддерживает правильные пропорции */
+}
+@media (max-width: 480px) {
+    .article-card {
+        max-width: 100%;
+        padding: 10px;
+        box-shadow: none;
+        border: none;
+    }
+    .article-title {
+        font-size: 18px;
+    }
+    .article-content {
+        font-size: 13px;
+    }
+    .article-details {
+        flex-direction: column; /* Размещаем элементы в колонку */
+        align-items: flex-start; /* Выравниваем по левому краю */
+        font-size: 12px; /* Уменьшаем шрифт */
+    }
+
+    .article-details span {
+        margin-bottom: 5px; /* Добавляем небольшой отступ между элементами */
+    }
+    .reaction-buttons{
+        gap: 10px;
+    }
+    .article-tags{
+        padding: 0;
+        margin-left: 0;
+    }
+    .youtube-video{
+        max-width: 100%;
+    }
+}
