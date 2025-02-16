@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
             htmlContent = htmlContent.replace(/\$\$([\s\S]*?)\$\$/g, (_, formula) => {
                 return `<div class="formula-container">${formula}</div>`;
             });
-            console.log(`Processed HTML Content for rendered-content-${index + 1}:`, htmlContent);
+            // console.log(`Processed HTML Content for rendered-content-${index + 1}:`, htmlContent);
 
             // Обновляем содержимое элемента
             markdownContent.innerHTML = htmlContent;

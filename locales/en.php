@@ -15,7 +15,11 @@ return [
     'privacy_settings'    => 'Privacy Settings',
     'security'            => 'Security',
     'preferences'         => 'Preferences',
-
+    'delete_account'        => 'Delete account',
+    'delete_account_description' => 'Deleting your account is irreversible. Please confirm that you want to delete your account.',
+    'enter_password' => 'Enter your password',
+    'delete_account_button' => 'Delete Account',
+    'delete_account_warning' => 'Once your account is deleted, all your data will be permanently lost.',
     //    Страница настроек "Безопасность"
     'current_password' => 'Current Password',
     'new_password' => 'New Password',

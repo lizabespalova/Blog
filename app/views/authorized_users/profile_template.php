@@ -58,13 +58,16 @@
                     </h1>
 
                     <div class="profile-stats">
-                        <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
-                            <?= $translations['followers']; ?>: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
-                        </button>
-                        <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followings')">
-                            <?= $translations['followings']; ?>: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
-                        </button>
+                        <?php if ($profileVisibility === 'public'): ?>
+                            <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
+                                <?= $translations['followers']; ?>: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
+                            </button>
+                            <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followings')">
+                                <?= $translations['followings']; ?>: <span id="following-count"><?= htmlspecialchars($followingCount) ?></span>
+                            </button>
+                        <?php endif; ?>
                     </div>
+
                 </div>
                 <p>
                     <strong><?= $translations['registered'] ?>:</strong>
@@ -86,8 +89,9 @@
                     <strong><?= $translations['articles'] ?>:</strong>
                     <?= htmlspecialchars($userArticlesCount) ?>
                 </p>
-                <?php if ($currentUser['user_id'] === $user['user_id']): ?>
-                <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
+
+                <?php if (!empty($currentUser['user_id']) && !empty($user['user_id']) && $currentUser['user_id'] === $user['user_id']): ?>
+                    <button class="edit-description-button" onclick="toggleEditForm()">✎</button>
                 <?php else: ?>
                 <?php if ($profileVisibility === 'private'): ?>
                     <!-- Для приватного профиля -->
@@ -167,7 +171,9 @@
 </div>
 
 <?php
-if ($profileVisibility === 'public' || $profileUserId === $_SESSION['user']['user_id'] || $isFollowing): ?>
+$userId = $_SESSION['user']['user_id'] ?? null;
+if ($profileVisibility === 'public' || $profileUserId === $userId || $isFollowing):
+    ?>
 <!-- Navigation Menu -->
 <div class="profile-navigation">
     <div class="menu-items">

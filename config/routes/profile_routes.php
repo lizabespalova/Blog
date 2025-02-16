@@ -25,7 +25,8 @@ function profile_route($uri, $method) {
             $controller = new FollowController($dbConnection);
 
             if ($method === 'POST') {
-                $followerId = $_SESSION['user']['user_id'];
+                $user = $_SESSION['user'] ?? null;
+                $followerId = $user['user_id']?? null;
                 $followedId = explode('/', $uri)[2];
                 $controller->follow($followerId, $followedId);
             }
@@ -102,6 +103,10 @@ function profile_route($uri, $method) {
             $controller->cancelFollowRequest($followerId, $followedId);
         }
         exit();
+        case '/delete_account':
+            $controller = new ProfileController(getDbConnection());
+            $controller->deleteAccount();
+            exit();
         default:
             return false;
     }

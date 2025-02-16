@@ -42,12 +42,14 @@ function handleFollowUnfollowButton(button) {
                             : currentCount + 1;
                     }
                 } else {
+
                     throw new Error(data.message || 'Ошибка сервера');
                 }
             })
             .catch(error => {
                 console.error('Ошибка:', error);
                 button.textContent = previousText; // Восстанавливаем текст при ошибке
+                window.location.href = "/error?message=" + error;
             })
             .finally(() => {
                 button.disabled = false; // Разблокируем кнопку

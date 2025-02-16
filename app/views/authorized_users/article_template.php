@@ -45,12 +45,14 @@
                     <?php endif; ?>                </a>
                 <!-- Заголовок статьи -->
                 <h2 class="article-title"><?php echo htmlspecialchars($article['title']); ?></h2>
-                <?php if ($_SESSION['user']['user_login'] === $article['author']) : ?>
-                    <!-- Кнопки редактирования и удаления только для автора статьи -->
-                    <div class="article-actions">
-                        <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit">Edit</a>
-                        <a href="javascript:void(0);" class="btn btn-delete" onclick="confirmDelete(event, '<?php echo urlencode($article['slug']); ?>')">Delete</a>
-                    </div>
+                <?php if ($user !== null): ?>
+                    <?php if ($user['user_login'] === $article['author']) : ?>
+                        <!-- Кнопки редактирования и удаления только для автора статьи -->
+                        <div class="article-actions">
+                            <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit">Edit</a>
+                            <a href="javascript:void(0);" class="btn btn-delete" onclick="confirmDelete(event, '<?php echo urlencode($article['slug']); ?>')">Delete</a>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <!-- Имя автора ниже аватара -->
@@ -121,20 +123,20 @@
                         <span class="dislike-count"><?php echo htmlspecialchars($article['dislikes']); ?></span> <!-- Здесь будет отображаться количество дизлайков -->
                     </button>
 
+                    <?php if ($user !== null): ?>
                     <!-- Избранное-->
-                    <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
-                            data-article-id="<?= $article['id'] ?>"
-                            title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
-                        <i class="fas fa-star"></i>
-                    </button>
+                        <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
+                                data-article-id="<?= $article['id'] ?>"
+                                title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
+                            <i class="fas fa-star"></i>
+                        </button>
 
 
-
-
-                    <!-- Кнопка репоста -->
-                    <button class="btn-repost" title="Share" onclick="openRepostForm()">
-                        <i class="fas fa-share"></i>
-                    </button>
+                        <!-- Кнопка репоста -->
+                        <button class="btn-repost" title="Share" onclick="openRepostForm()">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    <?php endif; ?>
 
                     <!-- Модальное окно для репоста -->
                     <div id="repost-form" class="repost-form-overlay">

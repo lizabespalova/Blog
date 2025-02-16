@@ -39,14 +39,16 @@ class ProfileController
         require_once 'app/services/helpers/switch_language.php';
         try {
             // Проверка, что данные пользователя есть в сессии
-            if (isset($_SESSION['user'])) {
-                $user = $_SESSION['user']; // Получаем данные из сессии
-                /*                print_r($user);*/
-            } else {
-                // Если пользователь не аутентифицирован
-                header('Location: /login');
-                exit();
-            }
+            $user = $_SESSION['user'] ?? null;
+
+//            if (isset($_SESSION['user'])) {
+//                $user = $_SESSION['user']; // Получаем данные из сессии
+//                /*                print_r($user);*/
+//            } else {
+//                // Если пользователь не аутентифицирован
+//                header('Location: /login');
+//                exit();
+//            }
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
             $profileUserId = $user['user_id'];
@@ -61,11 +63,11 @@ class ProfileController
             $publications = $article_cards;
             $followersCount = $this->followModel->getFollowersCount($profileUserId);
             $followingCount = $this->followModel->getFollowingCount($profileUserId);
-            $isFollowing = $this->followModel->isFollowing($_SESSION['user']['user_id'], $profileUserId);
+            $isFollowing = $this->followModel->isFollowing($user['user_id'], $profileUserId);
             $user['is_online'] = $this->statusService->isUserOnline($user['last_active_at']);
             $profileStatus = $this->settingModel->getShowLastSeen($profileUserId);
             $profileVisibility = $this->settingModel->getProfileVisibility($profileUserId);
-            $followStatus = $this->followModel->getFollowRequestStatus($profileUserId, $_SESSION['user']['user_id']); // Проверка активного запроса
+            $followStatus = $this->followModel->getFollowRequestStatus($profileUserId, $user['user_id']); // Проверка активного запроса
 //            var_dump($profileVisibility);
 //            var_dump($followStatus);
 //            var_dump($isFollowing);
@@ -80,6 +82,35 @@ class ProfileController
                 window.location.href = '/login'; // Перенаправление на страницу логина
               </script>";
             exit();
+        }
+    }
+    public function deleteAccount(){
+        $user = $_SESSION['user'] ?? null;
+//        var_dump($user);
+        $user_id = $user['user_id'];
+        // Получаем пароль из POST
+        $password = $_POST['password'] ?? '';  // Используем безопасный способ получения данных
+        $userData = $this->userModel->get_user_by_id($user_id);
+
+        // Убедись, что пароль передан
+        if (empty($password)) {
+            echo json_encode(['status' => 'error', 'message' => 'Password is required.']);
+            exit;
+        }
+        if (password_verify($password, $userData['user_password'])) {
+            // Если пароль верный, удаляем аккаунт
+            $this->userModel->deleteAccount($user_id);
+            session_destroy();  // Разлогиниваем пользователя
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Your account deleted successfully'
+            ]);
+            header('Location: /search');  // Перенаправляем на страницу подтверждения
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Incorrect password'
+            ]);
         }
     }
 }

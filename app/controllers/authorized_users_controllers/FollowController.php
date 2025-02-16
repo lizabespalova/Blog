@@ -23,20 +23,12 @@ class FollowController
     // Метод для подписки на пользователя
     public function follow($follower_id, $following_id) {
         header('Content-Type: application/json');
-
+        if($follower_id === null){
+            echo json_encode(['success' => false, 'message' => 'You must be logged in before you can follow a user.']);
+            exit();
+        }
         $followModel = $this->followModel;
         $profileVisibility = $this->settingModel->getProfileVisibility($following_id);
-//        $existingFollow = $followModel->findByFollowerAndFollowed($follower_id, $following_id);
-//
-//        if ($existingFollow) {
-//            if ($existingFollow['status'] === 'approved') {
-//                echo json_encode(['success' => false, 'message' => 'You are already following this user.']);
-//                exit();
-//            } elseif ($existingFollow['status'] === 'pending') {
-//                echo json_encode(['success' => false, 'message' => 'Follow request already sent.']);
-//                exit();
-//            }
-//        }
 
         if ($profileVisibility === 'private') {
             if ($followModel->createFollowRequest($follower_id, $following_id)) {

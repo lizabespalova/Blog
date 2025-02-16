@@ -34,6 +34,7 @@ class SettingsController
             'privacy' => $translations['privacy_settings'], // Настройки конфиденциальности
             'security' => $translations['security'],              // Безопасность (2FA, активные сессии)
             'preferences' => $translations['preferences'], // Общие предпочтения (язык, формат даты/времени)
+            'delete_account' => $translations['delete_account'],
         ];
         if (!array_key_exists($page, $sections)) {
             $page = 'appearance';

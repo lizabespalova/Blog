@@ -12,6 +12,7 @@ use models\Notifications;
 use models\Reposts;
 use models\User;
 use Parsedown;
+use services\ErrorService;
 use services\LoginService;
 use services\MarkdownService;
 use function Symfony\Component\String\s;
@@ -29,6 +30,7 @@ class ArticleController
     private $repostModel;
     private $notificationModel;
     private $markdownService;
+    private $errorService;
 
     public function __construct($conn)
     {
@@ -43,6 +45,7 @@ class ArticleController
         $this->repostModel = new Reposts(getDbConnection());
         $this->notificationModel = new Notifications(getDbConnection());
         $this->markdownService = new MarkdownService();
+        $this->errorService = new ErrorService();
     }
 
     public function show_article_form($slug)
@@ -267,11 +270,16 @@ class ArticleController
                 $tagsOutput = htmlspecialchars(implode(', ', $tagsArray));
             }
             // Получаем избранные статьи для пользователя
-            $favorites = $this->favouriteModel->getUserFavorites($_SESSION['user']['user_id']);
+            $user = $_SESSION['user'] ?? null;
+            $is_favorite = false; // По умолчанию, если неавторизован
+            if ($user) {
+                // Получаем избранные статьи для пользователя
+                $favorites = $this->favouriteModel->getUserFavorites($user['user_id']);
+                $is_favorite = in_array($article['id'], $favorites, true);
+            }
             // Проверяем, находится ли текущая статья в избранных
-            $is_favorite = in_array($article['id'], $favorites, true);
             $viewsAmount = $this->articleModel->incrementViews($article['id']);
-            $user = $this->userModel->get_user_by_login($article['author']);
+//            $user = $this->userModel->get_user_by_login($article['author']);
 
 //            var_dump($is_favorite); // Проверка
 
@@ -409,7 +417,12 @@ class ArticleController
     public function handle_reaction($entityType) {
         // Получаем данные из POST-запроса
         $data = $this->get_posted_data($entityType);
-        $reactionerId = $_SESSION['user']['user_id'];
+        $reactionerId = $_SESSION['user'] ?? null;
+        if ($reactionerId === null) {
+            header('Content-Type: application/json');
+            echo json_encode(["error" => "You cannot leave likes or dislikes because you are not authorized"]);
+            exit();
+        }
         $userId = $data['user_id'];
         $userLogin = $this->userModel->getLoginById($reactionerId);
         $reactionType = $data['reaction_type'];
@@ -517,7 +530,13 @@ class ArticleController
 
         $article_slug = $input['article_slug'];
         $userId = $input['user_id'];
-        $reactionerId = $_SESSION['user']['user_id'];
+        $reactionerId = $_SESSION['user'] ?? null;
+        if ($reactionerId === null) {
+            header('Content-Type: application/json');
+            echo json_encode(["error" => "You cannot leave comments because you are not authorized"]);
+            exit();
+        }
+
         $user_login = $this->userModel->getLoginById($reactionerId);
         $comment_text = $input['comment_text'];
         $parent_id = !empty($input['parent_id']) ? $input['parent_id'] : null;
@@ -579,7 +598,10 @@ class ArticleController
         if ($slug) {
             $comments = $this->articleCommentsModel->get_comments_by_slug($slug);
             $structuredComments = $this->structure_comments($comments);
-            $user = $this->userModel->get_user_by_login($_SESSION['user']['user_login']);
+            $user = $_SESSION['user'] ?? null;
+            if ($user) {
+                $user = $this->userModel->get_user_by_login($_SESSION['user']['user_login']);
+            }
             include __DIR__ . '/../../views/authorized_users/comments_template.php'; // шаблон только для комментариев
         } else {
             echo "Comments not found.";

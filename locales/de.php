@@ -15,7 +15,11 @@ return [
     'privacy_settings'      => 'Datenschutzeinstellungen',
     'security'              => 'Sicherheit',
     'preferences'           => 'Präferenzen',
-
+    'delete_account'        => 'Konto löschen',
+    'delete_account_description' => 'Das Löschen Ihres Kontos ist irreversibel. Bitte bestätigen Sie, dass Sie Ihr Konto löschen möchten.',
+    'enter_password' => 'Geben Sie Ihr Passwort ein',
+    'delete_account_button' => 'Konto löschen',
+    'delete_account_warning' => 'Sobald Ihr Konto gelöscht wurde, gehen alle Ihre Daten dauerhaft verloren.',
     //    Страница настроек "Безопасность"
     'current_password' => 'Aktuelles Passwort',
     'new_password' => 'Neues Passwort',

@@ -353,35 +353,7 @@ class User
         // Если данных нет, возвращаем 0
         return 0;
     }
-//
-//    // Поиск пользователя по Google ID
-//    public function findUserByGoogleId($googleId) {
-//        // Подготовка SQL-запроса
-//        $stmt = $this->conn->prepare('SELECT * FROM users WHERE google_id = ?');
-//        if ($stmt === false) {
-//            die('Prepare failed: ' . $this->conn->error);
-//        }
-//
-//        // Привязываем параметры
-//        $stmt->bind_param('s', $googleId);
-//
-//        // Выполняем запрос
-//        $stmt->execute();
-//
-//        // Получаем результат
-//        $result = $stmt->get_result();
-//
-//        // Проверяем наличие записи
-//        if ($result->num_rows > 0) {
-//            return $result->fetch_assoc();
-//        }
-//
-//        // Закрываем запрос
-//        $stmt->close();
-//
-//        // Возвращаем null, если пользователь не найден
-//        return null;
-//    }
+
     public function trackUserInterest(int $userId, string $category): void
     {
         $query = "
@@ -500,5 +472,12 @@ class User
 
         // Возвращаем результат
         return $lastActiveAt;
+    }
+    public function deleteAccount($user_id) {
+        // Удаляем записи из базы
+        $stmt = $this->conn->prepare("DELETE FROM users WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
     }
 }

@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadComments(articleSlug);
                     simplemde.value('');
                 }
+                else if(data.error){
+                    window.location.href = "/error?message=" + data.error;
+                }
             });
     });
 

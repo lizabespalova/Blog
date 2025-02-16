@@ -2,30 +2,32 @@
     <div class="card">
         <div class="card-actions">
             <div class="dropdown">
-                <button class="dropdown-toggle">⋮</button>
-                <div class="dropdown-menu">
-                    <?php if ($article['user_id'] == $_SESSION['user']['user_id']): ?>
+                <?php
+                $user = $_SESSION['user'] ?? null;
+                if ($user && $article['user_id'] == $user['user_id']):
+                    ?>
+                    <button class="dropdown-toggle">⋮</button>
                         <div class="dropdown-menu">
-                            <!-- Кнопка для просмотра статистики статьи -->
-                            <button class="dropdown-item edit-text" data-article-id="<?php echo htmlspecialchars($article['id']); ?>" onclick="viewStatistics(<?php echo htmlspecialchars($article['id']); ?>)">
-                                View article statistics <i class="fas fa-chart-bar"></i>
-                            </button>
-
-                            <!-- Кнопка удаления репоста -->
-                            <?php if (!empty($article['repost_id'])): ?>
-                                <button class="dropdown-item delete-card" data-repost-id="<?php echo htmlspecialchars($article['repost_id']); ?>" onclick="deleteRepost(this)">
-                                    Delete <i class="fas fa-trash-alt"></i>
+                            <div class="dropdown-menu">
+                                <!-- Кнопка для просмотра статистики статьи -->
+                                <button class="dropdown-item edit-text" data-article-id="<?php echo htmlspecialchars($article['id']); ?>" onclick="viewStatistics(<?php echo htmlspecialchars($article['id']); ?>)">
+                                    View article statistics <i class="fas fa-chart-bar"></i>
                                 </button>
 
-                                <!-- Кнопка изменения описания -->
-                                <button class="dropdown-item edit-text" data-article-id="<?php echo htmlspecialchars($article['id']); ?>">
-                                    Change description <i class="fas fa-edit"></i>
-                                </button>
-                            <?php endif; ?>
+                                <!-- Кнопка удаления репоста -->
+                                <?php if (!empty($article['repost_id'])): ?>
+                                    <button class="dropdown-item delete-card" data-repost-id="<?php echo htmlspecialchars($article['repost_id']); ?>" onclick="deleteRepost(this)">
+                                        Delete <i class="fas fa-trash-alt"></i>
+                                    </button>
+
+                                    <!-- Кнопка изменения описания -->
+                                    <button class="dropdown-item edit-text" data-article-id="<?php echo htmlspecialchars($article['id']); ?>">
+                                        Change description <i class="fas fa-edit"></i>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    <?php endif; ?>
-                </div>
-
+                <?php endif; ?>
             </div>
         </div>
         <div class="card-image">

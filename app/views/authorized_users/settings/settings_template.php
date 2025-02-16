@@ -64,6 +64,11 @@
                     <?= $translations['preferences'] ?>
                 </a>
             </li>
+            <li>
+                <a href="?section=delete_account" class="<?= $page === 'delete_account' ? 'active' : '' ?>">
+                    <?= $translations['delete_account'] ?>
+                </a>
+            </li>
         </ul>
 
 
@@ -86,6 +91,7 @@
 <script src="/js/authorized_users/settings/switch_font-style.js"></script>
 <script src="/js/authorized_users/settings/switch_privacy_settings.js"></script>
 <script src="/js/authorized_users/settings/change_password.js"></script>
+<script src="/js/authorized_users/settings/delete_account.js"></script>
 <script src="/js/authorized_users/settings/delete_session.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_show_updates.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_send_confirmation_email.js"></script>

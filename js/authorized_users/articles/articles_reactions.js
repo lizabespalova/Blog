@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.success) {
                         likeCount.textContent = formatNumber(data.likes);
                         dislikeCount.textContent = formatNumber(data.dislikes);
-                    } else {
-                        console.error('Ошибка:', data.error);
+                    } else if(data.error){
+                        window.location.href = "/error?message=" + data.error;
                     }
                 } catch (e) {
                     console.error('Ошибка парсинга JSON:', e);

@@ -28,7 +28,7 @@ h1 {
     background-color: transparent;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Включаем вертикальную прокрутку, если контент не помещается */
+    /*overflow-y: auto; !* Включаем вертикальную прокрутку, если контент не помещается *!*/
 }
 /* Стили для контейнера с графиками */
 .chart-container {
