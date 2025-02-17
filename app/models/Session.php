@@ -41,7 +41,12 @@ class Session
         $stmt->bind_param("s", $sessionId);
         return $stmt->execute();
     }
-
+    public function deleteSessionByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM user_sessions WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
     // Обновить время последней активности сессии
     public function updateLastActivity($sessionId){
         $query = "UPDATE user_sessions SET last_activity = NOW() WHERE session_id = ?";

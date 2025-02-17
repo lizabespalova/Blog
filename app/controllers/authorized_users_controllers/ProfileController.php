@@ -86,31 +86,33 @@ class ProfileController
     }
     public function deleteAccount(){
         $user = $_SESSION['user'] ?? null;
-//        var_dump($user);
         $user_id = $user['user_id'];
-        // Получаем пароль из POST
-        $password = $_POST['password'] ?? '';  // Используем безопасный способ получения данных
+
+        $password = $_POST['password'] ?? '';
         $userData = $this->userModel->get_user_by_id($user_id);
 
-        // Убедись, что пароль передан
         if (empty($password)) {
             echo json_encode(['status' => 'error', 'message' => 'Password is required.']);
             exit;
         }
+
         if (password_verify($password, $userData['user_password'])) {
-            // Если пароль верный, удаляем аккаунт
             $this->userModel->deleteAccount($user_id);
-            session_destroy();  // Разлогиниваем пользователя
+            session_destroy();
+
+            // Отправляем JSON и завершаем выполнение
             echo json_encode([
                 'status' => 'success',
                 'message' => 'Your account deleted successfully'
             ]);
-            header('Location: /search');  // Перенаправляем на страницу подтверждения
+            exit;  // <== Завершаем выполнение, чтобы PHP не выполнял дальше код
         } else {
             echo json_encode([
                 'status' => 'error',
                 'message' => 'Incorrect password'
             ]);
+            exit;
         }
     }
+
 }

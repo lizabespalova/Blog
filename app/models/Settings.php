@@ -167,4 +167,10 @@ class Settings
             die("Error : " . $stmt->error);
         }
     }
+    public function deleteSettingsByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM settings WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

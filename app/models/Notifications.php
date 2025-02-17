@@ -104,5 +104,11 @@ class Notifications
 
         return null; // Если записи нет
     }
+    public function deleteNotificationsByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM notifications WHERE user_id = ? OR reactioner_id = ?");
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $stmt->close();
 
+    }
 }

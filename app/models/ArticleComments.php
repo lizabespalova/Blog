@@ -104,4 +104,10 @@ class ArticleComments
         $stmt->bind_param("ii", $comment_id, $userId);
         $stmt->execute();
     }
+    public function deleteReactionsByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM comment_reactions WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

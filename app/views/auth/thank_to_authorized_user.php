@@ -12,7 +12,7 @@
         <h1>Thank You for Registering!</h1>
         <p>You have successfully confirmed your email address.</p>
         <p>Please
-        <form action="../../../index.php" method="GET" style="display: inline;">
+        <form action="/login" method="GET" style="display: inline;">
             <button type="submit">Log In</button>
         </form>
         to access your account.

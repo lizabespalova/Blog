@@ -61,4 +61,12 @@ class ArticleReactions
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    public function deleteReactionByUserId($user_id){
+        // Удаляем реакции пользователя на статьи
+        $stmt = $this->conn->prepare("DELETE FROM article_reactions WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+
+    }
 }

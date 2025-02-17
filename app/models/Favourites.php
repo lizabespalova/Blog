@@ -159,5 +159,10 @@ class Favourites
 
         return $favourites;
     }
-
+    public function deleteFavouriteByUserId($userId) {
+        $stmt = $this->conn->prepare("DELETE FROM favorites WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

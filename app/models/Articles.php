@@ -396,4 +396,12 @@ class Articles
 
         return $data ? (int)$data['views'] : 0;
     }
+    public function deleteArticleByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE articles, article_images FROM articles 
+                                  LEFT JOIN article_images ON articles.id = article_images.article_id
+                                  WHERE articles.user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

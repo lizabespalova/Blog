@@ -72,4 +72,10 @@ class Reposts
         }
         return false;
     }
+    public function deleteRepostByUserId($userId) {
+        $stmt = $this->conn->prepare("DELETE FROM reposts WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

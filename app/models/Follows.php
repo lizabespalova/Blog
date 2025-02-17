@@ -195,9 +195,16 @@ class Follows
         // Если записи нет, возвращаем 'none'
         return 'none';
     }
-//    public function deleteFollowRequest($followingId, $followerId){
-//        $stmt = $this->conn->prepare("DELETE FROM follow_requests WHERE following_id = ? AND follower_id = ?");
-//        $stmt->bind_param("ii", $followingId, $followerId);
-//        $stmt->close();
-//        $this->conn->close();}
+    public function deleteFollowerAndFollowingByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM followers WHERE follower_id = ? OR following_id = ?");
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function deleteFollowRequestByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM follow_requests WHERE follower_id = ? OR following_id = ?");
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

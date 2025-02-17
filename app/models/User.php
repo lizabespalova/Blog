@@ -7,9 +7,24 @@ use Exception;
 class User
 {
     private $conn;
+    private $session;
+    private $setting;
+    private $repost;
+    private $notification;
+    private $comment;
+    private $article;
+    private $articleReaction;
+
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->session = new Session($conn);
+        $this->setting = new Settings($conn);
+        $this->repost = new Reposts($conn);
+        $this->notification = new Notifications($conn);
+        $this->comment = new Comment($conn);
+        $this->article = new Articles($conn);
+        $this->articleReaction = new ArticleReactions($conn);
     }
 
     public function get_user_by_login($login) {
@@ -474,7 +489,27 @@ class User
         return $lastActiveAt;
     }
     public function deleteAccount($user_id) {
-        // Удаляем записи из базы
+         $this->session->deleteSessionByUserId($user_id);
+         $this->article->deleteArticleByUserId($user_id);
+         (new Follows($this->conn))->deleteFollowerAndFollowingByUserId($user_id);
+         (new Follows($this->conn))->deleteFollowRequestByUserId($user_id);
+         $this->articleReaction->deleteReactionByUserId($user_id);
+         $this->comment->deleteCommentByUserId($user_id);
+         (new ArticleComments($this->conn))->deleteReactionsByUserId($user_id);
+         $this->notification->deleteNotificationsByUserId($user_id);
+         $this->deleteUserInterestsByUserId($user_id);
+         $this->setting->deleteSettingsByUserId($user_id);
+         $this->repost->deleteRepostByUserId($user_id);
+         (new Favourites($this->conn))->deleteFavouriteByUserId($user_id);
+         $this->deleteUser($user_id);
+    }
+    public function deleteUserInterestsByUserId($user_id){
+        $stmt = $this->conn->prepare("DELETE FROM user_interests WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function deleteUser($user_id){
         $stmt = $this->conn->prepare("DELETE FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();

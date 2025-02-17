@@ -116,10 +116,11 @@ class Comment
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
-
-
-
-
-
+    public function deleteCommentByUserId($userId) {
+        $stmt = $this->conn->prepare("DELETE FROM comments WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->close();
+    }
 
 }

@@ -17,8 +17,8 @@ document.querySelector('#delete-account-form').addEventListener('submit', functi
             .then(data => {
                 if (data.status === 'success') {
                     // Если операция успешна, показываем сообщение и перенаправляем
-                    alert(data.message);
-                    window.location.href = '/login';  // Перенаправление на страницу входа
+                    // alert(data.message);
+                    window.location.href = '/search';  // Перенаправление на главную входа
                 } else {
                     // Если ошибка, перенаправляем на страницу с ошибкой и сообщением
                     window.location.href = "/error?message=" + encodeURIComponent(data.message);
