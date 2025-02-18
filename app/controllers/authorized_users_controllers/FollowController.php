@@ -86,7 +86,8 @@ class FollowController
         // Получаем подписчиков через модель
         $followers = $this->followModel->getFollowers($userId);
         $followersCount = $this->followModel->getFollowersCount($userId);
-
+        $user = $_SESSION['user'] ?? null;
+        $followingId = $userId;
 //        var_dump($userId);
 //        var_dump($followers);
         // Подключаем представление

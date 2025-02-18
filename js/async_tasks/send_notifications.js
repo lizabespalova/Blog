@@ -59,8 +59,7 @@ function displayNotification() {
                 icon: '/templates/images/profile.jpg',
                 tag: notification.id, // Для предотвращения дублирования уведомлений
             };
-
-            const desktopNotification = new Notification("Новое уведомление", notificationOptions);
+            const desktopNotification = new Notification("New notification", notificationOptions);
 
             // Переход по клику
             desktopNotification.onclick = () => {

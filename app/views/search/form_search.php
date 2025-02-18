@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/search/popular_writers.css">
+    <link rel="stylesheet" href="/css/profile/markdown.css">
+    <link rel="stylesheet" href="/css/search/feed.css">
+    <link rel="stylesheet" href="/css/pagination.css">
 
 </head>
 <body
@@ -31,6 +34,7 @@
 
 <!-- Меню секций -->
 <div class="menu-section">
+    <a href="?section=feed" class="menu-item" data-section="feed"><?= $translations['feed']?></a>
     <a href="?section=popular-articles" class="menu-item" data-section="popular-articles"><?= $translations['popular_articles'] ?></a>
     <a href="?section=popular-writers" class="menu-item" data-section="popular-writers"><?= $translations['popular_writers'] ?></a>
 </div>
@@ -44,11 +48,15 @@
 
 <!-- Footer -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/filter_articles.js"></script>
 <script src="/js/search/load_sections.js"></script>
+<script src="/js/search/pagination.js"></script>
+<script src="/js/authorized_users/articles/get_markdown.js"></script>
 
 </body>
 </html>

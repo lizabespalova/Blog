@@ -119,11 +119,14 @@ return [
     'it_news'           => 'IT News',
 
     //    Поиск
+    'feed' => 'Feed',
+    'no_feed' => 'No posts from your subscriptions',
     'popular_articles' => 'Popular articles',
     'popular_courses'  => 'Popular courses',
     'popular_writers'  => 'Popular IT-writers',
     'it_events'        => 'IT-events',
     'placeholder_search' => 'Type your search...',
+    'date' => 'date',
 
     //    Статистика
     'statistics_for' => 'Statistics for "%s"',

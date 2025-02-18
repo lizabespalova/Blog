@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 updateActiveMenu(section);
+                processMarkdownContent();
             })
             .catch(error => console.error("Ошибка загрузки секции:", error));
     }

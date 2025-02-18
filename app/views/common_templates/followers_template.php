@@ -56,10 +56,12 @@
                         </span>
                         </div>
                     </a>
+                    <?php if ($user['user_id'] === $followingId): ?>
                     <form method="POST" action="/remove-follower" class="remove-follower-form">
                         <input type="hidden" name="follower_id" value="<?= htmlspecialchars($follower['user_id']) ?>">
                         <button type="button" class="remove-follower-button" onclick="confirmDelete(this)">Delete</button>
                     </form>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>

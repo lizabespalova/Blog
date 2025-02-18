@@ -39,16 +39,8 @@ class ProfileController
         require_once 'app/services/helpers/switch_language.php';
         try {
             // Проверка, что данные пользователя есть в сессии
-            $user = $_SESSION['user'] ?? null;
+            $currentUser = $_SESSION['user'] ?? null;
 
-//            if (isset($_SESSION['user'])) {
-//                $user = $_SESSION['user']; // Получаем данные из сессии
-//                /*                print_r($user);*/
-//            } else {
-//                // Если пользователь не аутентифицирован
-//                header('Location: /login');
-//                exit();
-//            }
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
             $profileUserId = $user['user_id'];
@@ -63,11 +55,19 @@ class ProfileController
             $publications = $article_cards;
             $followersCount = $this->followModel->getFollowersCount($profileUserId);
             $followingCount = $this->followModel->getFollowingCount($profileUserId);
-            $isFollowing = $this->followModel->isFollowing($user['user_id'], $profileUserId);
+            $isFollowing = false; // По умолчанию считаем, что пользователь не подписан
+
+            if (!empty($currentUser) && isset($currentUser['user_id'])) {
+                $isFollowing = $this->followModel->isFollowing($currentUser['user_id'], $profileUserId);
+            }
             $user['is_online'] = $this->statusService->isUserOnline($user['last_active_at']);
             $profileStatus = $this->settingModel->getShowLastSeen($profileUserId);
             $profileVisibility = $this->settingModel->getProfileVisibility($profileUserId);
-            $followStatus = $this->followModel->getFollowRequestStatus($profileUserId, $user['user_id']); // Проверка активного запроса
+            $followStatus = 'none'; // По умолчанию нет запроса на подписку
+
+            if (!empty($currentUser) && isset($currentUser['user_id'])) {
+                $followStatus = $this->followModel->getFollowRequestStatus($profileUserId, $currentUser['user_id']);
+            }
 //            var_dump($profileVisibility);
 //            var_dump($followStatus);
 //            var_dump($isFollowing);

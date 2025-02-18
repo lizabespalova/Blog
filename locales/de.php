@@ -118,11 +118,14 @@ return [
     'it_news'           => 'IT Nachrichten',
 
     //    Поиск
+    'feed' => 'Feed',
+    'no_feed' => 'Keine Beiträge von deinen Abonnements',
     'popular_articles' => 'Beliebte Artikel',
     'popular_courses'  => 'Beliebte Kurse',
     'popular_writers'  => 'Beliebte IT-Autoren',
     'it_events'        => 'IT-Veranstaltungen',
     'placeholder_search' => 'Geben Sie Ihre Suche ein...',
+    'date' => 'Datum',
 
     //    Статистика
     'statistics_for' => 'Statistiken für "%s"',

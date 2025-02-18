@@ -31,7 +31,10 @@ function users_article_route($uri, $method) {
             $controller = new SearchController(getDbConnection());
             $controller->showPopularWriters();
             exit();
-
+        case '/sections/feed':
+            $controller = new SearchController(getDbConnection());
+            $controller->showFeed();
+            exit();
         default:
             return false;
     }

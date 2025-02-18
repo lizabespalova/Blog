@@ -2,7 +2,7 @@
     <div class="writers-grid">
         <?php foreach ($popularWriters as $writer): ?>
             <div class="writer-card">
-                <img class="writer-avatar" src="<?= htmlspecialchars($writer['user_avatar'] ?: '/templates/images/default_avatar.png') ?>" alt="<?= htmlspecialchars($writer['user_login']) ?>">
+                <img class="writer-avatar" src="<?= htmlspecialchars($writer['user_avatar'] ?: '/templates/images/profile.jpg') ?>" alt="<?= htmlspecialchars($writer['user_login']) ?>">
                 <div class="writer-info">
                     <h3><?= htmlspecialchars($writer['user_login']) ?></h3>
                     <p><?= htmlspecialchars($writer['user_specialisation']) ?></p>

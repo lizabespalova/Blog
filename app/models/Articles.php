@@ -404,4 +404,41 @@ class Articles
         $stmt->execute();
         $stmt->close();
     }
+    public function getArticlesForFeed($user_id, $startIndex, $articlesPerPage) {
+        $stmt = $this->conn->prepare("
+        SELECT a.*, u.user_login, u.user_avatar 
+        FROM articles a
+        JOIN followers f ON a.user_id = f.following_id
+        JOIN users u ON a.user_id = u.user_id
+        WHERE f.follower_id = ?
+        AND a.is_published = 1
+        ORDER BY a.created_at DESC
+        LIMIT ?, ?
+    ");
+        $stmt->bind_param("iii", $user_id, $startIndex, $articlesPerPage);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $articles = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+        return $articles;
+    }
+
+    public function getTotalArticlesCountForFeed($user_id)
+    {
+        $stmt = $this->conn->prepare("
+        SELECT COUNT(*) 
+        FROM articles a
+        JOIN followers f ON a.user_id = f.following_id
+        WHERE f.follower_id = ?
+        AND a.is_published = 1
+    ");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->bind_result($totalArticles);
+        $stmt->fetch();
+        $stmt->close();
+        return $totalArticles;
+    }
+
 }

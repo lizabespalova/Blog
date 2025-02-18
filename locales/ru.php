@@ -119,11 +119,14 @@ return [
     'it_news'           => 'IT новости',
 
     //    Поиск
+    'feed' => 'Лента',
+    'no_feed' => 'Нет публикаций от ваших подписок',
     'popular_articles' => 'Популярные статьи',
     'popular_courses'  => 'Популярные курсы',
     'popular_writers'  => 'Популярные IT-писатели',
     'it_events'        => 'IT-события',
     'placeholder_search' => 'Введите ваш запрос...',
+    'date' => 'Дата',
 
     //    Статистика
     'statistics_for' => 'Статистика для "%s"',

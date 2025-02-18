@@ -127,11 +127,14 @@ return [
     'it_news'           => 'IT новини',
 
     //    Поиск
+    'feed' => 'Стрічка',
+    'no_feed' => 'Немає публікацій від ваших підписок',
     'popular_articles' => 'Популярні статті',
     'popular_courses'  => 'Популярні курси',
     'popular_writers'  => 'Популярні IT-письменники',
     'it_events'        => 'IT-події',
     'placeholder_search' => 'Введіть ваш запит...',
+    'date' => 'Дата',
 
     //    Статистика
     'statistics_for' => 'Статистика для "%s"',
