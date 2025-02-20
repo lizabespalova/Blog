@@ -31,9 +31,10 @@ if (empty($articles)): ?>
                     <p><a href="/articles/<?= htmlspecialchars($article['slug']) ?>">
                             <?= htmlspecialchars($article['title']) ?></a></p>
 
-                    <div class="article-content">
+                    <div class="article-content" id="rendered-content-<?= htmlspecialchars($article['id']) ?>">
                         <?= isset($article['parsed_content']) ? truncateContent($article['parsed_content']) : 'No content available' ?>
                     </div>
+
 
                     <?php if (strlen($article['parsed_content']) > 300): ?>
                         <a href="/articles/<?= htmlspecialchars($article['slug']) ?>" class="read-more">
@@ -49,7 +50,7 @@ if (empty($articles)): ?>
 
     <!-- Пагинация -->
     <?php if ($totalPages > 1): ?>
-        <div class="pagination">
+        <div class="pagination" id="pagination">
             <?php if ($currentPage > 1): ?>
                 <a href="?section=feed&page=<?= $currentPage - 1 ?>" class="pagination-link prev">Prev</a>
             <?php endif; ?>
@@ -61,4 +62,7 @@ if (empty($articles)): ?>
             <?php endif; ?>
         </div>
     <?php endif; ?>
+    <div id="feed-content">
+        <!-- Контент статей будет подгружаться сюда через AJAX -->
+    </div>
 <?php endif; ?>

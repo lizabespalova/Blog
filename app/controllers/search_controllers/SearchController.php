@@ -91,78 +91,38 @@ class SearchController
     {
         $user = $_SESSION['user'] ?? null;
 
-        // Проверка на наличие пользователя
         if ($user) {
             $user_id = $user['user_id'];
-
-            // Количество статей на странице
             $articlesPerPage = 2;
-
-            // Получаем текущую страницу из параметра запроса
             $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $currentPage = max(1, $currentPage); // Гарантируем, что номер страницы не меньше 1
-
-            // Определяем начальный индекс для запроса
+            $currentPage = max(1, $currentPage);
             $startIndex = ($currentPage - 1) * $articlesPerPage;
-
-            // Получаем общее количество статей для подсчета общего числа страниц
             $totalArticles = $this->articleModel->getTotalArticlesCountForFeed($user_id);
-
-            // Вычисляем общее количество страниц
-            $totalPages = max(1, ceil($totalArticles / $articlesPerPage)); // Минимум 1 страница
-
-            // Получаем статьи для текущей страницы
+            $totalPages = max(1, ceil($totalArticles / $articlesPerPage));
             $articles = $this->articleModel->getArticlesForFeed($user_id, $startIndex, $articlesPerPage);
 
-            // Парсим контент каждой статьи через markdownService
             foreach ($articles as $key => $article) {
                 $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
             }
+
+            // Если запрос был сделан через AJAX, возвращаем только статьи и пагинацию в JSON
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+                echo json_encode([
+                    'articles' => $articles,
+                    'totalPages' => $totalPages,
+                    'currentPage' => $currentPage
+                ]);
+                exit();
+            }
         } else {
             $articles = [];
-            $totalPages = 1; // Если нет статей, хотя бы одна страница
+            $totalPages = 1;
         }
 
-        // Проверка на AJAX-запрос
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
-            // Если это AJAX-запрос, то возвращаем только блок с контентом ленты
-            echo $this->renderFeedContent($articles, $totalPages);
-            exit; // Завершаем выполнение, не выводим весь шаблон
-        }
-
-        // Для обычного запроса рендерим полную страницу
+        // Включаем основной шаблон, если не AJAX-запрос
         include __DIR__ . '/../../views/search/sections/feed.php';
     }
 
-    /**
-     * Функция для рендеринга контента ленты в виде HTML
-     */
-    private function renderFeedContent($articles, $totalPages)
-    {
-        ob_start();
-        ?>
-        <div id="feed-content">
-            <?php if (count($articles) > 0): ?>
-                <?php foreach ($articles as $article): ?>
-                    <div class="article">
-                        <h3><?= htmlspecialchars($article['title']) ?></h3>
-                        <div class="article-content"><?= $article['parsed_content'] ?></div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No articles found</p>
-            <?php endif; ?>
-        </div>
 
-        <div class="pagination">
-            <?php for ($page = 1; $page <= $totalPages; $page++): ?>
-                <a href="?page=<?= $page ?>" class="pagination-link"><?= $page ?></a>
-            <?php endfor; ?>
-        </div>
-        <?php
-        $output = ob_get_clean();
-        error_log($output);  // Логируем вывод в файл
-        return $output;
-    }
 
 }
