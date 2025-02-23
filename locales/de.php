@@ -126,6 +126,8 @@ return [
     'it_events'        => 'IT-Veranstaltungen',
     'placeholder_search' => 'Geben Sie Ihre Suche ein...',
     'date' => 'Datum',
+    'show_more' => 'Mehr anzeigen',
+
 
     //    Статистика
     'statistics_for' => 'Statistiken für "%s"',

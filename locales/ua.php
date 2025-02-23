@@ -135,6 +135,7 @@ return [
     'it_events'        => 'IT-події',
     'placeholder_search' => 'Введіть ваш запит...',
     'date' => 'Дата',
+    'show_more' => 'Більше',
 
     //    Статистика
     'statistics_for' => 'Статистика для "%s"',

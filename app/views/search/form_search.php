@@ -54,7 +54,9 @@
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/filter_articles.js"></script>
-<script src="/js/search/pagination.js"></script>
+<script src="/js/search/autoload_feed.js"></script>
+<script src="/js/search/autoload_popular_articles.js"></script>
+<script src="/js/search/autoload_writers.js"></script>
 <script src="/js/search/load_sections.js"></script>
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
 

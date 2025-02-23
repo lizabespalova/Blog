@@ -127,6 +127,8 @@ return [
     'it_events'        => 'IT-события',
     'placeholder_search' => 'Введите ваш запрос...',
     'date' => 'Дата',
+    'show_more' => 'Показать больше',
+
 
     //    Статистика
     'statistics_for' => 'Статистика для "%s"',

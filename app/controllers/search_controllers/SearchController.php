@@ -41,12 +41,6 @@ class SearchController
             $page = 'popular-articles';
         }
 
-        // Параметры пагинации
-        $paginationParams = '';
-        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        if ($currentPage > 1) {
-            $paginationParams = '&page=' . $currentPage;
-        }
 
         // Перенаправление, если параметр 'section' отсутствует
         if (!isset($_GET['section'])) {
@@ -55,10 +49,11 @@ class SearchController
         }
 
         // AJAX-запрос на загрузку секции
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $page) {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             include __DIR__ . '/../../views/' . $sections[$page];
             exit;
         }
+
 
         // Загружаем основной шаблон
         include __DIR__ . '/../../views/search/form_search.php';
@@ -68,42 +63,40 @@ class SearchController
 
 
 
-    public function showPopularArticles(){
-//        session_start();
-        // Загрузить данные для карточек в зависимости от наличия сессии
+    public function showPopularArticles() {
+        $offset = $_GET['offset'] ?? 0;  // Получаем смещение из параметров запроса (по умолчанию 0)
         $userId = $_SESSION['user']['user_id'] ?? null;
         if ($userId) {
-            $article_cards = $this->searchModel->getArticlesByUserInterests($userId, ARTICLES_LIMIT);
+            $article_cards = $this->searchModel->getArticlesByUserInterests($userId, 2, $offset);  // Загружаем 2 статьи за раз
         } else {
-            $article_cards = $this->searchModel->getMostPopularArticles(ARTICLES_LIMIT);
+            $article_cards = $this->searchModel->getMostPopularArticles(2, $offset);  // Загружаем 2 статьи за раз
         }
+
         require_once 'app/services/helpers/switch_language.php';
-        // Передаём статьи в шаблон
+        // Передаем статьи в шаблон
         include __DIR__ . '/../../views/search/sections/popular_articles.php';
     }
 
-    public function showPopularWriters(){
-//        session_start();
-        $popularWriters = $this->searchModel->getPopularWriters();
+
+    public function showPopularWriters() {
+        $limit = 1; // Количество авторов на странице
+        $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+        $popularWriters = $this->searchModel->getPopularWriters($limit, $offset);
         require_once 'app/services/helpers/switch_language.php';
-        // Передаём статьи в шаблон
+        // Передаём авторов в шаблон
         include __DIR__ . '/../../views/search/sections/popular_writers.php';
     }
-    public function showFeed()
-    {
+
+
+    public function showFeed() {
         $user = $_SESSION['user'] ?? null;
 
         if ($user) {
             $user_id = $user['user_id'];
-            $articlesPerPage = 2;
-            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $currentPage = max(1, $currentPage);
-            $startIndex = ($currentPage - 1) * $articlesPerPage;
-
-            $totalArticles = $this->articleModel->getTotalArticlesCountForFeed($user_id);
-            $totalPages = max(1, ceil($totalArticles / $articlesPerPage));
-
-            $articles = $this->articleModel->getArticlesForFeed($user_id, $startIndex, $articlesPerPage);
+            $articlesPerPage = 2; // Количество статей на одной загрузке
+            $offset = $_GET['offset'] ?? 0; // Получаем смещение для загрузки новых статей
+            // Загружаем статьи с учетом смещения
+            $articles = $this->articleModel->getArticlesForFeed($user_id, $offset, $articlesPerPage);
 
             if (!empty($articles)) {
                 foreach ($articles as $key => $article) {
@@ -112,11 +105,9 @@ class SearchController
             }
         } else {
             $articles = [];
-            $totalPages = 1;
         }
 
-
-        // Если не AJAX-запрос, загружаем шаблон полностью
+        // Передаем данные в шаблон
         include __DIR__ . '/../../views/search/sections/feed.php';
     }
 

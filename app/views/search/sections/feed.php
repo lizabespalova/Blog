@@ -47,20 +47,5 @@ if (empty($articles)): ?>
         <?php endforeach; ?>
     </div>
 
-    <!-- Пагинация -->
-    <?php if ($totalPages > 1): ?>
-        <div class="pagination" id="pagination">
-            <?php if ($currentPage > 1): ?>
-                <button class="pagination-link prev" data-page="<?= $currentPage - 1 ?>">Prev</button>
-            <?php endif; ?>
-
-            <span>Page <?= $currentPage ?> of <?= $totalPages ?></span>
-
-            <?php if ($currentPage < $totalPages): ?>
-                <button class="pagination-link next" data-page="<?= $currentPage + 1 ?>">Next</button>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-
 
 <?php endif; ?>

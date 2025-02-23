@@ -17,24 +17,25 @@ class Search
      * @param int $limit Максимальное количество статей
      * @return array Статьи по интересам
      */
-    public function getArticlesByUserInterests(int $userId, int $limit = 10): array {
+    public function getArticlesByUserInterests(int $userId, int $limit = 10, int $offset = 0): array {
         $query = "
-        SELECT a.*,
-               (COALESCE(ui.interest_level, 0) * (a.views + a.likes)) AS weighted_score
-        FROM articles a
-        LEFT JOIN user_interests ui
-            ON a.category LIKE CONCAT('%', ui.category, '%') AND ui.user_id = ?
-        WHERE a.is_published = 1
-        ORDER BY weighted_score DESC, a.created_at DESC
-        LIMIT ?
+    SELECT a.*,
+           (COALESCE(ui.interest_level, 0) * (a.views + a.likes)) AS weighted_score
+    FROM articles a
+    LEFT JOIN user_interests ui
+        ON a.category LIKE CONCAT('%', ui.category, '%') AND ui.user_id = ?
+    WHERE a.is_published = 1
+    ORDER BY weighted_score DESC, a.created_at DESC
+    LIMIT ?, ?
     ";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ii", $userId, $limit);
+        $stmt->bind_param("iii", $userId, $offset, $limit);  // привязываем параметры
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
 
 
 
@@ -44,22 +45,23 @@ class Search
      * @param int $limit Ограничение на количество статей
      * @return array Популярные статьи
      */
-    public function getMostPopularArticles(int $limit = 10): array {
+    public function getMostPopularArticles(int $limit = 10, int $offset = 0): array {
         $query = "
-            SELECT a.*, (a.views + a.likes) AS popularity
-            FROM articles a
-            WHERE a.is_published = 1
-            ORDER BY popularity DESC
-            LIMIT ?
-        ";
+        SELECT a.*, (a.views + a.likes) AS popularity
+        FROM articles a
+        WHERE a.is_published = 1
+        ORDER BY popularity DESC
+        LIMIT ?, ?
+    ";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $limit);
+        $stmt->bind_param("ii", $offset, $limit);  // привязываем параметры
         $stmt->execute();
         $result = $stmt->get_result();
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-    public function getPopularWriters($limit = 10) {
+
+    public function getPopularWriters($limit = 10, $offset = 0) {
         $query = "SELECT 
                   u.user_id, 
                   u.user_login, 
@@ -70,9 +72,9 @@ class Search
               LEFT JOIN followers f ON u.user_id = f.following_id
               GROUP BY u.user_id
               ORDER BY followers_count DESC
-              LIMIT ?";
+              LIMIT ? OFFSET ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $limit);
+        $stmt->bind_param("ii", $limit, $offset);
         $stmt->execute();
         $result = $stmt->get_result();
         $writers = [];
@@ -81,5 +83,6 @@ class Search
         }
         return $writers;
     }
+
 
 }
