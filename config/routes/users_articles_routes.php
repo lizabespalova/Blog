@@ -8,7 +8,12 @@ require_once __DIR__ . '/../../config/config.php';
 
 function users_article_route($uri, $method) {
     $dbConnection = getDbConnection();
-
+    // Обработка GET-параметра sections
+    if (isset($_GET['section']) && $_GET['section'] === 'feed') {
+        $controller = new SearchController($dbConnection);
+        $controller->showFeed();
+        exit();
+    }
     switch ($uri) {
         case (preg_match('/^\/users-articles\/filter$/', $uri)? true : false):
             $controller = new UserArticleController($dbConnection);
@@ -35,6 +40,7 @@ function users_article_route($uri, $method) {
             $controller = new SearchController(getDbConnection());
             $controller->showFeed();
             exit();
+
         default:
             return false;
     }

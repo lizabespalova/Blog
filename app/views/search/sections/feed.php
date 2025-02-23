@@ -35,7 +35,6 @@ if (empty($articles)): ?>
                         <?= isset($article['parsed_content']) ? truncateContent($article['parsed_content']) : 'No content available' ?>
                     </div>
 
-
                     <?php if (strlen($article['parsed_content']) > 300): ?>
                         <a href="/articles/<?= htmlspecialchars($article['slug']) ?>" class="read-more">
                             <?= $translations['read_more'] ?? 'Read more' ?></a>
@@ -52,17 +51,16 @@ if (empty($articles)): ?>
     <?php if ($totalPages > 1): ?>
         <div class="pagination" id="pagination">
             <?php if ($currentPage > 1): ?>
-                <a href="?section=feed&page=<?= $currentPage - 1 ?>" class="pagination-link prev">Prev</a>
+                <button class="pagination-link prev" data-page="<?= $currentPage - 1 ?>">Prev</button>
             <?php endif; ?>
 
             <span>Page <?= $currentPage ?> of <?= $totalPages ?></span>
 
             <?php if ($currentPage < $totalPages): ?>
-                <a href="?section=feed&page=<?= $currentPage + 1 ?>" class="pagination-link next">Next</a>
+                <button class="pagination-link next" data-page="<?= $currentPage + 1 ?>">Next</button>
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <div id="feed-content">
-        <!-- Контент статей будет подгружаться сюда через AJAX -->
-    </div>
+
+
 <?php endif; ?>

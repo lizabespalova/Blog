@@ -404,7 +404,13 @@ class Articles
         $stmt->execute();
         $stmt->close();
     }
-    public function getArticlesForFeed($user_id, $startIndex, $articlesPerPage) {
+    // Функция получения статей для ленты
+    public function getArticlesForFeed($user_id, $startIndex, $articlesPerPage)
+    {
+        $startIndex = intval($startIndex);
+        $articlesPerPage = intval($articlesPerPage);
+
+        // Подготовка запроса для получения статей
         $stmt = $this->conn->prepare("
         SELECT a.*, u.user_login, u.user_avatar 
         FROM articles a
@@ -415,15 +421,26 @@ class Articles
         ORDER BY a.created_at DESC
         LIMIT ?, ?
     ");
+
+        // Связывание параметров
         $stmt->bind_param("iii", $user_id, $startIndex, $articlesPerPage);
-        $stmt->execute();
+
+        // Выполнение запроса
+        if (!$stmt->execute()) {
+            return ['error' => 'Ошибка при получении статей: ' . $stmt->error];
+        }
+
+        // Получение результатов
         $result = $stmt->get_result();
         $articles = $result->fetch_all(MYSQLI_ASSOC);
 
+        // Закрытие соединения
         $stmt->close();
+
         return $articles;
     }
 
+// Функция для подсчета общего количества статей
     public function getTotalArticlesCountForFeed($user_id)
     {
         $stmt = $this->conn->prepare("
@@ -433,11 +450,20 @@ class Articles
         WHERE f.follower_id = ?
         AND a.is_published = 1
     ");
+
         $stmt->bind_param("i", $user_id);
-        $stmt->execute();
+
+        // Выполнение запроса
+        if (!$stmt->execute()) {
+            return ['error' => 'Ошибка при подсчете статей: ' . $stmt->error];
+        }
+
+        // Получение общего количества статей
         $stmt->bind_result($totalArticles);
         $stmt->fetch();
+
         $stmt->close();
+
         return $totalArticles;
     }
 

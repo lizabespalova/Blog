@@ -34,7 +34,7 @@
 
 <!-- Меню секций -->
 <div class="menu-section">
-    <a href="?section=feed" class="menu-item" data-section="feed"><?= $translations['feed']?></a>
+    <a href="?section=feed>" class="menu-item" data-section="feed"><?= $translations['feed'] ?></a>
     <a href="?section=popular-articles" class="menu-item" data-section="popular-articles"><?= $translations['popular_articles'] ?></a>
     <a href="?section=popular-writers" class="menu-item" data-section="popular-writers"><?= $translations['popular_writers'] ?></a>
 </div>
@@ -54,8 +54,8 @@
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 <script src="/js/filter_articles.js"></script>
-<script src="/js/search/load_sections.js"></script>
 <script src="/js/search/pagination.js"></script>
+<script src="/js/search/load_sections.js"></script>
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
 
 </body>

@@ -41,10 +41,11 @@ class SearchController
             $page = 'popular-articles';
         }
 
-        // Сохраняем параметры пагинации
+        // Параметры пагинации
         $paginationParams = '';
-        if (isset($_GET['page'])) {
-            $paginationParams = '&page=' . (int)$_GET['page'];
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($currentPage > 1) {
+            $paginationParams = '&page=' . $currentPage;
         }
 
         // Перенаправление, если параметр 'section' отсутствует
@@ -62,6 +63,7 @@ class SearchController
         // Загружаем основной шаблон
         include __DIR__ . '/../../views/search/form_search.php';
     }
+
 
 
 
@@ -97,31 +99,27 @@ class SearchController
             $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $currentPage = max(1, $currentPage);
             $startIndex = ($currentPage - 1) * $articlesPerPage;
+
             $totalArticles = $this->articleModel->getTotalArticlesCountForFeed($user_id);
             $totalPages = max(1, ceil($totalArticles / $articlesPerPage));
+
             $articles = $this->articleModel->getArticlesForFeed($user_id, $startIndex, $articlesPerPage);
 
-            foreach ($articles as $key => $article) {
-                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
-            }
-
-            // Если запрос был сделан через AJAX, возвращаем только статьи и пагинацию в JSON
-            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-                echo json_encode([
-                    'articles' => $articles,
-                    'totalPages' => $totalPages,
-                    'currentPage' => $currentPage
-                ]);
-                exit();
+            if (!empty($articles)) {
+                foreach ($articles as $key => $article) {
+                    $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+                }
             }
         } else {
             $articles = [];
             $totalPages = 1;
         }
 
-        // Включаем основной шаблон, если не AJAX-запрос
+
+        // Если не AJAX-запрос, загружаем шаблон полностью
         include __DIR__ . '/../../views/search/sections/feed.php';
     }
+
 
 
 
