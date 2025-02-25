@@ -179,4 +179,14 @@ return [
     'view_statistics'    => 'View article statistics',
     'delete_repost'    => 'Delete',
     'change_description' => 'Change description',
+
+    //    Курсы
+    'create_course' => 'Create a New Course',
+    'course_title' => 'Course Title',
+    'course_description' => 'Course Description',
+    'create_course_button' => 'Create course',
+    'select_articles_button' => 'Select articles',
+    'search_articles' => 'Search articles',
+    'articles_selected' => 'Selected articles',
+
 ];

@@ -3,49 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои курсы</title>
+    <title><?= $translations['my_courses']?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/courses/courses.css">
+
 </head>
 <body
         class="<?=
-        (isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode ' : '') .
-        (isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'sans-serif'); ?>"
-        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;"
-        data-lang="<?= isset($_SESSION['settings']['language']) ? htmlspecialchars($_SESSION['settings']['language']) : 'en'; ?>">
+        isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '';
+        ?>
+    <?= isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'sans-serif'; ?>"
+        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;">
 
 <!-- Header Section -->
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <main class="courses-container">
-    <h1>Мои курсы</h1>
+    <h1><?= $translations['my_courses']?></h1>
 
-    <div class="courses-grid">
-        <div class="course-card">
-            <h2>Пример курса</h2>
-            <p>Описание курса. Здесь будет информация о курсе.</p>
-            <a href="#">Перейти</a>
-        </div>
-    </div>
-
-    <!-- Форма создания курса -->
     <section class="course-form">
-        <h2>Создать новый курс</h2>
+        <h2><?= $translations['create_course'] ?></h2>
         <form action="/create-course" method="POST">
-            <label for="course-title">Название курса</label>
+            <label for="course-title"><?= $translations['course_title']?></label>
             <input type="text" id="course-title" name="course_title" required>
 
-            <label for="course-description">Описание курса</label>
+            <label for="course-description"><?= $translations['course_description']?></label>
             <textarea id="course-description" name="course_description" rows="4" required></textarea>
 
-            <button type="submit">Создать курс</button>
+            <!-- Кнопка для открытия окна -->
+            <button type="button" class="courses-button" id="select-articles-btn"><?= $translations['select_articles_button'] ?></button>
+            <span id="selected-articles-count">0 <?= $translations['articles_selected'] ?></span>
+
+            <!-- Скрытое поле для отправки данных -->
+            <input type="hidden" name="articles" id="selected-articles">
+
+            <!-- Модальное окно -->
+            <div id="articles-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2><?= $translations['select_articles_button'] ?></h2>
+                    <input type="text" id="article-search" placeholder="<?= $translations['search_articles'] ?>">
+
+                    <div id="articles-list">
+                        <?php foreach ($articles as $article): ?>
+                            <div class="article-item">
+                                <label>
+                                    <input type="checkbox" value="<?= $article['id'] ?>">
+                                </label>
+                                <div class="course-card">
+                                    <?php include __DIR__ . '/../../views/partials/card.php'; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- Кнопка для сохранения настроек -->
+                    <button id="save-settings-btn" class="courses-button" type="button"><?= $translations['save'] ?></button>
+                </div>
+            </div>
+
+            <button type="submit" class="courses-button"><?= $translations['create_course_button']?></button>
         </form>
     </section>
 </main>
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
+
+<script src="/js/courses/show_courses_window.js"></script>
+<script src="/js/authorized_users/menu.js"></script>
 
 </body>
 </html>

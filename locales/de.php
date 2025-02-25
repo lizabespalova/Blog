@@ -180,4 +180,15 @@ return [
     'view_statistics'    => 'Artikelstatistiken anzeigen',
     'delete_repost'    => 'Löschen',
     'change_description' => 'Beschreibung ändern',
+
+    //    Курсы
+    'create_course' => 'Neuen Kurs erstellen',
+    'course_title' => 'Kursname',
+    'course_description' => 'Kursbeschreibung',
+    'create_course_button' => 'Kurs erstellen',
+    'select_articles_button' => 'Artikel auswählen',
+    'search_articles' => 'Artikel suchen',
+    'articles_selected' => 'Ausgewählte Artikles',
+
+
 ];

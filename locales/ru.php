@@ -178,4 +178,14 @@ return [
 
 //    Поиск
     'view_profile'    => 'Смотреть профиль',
+
+    //    Курсы
+    'create_course' => 'Создать новый курс',
+    'course_title' => 'Название курса',
+    'course_description' => 'Описание курса',
+    'create_course_button' => 'Создать курс',
+    'select_articles_button' => 'Выбрать статью',
+    'search_articles' => 'Искать статью',
+    'articles_selected' => 'Выбранные статьи',
+
 ];

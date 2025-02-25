@@ -179,4 +179,14 @@ return [
     'view_statistics'    => 'Переглянути статистику статті',
     'delete_repost'    => 'Видалити',
     'change_description' => 'Змінити опис',
+
+    //    Курсы
+    'create_course' => 'Створити новий курс',
+    'course_title' => 'Назва курсу',
+    'course_description' => 'Опис курсу',
+    'create_course_button' => 'Створити курс',
+    'select_articles_button' => 'Обрати статті',
+    'search_articles' => 'Шукати статті',
+    'articles_selected' => 'Обрані статті',
+
 ];
