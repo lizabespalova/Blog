@@ -96,6 +96,52 @@ function deleteRepost(button) {
             });
     }
 }
+
+function editRepost(button) {
+    let card = button.closest(".card"); // Ищем родительскую карточку
+    if (!card) {
+        console.error("Не найден родительский элемент .card");
+        return;
+    }
+
+    let messageElement = card.querySelector(".repost-message p");
+    if (!messageElement) {
+        console.error("Не найден элемент .repost-message p внутри .card");
+        return;
+    }
+
+    // Извлекаем repostId из data-атрибута кнопки
+    let repostId = button.getAttribute("data-repost-id");
+    if (!repostId) {
+        console.error("Не найден data-repost-id у кнопки");
+        return;
+    }
+
+    let currentText = messageElement.innerText;
+    let newText = prompt("Введите новое описание:", currentText);
+    if (newText === null || newText.trim() === "") return;
+
+    let formData = new FormData();
+    formData.append("repost_id", repostId);
+    formData.append("message", newText);
+
+    fetch("/repost-edit", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                messageElement.innerText = newText;
+                setTimeout(() => location.reload()); // Обновляем страницу
+            } else {
+                console.log("Ошибка: " + data.error);
+            }
+        })
+        .catch(error => console.error("Ошибка запроса:", error));
+}
+
+
 function viewStatistics(articleId) {
     // Перенаправление на страницу со статистикой статьи
     window.location.href = `/articles/statistics/${articleId}`;

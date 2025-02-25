@@ -128,7 +128,10 @@ return [
     'placeholder_search' => 'Введите ваш запрос...',
     'date' => 'Дата',
     'show_more' => 'Показать больше',
-
+//    Репосты
+    'view_statistics'    => 'Просмотр статистики статьи',
+    'delete_repost'    => 'Удалить',
+    'change_description' => 'Изменить описание',
 
     //    Статистика
     'statistics_for' => 'Статистика для "%s"',

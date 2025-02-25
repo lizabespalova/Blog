@@ -18,7 +18,6 @@ class FollowController
         $this->notificationModel = new Notifications(getDbConnection());
         $this->settingModel = new Settings(getDbConnection());
         $this->userModel = new User(getDbConnection());
-
     }
     // Метод для подписки на пользователя
     public function follow($follower_id, $following_id) {

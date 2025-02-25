@@ -45,6 +45,9 @@ $currentUser = $_SESSION['user'] ?? null; // Получаем данные по�
                         <a href="/favourites/<?php echo $currentUser['user_login']; ?>">
                             <?php echo $translations['favourites']; ?> <i class="fas fa-star"></i>
                         </a>
+                        <a href="/my-courses/<?php echo $currentUser['user_login']; ?>">
+                            <?php echo $translations['my_courses']; ?> <i class="fas fa-book"></i>
+                        </a>
                         <a href="/notifications">
                             <?php echo $translations['notifications']; ?> <i class="fas fa-bell"></i>
                         </a>

@@ -15,9 +15,10 @@
 
 </head>
 <body
-        class="<?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : '' ?>"
-        style="font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;"
->
+        class="<?= isset($_SESSION['settings']['theme']) && $_SESSION['settings']['theme'] === 'dark' ? 'dark-mode' : ''; ?>"
+        style="font-family: <?= isset($_SESSION['settings']['font_style']) ? htmlspecialchars($_SESSION['settings']['font_style']) : 'Arial, sans-serif'; ?>;
+                font-size: <?= isset($_SESSION['settings']['font_size']) ? htmlspecialchars($_SESSION['settings']['font_size']) : '16' ?>px;">
+
 <!-- Header Section -->
 <?php include __DIR__ . '/../../../views/base/profile_header.php'; ?>
 

@@ -78,4 +78,11 @@ class Reposts
         $stmt->execute();
         $stmt->close();
     }
+    public function updateRepostMessage($repostId, $userId, $message) {
+        $stmt = $this->conn->prepare("UPDATE reposts SET message = ? WHERE id = ? AND user_id = ?");
+        $stmt->bind_param("sii", $message, $repostId, $userId);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 }

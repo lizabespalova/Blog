@@ -41,8 +41,8 @@
     <div class="followers-list">
         <?php if (!empty($followings)): ?>
             <?php foreach ($followings as $follower): ?>
+                <div class="follower-card">
                 <a href="/profile/<?= urlencode($follower['user_login']) ?>" class="follower-link">
-                    <div class="follower-card">
                         <img
                                 src="<?= htmlspecialchars($follower['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
                                 alt="Avatar"

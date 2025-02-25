@@ -56,6 +56,10 @@ function article_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->delete_repost();
             exit();
+        case $method === 'POST' && $uri === '/repost-edit':
+            $controller = new ArticleController(getDbConnection());
+            $controller->editrepost();
+            exit();
         case $method === 'GET' && preg_match('~^/articles/statistics/(\d+)$~', $uri, $matches):
             $controller = new ArticleController(getDbConnection());
             $articleId = $matches[1]; // Извлекаем ID статьи из URI

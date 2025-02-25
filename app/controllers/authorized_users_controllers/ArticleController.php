@@ -652,6 +652,32 @@ class ArticleController
             echo json_encode(['success' => false, 'error' => 'Invalid request']);
         }
     }
+    public function editRepost() {
+        $user = $_SESSION['user'] ?? null;
+        if (!$user) {
+            echo json_encode(["success" => false, "error" => "You are not authorized"]);
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repost_id'], $_POST['message'])) {
+            $repostId = intval($_POST['repost_id']);
+            $newMessage = trim($_POST['message']);
+
+//            if ($newMessage === "") {
+//                echo json_encode(["success" => false, "error" => "Описание не может быть пустым."]);
+//                exit;
+//            }
+
+
+            $updated = $this->repostModel->updateRepostMessage($repostId, $user['user_id'], $newMessage);
+
+            if ($updated) {
+                echo json_encode(["success" => true]);
+            } else {
+                echo json_encode(["success" => false, "error" => "Error"]);
+            }
+        }
+    }
     public function getArticleStatistics($articleId){
         // Получаем данные статьи
         require_once 'app/services/helpers/switch_language.php';

@@ -79,7 +79,7 @@ class SearchController
 
 
     public function showPopularWriters() {
-        $limit = 1; // Количество авторов на странице
+        $limit = 4; // Количество авторов на странице
         $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
         $popularWriters = $this->searchModel->getPopularWriters($limit, $offset);
         require_once 'app/services/helpers/switch_language.php';

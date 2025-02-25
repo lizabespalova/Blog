@@ -175,5 +175,8 @@ return [
 
 //    Поиск
     'view_profile'    => 'Переглянути профіль',
-
+//    Репосты
+    'view_statistics'    => 'Переглянути статистику статті',
+    'delete_repost'    => 'Видалити',
+    'change_description' => 'Змінити опис',
 ];

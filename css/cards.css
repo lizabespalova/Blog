@@ -166,3 +166,55 @@
 .dropdown:hover .dropdown-menu {
     display: block;
 }
+/* Мобильные устройства (до 768px) */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column; /* Меняем направление на вертикальное */
+        align-items: flex-start;
+        width: 100%;
+        height: auto;
+    }
+
+    .card-image {
+        width: 100%;
+        height: 200px; /* Увеличиваем высоту */
+        border-right: none; /* Убираем границу */
+        border-bottom: 1px solid #ddd;
+    }
+
+    .card-content {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-meta {
+        font-size: 12px;
+    }
+
+    .card-actions {
+        top: 5px;
+        right: 5px;
+    }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+    .card {
+        border-radius: 5px;
+    }
+
+    .card-image {
+        height: 150px;
+    }
+
+    .card-title {
+        font-size: 14px;
+    }
+
+    .card-meta {
+        font-size: 11px;
+    }
+}
