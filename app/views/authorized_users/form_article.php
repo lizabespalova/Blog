@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/article_form.css">
+    <link rel="stylesheet" href="/css/cover_image_preview.css">
     <link rel="stylesheet" href="/css/profile/markdown.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <link rel="stylesheet" href="/css/settings/themes.css">

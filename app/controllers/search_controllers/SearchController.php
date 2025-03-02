@@ -67,9 +67,9 @@ class SearchController
         $offset = $_GET['offset'] ?? 0;  // Получаем смещение из параметров запроса (по умолчанию 0)
         $userId = $_SESSION['user']['user_id'] ?? null;
         if ($userId) {
-            $article_cards = $this->searchModel->getArticlesByUserInterests($userId, 2, $offset);  // Загружаем 2 статьи за раз
+            $article_cards = $this->searchModel->getArticlesByUserInterests($userId, 3, $offset);  // Загружаем 2 статьи за раз
         } else {
-            $article_cards = $this->searchModel->getMostPopularArticles(2, $offset);  // Загружаем 2 статьи за раз
+            $article_cards = $this->searchModel->getMostPopularArticles(3, $offset);  // Загружаем 2 статьи за раз
         }
 
         require_once 'app/services/helpers/switch_language.php';

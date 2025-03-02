@@ -10,7 +10,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background-color: #fff;
-    margin-bottom: 20px; /* Отступ между карточками */
+    /*margin-bottom: 20px; !* Отступ между карточками *!*/
     position: relative; /* Ограничиваем область для абсолютного позиционирования дочерних элементов */
     overflow: hidden; /* Убираем видимость выпадающего меню за пределами карточки */
 }
@@ -169,11 +169,14 @@
 /* Мобильные устройства (до 768px) */
 @media (max-width: 768px) {
     .card {
-        flex-direction: column; /* Меняем направление на вертикальное */
+        width: 100%; /* Чтобы карточка растягивалась на всю ширину контейнера */
+        max-width: 400px; /* Ограничиваем максимальную ширину */
+        min-width: 280px; /* Минимальная ширина для избежания слишком узких карточек */
+        height: auto; /* Автоматическая высота */
+        flex-direction: column;
         align-items: flex-start;
-        width: 100%;
-        height: auto;
     }
+
 
     .card-image {
         width: 100%;

@@ -165,6 +165,7 @@ return [
     'cover_image_preview'    => 'Cover Image Preview',
     'publish'                => 'Publish:',
     'create_article' => 'Create Article',
+    'add_article' => 'Add article',
 
 //    Редактирование
     'edit_description'           => 'Edit Description',
@@ -177,7 +178,7 @@ return [
     'view_profile'    => 'View Profile',
 //    Репосты
     'view_statistics'    => 'View article statistics',
-    'delete_repost'    => 'Delete',
+    'delete'    => 'Delete',
     'change_description' => 'Change description',
 
     //    Курсы
@@ -188,5 +189,10 @@ return [
     'select_articles_button' => 'Select articles',
     'search_articles' => 'Search articles',
     'articles_selected' => 'Selected articles',
+    'no_courses' => 'You haven`t got courses yet',
+    'open_course' => 'Open course',
+    'edit'           => 'Edit',
+    'courses_articles'           => 'Course articles',
+    'no_articles'           => 'There are no articles in this course yet',
 
 ];

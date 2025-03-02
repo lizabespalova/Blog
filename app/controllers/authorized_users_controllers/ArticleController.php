@@ -12,6 +12,7 @@ use models\Notifications;
 use models\Reposts;
 use models\User;
 use Parsedown;
+use services\CoverImagesService;
 use services\ErrorService;
 use services\LoginService;
 use services\MarkdownService;
@@ -31,6 +32,7 @@ class ArticleController
     private $notificationModel;
     private $markdownService;
     private $errorService;
+    private $coverImagesService;
 
     public function __construct($conn)
     {
@@ -46,6 +48,7 @@ class ArticleController
         $this->notificationModel = new Notifications(getDbConnection());
         $this->markdownService = new MarkdownService();
         $this->errorService = new ErrorService();
+        $this->coverImagesService = new CoverImagesService();
     }
 
     public function show_article_form($slug)
@@ -82,7 +85,7 @@ class ArticleController
             // Проверка наличия `article_id`
             $articleId = $_POST['article_id'] ?? null;
             // Проверка и загрузка обложки
-            $cover_image_path = $this->upload_cover_image($articleId, $inputData['user_id'], $inputData['cover_image']);
+            $cover_image_path = $this->coverImagesService->upload_cover_image($inputData['cover_image'],'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover');
             if (!$cover_image_path) {
                 $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию, если загрузка не удалась
             }
@@ -103,7 +106,7 @@ class ArticleController
 
             if ($result) {
 
-                $articleDir = $this->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId);
+                $articleDir = $this->coverImagesService->create_user_directory('uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId);
 
                 if ($articleId) {
                     // Если создается статья, создаем slug для новой статьи
@@ -136,42 +139,42 @@ class ArticleController
             exit();
         }
     }
-    private function create_user_directory($userDir)
-    {
-        if (!file_exists($userDir)) {
-            mkdir($userDir, 0777, true);
-        }
-        return $userDir;
-    }
-    private function upload_cover_image($article_id, $user_id, $coverImage)
-    {
-        if (/*isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0*/$coverImage) {
-            // Создаем директорию для обложки
-            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id . '/cover');
-
-            // Удаляем старое изображение, если оно существует, чтобы в директории оставалось только одно
-            $existingFiles = glob($coverDir . '/*'); // Получаем все файлы в папке cover
-            foreach ($existingFiles as $file) {
-                if (is_file($file)) {
-                    unlink($file); // Удаляем файл
-                }
-            }
-
-            // Получаем новое имя файла обложки
-            $cover_image_name = basename($_FILES['cover_image']['name']);
-            $cover_image_path = $coverDir . '/' . $cover_image_name;
-
-            // Перемещаем загруженный файл
-            if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $cover_image_path)) {
-                // Возвращаем путь для сохранения в базе данных
-                return $cover_image_path;
-            } else {
-                echo "Error uploading cover image.";
-                return false;
-            }
-        }
-        return false;
-    }
+//    private function create_user_directory($userDir)
+//    {
+//        if (!file_exists($userDir)) {
+//            mkdir($userDir, 0777, true);
+//        }
+//        return $userDir;
+//    }
+//    private function upload_cover_image($article_id, $user_id, $coverImage)
+//    {
+//        if (/*isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] == 0*/$coverImage) {
+//            // Создаем директорию для обложки
+//            $coverDir = $this->create_user_directory('uploads/' . $user_id . '/article_photos/' . $article_id . '/cover');
+//
+//            // Удаляем старое изображение, если оно существует, чтобы в директории оставалось только одно
+//            $existingFiles = glob($coverDir . '/*'); // Получаем все файлы в папке cover
+//            foreach ($existingFiles as $file) {
+//                if (is_file($file)) {
+//                    unlink($file); // Удаляем файл
+//                }
+//            }
+//
+//            // Получаем новое имя файла обложки
+//            $cover_image_name = basename($_FILES['cover_image']['name']);
+//            $cover_image_path = $coverDir . '/' . $cover_image_name;
+//
+//            // Перемещаем загруженный файл
+//            if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $cover_image_path)) {
+//                // Возвращаем путь для сохранения в базе данных
+//                return $cover_image_path;
+//            } else {
+//                echo "Error uploading cover image.";
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
 
 
     // Генерация пути для изображения

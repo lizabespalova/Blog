@@ -1,0 +1,68 @@
+/* Обертка для всего */
+.articles-wrapper {
+    position: relative;
+    width: 80%; /* Уменьшаем контейнер */
+    margin: auto; /* Центрируем контейнер */
+}
+
+/* Контейнер для статей */
+.articles-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%; /* Забираем всю ширину */
+}
+
+.articles {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px;
+    scroll-snap-type: x mandatory;
+    white-space: nowrap;
+    scroll-behavior: smooth; /* Плавная прокрутка */
+}
+
+.article-item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.articles::-webkit-scrollbar {
+    height: 8px;
+}
+
+.articles::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+}
+
+/* Кнопки для прокрутки */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Расположение кнопок вне контейнера */
+.left {
+    left: -50px; /* Сдвигаем влево относительно контейнера */
+}
+
+.right {
+    right: -50px; /* Сдвигаем вправо относительно контейнера */
+}
+
+.scroll-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}

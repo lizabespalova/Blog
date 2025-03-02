@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="/css/settings/sections/appearance.css">
     <link rel="stylesheet" href="/css/settings/sections/personal.css">
     <link rel="stylesheet" href="/css/settings/sections/privacy.css">
-<!--    <link rel="stylesheet" href="/css/settings/sections/notifications.css">-->
     <link rel="stylesheet" href="/css/settings/sections/security.css">
     <link rel="stylesheet" href="/css/settings/sections/integrations.css">
     <link rel="stylesheet" href="/css/settings/sections/preferences.css">
@@ -93,6 +92,7 @@
 <script src="/js/authorized_users/settings/delete_account.js"></script>
 <script src="/js/authorized_users/settings/delete_session.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_show_updates.js"></script>
+<script src="/js/authorized_users/settings/determine_timezone.js"></script>
 <script src="/js/authorized_users/settings/set_alert_to_send_confirmation_email.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 

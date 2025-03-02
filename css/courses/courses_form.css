@@ -322,7 +322,7 @@
         width: 85%;
     }
     .course-form {
-        width: 100%;
+        /*width: 100%;*/
         padding: 10px;
     }
 
@@ -366,3 +366,65 @@
         font-size: 12px;
     }
 }
+.selected-articles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.selected-article-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 150px;
+    position: relative;
+    text-align: center;
+}
+
+.selected-article-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.selected-article-card p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.remove-article-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-article-btn:hover {
+    background: darkred;
+}
+
+
+

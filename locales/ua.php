@@ -172,12 +172,13 @@ return [
     'cover_image_preview'    => 'Попередній перегляд обкладинки',
     'publish'                => 'Опублікувати:',
     'create_article' => 'Створити статтю',
+    'add_article' => 'Додати статтю',
 
 //    Поиск
     'view_profile'    => 'Переглянути профіль',
 //    Репосты
     'view_statistics'    => 'Переглянути статистику статті',
-    'delete_repost'    => 'Видалити',
+    'delete'    => 'Видалити',
     'change_description' => 'Змінити опис',
 
     //    Курсы
@@ -188,5 +189,10 @@ return [
     'select_articles_button' => 'Обрати статті',
     'search_articles' => 'Шукати статті',
     'articles_selected' => 'Обрані статті',
+    'no_courses' => 'У вас поки що немає курсів',
+    'open_course' => 'Відкрити курс',
+    'edit'           => 'Редактувати',
+    'courses_articles'           => 'Статті курсу',
+    'no_articles'           => 'У цьому курсі поки що немає статей',
 
 ];

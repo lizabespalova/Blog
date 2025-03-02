@@ -22,9 +22,17 @@
     </div>
 
     <div class="form-group">
-        <label for="language"><?= $translations['timezone'] ?></label>
-        <input type="text" id="timezone" name="timezone" placeholder="<?= $translations['timezone'] ?>" required />
+        <label for="timezone"><?= $translations['timezone'] ?></label>
+        <select id="timezone" name="timezone" required>
+            <?php
+            $timezones = DateTimeZone::listIdentifiers();
+            foreach ($timezones as $tz) {
+                echo "<option value=\"$tz\">$tz</option>";
+            }
+            ?>
+        </select>
     </div>
+
 
     <button type="submit" class="save-settings"><?= $translations['save_changes'] ?></button>
 </form>

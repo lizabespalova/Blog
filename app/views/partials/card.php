@@ -22,7 +22,7 @@ require_once 'app/services/helpers/switch_language.php';
                                 <?php if (!empty($article['repost_id'])): ?>
                                     <button class="dropdown-item delete-card" data-repost-id="<?php echo htmlspecialchars($article['repost_id']); ?>"
                                             onclick="deleteRepost(this)">
-                                        <?php echo $translations['delete_repost']; ?> <i class="fas fa-trash-alt"></i>
+                                        <?php echo $translations['delete']; ?> <i class="fas fa-trash-alt"></i>
                                     </button>
 
                                     <!-- Кнопка изменения описания -->
