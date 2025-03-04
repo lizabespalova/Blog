@@ -81,6 +81,26 @@
         <button class="scroll-btn right"><i class="fas fa-chevron-right"></i></button>
     </div>
 
+    <!-- Блок с прокруткой видео -->
+    <h2><?= $translations['videos'] ?></h2>
+    <div class="articles-wrapper">
+        <div class="articles-container">
+            <div class="articles">
+            <?php foreach ($articles as $article): ?>
+                <?php if (!empty($article['youtube_link'])): ?>
+                    <div class="video-item">
+                        <iframe width="300" height="200" src="https://www.youtube.com/embed/<?= htmlspecialchars($article['youtube_link']) ?>" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Кнопки для прокрутки -->
+        <button class="scroll-btn left"><i class="fas fa-chevron-left"></i></button>
+        <button class="scroll-btn right"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
 </div>
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
@@ -90,6 +110,7 @@
 <script src="/js/courses/delete_course.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/courses/add_scroll_buttons.js"></script>
+<script src="/js/courses/scroll_video.js"></script>
 
 </body>
 </html>

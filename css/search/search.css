@@ -67,6 +67,31 @@
     /*font-size: 16px;*/
     transition: color 0.3s; /* Плавный переход цвета при наведении */
 }
+
+.tag-search-form {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.tag-search-form input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tag-search-form button {
+    padding: 5px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tag-search-form button:hover {
+    background: #0056b3;
+}
+
 /* Адаптация для мобильных устройств */
 @media (max-width: 768px) {
     .menu-section {

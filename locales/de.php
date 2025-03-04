@@ -95,6 +95,8 @@ return [
     'follow' => 'Abbonieren',
     'cancel' => 'Stornieren',
     'add_description' => 'Um eine Beschreibung hinzuzufügen, klicken Sie oben auf die Schaltfläche "Bearbeiten".',
+    'user_publication' => 'Hier sind Ihre Veröffentlichungen. Laden Sie hier Ihre Arbeit hoch!',
+    'user_courses' => 'Dies sind Ihre Kurse. Beginnen Sie jetzt mit dem Lernen!',
 
     //    Фильтры
     'title' => 'Titel:',
@@ -127,7 +129,8 @@ return [
     'placeholder_search' => 'Geben Sie Ihre Suche ein...',
     'date' => 'Datum',
     'show_more' => 'Mehr anzeigen',
-
+    'search_by_tag' => 'Nach Tag suchen',
+    'search' => 'Suchen',
 
     //    Статистика
     'statistics_for' => 'Statistiken für "%s"',
@@ -195,6 +198,7 @@ return [
     'edit'           => 'Bearbeiten',
     'courses_articles'           => 'Kursartikel',
     'no_articles'           => 'Es gibt noch keine Artikel in diesem Kurs',
+    'videos'           => 'Videos zum Kurs',
 
 
 ];

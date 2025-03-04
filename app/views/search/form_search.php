@@ -34,10 +34,18 @@
 
 <!-- Меню секций -->
 <div class="menu-section">
-    <a href="?section=feed>" class="menu-item" data-section="feed"><?= $translations['feed'] ?></a>
+    <a href="?section=feed" class="menu-item" data-section="feed"><?= $translations['feed'] ?></a>
     <a href="?section=popular-articles" class="menu-item" data-section="popular-articles"><?= $translations['popular_articles'] ?></a>
     <a href="?section=popular-writers" class="menu-item" data-section="popular-writers"><?= $translations['popular_writers'] ?></a>
+
+    <!-- Форма поиска по тегам -->
+    <form class="tag-search-form">
+        <input type="hidden" name="section" value="tag-search">
+        <input type="text" name="tag" placeholder="<?= $translations['search_by_tag'] ?>" value="<?= htmlspecialchars($_GET['tag'] ?? '') ?>">
+        <button type="submit"><?= $translations['search'] ?></button>
+    </form>
 </div>
+
 
 <!-- Контейнер для контента, загружаемого через AJAX -->
 <div id="content-container">

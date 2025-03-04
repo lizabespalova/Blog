@@ -28,18 +28,9 @@
 
     <?php if (empty($courses)): ?>
         <p><?= $translations['no_courses']?></p>
-        <a href="/course-form" class="btn"><?= $translations['create_course']?></a>
+    <a href="/course-form/<?php echo $currentUser['user_login']; ?>" class="btn"><?= $translations['create_course']?></a>
     <?php else: ?>
-        <div class="courses-list">
-            <?php foreach ($courses as $course): ?>
-                <div class="course-card">
-                    <img src="<?= htmlspecialchars('/' . ltrim($course['cover_image'], '/')) ?>" alt="Обложка курса">
-                    <h3><?= htmlspecialchars($course['title']) ?></h3>
-                    <p><?= htmlspecialchars($course['description']) ?></p>
-                    <a href="/course/<?= $course['course_id'] ?>" class="btn"><?= $translations['open_course']?></a>
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <?php include __DIR__ . '/../../views/courses/courses.php'; ?>
     <?php endif; ?>
 </div>
 

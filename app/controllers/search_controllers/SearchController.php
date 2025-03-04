@@ -111,7 +111,18 @@ class SearchController
         include __DIR__ . '/../../views/search/sections/feed.php';
     }
 
+    public function showArticlesFilteredByTags(){
+        $user = $_SESSION['user'] ?? null;
 
+        $tag = $_GET['tag'] ?? '';
+        $tag = trim($tag);
+        $articles = $this->articleModel->getArticlesFilteredByTags($tag);
+        if (!empty($articles)):
+            foreach ($articles as $article):
+                 include __DIR__ . '/../../views/partials/card.php';
+             endforeach;
+        endif;
+    }
 
 
 }

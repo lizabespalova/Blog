@@ -466,5 +466,10 @@ class Articles
 
         return $totalArticles;
     }
-
+    public function getArticlesFilteredByTags($tag){
+        $stmt = $this->conn->prepare("SELECT * FROM articles WHERE tags LIKE CONCAT('%', ?, '%') ORDER BY created_at DESC");
+        $stmt->bind_param("s", $tag);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
 }

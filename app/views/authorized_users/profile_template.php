@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/css/settings/themes.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
+    <link rel="stylesheet" href="/css/courses/my_courses.css">
 
 </head>
 <body
@@ -216,22 +217,33 @@ if ($profileVisibility === 'public' || $profileUserId === $userId || $isFollowin
         </div>
     </div>
 
+    <!-- Publications Section -->
     <div class="content-page hidden" id="publication-content">
         <?php if (!empty($publications)): ?>
-            <!-- Publications -->
             <div class="parent-container">
                 <div class="reposts-articles-container">
                     <?php include __DIR__ . '/../../views/partials/publication.php'; ?>
                 </div>
             </div>
         <?php else: ?>
-            <p>Here are your publications. Upload your work here!</p>
+            <p><?= $translations['user_publication'] ?></p>
         <?php endif; ?>
     </div>
+
+    <!-- Courses Section (Отдельный контейнер) -->
     <div class="content-page hidden" id="courses-content">
-        <p>These are your courses. Start learning now!</p>
+        <?php if (!empty($courses)): ?>
+            <div class="parent-container">
+                <div class="reposts-articles-container">
+                    <?php include __DIR__ . '/../../views/courses/courses.php'; ?>
+                </div>
+            </div>
+        <?php else: ?>
+            <p><?= $translations['user_courses'] ?></p>
+        <?php endif; ?>
     </div>
 </div>
+
 <?php else: ?>
     <!-- Сообщение о приватности -->
     <div class="profile-restricted">

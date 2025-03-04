@@ -95,8 +95,8 @@ return [
     'follow' => 'Follow',
     'cancel' => 'Cancel',
     'add_description' => 'For adding a description, click on the edit button above.',
-
-
+    'user_publication' => 'Here are your publications. Upload your work here!',
+    'user_courses' => 'These are your courses. Start learning now!',
     //    Фильтры
     'title' => 'Title:',
     'filter_title_placeholder' => 'Article title',
@@ -128,6 +128,8 @@ return [
     'placeholder_search' => 'Type your search...',
     'date' => 'date',
     'show_more' => 'Show more',
+    'search_by_tag' => 'Search by tag',
+    'search' => 'Search',
 
 
     //    Статистика
@@ -176,6 +178,7 @@ return [
 
 //    Поиск
     'view_profile'    => 'View Profile',
+
 //    Репосты
     'view_statistics'    => 'View article statistics',
     'delete'    => 'Delete',
@@ -194,5 +197,6 @@ return [
     'edit'           => 'Edit',
     'courses_articles'           => 'Course articles',
     'no_articles'           => 'There are no articles in this course yet',
+    'videos'           => 'videos of the course',
 
 ];

@@ -3,7 +3,9 @@
 namespace controllers\authorized_users_controllers;
 require_once 'app/services/helpers/update_status.php';
 
+use Google\Service\Classroom\Course;
 use models\Articles;
+use models\Courses;
 use models\Follows;
 use models\Notifications;
 use models\Reposts;
@@ -18,6 +20,7 @@ class ProfileController
     private $articleModel;
     private $repostModel;
     private $followModel;
+    private $courseModel;
     private $settingModel;
     private $notificationModel;
     private $statusService;
@@ -29,6 +32,7 @@ class ProfileController
         $this->repostModel = new Reposts($dbConnection);
         $this->followModel = new Follows($dbConnection);
         $this->settingModel = new Settings($dbConnection);
+        $this->courseModel = new Courses($dbConnection);
         $this->notificationModel = new Notifications($dbConnection);
         $this->markdownService = new MarkdownService();
         $this->statusService = new StatusService();
@@ -73,7 +77,7 @@ class ProfileController
 //            var_dump($isFollowing);
 //            var_dump($followStatus);
 
-
+            $courses = $this->courseModel->getUserCourses( $currentUser['user_id']);
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

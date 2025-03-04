@@ -42,7 +42,10 @@ function users_article_route($uri, $method) {
             $controller = new SearchController(getDbConnection());
             $controller->showFeed();
             exit();
-
+        case '/sections/tag-search':
+            $controller = new SearchController(getDbConnection());
+            $controller->showArticlesFilteredByTags();
+            exit();
         default:
             return false;
     }

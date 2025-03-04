@@ -69,7 +69,7 @@ class CourseController
         $userId = $_SESSION['user']['user_id'] ?? null;
         // Получаем список курсов пользователя
         $courses = $this->courseModel->getUserCourses($userId);
-
+        $userLogin = $this->userModel->getLoginById($userId);
         // Загружаем шаблон
         require_once 'app/views/courses/my_courses.php';
     }
