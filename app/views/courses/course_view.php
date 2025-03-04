@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="/css/settings/themes.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
+    <link rel="stylesheet" href="/css/courses/modal_form.css">
+
 </head>
 <body
         class="<?=
@@ -30,18 +32,38 @@
     <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover">
     <p class="course-description"><?= nl2br(htmlspecialchars($course['description'])) ?></p>
     <?php if ($userId === $course['user_id']): ?>
-        <div class="buttons">
-            <a href="/edit-course/<?= $course['course_id'] ?>" class="btn edit"><?= $translations['edit']?></a>
-            <a href="/delete-course/<?= $course['course_id'] ?>" class="btn delete"><?= $translations['delete']?></a>
-            <a href="/add-article/<?= $course['course_id'] ?>" class="btn add"><?= $translations['add_article']?></a>
+
+
+        <!-- Контейнер для кнопок -->
+        <div class="courses-buttons-container">
+            <!-- Кнопка для открытия окна редактирования -->
+            <button type="button" class="courses-button" id="select-articles-btn"><?= $translations['edit'] ?></button>
+
+            <!-- Кнопка для удаления -->
+            <button type="button" class="courses-button" id="delete-course-btn"><?= $translations['delete'] ?></button>
         </div>
+
+        <!-- Скрытое поле для отправки данных -->
+        <input type="hidden" name="articles" id="selected-articles">
+        <!-- Скрытое поле для ID курса -->
+        <input type="hidden" id="course-id" value="<?= $course['course_id'] ?>">
+        <!-- Поля внутри модального окна -->
+        <input type="hidden" id="modal-course-title" value="<?= $course['title'] ?>">
+        <input type="hidden" id="modal-course-description" value="<?= $course['description'] ?>">
+        <input type="hidden" id="modal-course-cover-image" value="<?= $course['cover_image'] ?>">
+
+
     <?php endif; ?>
+
+    <!-- Модальное окно -->
+    <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
+
     <h2><?= $translations['courses_articles']?></h2>
     <div class="articles-wrapper">
         <div class="articles-container">
             <div class="articles">
-                <?php if (!empty($articles)): ?>
-                    <?php foreach ($articles as $article): ?>
+                <?php if (!empty($articlesInCourses)): ?>
+                    <?php foreach ($articlesInCourses as $article): ?>
                         <div class="article-item">
                             <div class="course-card">
                                 <?php include __DIR__ . '/../../views/partials/card.php'; ?>
@@ -63,7 +85,9 @@
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
-
+<!--<script src="/js/courses/show_courses_window.js"></script>-->
+<script src="/js/courses/save-course-article.js"></script>
+<script src="/js/courses/delete_course.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/courses/add_scroll_buttons.js"></script>
 

@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveBtn = document.getElementById("save-settings-btn");
 
     if (!modal || !btn || !closeBtn || !searchInput || !articlesList || !selectedArticlesInput || !selectedCount || !saveBtn) {
-        console.error("Один или несколько элементов не найдены в DOM.");
         return;
     }
 

@@ -9,11 +9,14 @@
     <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
-    <link rel="stylesheet" href="/css/courses/courses_form.css">
     <link rel="stylesheet" href="/css/cover_image_preview.css">
     <link rel="stylesheet" href="/css/settings/themes.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
+    <link rel="stylesheet" href="/css/courses/courses_form.css">
+
+    <link rel="stylesheet" href="/css/courses/modal_form.css">
+
 </head>
 <body
         class="<?=
@@ -45,29 +48,8 @@
             <input type="hidden" name="articles" id="selected-articles">
 
             <!-- Модальное окно -->
-            <div id="articles-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2><?= $translations['select_articles_button'] ?></h2>
-                    <input type="text" id="article-search" placeholder="<?= $translations['search_articles'] ?>">
+            <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
 
-                    <div id="articles-list">
-                        <?php foreach ($articles as $article): ?>
-                            <div class="article-item">
-                                <label>
-                                    <input type="checkbox" value="<?= $article['id'] ?>">
-                                </label>
-                                <div class="course-card">
-                                    <?php include __DIR__ . '/../../views/partials/card.php'; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <!-- Кнопка для сохранения настроек -->
-                    <button id="save-settings-btn" class="courses-button" type="button"><?= $translations['save'] ?></button>
-                </div>
-            </div>
             <!-- Загрузка обложки -->
             <label for="cover_image"><?= $translations['cover_image'] ?></label>
             <div class="image-preview-container">
