@@ -28,13 +28,43 @@
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <div class="container">
-    <h1><?= htmlspecialchars($course['title']) ?></h1>
-    <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover">
-    <p class="course-description"><?= nl2br(htmlspecialchars($course['description'])) ?></p>
-    <?php if ($userId === $course['user_id']): ?>
+    <h1 class="course-title"><?= htmlspecialchars($course['title']) ?>
+        <?php if ($userId === $course['user_id']): ?>
+            <button class="edit-btn title-edit-btn">✏️</button>
+        <?php endif; ?>
+    </h1>
+
+    <div class="course-header">
+        <div class="course-cover-container" data-course-id="<?= $course['course_id'] ?>">
+            <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
+            <?php if ($userId === $course['user_id']): ?>
+                <button class="edit-btn cover-edit-btn" onclick="triggerCoverUpload()">✏️</button>
+                <input type="file" id="cover-upload" accept="image/*" style="display: none;">
+            <?php endif; ?>
+        </div>
 
 
-        <!-- Контейнер для кнопок -->
+
+        <div class="course-description-container">
+            <p class="course-description" data-course-id="<?= $course['course_id'] ?>">
+                <?= nl2br(htmlspecialchars($course['description'])) ?>
+                <?php if ($userId === $course['user_id']): ?>
+                    <button class="edit-btn desc-edit-btn">✏️</button>
+                <?php endif; ?>
+            </p>
+        </div>
+        <!-- Модальное окно для редактирования -->
+        <div id="desc-modal" class="modal">
+            <div class="modal-content">
+                <textarea id="desc-input"></textarea>
+                <button id="save-desc"><?= $translations['save']?></button>
+                <button id="cancel-desc"><?= $translations['cancel']?></button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Контейнер для кнопок -->
         <div class="courses-buttons-container">
             <!-- Кнопка для открытия окна редактирования -->
             <button type="button" class="courses-button" id="select-articles-btn"><?= $translations['edit'] ?></button>
@@ -53,7 +83,6 @@
         <input type="hidden" id="modal-course-cover-image" value="<?= $course['cover_image'] ?>">
 
 
-    <?php endif; ?>
 
     <!-- Модальное окно -->
     <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
@@ -108,9 +137,14 @@
 <!--<script src="/js/courses/show_courses_window.js"></script>-->
 <script src="/js/courses/save-course-article.js"></script>
 <script src="/js/courses/delete_course.js"></script>
+<script src="/js/courses/update_course_cover.js"></script>
+<script src="/js/courses/update_course_title.js"></script>
+<script src="/js/courses/update_course_description.js"></script>
+<script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/courses/add_scroll_buttons.js"></script>
 <script src="/js/courses/scroll_video.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

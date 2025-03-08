@@ -22,7 +22,7 @@ if (empty($articles)): ?>
     <div id="feed-content">
         <?php foreach ($articles as $article): ?>
             <div class="article">
-                <img src="<?= htmlspecialchars($article['user_avatar'] ?: '/templates/images/default_avatar.png') ?>"
+                <img src="<?= htmlspecialchars($article['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
                      alt="<?= htmlspecialchars($article['user_login']) ?>" class="article-avatar">
                 <div class="article-info">
                     <h2><?= $translations['author'] ?? 'Author: ' ?><a href="/profile/<?= htmlspecialchars($article['user_login']) ?>">

@@ -137,4 +137,69 @@ class CourseController
             echo json_encode(['status' => 'error', 'message' => 'Course ID is missing.']);
         }
     }
+
+
+    public function updateCoverCourse() {
+        $userId = $_SESSION['user']['user_id'] ?? null;
+
+
+        if (!isset($_FILES['cover_image']) || !isset($_POST['course_id'])) {
+            echo json_encode(['success' => false, 'error' => 'Нет данных']);
+            return;
+        }
+
+        $courseId = (int) $_POST['course_id'];
+
+        // Проверяем, принадлежит ли курс пользователю
+        $course = $this->courseModel->getCourseById($courseId);
+
+        if (!$course || $course['user_id'] !== $userId) {
+            echo json_encode(['success' => false, 'error' => 'Курс не найден или нет доступа']);
+            return;
+        }
+
+        // Сохраняем файл
+        if (!empty($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
+            $cover_image_path = $this->coverImagesService->upload_cover_image($_FILES['cover_image'], 'uploads/' . $userId . '/courses/' . $courseId);
+        }
+
+        $this->courseModel->updateCoverImage($courseId, $cover_image_path);
+        // Обновляем базу
+        echo json_encode(['success' => true, 'message' => 'Курс успешно создан!', 'course_id' => $courseId]);
+
+    }
+
+    public function updateTitleCourse() {
+        $courseId = $_POST['course_id'] ?? null;
+        $newTitle = trim($_POST['title'] ?? '');
+        if (!$courseId || !$newTitle) {
+            echo json_encode(["success" => false, "error" => "Invalid data"]);
+            return;
+        }
+
+        // Обновляем заголовок
+        if ( $this->courseModel->updateCourseTitel($newTitle, $courseId)) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false, "error" => "Failed to update title", "title" => $newTitle, "course_id" => $courseId
+            ]);
+        }
+    }
+    public function updateDescriptionCourse() {
+        $courseId = $_POST['course_id'] ?? null;
+        $newDesc = trim($_POST['description'] ?? '');
+
+        if (!$courseId || !$newDesc) {
+            echo json_encode(["success" => false, "error" => "Invalid data"]);
+            return;
+        }
+
+        // Обновляем описание в базе
+        if ($this->courseModel->updateCourseDescription($newDesc, $courseId)) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false, "error" => "Failed to update description"]);
+        }
+    }
+
 }

@@ -5,14 +5,28 @@ document.addEventListener('DOMContentLoaded', function () {
     const maxVisibleReplies = 3;
     const articleSlug = commentForm.querySelector('.article-slug').value;
     const commentInput = document.querySelector('.comment-input');
+    const errorMessage = document.createElement('div'); // Создаём элемент для отображения ошибки
+    errorMessage.style.color = 'red'; // Делаем ошибку красной
+    commentForm.appendChild(errorMessage); // Добавляем элемент ошибки в форму
 
     loadComments(articleSlug);
 
     commentForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Останавливаем отправку формы
+
         const commentText = commentInput.value;
         const userId = commentForm.querySelector('.user-id').value;
 
+        // Очистим предыдущее сообщение об ошибке
+        errorMessage.textContent = '';
+
+        // Проверка длины комментария
+        if (commentText.length > 500) {
+            errorMessage.textContent = "Error: The comment cannot contain more than 500 characters.";
+            return; // Прерываем выполнение, не отправляем форму
+        }
+
+        // Отправка формы, если всё в порядке
         fetch('/articles/add_comment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -20,19 +34,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success)
-                {
+                if (data.success) {
                     loadComments(articleSlug);
-                    simplemde.value('');
-                }
-                else if(data.error){
+                    simplemde.value(''); // Очистка редактора
+                } else if (data.error) {
                     window.location.href = "/error?message=" + data.error;
                 }
             });
     });
 
-
-    function loadComments(articleSlug) {
+function loadComments(articleSlug) {
         fetch('/articles/get_comments?article_slug=' + articleSlug)
             .then(response => response.text())
             .then(html => {

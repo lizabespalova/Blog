@@ -32,9 +32,8 @@
 
      <label for="markdown-editor"><?= $translations['content']; ?></label>
      <!-- Для вывода контента статьи -->
-     <textarea id="markdown-editor" name="content" placeholder="<?= $translations['write_article_content_placeholder']; ?>">
-    <?= isset($content) ? htmlspecialchars($content) : '' ?>
-    </textarea>
+     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= htmlspecialchars($content) ?></textarea>
+
 
      <!-- Модальное окно для таблиц -->
      <div id="tableModal" class="modal" style="display: none;">
@@ -80,7 +79,7 @@
         <?= $translations['tag_warning'] ?>
     </span>
      </div>
-     <input type="hidden" id="tags" name="tags">
+     <input type="hidden" id="tags" name="tags" value="<?= htmlspecialchars(implode(', ', (isset($article['tags']) && is_array($article['tags'])) ? $article['tags'] : explode(',', $article['tags'] ?? ''))) ?>">
 
      <!-- Поле ввода ссылки на YouTube -->
      <label for="youtube_link"><?= $translations['youtube_link'] ?></label>
@@ -89,11 +88,13 @@
      <!-- Загрузка обложки -->
      <label for="cover_image"><?= $translations['cover_image'] ?></label>
      <div class="image-preview-container">
-         <input type="file" id="cover_image" name="cover_image" accept="image/*">
+         <input type="file" id="cover_image" name="cover_image" accept="image/*" >
          <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($article['cover_image'] ?? '') ?>"
               alt="<?= $translations['cover_image_preview'] ?>" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">
          <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
+
+
 
      <!-- Переключатель публикации -->
      <div class="switch-container">
@@ -114,17 +115,18 @@
      <button type="submit" class="custom-submit-button">
          <?= isset($article['slug']) ? $translations['save_changes'] : $translations['create_article'] ?>
      </button>
+<!--     Для userId в джс-->
+     <input type="hidden" id="user_id" value="<?=$userId?>">
+     <input type="hidden" id="article_id" value="<?= $article['id'] ?? '' ?>">
 
  </form>
  <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
- <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
- <script src="/js/authorized_users/files_uploads/show_preview.js"></script>
- <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
+<script src="/js/authorized_users/files_uploads/file_upload.js"></script>
+<script src="/js/authorized_users/files_uploads/show_preview.js"></script>
+<script src="/js/authorized_users/files_uploads/add_avatar.js"></script>
 <script src="/js/authorized_users/files_uploads/form_actions.js"></script>
- <script src="/js/authorized_users/articles/add_markdown.js"></script>
- <script src="/js/authorized_users/menu.js"></script>
- <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
+<script src="/js/authorized_users/articles/add_markdown.js"></script>
+<script src="/js/authorized_users/menu.js"></script>
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </body>
 </html>

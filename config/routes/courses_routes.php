@@ -36,6 +36,18 @@ function courses_route($uri, $method) {
          $controller = new CourseController(getDbConnection());
          $controller->deleteCourse();  // Создаем новый курс
          exit();
+     case $method === 'POST' && $uri === '/update_cover':
+         $controller = new CourseController(getDbConnection());
+         $controller->updateCoverCourse();  // Создаем новый курс
+         exit();
+     case $method === 'POST' && $uri === '/update_course_title':
+         $controller = new CourseController(getDbConnection());
+         $controller->updateTitleCourse();  // Создаем новый курс
+         exit();
+     case $method === 'POST' && $uri === '/update_course_description':
+         $controller = new CourseController(getDbConnection());
+         $controller->updateDescriptionCourse();  // Создаем новый курс
+         exit();
         default:
             return false;
     }

@@ -77,7 +77,7 @@ class ProfileController
 //            var_dump($isFollowing);
 //            var_dump($followStatus);
 
-            $courses = $this->courseModel->getUserCourses( $currentUser['user_id']);
+            $courses = $this->courseModel->getUserCourses($profileUserId);
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

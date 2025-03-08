@@ -119,4 +119,18 @@ class Courses
             return false; // Ошибка удаления
         }
     }
+    public function updateCourseTitel($newTitle, $courseId){
+        // Обновляем заголовок
+        $stmt = $this->conn->prepare("UPDATE courses SET title = ? WHERE course_id = ?");
+        $stmt->bind_param("si", $newTitle, $courseId);
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
+    }
+    public function updateCourseDescription($newDescription, $courseId){
+        // Обновляем заголовок
+        $stmt = $this->conn->prepare("UPDATE courses SET description = ? WHERE course_id = ?");
+        $stmt->bind_param("si", $newDescription, $courseId);
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
+    }
 }

@@ -54,6 +54,8 @@ class ArticleController
     public function show_article_form($slug)
     {
         require_once 'app/services/helpers/switch_language.php';
+        $userId = $_SESSION['user']['user_id'] ?? null;
+
         if ($slug) {
             $article = $this->articleModel->get_article_by_slug($slug);
             // Проверка и обработка обложки
@@ -68,9 +70,11 @@ class ArticleController
 //            var_dump($coverImage);
             $title = $article['title'] ?? '';
             $content = $article['content'] ?? '';
-
+//            var_dump($content);
         }
         // Передаем данные в форму
+
+
         include __DIR__ . '/../../views/authorized_users/form_article.php';
     }
 
@@ -80,28 +84,53 @@ class ArticleController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $inputData = $this->get_article_input();
+//            // Обрезаем лишние части в контенте, такие как (56/article_photos/18/image1741392398658.jpg)
+//            $inputData['content'] = $this->remove_extra_image_info($inputData['content']);
 
-//            var_dump($inputData);
-            // Проверка наличия `article_id`
-            $articleId = $_POST['article_id'] ?? null;
-            // Проверка и загрузка обложки
-            $cover_image_path = $this->coverImagesService->upload_cover_image($inputData['cover_image'],'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover');
-            if (!$cover_image_path) {
-                $cover_image_path = 'templates/images/article_logo.png'; // Путь по умолчанию, если загрузка не удалась
-            }
             $this->validate_input($inputData['title'], $inputData['content']);
             $matches = $this->find_images_in_content($inputData['content']);
 
+            // Проверка наличия `article_id`
+            $articleId = $_POST['article_id'] ?? null;
+
             if ($articleId) {
                 // Обновление статьи
-//                file_put_contents('inputData_log.txt', print_r($inputData, true), FILE_APPEND);
+                $cover_image_path = $this->coverImagesService->upload_cover_image(
+                    $inputData['cover_image'],
+                    'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover'
+                );
+
+                if (!$cover_image_path) {
+                    $cover_image_path = 'templates/images/article_logo.png';
+                }
+
                 $result = $this->articleModel->update_article($articleId, $inputData, $cover_image_path);
             } else {
-                // Создание новой статьи
-                $articleId = $this->articleModel->add_article($inputData, $cover_image_path);
-                // Добавить +1 к статьям пользователя
-                $this->userModel->add_one_articles_to_user($inputData['user_id']);
-                $result = $articleId !== false;
+                // **Создание новой статьи (без загрузки обложки)**
+
+                $articleId = $this->articleModel->add_article($inputData, null); // Пока без обложки
+
+                if ($articleId) {
+                    // После получения articleId загружаем обложку
+                    $cover_image_path = $this->coverImagesService->upload_cover_image(
+                        $inputData['cover_image'],
+                        'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover'
+                    );
+
+                    if (!$cover_image_path) {
+                        $cover_image_path = 'templates/images/article_logo.png';
+                    }
+
+                    // Обновляем статью с путем к обложке
+                    $this->articleModel->update_article_cover($articleId, $cover_image_path);
+
+                    // Добавить +1 к статьям пользователя
+                    $this->userModel->add_one_articles_to_user($inputData['user_id']);
+
+                    $result = true;
+                } else {
+                    $result = false;
+                }
             }
 
             if ($result) {
@@ -127,6 +156,7 @@ class ArticleController
             }
         }
     }
+
 
 
     private function validate_input($title, $content)
@@ -179,7 +209,7 @@ class ArticleController
 
     // Генерация пути для изображения
     private function generate_image_path($user_id, $article_id, $photoNumber) {
-        $fileName = "image_" . $photoNumber . ".jpg";
+        $fileName = "image" . $photoNumber . ".jpg";
         return 'http://' . $_SERVER['HTTP_HOST'] . '/uploads/' . $user_id . '/article_photos/' . $article_id . '/' . $fileName;
     }
 
@@ -244,6 +274,11 @@ class ArticleController
         // Формируем слаг с именем автора, ID статьи и заголовком
         return $author . '-' . $article_id . '-' . $title_slug;
     }
+//    private function remove_extra_image_info($content)
+//    {
+//        return preg_replace(['/^!+/', '/\((\/uploads[^)]+)\)/'], ['', ''], $content);
+//    }
+
 
     public function show_article($slug)
     {
@@ -420,7 +455,7 @@ class ArticleController
     public function handle_reaction($entityType) {
         // Получаем данные из POST-запроса
         $data = $this->get_posted_data($entityType);
-        $reactionerId = $_SESSION['user'] ?? null;
+        $reactionerId = $_SESSION['user']['user_id'] ?? null;
         if ($reactionerId === null) {
             header('Content-Type: application/json');
             echo json_encode(["error" => "You cannot leave likes or dislikes because you are not authorized"]);
@@ -533,7 +568,7 @@ class ArticleController
 
         $article_slug = $input['article_slug'];
         $userId = $input['user_id'];
-        $reactionerId = $_SESSION['user'] ?? null;
+        $reactionerId = $_SESSION['user']['user_id'] ?? null;
         if ($reactionerId === null) {
             header('Content-Type: application/json');
             echo json_encode(["error" => "You cannot leave comments because you are not authorized"]);
@@ -600,6 +635,7 @@ class ArticleController
         $slug = $_GET['article_slug'] ?? '';
         if ($slug) {
             $comments = $this->articleCommentsModel->get_comments_by_slug($slug);
+//            var_dump($comments);
             $structuredComments = $this->structure_comments($comments);
             $user = $_SESSION['user'] ?? null;
             if ($user) {

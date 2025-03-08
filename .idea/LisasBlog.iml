@@ -38,20 +38,18 @@
     <orderEntry type="library" name="emoji-mart" level="application" />
     <orderEntry type="library" name="@joeattardi/emoji-button" level="application" />
     <orderEntry type="library" name="highlight" level="application" />
-    <orderEntry type="library" name="default" level="application" />
     <orderEntry type="library" name="mathjax" level="application" />
-    <orderEntry type="library" name="showdown" level="application" />
     <orderEntry type="library" name="bootstrap-icons" level="application" />
-    <orderEntry type="library" name="simplemde" level="application" />
-    <orderEntry type="library" name="highlight.js" level="application" />
-    <orderEntry type="library" name="default" level="application" />
-    <orderEntry type="library" name="sweetalert2" level="application" />
     <orderEntry type="library" name="chart.js" level="application" />
-    <orderEntry type="library" name="font-awesome" level="application" />
-    <orderEntry type="library" name="font-awesome" level="application" />
-    <orderEntry type="library" name="simplemde" level="application" />
+    <orderEntry type="library" name="default" level="application" />
+    <orderEntry type="library" name="highlight.js" level="application" />
+    <orderEntry type="library" name="twemoji" level="application" />
     <orderEntry type="library" name="sweetalert2" level="application" />
     <orderEntry type="library" name="showdown" level="application" />
-    <orderEntry type="library" name="highlight.js" level="application" />
+    <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="simplemde" level="application" />
+    <orderEntry type="library" name="simplemde" level="application" />
+    <orderEntry type="library" name="sweetalert2" level="application" />
+    <orderEntry type="library" name="font-awesome" level="application" />
   </component>
 </module>

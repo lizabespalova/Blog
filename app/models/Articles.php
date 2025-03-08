@@ -69,7 +69,26 @@ class Articles
             return false;
         }
     }
+    public function update_article_cover($articleId, $coverImagePath)
+    {
+        $query = "UPDATE articles SET cover_image = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
 
+        if ($stmt === false) {
+            die('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("si", $coverImagePath, $articleId);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            error_log("Execute failed: " . $stmt->error);
+            $stmt->close();
+            return false;
+        }
+    }
     public function update_article($articleId, $inputData, $coverImagePath)
     {
         $stmt = $this->conn->prepare(

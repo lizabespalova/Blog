@@ -62,6 +62,8 @@
         </form>
     </section>
 </main>
+<!-- Передаем логин пользователя через data-атрибут -->
+<div id="user-info" data-login="<?php echo htmlspecialchars($_SESSION['user']['user_login'], ENT_QUOTES, 'UTF-8'); ?>"></div>
 
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>

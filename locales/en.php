@@ -168,7 +168,6 @@ return [
     'publish'                => 'Publish:',
     'create_article' => 'Create Article',
     'add_article' => 'Add article',
-
 //    Редактирование
     'edit_description'           => 'Edit Description',
     'description'                => 'Description',

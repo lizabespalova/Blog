@@ -91,73 +91,6 @@ form input[type="file"] {
     transform: scale(0.98);
 }
 
-/*!* Контейнер для изображения *!*/
-/*.image-preview-container {*/
-/*    position: relative;*/
-/*    display: inline-block;*/
-/*    margin-bottom: 15px;*/
-/*}*/
-
-/*!* Предварительный просмотр изображения *!*/
-/*.cover-image-preview {*/
-/*    width: 150px;*/
-/*    height: 150px;*/
-/*    object-fit: cover;*/
-/*    border-radius: 10px;*/
-/*}*/
-
-/*!* Кнопка удаления *!*/
-/*.remove-button {*/
-/*    position: absolute;*/
-/*    top: 5px;*/
-/*    right: 5px;*/
-/*    background-color: rgba(0, 0, 0, 0.5);*/
-/*    color: white;*/
-/*    border: none;*/
-/*    border-radius: 50%;*/
-/*    cursor: pointer;*/
-/*    width: 24px;*/
-/*    height: 24px;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    font-size: 16px;*/
-/*    line-height: 24px;*/
-/*    z-index: 10;*/
-/*}*/
-
-/*!* Стиль кнопки удаления при наведении *!*/
-/*.remove-button:hover {*/
-/*    background-color: rgba(0, 0, 0, 0.7);*/
-/*}*/
-
-/*!* Стили модального окна *!*/
-/*.modal {*/
-/*    display: none;*/
-/*    position: fixed;*/
-/*    z-index: 1;*/
-/*    left: 0;*/
-/*    top: 0;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    background-color: rgba(0, 0, 0, 0.5);*/
-/*}*/
-
-/*.close {*/
-/*    color: red;*/
-/*    float: right;*/
-/*    font-size: 24px;*/
-/*    cursor: pointer;*/
-/*}*/
-/*.modal-content {*/
-/*    background-color: #ffffff;*/
-/*    margin: 15% auto;*/
-/*    padding: 20px;*/
-/*    border-radius: 5px;*/
-/*    width: 30%;*/
-/*    text-align: center;*/
-/*    position: relative;*/
-/*}*/
 
 /* Контейнер для тегов */
 .tag-container {
@@ -282,4 +215,11 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px); /* Сдвиг индикатора вправо */
+}
+.emoji-picker span {
+    font-size: 20px;
+    cursor: pointer;
+}
+.emoji-picker span:hover {
+    transform: scale(1.2);
 }

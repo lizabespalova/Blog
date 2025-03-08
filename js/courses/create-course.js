@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "/my-courses";
+                    // Получаем логин пользователя из data-атрибута
+                    const userLogin = document.getElementById('user-info').getAttribute('data-login');
+                    window.location.href = "/my-courses/"+userLogin;
                 } else {
                     console.error("Ошибка сервера:", data.message);
                     window.location.href = "/error?message=" + encodeURIComponent(data.message);

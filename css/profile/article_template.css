@@ -131,15 +131,15 @@
 }
 
 /* Кнопка удаления — красный цвет */
-.article-actions .btn-delete {
+.btn-delete-article {
     background-color: #dc3545; /* Красный для удаления */
 }
 
-.article-actions .btn-delete:hover {
+.btn-delete-article:hover {
     background-color: #c82333; /* Темнее при наведении */
 }
 
-.article-actions .btn-delete:active {
+.btn-delete-article:active {
     transform: scale(0.95); /* Эффект нажатия — уменьшение кнопки */
 }
 

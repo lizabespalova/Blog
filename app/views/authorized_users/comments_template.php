@@ -1,5 +1,6 @@
 <div class="comments-container">
     <?php
+    
     // Создаем экземпляр Parsedown
     $parsedown = new Parsedown();
 

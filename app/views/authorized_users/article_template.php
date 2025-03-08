@@ -49,8 +49,8 @@
                     <?php if ($user['user_login'] === $article['author']) : ?>
                         <!-- Кнопки редактирования и удаления только для автора статьи -->
                         <div class="article-actions">
-                            <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit">Edit</a>
-                            <a href="javascript:void(0);" class="btn btn-delete" onclick="confirmDelete(event, '<?php echo urlencode($article['slug']); ?>')">Delete</a>
+                            <a href="/articles/edit/<?php echo urlencode($article['slug']); ?>" class="btn btn-edit"><?= $translations['edit']?></a>
+                            <a href="javascript:void(0);" class="btn btn-delete-article" onclick="confirmDelete(event, '<?php echo urlencode($article['slug']); ?>')"><?= $translations['delete']?></a>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -204,7 +204,7 @@
                     <input type="hidden" class="article-slug" value="<?= htmlspecialchars($article['slug']); ?>">
                     <input type="hidden" class="user-id" value="<?= htmlspecialchars($user['user_id']); ?>">
                     <div class="comment-input-wrapper">
-                        <textarea id="markdown-comment-input" placeholder="Add a comment..." class="comment-input"></textarea>
+                        <textarea id="markdown-comment-input" placeholder="Add a comment..." class="comment-input" maxlength="500"></textarea>
                         <div class="comment-editor-wrapper">
                             <span class="char-count">0/500</span>
                         </div>
@@ -231,6 +231,7 @@
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/authorized_users/articles/add_markdown_comments.js"></script>
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
+
 <script src="/js/authorized_users/articles/articles_reactions.js"></script>
 <script src="/js/authorized_users/favourites/toogle_favourites.js"></script>
 <script src="/js/authorized_users/articles/articles_comments.js"></script>

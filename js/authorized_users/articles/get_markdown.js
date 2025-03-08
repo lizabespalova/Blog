@@ -35,11 +35,11 @@ function convertMarkdownToHtml(content) {
 }
 
 function processSpecialElements(htmlContent) {
-    htmlContent = htmlContent.replace(/<img\s+[^>]*src="(\/?uploads\/[^"]+)"[^>]*>/g, (match, p1) => {
-        let relativePath = p1.replace('/articles/', '/');
-        let altText = 'Uploaded Image';
-        return `<img src="/${relativePath}" alt="${altText}" />`;
-    });
+    // htmlContent = htmlContent.replace(/<img\s+[^>]*src="(\/?uploads\/[^"]+)"[^>]*>/g, (match, p1) => {
+    //     let relativePath = p1.replace('/articles/', '/');
+    //     let altText = 'Uploaded Image';
+    //     return `<img src="/${relativePath}" alt="${altText}" />`;
+    // });
 
     htmlContent = htmlContent.replace(/\[!spoiler\]\s*(.*?)\s*(\n|$)/g, '<details><summary>Spoiler</summary>$1</details>');
     htmlContent = htmlContent.replace(/\$\$([\s\S]*?)\$\$/g, (_, formula) => {
@@ -52,7 +52,7 @@ function processSpecialElements(htmlContent) {
 function highlightCodeBlocks(markdownContent) {
     markdownContent.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightBlock(block);
-        addLineNumbers(block);
+        // addLineNumbers(block);
         addCopyButton(block);
     });
 }
