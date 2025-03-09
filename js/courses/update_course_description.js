@@ -10,22 +10,29 @@ document.addEventListener("DOMContentLoaded", function () {
     let courseId = coverContainer.dataset.courseId;
     if (!descElement || !editButton) return;
 
-    // Открытие модального окна с текущим описанием
+    // Open modal with current description
     editButton.addEventListener("click", function () {
-        descInput.value = descElement.firstChild.textContent.trim();
+        descInput.value = descElement.textContent.trim();
         modal.style.display = "flex";
     });
 
-    // Закрытие модального окна без сохранения
+    // Close modal without saving
     cancelButton.addEventListener("click", function () {
         modal.style.display = "none";
     });
 
-    // Сохранение нового описания
+    // Save new description
     saveButton.addEventListener("click", function () {
         let newDesc = descInput.value.trim();
-        if (!newDesc || newDesc === descElement.firstChild.textContent.trim()) {
+        let currentDesc = descElement.textContent.trim();
+
+        if (!newDesc || newDesc === currentDesc) {
             modal.style.display = "none";
+            return;
+        }
+
+        if (newDesc.length > 1000) {
+            alert("Description must not exceed 1000 characters.");
             return;
         }
 
@@ -40,13 +47,13 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 let response = JSON.parse(xhr.responseText);
                 if (response.success) {
-                    descElement.innerHTML = newDesc.replace(/\n/g, "<br>"); // Обновляем текст на странице
+                    descElement.innerHTML = newDesc.replace(/\n/g, "<br>");
                     modal.style.display = "none";
                 } else {
-                    alert("Ошибка: " + response.error);
+                    alert("Error: " + response.error);
                 }
             } catch (e) {
-                alert("Ошибка обработки ответа сервера.");
+                alert("Error processing server response.");
             }
         };
 

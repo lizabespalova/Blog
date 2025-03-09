@@ -84,7 +84,12 @@ class CourseController
             echo "Course wasn`t find";
             return;
         }
+        // Получаем прогресс курса для пользователя
+        $progress = $this->courseModel->getCourseProgress($userId, $courseId);
+        // Получаем информацию о завершении статей
+        $completedArticles = $this->courseModel->getCompletedArticlesForUser($userId, $courseId);
 
+//        var_dump($completedArticles);
         require_once 'app/views/courses/course_view.php';
     }
     public function updateCourse() {
@@ -201,5 +206,19 @@ class CourseController
             echo json_encode(["success" => false, "error" => "Failed to update description"]);
         }
     }
+    public function saveProgress(){
+        $data = json_decode(file_get_contents('php://input'), true);
 
+        $userId = $_SESSION['user']['user_id'] ?? null;
+
+
+        $course_id = $data['course_id'] ?? null;
+        $article_id = $data['article_id'] ?? null;
+        $video_link = $data['video_link'] ?? null;
+        $is_completed = $data['is_completed'] ?? 0;
+
+        $this->courseModel->saveProgress($userId, $course_id, $article_id, $video_link, $is_completed);
+
+        echo json_encode(['message' => "Прогресс сохранён {$article_id}"]);
+    }
 }

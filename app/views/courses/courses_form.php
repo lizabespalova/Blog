@@ -35,10 +35,10 @@
         <h2><?= $translations['create_course'] ?></h2>
         <form id="create-course-form" action="/create-course" method="POST" enctype="multipart/form-data">
             <label for="course-title"><?= $translations['course_title']?></label>
-            <input type="text" id="course-title" name="course_title" required>
+            <input type="text" id="course-title" name="course_title" maxlength="100" required>
 
             <label for="course-description"><?= $translations['course_description']?></label>
-            <textarea id="course-description" name="course_description" rows="4" required></textarea>
+            <textarea id="course-description" name="course_description" rows="4" maxlength="1000" required></textarea>
 
             <!-- Кнопка для открытия окна -->
             <button type="button" class="courses-button" id="select-articles-btn"><?= $translations['select_articles_button'] ?></button>

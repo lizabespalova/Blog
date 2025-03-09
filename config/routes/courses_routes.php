@@ -48,6 +48,10 @@ function courses_route($uri, $method) {
          $controller = new CourseController(getDbConnection());
          $controller->updateDescriptionCourse();  // Создаем новый курс
          exit();
+     case $method === 'POST' && $uri === '/progress/save':
+         $controller = new CourseController(getDbConnection());
+         $controller->saveProgress();  // Создаем новый курс
+         exit();
         default:
             return false;
     }

@@ -197,5 +197,8 @@ return [
     'courses_articles'           => 'Статьи курса',
     'no_articles'           => 'В этом курсе пока нет статей',
     'videos'           => 'Видео к курсу',
+    'course_progress'           => 'Прогресс курса',
+    'course_passed'           => 'Пройдено',
+
 
 ];

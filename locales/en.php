@@ -197,5 +197,6 @@ return [
     'courses_articles'           => 'Course articles',
     'no_articles'           => 'There are no articles in this course yet',
     'videos'           => 'videos of the course',
-
+    'course_progress'           => 'Course progress',
+    'course_passed'           => 'Passed',
 ];

@@ -4,14 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!titleElement || !editButton) return;
     let coverContainer = document.querySelector(".course-cover-container");
-
     let courseId = coverContainer.dataset.courseId;
 
     editButton.addEventListener("click", function () {
         let currentTitle = titleElement.firstChild.textContent.trim();
-        let newTitle = prompt("Enter new course title:", currentTitle);
+        let newTitle = prompt("Enter new course title (maximum 100 characters):", currentTitle);
 
-        if (!newTitle || newTitle === currentTitle) return;
+        if (newTitle === null) return; // user canceled
+        newTitle = newTitle.trim();
+
+        if (newTitle === "" || newTitle === currentTitle) return;
+
+        if (newTitle.length > 100) {
+            alert("Course title must not exceed 100 characters.");
+            return;
+        }
 
         let formData = new FormData();
         formData.append("title", newTitle);
@@ -26,10 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.success) {
                     titleElement.firstChild.textContent = newTitle;
                 } else {
-                    alert("Ошибка: " + response.error);
+                    alert("Error: " + response.error);
                 }
             } catch (e) {
-                alert("Ошибка обработки ответа сервера.");
+                alert("Error processing server response.");
             }
         };
 

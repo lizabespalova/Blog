@@ -199,6 +199,7 @@ return [
     'courses_articles'           => 'Kursartikel',
     'no_articles'           => 'Es gibt noch keine Artikel in diesem Kurs',
     'videos'           => 'Videos zum Kurs',
-
+    'course_progress'           => 'Kursfortschritt',
+    'course_passed'           => 'Bestanden',
 
 ];

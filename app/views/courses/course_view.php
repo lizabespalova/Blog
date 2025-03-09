@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/courses/scroll_buttons.css">
     <link rel="stylesheet" href="/css/courses/courses_view.css">
+    <link rel="stylesheet" href="/css/courses/progress_bar.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/settings/themes.css">
@@ -88,12 +89,31 @@
     <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
 
     <h2><?= $translations['courses_articles']?></h2>
+    <div class="progress-container">
+        <div class="course-progress">
+            <label for="course-progress-bar"><?= $translations['course_progress']?>:</label>
+            <progress id="course-progress-bar" value="<?= $progress ?>" max="100"></progress>
+            <span><?= $progress ?>%</span>
+        </div>
+
+    </div>
+
     <div class="articles-wrapper">
         <div class="articles-container">
             <div class="articles">
                 <?php if (!empty($articlesInCourses)): ?>
                     <?php foreach ($articlesInCourses as $article): ?>
                         <div class="article-item">
+                            <label class="progress-item">
+                                <!-- Проверяем, завершена ли статья -->
+                                <input type="checkbox" class="progress-checkbox"
+                                       data-course-id="<?= $course['course_id'] ?>"
+                                       data-id="<?= $article['id'] ?>"
+                                       data-video-link="<?= htmlspecialchars($article['youtube_link']) ?>"
+                                    <?= in_array($article['id'], $completedArticles) ? 'checked' : ''; ?>>
+
+                                <?= $translations['course_passed'] ?>
+                            </label>
                             <div class="course-card">
                                 <?php include __DIR__ . '/../../views/partials/card.php'; ?>
                             </div>
@@ -104,7 +124,6 @@
                 <?php endif; ?>
             </div>
         </div>
-
         <!-- Кнопки для прокрутки -->
         <button class="scroll-btn left"><i class="fas fa-chevron-left"></i></button>
         <button class="scroll-btn right"><i class="fas fa-chevron-right"></i></button>
@@ -119,7 +138,12 @@
                 <?php if (!empty($article['youtube_link'])): ?>
                     <div class="video-item">
                         <iframe width="300" height="200" src="https://www.youtube.com/embed/<?= htmlspecialchars($article['youtube_link']) ?>" frameborder="0" allowfullscreen></iframe>
+                        <label class="progress-item">
+                            <input type="checkbox" class="progress-checkbox" data-id="video-<?= $article['id'] ?>">
+                            Пройдено
+                        </label>
                     </div>
+
                 <?php endif; ?>
             <?php endforeach; ?>
             </div>
@@ -140,6 +164,7 @@
 <script src="/js/courses/update_course_cover.js"></script>
 <script src="/js/courses/update_course_title.js"></script>
 <script src="/js/courses/update_course_description.js"></script>
+<script src="/js/courses/show_progress.js"></script>
 <script src="/js/authorized_users/files_uploads/file_upload.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/courses/add_scroll_buttons.js"></script>
