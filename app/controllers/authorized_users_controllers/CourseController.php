@@ -88,7 +88,7 @@ class CourseController
         $progress = $this->courseModel->getCourseProgress($userId, $courseId);
         // Получаем информацию о завершении статей
         $completedArticles = $this->courseModel->getCompletedArticlesForUser($userId, $courseId);
-
+        $materials = $this->courseModel->getMaterials($courseId);
 //        var_dump($completedArticles);
         require_once 'app/views/courses/course_view.php';
     }

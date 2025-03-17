@@ -199,4 +199,7 @@ return [
     'videos'           => 'videos of the course',
     'course_progress'           => 'Course progress',
     'course_passed'           => 'Passed',
+    'course_materials'   => 'Сourse materials',
+    'upload'   => 'Upload',
+
 ];

@@ -201,5 +201,7 @@ return [
     'videos'           => 'Videos zum Kurs',
     'course_progress'           => 'Kursfortschritt',
     'course_passed'           => 'Bestanden',
+    'course_materials'   => 'Kursmaterialien',
+    'upload'   => 'Hochladen',
 
 ];

@@ -217,6 +217,32 @@ class Courses
 
         return $completedArticles;
     }
+    public function getMaterials($courseId)
+    {
+        $materials = [];
+
+        // Подготовим SQL-запрос
+        $stmt = $this->conn->prepare("
+        SELECT material_id, file_name, original_name, description, uploaded_at
+        FROM course_materials
+        WHERE course_id = ?
+        ORDER BY uploaded_at DESC
+    ");
+
+        if ($stmt) {
+            $stmt->bind_param("i", $courseId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $materials[] = $row;
+            }
+
+            $stmt->close();
+        }
+        $this->conn->close();
+        return $materials;
+    }
 
 
 }

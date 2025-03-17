@@ -8,6 +8,10 @@ function isValidImage(file) {
 function isValidSize(file, maxSizeMB = 5) {
     return file.size <= maxSizeMB * 1024 * 1024;
 }
+
+
+
+
 function showError(message) {
     Swal.fire({
         icon: 'error',
@@ -22,6 +26,9 @@ function showError(message) {
         }
     });
 }
+
+
+
 
 // Общая функция загрузки файла
 function uploadFile(fileInputId, url, successCallback) {

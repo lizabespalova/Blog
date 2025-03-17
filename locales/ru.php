@@ -199,6 +199,8 @@ return [
     'videos'           => 'Видео к курсу',
     'course_progress'           => 'Прогресс курса',
     'course_passed'           => 'Пройдено',
+    'course_materials'   => 'Материалы курса',
+    'upload'   => 'Загрузить',
 
 
 ];

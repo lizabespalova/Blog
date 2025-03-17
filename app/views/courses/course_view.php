@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/courses/modal_form.css">
-
 </head>
 <body
         class="<?=
@@ -154,6 +153,29 @@
         <button class="scroll-btn right"><i class="fas fa-chevron-right"></i></button>
     </div>
 
+    <div class="course-materials-section">
+        <h2><?= $translations['course_materials'] ?></h2>
+
+        <?php if ($userId === $course['user_id']): ?>
+            <div class="materials-upload-box">
+                <input type="file" id="course-material-file" multiple class="file-input">
+                <textarea id="material-description" placeholder="Описание материала..." class="material-textarea"></textarea>
+                <button type="button" id="upload-material-btn" class="upload-btn"><?= $translations['upload'] ?></button>
+            </div>
+        <?php endif; ?>
+
+        <div class="materials-list">
+            <?php foreach ($materials as $material): ?>
+                <div class="material-item">
+                    <a href="/uploads/course_materials/<?= htmlspecialchars($material['file_name']) ?>" target="_blank" class="material-link">
+                        📎 <?= htmlspecialchars($material['description']) ?>
+                    </a>
+                    <span class="material-date"><?= date('d.m.Y H:i', strtotime($material['uploaded_at'])) ?></span>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
 </div>
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
@@ -169,6 +191,8 @@
 <script src="/js/authorized_users/menu.js"></script>
 <script src="/js/courses/add_scroll_buttons.js"></script>
 <script src="/js/courses/scroll_video.js"></script>
+<script src="/js/authorized_users/files_uploads/upload_big_files.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
