@@ -164,17 +164,46 @@
             </div>
         <?php endif; ?>
 
-        <div class="materials-list">
-            <?php foreach ($materials as $material): ?>
-                <div class="material-item">
-                    <a href="/uploads/course_materials/<?= htmlspecialchars($material['file_name']) ?>" target="_blank" class="material-link">
-                        📎 <?= htmlspecialchars($material['description']) ?>
-                    </a>
-                    <span class="material-date"><?= date('d.m.Y H:i', strtotime($material['uploaded_at'])) ?></span>
+        <?php if (!empty($materials)): ?> <!-- Проверка на наличие материалов -->
+        <div class="course-materials-block">
+            <?php
+            // Группируем материалы по описанию
+            $groupedMaterials = [];
+            foreach ($materials as $material) {
+                $desc = $material['description'] ;
+                $groupedMaterials[$desc][] = $material;
+            }
+            ?>
+
+            <?php foreach ($groupedMaterials as $description => $group): ?>
+                <div class="material-group">
+                    <div class="material-description-toggle">
+                        <div class="material-description-text">📝 <?= htmlspecialchars($description) ?></div>
+                        <button class="toggle-materials-btn">📂 Show materials ⬇</button>
+                    </div>
+
+                    <div class="materials-list hidden">
+                        <?php foreach ($group as $material): ?>
+                            <div class="material-item">
+                                <a href="/uploads/<?= $userId ?>/courses/<?= $courseId ?>/materials/<?= htmlspecialchars($material['file_name']) ?>" target="_blank" class="material-link">
+                                    📄 <?= htmlspecialchars($material['original_name']) ?>
+                                </a>
+
+                                <div class="material-date"><?= date('d.m.Y H:i', strtotime($material['uploaded_at'])) ?></div>
+
+                                <?php if ($_SESSION['user']['user_id'] == $course['user_id']): ?>
+                                    <button class="delete-material-btn" data-material-id="<?= $material['material_id'] ?>">🗑️ <?= $translations['delete'] ?></button>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             <?php endforeach; ?>
+            <?php endif; ?>
         </div>
+
     </div>
+    <input type="hidden" id="course-id" value=<?= $course['course_id'] ?>>
 
 </div>
 <!-- Footer Section -->
@@ -192,6 +221,8 @@
 <script src="/js/courses/add_scroll_buttons.js"></script>
 <script src="/js/courses/scroll_video.js"></script>
 <script src="/js/authorized_users/files_uploads/upload_big_files.js"></script>
+<script src="/js/authorized_users/files_uploads/delete_material.js"></script>
+<script src="/js/courses/reverse_material.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

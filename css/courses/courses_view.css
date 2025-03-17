@@ -197,63 +197,100 @@ input,
 .materials-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
+}
+.material-item {
+    border: 1px solid #ddd;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    position: relative;
+}
+.material-link {
+    font-weight: bold;
+    text-decoration: none;
+    color: #007bff;
+    display: block;
+    margin-bottom: 4px;
+}
+.material-date {
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 6px;
+}
+.course-materials-block {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fefefe;
+    margin-bottom: 20px;
+}
+
+.course-description {
+    font-size: 14px;
+    color: #444;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.toggle-materials-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.toggle-materials-btn:hover {
+    background-color: #0056b3;
+}
+
+.materials-list.hidden {
+    display: none;
 }
 
 .material-item {
-    background: #fff;
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    margin-bottom: 10px;
 }
 
 .material-link {
-    font-size: 15px;
-    color: #007bff;
+    font-weight: bold;
     text-decoration: none;
-}
-
-.material-link:hover {
-    text-decoration: underline;
+    color: #007bff;
+    display: block;
+    margin-bottom: 4px;
 }
 
 .material-date {
-    font-size: 12px;
-    color: #777;
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 6px;
 }
-/* Мобильная адаптация */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
-    }
 
-    .course-description {
-        font-size: 16px;
-    }
+.material-description {
+    font-style: italic;
+    color: #444;
+}
 
-    .course-header {
-        flex-direction: column;
-        align-items: center;
-    }
+.delete-material-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    float: right;
+}
 
-    .courses-buttons-container {
-        flex-direction: column;
-        gap: 8px;
-        width: 90%;
-    }
-
-    .course-cover-container {
-        flex: 0 0 80%; /* Обложка на мобильных экранах занимает больше пространства */
-        margin-bottom: 20px;
-    }
-
-    .cover-edit-btn {
-        top: 10px;
-        right: 10px;
-    }
+.delete-material-btn:hover {
+    background: #c0392b;
 }
 .modal {
     display: none;
@@ -281,17 +318,38 @@ textarea {
     height: 100px;
     margin-bottom: 10px;
 }
+.material-group {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fefefe;
+    margin-bottom: 20px;
+}
 
+.material-description-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.material-description-text {
+    font-style: italic;
+    font-size: 16px;
+    color: #333;
+}
 /* Мобильная адаптация */
 @media (max-width: 600px) {
     .container {
         padding: 15px;
     }
+
     .course-cover-container {
-        width: 100%; /* Делаем ширину 100%, чтобы адаптировалась */
-        max-width: 250px; /* Максимальная ширина */
-        height: 150px; /* Уменьшаем высоту */
+        width: 100%;
+        max-width: 250px;
+        height: 150px;
     }
+
     .course-description {
         font-size: 16px;
     }
@@ -302,16 +360,53 @@ textarea {
         width: 90%;
     }
 
-    /* Уменьшаем размер кнопок, чтобы они не были слишком большими */
-    .edit-btn, .courses-button {
+    .edit-btn,
+    .courses-button {
         padding: 2px 5px;
         font-size: 14px;
-        width: auto; /* Убираем 100% ширины, оставляем их стандартную ширину */
+        width: auto;
         text-align: center;
     }
 
-    /* Для кнопок при наведении */
-    .edit-btn:hover, .courses-button:hover {
+    .edit-btn:hover,
+    .courses-button:hover {
         background-color: #1e35b7;
     }
+
+    /* Адаптация материалов */
+    .material-item {
+        padding: 12px;
+        padding-top: 36px; /* Добавляем место сверху, чтобы кнопка не перекрывала текст */
+    }
+
+    .material-link {
+        font-size: xx-small;
+    }
+
+    .material-description,
+    .material-date {
+        font-size: 0.8em;
+    }
+
+    .delete-material-btn {
+        padding: 2px 6px;
+        width: auto;
+        background: none;
+        color: #e74c3c;
+    }
+
+    .delete-material-btn:hover {
+        background: none;
+        color: #c0392b;
+    }
+
+    /* Убираем текст на кнопке, оставляем только иконку */
+    .delete-material-btn::after {
+        content: '';
+    }
+
+    .delete-material-btn span {
+        display: none; /* если текст есть внутри кнопки — скрываем */
+    }
 }
+

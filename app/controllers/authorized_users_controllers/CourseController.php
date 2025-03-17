@@ -221,4 +221,77 @@ class CourseController
 
         echo json_encode(['message' => "Прогресс сохранён {$article_id}"]);
     }
+    public function saveMaterials()
+    {
+        $courseId = $_POST['course_id'] ?? null;
+        $userId = $_SESSION['user']['user_id'] ?? null;
+        $description = trim($_POST['description'] ?? '');
+
+        if (!$courseId || !$userId || empty($_FILES['material_files'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Недостаточно данных для загрузки']);
+            return;
+        }
+        $uploadDir =  'uploads/' . $userId . '/courses/' . $courseId . '/materials/';
+        $this->coverImagesService->create_user_directory($uploadDir);
+
+        $uploadedFiles = $_FILES['material_files'];
+        $successFiles = [];
+
+        for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
+            $originalName = basename($uploadedFiles['name'][$i]);
+            $tmpPath = $uploadedFiles['tmp_name'][$i];
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+            $safeFileName = uniqid('material_', true) . '.' . $extension;
+            $targetPath = $uploadDir . $safeFileName;
+
+            if (move_uploaded_file($tmpPath, $targetPath)) {
+                $successFiles = $this->courseModel->createMaterials($courseId, $userId, $safeFileName, $originalName, $description);
+            }
+        }
+
+        if (count($successFiles)) {
+            echo json_encode(['success' => true, 'files' => $successFiles]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Не удалось сохранить материалы']);
+        }
+    }
+
+    public function deleteMaterials()
+    {
+        $materialId = $_POST['material_id'] ?? null;
+        $userId = $_SESSION['user']['user_id'] ?? null;
+
+        if (!$materialId || !$userId) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Недостаточно данных']);
+            return;
+        }
+
+        // Получаем материал
+        $material = $this->courseModel->getMaterialById($materialId);
+        if (!$material) {
+            echo json_encode(['success' => false, 'error' => 'Материал не найден']);
+            return;
+        }
+
+        // Проверка владельца
+        if ($material['user_id'] != $userId) {
+            echo json_encode(['success' => false, 'error' => 'У вас нет прав на удаление этого материала']);
+            return;
+        }
+
+        // Удаляем файл
+        $filePath = 'uploads/' . $userId . '/courses/' . $material['course_id'] . '/materials/' . $material['file_name'];
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Удаляем запись из базы
+        $this->courseModel->deleteMaterialById($materialId);
+
+        echo json_encode(['success' => true]);
+    }
+
 }

@@ -243,6 +243,36 @@ class Courses
         $this->conn->close();
         return $materials;
     }
+    public function createMaterials($courseId, $userId, $safeFileName, $originalName, $description){
+        // Запись в базу
+        $stmt = $this->conn->prepare("
+                INSERT INTO course_materials (course_id, user_id, file_name, original_name, description)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+        $stmt->bind_param('iisss', $courseId, $userId, $safeFileName, $originalName, $description);
+        if ($stmt->execute()) {
+            $successFiles[] = $originalName;
+        }
+        $stmt->close();
+        return $successFiles;
+    }
+    // Получение информации о материале
+    public function getMaterialById($materialId) {
+        $stmt = $this->conn->prepare("SELECT * FROM course_materials WHERE material_id = ? LIMIT 1");
+        $stmt->bind_param('i', $materialId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $material = $result->fetch_assoc();
+        $stmt->close();
+        return $material;
+    }
 
+// Удаление материала из базы
+    public function deleteMaterialById($materialId) {
+        $stmt = $this->conn->prepare("DELETE FROM course_materials WHERE material_id = ?");
+        $stmt->bind_param('i', $materialId);
+        $stmt->execute();
+        $stmt->close();
+    }
 
 }

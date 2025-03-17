@@ -12,11 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
         'image/jpeg',
         'image/png',
         'text/html',
-        'audio/mp3',
+        'audio/mpeg',
     ];
 
     const maxSizeMB = 5;
     const maxFileSize = maxSizeMB * 1024 * 1024;
+    const maxFilesCount = 5; // Максимальное количество файлов
 
     // Проверка файла на допустимый тип и размер
     function validateFile(file) {
@@ -35,26 +36,27 @@ document.addEventListener("DOMContentLoaded", function () {
     function uploadFiles(files, description) {
         const formData = new FormData();
         Array.from(files).forEach(file => {
-            formData.append('material_files[]', file);
+            formData.append('material_files[]', file); // добавляем файл
         });
+        formData.append('course_id', document.getElementById('course-id').value); // отдельно добавляем course_id
         formData.append('description', description);
 
-        fetch('upload_material.php', {
+        fetch('/upload-material-course', {
             method: 'POST',
             body: formData
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ Материалы успешно загружены!');
+                    // alert('✅ Материалы успешно загружены!');
                     location.reload(); // Перезагрузить страницу для обновления списка
                 } else {
-                    alert('❌ Ошибка загрузки материалов: ' + data.error);
+                    alert('❌ Eerror while uploading: ' + data.error);
                 }
             })
             .catch(err => {
                 console.error(err);
-                alert('❌ Произошла ошибка при загрузке файлов');
+                alert('❌ Error');
             });
     }
 
@@ -64,12 +66,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const description = descriptionField.value.trim();
 
         if (files.length === 0) {
-            alert('⚠ Пожалуйста, выберите хотя бы один файл');
+            alert('⚠ Please select at least one file');
             return;
         }
 
         if (description === '') {
-            alert('⚠ Пожалуйста, введите описание материала');
+            alert('⚠ Please enter a description of the material');
+            return;
+        }
+
+        if (files.length > maxFilesCount) {
+            alert(`⚠ You can upload up to ${maxFilesCount} files.`);
             return;
         }
 

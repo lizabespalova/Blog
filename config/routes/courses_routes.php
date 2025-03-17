@@ -52,8 +52,16 @@ function courses_route($uri, $method) {
          $controller = new CourseController(getDbConnection());
          $controller->saveProgress();  // Создаем новый курс
          exit();
-        default:
-            return false;
+     case $method === 'POST' && $uri === '/upload-material-course':
+         $controller = new CourseController(getDbConnection());
+         $controller->saveMaterials();
+         exit();
+     case $method === 'POST' && $uri === '/delete_material':
+         $controller = new CourseController(getDbConnection());
+         $controller->deleteMaterials();
+         exit();
+     default:
+         return false;
     }
 }
 
