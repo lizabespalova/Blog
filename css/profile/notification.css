@@ -99,6 +99,27 @@ h1{
     transform: scale(1.05);
 }
 
+.clear-notifications-form {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.btn-clear-notifications {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-clear-notifications:hover {
+    background-color: #cc0000;
+}
+
+
 /* Адаптация для мобильных устройств */
 @media (max-width: 768px) {
     .notification-item {

@@ -338,12 +338,21 @@ textarea {
     font-size: 16px;
     color: #333;
 }
+
 /* Мобильная адаптация */
 @media (max-width: 600px) {
     .container {
         padding: 15px;
     }
+    .course-header {
+        flex-direction: column;
+        align-items: center;
+    }
 
+    .course-description-container {
+        text-align: center;
+        width: 100%;
+    }
     .course-cover-container {
         width: 100%;
         max-width: 250px;

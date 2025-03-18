@@ -75,6 +75,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        const maxWords = 50;
+        const wordCount = description.split(/\s+/).filter(word => word.length > 0).length;
+
+        if (wordCount > maxWords) {
+            alert(`⚠ Description should not exceed ${maxWords} words. Currently: ${wordCount}`);
+            return;
+        }
+
         if (files.length > maxFilesCount) {
             alert(`⚠ You can upload up to ${maxFilesCount} files.`);
             return;
@@ -88,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         uploadFiles(files, description); // Загружаем файлы
     }
+
 
     // Привязываем обработчик события к кнопке
     uploadBtn.addEventListener("click", handleUpload);

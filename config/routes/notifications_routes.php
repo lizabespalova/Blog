@@ -32,9 +32,11 @@ function notification_route($uri, $method) {
 
         case '/notifications/cleanup':
             $controller = new NotificationController($dbConnection);
-            if ($method === 'POST') {
-                $controller->deleteOldNotifications(); // Удаление старых уведомлений
-            }
+            $controller->deleteOldNotifications(); // Удаление старых уведомлений
+            exit(); // Остановка выполнения после маршрута
+        case '/notifications/clear':
+            $controller = new NotificationController($dbConnection);
+            $controller->deleteNotifications(); // Удаление старых уведомлений
             exit(); // Остановка выполнения после маршрута
         case '/notifications/approve':
             if ($method === 'POST') {

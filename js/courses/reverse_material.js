@@ -6,4 +6,5 @@ document.querySelectorAll('.toggle-materials-btn').forEach(button => {
             ? '📂 Show materials ⬇'
             : '📂 Hide materials ⬆';
     });
+
 });

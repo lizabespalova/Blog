@@ -32,6 +32,10 @@ class NotificationController
         $deletedCount = $this->notificationModel->deleteNotificationsOlderThan(14); // Удаление старше 14 дней
         echo json_encode(['success' => true, 'deleted' => $deletedCount]);
     }
+    public function deleteNotifications() {
+        $deletedCount = $this->notificationModel->deleteNotificationsOlderThan(0); // Удаление по нажатию кнопкки
+        echo json_encode(['success' => true, 'deleted' => $deletedCount]);
+    }
     // Утверждение запроса на подписку
     public function approveRequest($notificationId, $followerId)
     {

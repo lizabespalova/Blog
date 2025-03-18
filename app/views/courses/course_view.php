@@ -137,10 +137,6 @@
                 <?php if (!empty($article['youtube_link'])): ?>
                     <div class="video-item">
                         <iframe width="300" height="200" src="https://www.youtube.com/embed/<?= htmlspecialchars($article['youtube_link']) ?>" frameborder="0" allowfullscreen></iframe>
-                        <label class="progress-item">
-                            <input type="checkbox" class="progress-checkbox" data-id="video-<?= $article['id'] ?>">
-                            Пройдено
-                        </label>
                     </div>
 
                 <?php endif; ?>
@@ -203,6 +199,7 @@
         </div>
 
     </div>
+
     <input type="hidden" id="course-id" value=<?= $course['course_id'] ?>>
 
 </div>

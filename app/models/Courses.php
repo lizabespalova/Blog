@@ -158,46 +158,30 @@ class Courses
 
     // Метод для получения прогресса пользователя по курсу
     public function getCourseProgress($userId, $courseId) {
-        // Считаем общее количество элементов (статьи и видео) в курсе
-        $sql_total = "SELECT 
-                    COUNT(DISTINCT ca.article_id) + 
-                    (SELECT COUNT(DISTINCT cp.video_link) 
-                     FROM course_progress cp 
-                     WHERE cp.course_id = ? AND cp.video_link IS NOT NULL) 
-                 FROM course_articles ca 
-                 WHERE ca.course_id = ?";
-
-        // Подсчитываем завершенные элементы (статьи и видео) для пользователя
-        $sql_completed = "SELECT 
-                        COUNT(DISTINCT CASE WHEN cp.article_id IS NOT NULL THEN cp.article_id END) + 
-                        COUNT(DISTINCT CASE WHEN cp.video_link IS NOT NULL THEN cp.video_link END)
-                      FROM course_progress cp
-                      WHERE cp.user_id = ? AND cp.course_id = ? AND cp.is_completed = 1";
-
-        // Получаем общее количество элементов
+        // Считаем общее количество статей в курсе
+        $sql_total = "SELECT COUNT(DISTINCT article_id) FROM course_articles WHERE course_id = ?";
         $stmt_total = $this->conn->prepare($sql_total);
-        $stmt_total->bind_param("ii", $courseId, $courseId);
+        $stmt_total->bind_param("i", $courseId);
         $stmt_total->execute();
-        $stmt_total->bind_result($totalItems);
+        $stmt_total->bind_result($totalArticles);
         $stmt_total->fetch();
         $stmt_total->close();
 
-        // Получаем количество завершенных элементов
+        // Считаем количество завершённых пользователем статей
+        $sql_completed = "SELECT COUNT(DISTINCT article_id) 
+                      FROM course_progress 
+                      WHERE user_id = ? AND course_id = ? AND is_completed = 1 AND article_id IS NOT NULL";
         $stmt_completed = $this->conn->prepare($sql_completed);
         $stmt_completed->bind_param("ii", $userId, $courseId);
         $stmt_completed->execute();
-        $stmt_completed->bind_result($completedItems);
+        $stmt_completed->bind_result($completedArticles);
         $stmt_completed->fetch();
         $stmt_completed->close();
 
         // Вычисляем прогресс в процентах
-        if ($totalItems > 0) {
-            $progress = ($completedItems / $totalItems) * 100;
-        } else {
-            $progress = 0;
-        }
+        $progress = ($totalArticles > 0) ? ($completedArticles / $totalArticles) * 100 : 0;
 
-        return $progress ?? 0; // Возвращаем прогресс (в процентах), если не найдено - 0
+        return round($progress, 2); // округляем до двух знаков
     }
 
 

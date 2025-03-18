@@ -24,6 +24,16 @@
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <h1 class="page-title"><?= $translations['your_notifications']; ?></h1>
+<div class="notifications-header-actions">
+    <?php if (!empty($notifications)): ?>
+        <form method="POST" action="/notifications/clear" class="clear-notifications-form" id="clearNotificationsForm">
+            <button type="submit" class="btn-clear-notifications">
+                <i class="fas fa-trash-alt"></i> <?= $translations['clear_notifications'] ?? 'Clear All Notifications'; ?>
+            </button>
+        </form>
+
+    <?php endif; ?>
+</div>
 
 <div class="notifications-list">
     <?php if (!empty($notifications)): ?>
@@ -67,6 +77,7 @@
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
 <script src="/js/async_tasks/send_notifications.js"></script>
+<script src="/js/authorized_users/notifications/delete_notifications.js"></script>
 <script src="/js/authorized_users/menu.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
