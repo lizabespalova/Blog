@@ -1,28 +1,23 @@
-// Функция для обработки кнопок Follow/Unfollow/Cancel Request
-function handleFollowUnfollowButton(button) {
-    button.addEventListener('click', function () {
-        const followedUserId = button.getAttribute('data-followed-user-id'); // ID пользователя
-        const followersCountSpan = document.getElementById('followers-count'); // Счетчик подписчиков
-        const isPrivateProfile = button.getAttribute('data-private') === 'true'; // Приватный профиль?
-        const currentAction = button.textContent.trim(); // Текущий текст кнопки
-        const previousText = button.textContent; // Запоминаем текст перед изменением
+// Обработка кнопок Follow/Unfollow/Cancel Request
+document.querySelectorAll('.follow-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const followedUserId = button.getAttribute('data-followed-user-id');
+        const isPrivateProfile = button.getAttribute('data-private') === 'true';
+        const actionType = button.getAttribute('data-action-type');
 
-        let newActionUrl;
-        let newButtonText;
+        let actionUrl = '';
 
-        // Определяем новое действие
-        if (currentAction === 'Unfollow' || currentAction === 'Cancel Request') {
-            newActionUrl = `/unfollow/${followedUserId}`;
-            newButtonText = 'Follow'; // После любого удаления запроса или отписки всегда "Follow"
+        if (actionType === 'unfollow') {
+            actionUrl = `/unfollow/${followedUserId}`;
+        } else if (actionType === 'cancel-request') {
+            actionUrl = `/cancel-follow-request/${followedUserId}`;
         } else {
-            newActionUrl = `/follow/${followedUserId}`;
-            newButtonText = isPrivateProfile ? 'Cancel Request' : 'Unfollow';
+            actionUrl = `/follow/${followedUserId}`;
         }
 
-        button.disabled = true; // Блокируем кнопку
+        button.disabled = true;
 
-        // Отправляем запрос
-        fetch(newActionUrl, {
+        fetch(actionUrl, {
             method: 'POST',
             body: new URLSearchParams({ followed_user_id: followedUserId }),
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -30,33 +25,21 @@ function handleFollowUnfollowButton(button) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Устанавливаем новое действие
-                    button.textContent = newButtonText;
-                    button.setAttribute('data-action', newActionUrl);
-
-                    // Обновляем счетчик подписчиков
-                    if (followersCountSpan && !isPrivateProfile) {
-                        let currentCount = parseInt(followersCountSpan.textContent, 10);
-                        followersCountSpan.textContent = (currentAction === 'Unfollow' || currentAction === 'Cancel Request')
-                            ? currentCount - 1
-                            : currentCount + 1;
-                    }
+                    // Просто обновляем страницу после успешного действия
+                    location.reload();
                 } else {
-
                     throw new Error(data.message || 'Ошибка сервера');
                 }
             })
             .catch(error => {
                 console.error('Ошибка:', error);
-                button.textContent = previousText; // Восстанавливаем текст при ошибке
-                window.location.href = "/error?message=" + error;
+                window.location.href = "/error?message=" + encodeURIComponent(error.message);
             })
             .finally(() => {
-                button.disabled = false; // Разблокируем кнопку
+                button.disabled = false;
             });
     });
-}
-
+});
 // Применение функции ко всем кнопкам Follow/Unfollow/Cancel Request
 document.querySelectorAll('.follow-button').forEach(button => handleFollowUnfollowButton(button));
 

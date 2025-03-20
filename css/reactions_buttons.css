@@ -1,0 +1,96 @@
+/*Лайк, дизлайк, избранное*/
+/* Разделительная полоска */
+.article-divider {
+    margin: 40px 0;
+    border: none;
+    height: 2px;
+    background-color: #ddd;
+}
+
+/* Блок с реакциями */
+.article-reactions {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.reaction-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reaction-buttons button i {
+    font-size: 16px;
+}
+
+.reaction-buttons button:hover {
+    background-color: #f0f0f0;
+}
+
+.reaction-buttons .like-count,
+.reaction-buttons .dislike-count {
+    font-weight: bold;
+    color: #5380e3;
+
+}
+
+.reaction-buttons .btn-favorite i {
+    color: #f0c040;
+}
+
+.reaction-buttons .btn-like:hover,
+.reaction-buttons .btn-repost:hover,
+.btn-share:hover{
+    color: #5380e3;
+}
+
+.reaction-buttons .btn-dislike:hover {
+    color: #e04b4b;
+}
+
+.reaction-buttons .btn-favorite:hover {
+    color: #f0c040;
+}
+
+
+/* Базовый стиль кнопки */
+.btn-favorite {
+    border: 1px solid transparent; /* По умолчанию прозрачная рамка */
+    padding: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Стили для иконки звездочки */
+.btn-favorite i {
+    font-size: 18px;
+    color: #ccc; /* По умолчанию серый цвет звездочки */
+    transition: color 0.3s ease;
+}
+
+/* Стиль для избранного */
+.btn-favorite.added {
+    border-color: #ffa500; /* Оранжевая рамка для избранного */
+    background-color: rgba(255, 165, 0, 0.1); /* Легкий оранжевый фон */
+}
+
+.btn-favorite.added i {
+    color: #ffa500; /* Оранжевая звездочка */
+}
+

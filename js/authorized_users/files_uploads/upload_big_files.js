@@ -99,5 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // Привязываем обработчик события к кнопке
+    if(uploadBtn)
     uploadBtn.addEventListener("click", handleUpload);
 });

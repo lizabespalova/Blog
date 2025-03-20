@@ -25,8 +25,7 @@ function profile_route($uri, $method) {
             $controller = new FollowController($dbConnection);
 
             if ($method === 'POST') {
-                $user = $_SESSION['user'] ?? null;
-                $followerId = $user['user_id']?? null;
+                $followerId = $_SESSION['user']['user_id'] ?? null;
                 $followedId = explode('/', $uri)[2];
                 $controller->follow($followerId, $followedId);
             }
@@ -47,7 +46,7 @@ function profile_route($uri, $method) {
             header('Content-Type: application/json'); // Установить JSON-заголовок
             $controller = new FollowController($dbConnection);
             if ($method === 'POST') {
-                $followerId = $_SESSION['user']['user_id'];
+                $followerId = $_SESSION['user']['user_id'] ?? null;
                 $followedId = explode('/', $uri)[2];
                 $controller->unfollow($followerId, $followedId);
             }
@@ -98,7 +97,7 @@ function profile_route($uri, $method) {
         $controller = new FollowController($dbConnection);
         if ($method === 'POST') {
             session_start();
-            $followerId = $_SESSION['user']['user_id'];
+            $followerId = $_SESSION['user']['user_id'] ?? null;
             $followedId = explode('/', $uri)[2];
             $controller->cancelFollowRequest($followerId, $followedId);
         }

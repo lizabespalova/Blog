@@ -224,7 +224,7 @@ class Courses
 
             $stmt->close();
         }
-        $this->conn->close();
+//        $this->conn->close();
         return $materials;
     }
     public function createMaterials($courseId, $userId, $safeFileName, $originalName, $description){
@@ -258,5 +258,78 @@ class Courses
         $stmt->execute();
         $stmt->close();
     }
+// Получить количество лайков для курса
+    public function getLikesForCourse($courseId) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS likes FROM course_reactions WHERE course_id = ? AND reaction = 'like'");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['likes'];
+    }
+
+    // Получить количество дизлайков для курса
+    public function getDislikesForCourse($courseId) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS dislikes FROM course_reactions WHERE course_id = ? AND reaction = 'dislike'");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['dislikes'];
+    }
+    // Проверка существующей реакции
+    public function getReaction($courseId, $userId) {
+        $query = "SELECT * FROM course_reactions WHERE course_id = ? AND user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ii", $courseId, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc(); // Вернёт null, если не найдено
+    }
+
+
+    // Вставка новой реакции
+    public function addReaction($courseId, $userId, $reactionType) {
+        $query = "INSERT INTO course_reactions (course_id, user_id, reaction) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$courseId, $userId, $reactionType]);
+    }
+
+    // Обновление существующей реакции
+    public function updateReaction($courseId, $userId, $reactionType) {
+        $query = "UPDATE course_reactions SET reaction = ? WHERE course_id = ? AND user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$reactionType, $courseId, $userId]);
+    }
+    public function removeReaction($courseId, $userId) {
+        $query = "DELETE FROM course_reactions WHERE course_id = ? AND user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ii", $courseId, $userId);
+        return $stmt->execute();
+    }
+
+
+// Получение количества лайков
+    public function getCourseLikes(int $courseId): int
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS likes FROM course_reactions WHERE course_id = ? AND reaction = 'like'");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return (int)($result['likes'] ?? 0);
+    }
+
+// Получение количества дизлайков
+    public function getCourseDislikes(int $courseId): int
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS dislikes FROM course_reactions WHERE course_id = ? AND reaction = 'dislike'");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return (int)($result['dislikes'] ?? 0);
+    }
+
 
 }

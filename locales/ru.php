@@ -201,6 +201,7 @@ return [
     'course_passed'           => 'Пройдено',
     'course_materials'   => 'Материалы курса',
     'upload'   => 'Загрузить',
+    'course_visibility' => 'Видимость курса',
 
 
 ];

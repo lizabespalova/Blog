@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/courses/modal_form.css">
+    <link rel="stylesheet" href="/css/profile/article_template.css">
+    <link rel="stylesheet" href="/css/reactions_buttons.css">
+
 </head>
 <body
         class="<?=
@@ -28,12 +31,46 @@
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <div class="container">
-    <h1 class="course-title"><?= htmlspecialchars($course['title']) ?>
+    <div class="author-avatar-block">
+        <div class="author-info">
+            <img src="<?= htmlspecialchars($course['author_avatar']) ?>"
+                 alt="Author Avatar"
+                 class="author-avatar">
+            <a href="/profile/<?= urlencode($userlogin); ?>" class="article-author">
+                <?= htmlspecialchars($userlogin); ?>
+            </a>
+        </div>
+        <!-- Кнопка шестерёнки для настроек -->
+        <?php if ($userId === $course['user_id']): ?>
+            <button class="settings-btn" onclick="toggleSettingsMenu(event)">
+                ⚙️
+            </button>
+        <?php endif; ?>
+        <!-- Выпадающее меню настроек -->
+        <div id="settings-menu" class="settings-menu">
+            <ul>
+                <!-- Статистика курса с иконкой справа -->
+                <li>
+                    <a href="/courses/statistics/<?= urlencode((string)$course['course_id']) ?>">
+                        <?= sprintf(htmlspecialchars($translations['statistics_for']), htmlspecialchars($course['title'])) ?>
+                        <i class="fas fa-chart-line"></i>
+                    </a>
+                </li>
+                <!-- Видимость курса с иконкой справа -->
+                <li><a href="#"><?= $translations['course_visibility']; ?><i class="fas fa-eye"></i></a></li>
+
+            </ul>
+        </div>
+
+    </div>
+
+
+    <h1 class="course-title" style="margin: 0; padding-top: 5px;">
+        <?= htmlspecialchars($course['title']) ?>
         <?php if ($userId === $course['user_id']): ?>
             <button class="edit-btn title-edit-btn">✏️</button>
         <?php endif; ?>
     </h1>
-
     <div class="course-header">
         <div class="course-cover-container" data-course-id="<?= $course['course_id'] ?>">
             <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
@@ -65,7 +102,9 @@
 
 
     <!-- Контейнер для кнопок -->
-        <div class="courses-buttons-container">
+    <?php if ($userId === $course['user_id']): ?>
+
+    <div class="courses-buttons-container">
             <!-- Кнопка для открытия окна редактирования -->
             <button type="button" class="courses-button" id="select-articles-btn"><?= $translations['edit'] ?></button>
 
@@ -81,8 +120,7 @@
         <input type="hidden" id="modal-course-title" value="<?= $course['title'] ?>">
         <input type="hidden" id="modal-course-description" value="<?= $course['description'] ?>">
         <input type="hidden" id="modal-course-cover-image" value="<?= $course['cover_image'] ?>">
-
-
+    <?php endif; ?>
 
     <!-- Модальное окно -->
     <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
@@ -198,6 +236,25 @@
             <?php endif; ?>
         </div>
 
+        <hr class="article-divider">
+        <div class="reaction-buttons">
+            <!-- Лайки для курса -->
+            <button class="btn-like" data-url="/courses/react" title="Like"
+                    data-user_id="<?= htmlspecialchars($course['user_id']); ?>"
+                    data-course_id="<?= htmlspecialchars($course['course_id']); ?>">
+                <i class="fas fa-thumbs-up"></i>
+                <span class="like-count"><?= htmlspecialchars($course['likes']); ?></span>
+            </button>
+
+            <!-- Дизлайки для курса -->
+            <button class="btn-dislike" data-url="/courses/react" title="Dislike"
+                    data-user_id="<?= htmlspecialchars($course['user_id']); ?>"
+                    data-course_id="<?= htmlspecialchars($course['course_id']); ?>">
+                <i class="fas fa-thumbs-down"></i>
+                <span class="dislike-count"><?= htmlspecialchars($course['dislikes']); ?></span>
+            </button>
+        </div>
+
     </div>
 
     <input type="hidden" id="course-id" value=<?= $course['course_id'] ?>>
@@ -220,6 +277,8 @@
 <script src="/js/authorized_users/files_uploads/upload_big_files.js"></script>
 <script src="/js/authorized_users/files_uploads/delete_material.js"></script>
 <script src="/js/courses/reverse_material.js"></script>
+<script src="/js/authorized_users/articles/articles_reactions.js"></script>
+<script src="/js/courses/show_menu.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

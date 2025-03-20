@@ -201,5 +201,6 @@ return [
     'course_passed'           => 'Пройдено',
     'course_materials'   => 'Матеріали до курсу',
     'upload'   => 'Завантажити',
+    'course_visibility' => 'Видимість курсу',
 
 ];

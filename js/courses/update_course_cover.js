@@ -8,50 +8,51 @@ document.addEventListener("DOMContentLoaded", function () {
     window.triggerCoverUpload = function () {
         fileInput.click();
     };
+    if(fileInput) {
+        fileInput.addEventListener("change", function () {
+            let file = fileInput.files[0];
+            if (!file) return;
 
-    fileInput.addEventListener("change", function () {
-        let file = fileInput.files[0];
-        if (!file) return;
-
-        // Проверяем формат
-        if (!isValidImage(file)) {
-            showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
-            return;
-        }
-
-        // Проверяем размер (5MB)
-        if (!isValidSize(file, 5)) {
-            showError("File size exceeds the limit of 5 MB.");
-            return;
-        }
-
-        // Показываем подтверждение перед загрузкой
-        if (!confirm("Change cover")) return;
-
-        let formData = new FormData();
-        formData.append("cover_image", file);
-        formData.append("course_id", courseId);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/update_cover", true);
-
-        xhr.onload = function () {
-            try {
-                let response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    coverImg.src = response.new_cover;
-                    location.reload(); // Без задержки
-
-                } else {
-                    alert("Ошибка: " + response.error);
-                }
-            } catch (e) {
-                alert("Ошибка обработки ответа сервера.");
+            // Проверяем формат
+            if (!isValidImage(file)) {
+                showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
+                return;
             }
-        };
 
-        xhr.send(formData);
-    });
+            // Проверяем размер (5MB)
+            if (!isValidSize(file, 5)) {
+                showError("File size exceeds the limit of 5 MB.");
+                return;
+            }
+
+            // Показываем подтверждение перед загрузкой
+            if (!confirm("Change cover")) return;
+
+            let formData = new FormData();
+            formData.append("cover_image", file);
+            formData.append("course_id", courseId);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/update_cover", true);
+
+            xhr.onload = function () {
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        coverImg.src = response.new_cover;
+                        location.reload(); // Без задержки
+
+                    } else {
+                        alert("Ошибка: " + response.error);
+                    }
+                } catch (e) {
+                    alert("Ошибка обработки ответа сервера.");
+                }
+            };
+
+            xhr.send(formData);
+        });
+    }
 });
 
 // Общая функция проверки формата изображения

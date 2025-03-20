@@ -76,8 +76,9 @@ class CourseController
     public function showCourse($courseId) {
         require_once 'app/services/helpers/switch_language.php';
         $userId = $_SESSION['user']['user_id'] ?? null;
-        $userlogin = $this->userModel->getLoginById($userId);
         $course = $this->courseModel->getCourseById($courseId);
+        $userlogin = $this->userModel->getLoginById($course['user_id']);
+
         $articlesInCourses = $this->courseModel->getArticlesByCourseId($courseId);
         $articles = $this->articleModel->getUserArticles($userlogin);
         if (!$course) {
@@ -89,6 +90,18 @@ class CourseController
         // Получаем информацию о завершении статей
         $completedArticles = $this->courseModel->getCompletedArticlesForUser($userId, $courseId);
         $materials = $this->courseModel->getMaterials($courseId);
+
+        // Добавим данные автора в массив $course
+        $author = $this->userModel->get_author_avatar($userlogin);
+        // Получаем количество лайков и дизлайков
+        $likes = $this->courseModel->getLikesForCourse($courseId);
+        $dislikes = $this->courseModel->getDislikesForCourse($courseId);
+
+        // Добавляем данные о лайках и дизлайках в курс
+        $course['likes'] = $likes;
+        $course['dislikes'] = $dislikes;
+
+        $course['author_avatar'] = $author['user_avatar'] ?? '/templates/images/profile.jpg';
 //        var_dump($completedArticles);
         require_once 'app/views/courses/course_view.php';
     }
@@ -292,6 +305,63 @@ class CourseController
         $this->courseModel->deleteMaterialById($materialId);
 
         echo json_encode(['success' => true]);
+    }
+
+    public function reactToCourse() {
+        // Получаем данные из запроса
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $reactionType = $input['reaction_type'] ?? null;
+        $courseId = $input['course_id'] ?? null;
+        $userId = $input['user_id'] ?? null;
+
+        // Проверка существующей реакции
+        $existingReaction = $this->courseModel->getReaction($courseId, $userId);
+
+        if ($existingReaction !== null) {
+            if ($existingReaction['reaction'] === $reactionType) {
+                // Если нажали повторно — удаляем реакцию
+                $this->courseModel->removeReaction($courseId, $userId);
+            } else {
+                // Обновляем реакцию на другую
+                $this->courseModel->updateReaction($courseId, $userId, $reactionType);
+            }
+        } else {
+            // Если реакции нет — создаём
+            $this->courseModel->addReaction($courseId, $userId, $reactionType);
+        }
+
+        // Получаем количество лайков и дизлайков
+        $likes = $this->courseModel->getLikesForCourse($courseId);
+        $dislikes = $this->courseModel->getDislikesForCourse($courseId);
+
+        // Отправляем успешный ответ с обновленными значениями лайков и дизлайков
+        echo json_encode([
+            'success' => true,
+            'likes' => $likes,
+            'dislikes' => $dislikes
+        ]);
+        exit();
+    }
+    public function showStatistics(int $courseId): void
+    {
+        require_once 'app/services/helpers/switch_language.php';
+
+        $course = $this->courseModel->getCourseById($courseId);
+        if (!$course) {
+            http_response_code(404);
+            echo "Course not found";
+            return;
+        }
+        $user = $this->userModel->get_user_by_id($course['user_id']);
+        $statistics = [
+            'likes' => $this->courseModel->getCourseLikes($courseId),
+            'dislikes' => $this->courseModel->getCourseDislikes($courseId),
+            'popular_articles' => $this->articleModel->getPopularArticlesByCourseID($courseId),
+
+        ];
+
+        require_once 'app/views/courses/statistic_courses_template.php';
     }
 
 }

@@ -201,5 +201,5 @@ return [
     'course_passed'           => 'Passed',
     'course_materials'   => 'Сourse materials',
     'upload'   => 'Upload',
-
+    'course_visibility' => 'Course visibility',
 ];

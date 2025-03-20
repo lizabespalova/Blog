@@ -491,4 +491,32 @@ class Articles
         $stmt->execute();
         return $stmt->get_result();
     }
+
+    // Получение популярных статей по лайкам
+    public function getPopularArticlesByCourseID(int $courseId): array
+    {
+        $popularArticles = [];
+
+        $stmt = $this->conn->prepare("
+        SELECT a.id, a.title,a.views, a.author,a.created_at, a.user_id,a.cover_image, a.slug, COUNT(ar.id) AS likes
+        FROM course_articles ca
+        INNER JOIN articles a ON ca.article_id = a.id
+        LEFT JOIN article_reactions ar ON a.slug = ar.article_slug AND ar.reaction_type = 'like'
+        WHERE ca.course_id = ?
+        GROUP BY a.id
+        ORDER BY likes DESC
+        LIMIT 5
+    ");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        while ($row = $res->fetch_assoc()) {
+            $popularArticles[] = $row;
+        }
+
+        $stmt->close();
+        return $popularArticles;
+    }
+
 }

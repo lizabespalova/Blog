@@ -60,6 +60,20 @@ function courses_route($uri, $method) {
          $controller = new CourseController(getDbConnection());
          $controller->deleteMaterials();
          exit();
+     // Маршрут для обработки лайка для курса
+     case $method === 'POST' && $uri === '/courses/react':
+         // Получаем данные из POST запроса (для лайка или дизлайка)
+         $controller = new CourseController(getDbConnection());
+         $controller->reactToCourse();
+         exit();
+         // Статистика по курсам (GET)
+     case $method === 'GET' && preg_match('#^/courses/statistics/([^/]+)$#', $uri, $matches):
+             $courseId = $matches[1];
+             $controller = new CourseController(getDbConnection());
+             $controller->showStatistics($courseId);
+             exit;
+
+
      default:
          return false;
     }
