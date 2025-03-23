@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/css/settings/font-style.css">
     <link rel="stylesheet" href="/css/settings/font-size.css">
     <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/statistics.css">
+    <link rel="stylesheet" href="/css/profile/profile_template.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
 </head>
@@ -23,48 +25,48 @@
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <div class="container">
-    <h1>Statistics for course: <?= htmlspecialchars($course['title']); ?></h1>
+    <h1><?= sprintf($translations['statistics_for'], htmlspecialchars($course['title'])); ?></h1>
 
     <div class="statistic-item">
-        <strong><i class="fas fa-thumbs-up"></i> Likes:</strong>
+        <strong><i class="fas fa-thumbs-up"></i> <?= $translations['likes']; ?>:</strong>
         <span id="likes"><?= htmlspecialchars($statistics['likes']); ?></span>
-        <button class="stat" onclick="showList('likes', '<?= htmlspecialchars($course['course_id'], ENT_QUOTES, 'UTF-8'); ?>')">
-            View Likes
+        <button class="stat" onclick="showList('likes', '<?= htmlspecialchars($course['course_id'], ENT_QUOTES, 'UTF-8'); ?>', 'course')">
+            <?= $translations['view_likes']; ?>
         </button>
     </div>
 
     <div class="statistic-item">
-        <strong><i class="fas fa-thumbs-down"></i> Dislikes:</strong>
+        <strong><i class="fas fa-thumbs-down"></i> <?= $translations['dislikes']; ?>:</strong>
         <span id="dislikes"><?= htmlspecialchars($statistics['dislikes']); ?></span>
-        <button class="stat" onclick="showList('dislikes', '<?= htmlspecialchars($course['course_id'], ENT_QUOTES, 'UTF-8'); ?>')">
-            View Dislikes
+        <button class="stat" onclick="showList('dislikes', '<?= htmlspecialchars($course['course_id'], ENT_QUOTES, 'UTF-8'); ?>', 'course')">
+            <?= $translations['view_likes']; ?>
         </button>
     </div>
     <div class="statistic-item">
-        <strong><i class="fas fa-user"></i> Author:</strong>
+        <strong><i class="fas fa-user"></i> <?= $translations['author']; ?>:</strong>
         <span><?= htmlspecialchars($user['user_login']); ?></span>
     </div>
 
     <div class="statistic-item">
-        <strong><i class="fas fa-calendar-alt"></i> Created At:</strong>
+        <strong><i class="fas fa-calendar-alt"></i><?= $translations['created_at']; ?>:</strong>
         <span><?= htmlspecialchars($course['created_at']); ?></span>
     </div>
 
     <div class="statistic-item">
-        <h2><i class="fas fa-star"></i> Popular Articles</h2>
+        <h2><i class="fas fa-star"></i><?= $translations['popular_articles']; ?></h2>
         <ul>
             <?php if (!empty($statistics['popular_articles'])): ?>
                 <?php foreach ($statistics['popular_articles'] as $article): ?>
                     <li>
                         <?= htmlspecialchars($article['title']); ?>
-                        (<?= (int)$article['views']; ?> views
+                        (<?= (int)$article['views']; ?> <?= $translations['views']; ?>
                         <?php if (isset($article['likes'])): ?>, <?= (int)$article['likes']; ?> 👍<?php endif; ?>
                         <?php if (isset($article['dislikes'])): ?>, <?= (int)$article['dislikes']; ?> 👎<?php endif; ?>)
                     </li>
                     <?php include __DIR__ . '/../../views/partials/card.php'; ?>
                 <?php endforeach; ?>
             <?php else: ?>
-                <li>No popular articles available.</li>
+                <li><?= $translations['no_articles']; ?></li>
             <?php endif; ?>
         </ul>
     </div>
@@ -90,7 +92,14 @@
     <div class="chart-container">
         <canvas id="likesChart"></canvas>
     </div>
-
+    <!-- Модальные окна для списков -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">List</h2>
+            <ul id="modal-list"></ul>
+        </div>
+    </div>
 </div>
 
 <!-- Footer -->
@@ -102,8 +111,9 @@
     window.popularArticles = <?= json_encode($statistics['popular_articles']); ?>;
 </script>
 <script src="/js/courses/course_statistic.js"></script>
-
 <script src="/js/authorized_users/articles/statistic_graphs.js"></script>
+<script src="/js/authorized_users/articles/show_module_likes_dislikes_in_statistic.js"></script>
+<script src="/js/authorized_users/articles/repost_article.js"></script>
 
 </body>
 </html>

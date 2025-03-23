@@ -204,5 +204,9 @@ return [
     'course_materials'   => 'Kursmaterialien',
     'upload'   => 'Hochladen',
     'course_visibility' => 'Kurssichtbarkeit',
+    'visibility_public' => 'Offener Zugang für alle',
+    'visibility_subscribers' => 'Nur für Abonnenten',
+    'visibility_custom' => 'Wählen Sie einen Benutzer aus',
+    'selected_users' => 'Ausgewählte Benutzer',
 
 ];

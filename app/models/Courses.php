@@ -331,5 +331,39 @@ class Courses
         return (int)($result['dislikes'] ?? 0);
     }
 
-
+    public function getLikesById($courseId){
+        $likesQuery = $this->conn->prepare("
+        SELECT u.user_id, u.user_login, u.user_email, u.user_avatar, CONCAT('/profile/', u.user_login) AS link
+        FROM course_reactions cr
+        JOIN users u ON cr.user_id = u.user_id
+        WHERE cr.course_id = ? AND cr.reaction = 'like'
+    ");
+        $likesQuery->bind_param('i', $courseId);
+        $likesQuery->execute();
+        $likesResult = $likesQuery->get_result();
+        $likes = [];
+        while ($row = $likesResult->fetch_assoc()) {
+            $likes[] = $row;
+        }
+        $likesQuery->close();
+        return $likes;
+    }
+    public function getDislikesById($courseId){
+        // Дизлайки
+        $dislikesQuery = $this->conn->prepare("
+        SELECT u.user_id, u.user_login, u.user_email, u.user_avatar, CONCAT('/profile/', u.user_login) AS link
+        FROM course_reactions cr
+        JOIN users u ON cr.user_id = u.user_id
+        WHERE cr.course_id = ? AND cr.reaction = 'dislike'
+    ");
+        $dislikesQuery->bind_param('i', $courseId);
+        $dislikesQuery->execute();
+        $dislikesResult = $dislikesQuery->get_result();
+        $dislikes = [];
+        while ($row = $dislikesResult->fetch_assoc()) {
+            $dislikes[] = $row;
+        }
+        $dislikesQuery->close();
+        return $dislikes;
+    }
 }

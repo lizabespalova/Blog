@@ -202,4 +202,8 @@ return [
     'course_materials'   => 'Сourse materials',
     'upload'   => 'Upload',
     'course_visibility' => 'Course visibility',
+    'visibility_public' => 'Open access for all',
+    'visibility_subscribers' => 'Subscribers only',
+    'visibility_custom' => 'Select a user',
+    'selected_users' => 'Selected users',
 ];

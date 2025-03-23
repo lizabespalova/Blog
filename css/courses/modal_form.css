@@ -16,32 +16,80 @@
     background: #0056b3;
 }
 
-/* Центрируем модальное окно */
+/* Затемнение фона */
 .modal {
-    display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center; /* Центрируем модальное окно по горизонтали */
-    align-items: center; /* Центрируем модальное окно по вертикали */
-
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
 }
 
-/* Контент модального окна */
 .modal-content-container {
-    background: white;
-    padding: 20px;
-    /*max-width: 900px; !* Ограничение по ширине *!*/
-    height: 80vh; /* 80% высоты экрана */
-    overflow: hidden; /* Скрываем лишнее */
+    background-color: #fff;
+    margin: 100px auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-content-container h3 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+#visibilityForm label {
     display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Улучшенная тень */
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+#visibilityForm label:hover {
+    background-color: #f1f1f1;
+}
+
+#visibilityForm input[type="radio"] {
+    margin-left: 10px;
+}
+
+#visibilityForm button {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#visibilityForm button:hover {
+    background-color: #0056b3;
+}
+
+#customUsersBlock {
+    margin-top: 15px;
 }
 
 /* Крестик (кнопка закрытия) */

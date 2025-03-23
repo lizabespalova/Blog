@@ -57,7 +57,9 @@
                     </a>
                 </li>
                 <!-- Видимость курса с иконкой справа -->
-                <li><a href="#"><?= $translations['course_visibility']; ?><i class="fas fa-eye"></i></a></li>
+                <li><a href="javascript:void(0);" onclick="openVisibilityModal()">
+                        <?= $translations['course_visibility']; ?> <i class="fas fa-eye"></i>
+                    </a></li>
 
             </ul>
         </div>
@@ -258,6 +260,39 @@
     </div>
 
     <input type="hidden" id="course-id" value=<?= $course['course_id'] ?>>
+    <div id="visibilityModal" class="modal">
+        <div class="modal-content-container">
+            <span class="close-btn" onclick="closeVisibilityModal()">&times;</span>
+            <h3><?= $translations['course_visibility']; ?></h3>
+
+            <form id="visibilityForm">
+                <label>
+                    <?= $translations['visibility_public']; ?>
+                    <input type="radio" name="visibility" value="public" checked>
+                </label>
+
+                <label>
+                    <?= $translations['visibility_subscribers']; ?>
+                    <input type="radio" name="visibility" value="subscribers">
+                </label>
+
+                <label>
+                    <?= $translations['visibility_custom']; ?>
+                    <input type="radio" name="visibility" value="custom">
+                </label>
+
+                <div id="customUsersBlock" style="display:none;">
+                    <input type="text" id="userSearch" placeholder="<?= $translations['search']; ?>" oninput="searchUsers(this.value)">
+                    <ul id="userSearchResults"></ul>
+
+                    <h4><?= $translations['selected_users']; ?>:</h4>
+                    <ul id="selectedUsers"></ul>
+                </div>
+
+                <button type="submit"><?= $translations['save']; ?></button>
+            </form>
+        </div>
+    </div>
 
 </div>
 <!-- Footer Section -->
@@ -279,6 +314,8 @@
 <script src="/js/courses/reverse_material.js"></script>
 <script src="/js/authorized_users/articles/articles_reactions.js"></script>
 <script src="/js/courses/show_menu.js"></script>
+<script src="/js/courses/modal_window_actions.js"></script>
+<script src="/js/authorized_users/articles/repost_article.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

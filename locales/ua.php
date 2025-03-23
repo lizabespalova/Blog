@@ -202,5 +202,9 @@ return [
     'course_materials'   => 'Матеріали до курсу',
     'upload'   => 'Завантажити',
     'course_visibility' => 'Видимість курсу',
+    'visibility_public' => 'Відкритий доступ для всіх',
+    'visibility_subscribers' => 'Тільки підписники',
+    'visibility_custom' => 'Обрати користувача',
+    'selected_users' => 'Обрані користувачі',
 
 ];

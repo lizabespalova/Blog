@@ -72,7 +72,11 @@ function courses_route($uri, $method) {
              $controller = new CourseController(getDbConnection());
              $controller->showStatistics($courseId);
              exit;
-
+     case $method === 'GET' && preg_match('#^/course/(\d+)/reactions$#', $uri, $matches):
+         $courseId = (int)$matches[1];
+         $controller = new CourseController(getDbConnection());
+         $controller->getReactions($courseId);
+         exit;
 
      default:
          return false;

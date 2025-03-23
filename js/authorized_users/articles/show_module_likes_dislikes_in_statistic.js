@@ -1,5 +1,5 @@
-function showList(type, slug) {
-    fetch(`/article/${slug}/reactions`)
+function showList(type, slug, typeEntity = 'article') {
+    fetch(`/${typeEntity}/${slug}/reactions`)
         .then(response => response.json())
         .then(data => {
             const modal = document.getElementById('modal');
@@ -8,10 +8,11 @@ function showList(type, slug) {
 
             // Заголовок модального окна
             modalTitle.textContent = type === 'likes' ? 'List of Likes' : 'List of Dislikes';
-            modalTitle.style.textAlign = 'center';  // Центрирование текста
-            modalTitle.style.margin = '0';  // Убирает возможные отступы, которые могут мешать центрированию
-            // Формирование списка с аватарами, именами и email
-            const users = data[type];
+            modalTitle.style.textAlign = 'center';
+            modalTitle.style.margin = '0';
+
+            // Формирование списка
+            const users = data[type] || [];
             modalList.innerHTML = users.map(user => `
                 <li class="user-item">
                     <img class="avatar" src="${user.user_avatar ? user.user_avatar : '/templates/images/profile.jpg'}" alt="${user.user_login}'s avatar">
@@ -24,7 +25,6 @@ function showList(type, slug) {
                 </li>
             `).join('');
 
-            // Показать модальное окно
             modal.style.display = 'block';
         })
         .catch(error => {

@@ -363,5 +363,16 @@ class CourseController
 
         require_once 'app/views/courses/statistic_courses_template.php';
     }
+    public function getReactions($courseId){
+        // Получаем данные из модели
+        $likes = $this->courseModel->getLikesById($courseId);
+        $dislikes = $this->courseModel->getDislikesById($courseId);
 
+        // Возвращаем данные в формате JSON
+        header('Content-Type: application/json');
+        echo json_encode([
+            'likes' => $likes,
+            'dislikes' => $dislikes
+        ]);
+    }
 }
