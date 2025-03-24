@@ -515,4 +515,27 @@ class User
         $stmt->execute();
         $stmt->close();
     }
+    public function getUsersBySearchQuery($query){
+        if (strlen($query) < 2) {
+            echo json_encode([]);
+            return;
+        }
+
+        $stmt = $this->conn->prepare("SELECT user_id, user_login, user_email, user_avatar FROM users WHERE user_login LIKE CONCAT('%', ?, '%') OR user_email LIKE CONCAT('%', ?, '%') LIMIT 10");
+        if (!$stmt) {
+            echo json_encode(['error' => 'Database error']);
+            return;
+        }
+
+        $stmt->bind_param("ss", $query, $query);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $users = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
+        return $users;
+    }
 }

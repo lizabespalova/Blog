@@ -366,4 +366,113 @@ class Courses
         $dislikesQuery->close();
         return $dislikes;
     }
+    public function updateVisibilityType($visibility_type, $course_id, $user_ids){
+        // Обновляем курс
+        $stmt = $this->conn->prepare("UPDATE courses SET visibility_type = ? WHERE course_id = ?");
+        $stmt->bind_param("si", $visibility_type, $course_id);
+        $stmt->execute();
+        $stmt->close();
+
+        if ($visibility_type === 'custom') {
+            // Удаляем старые записи
+            $stmt = $this->conn->prepare("DELETE FROM course_custom_access WHERE course_id = ?");
+            $stmt->bind_param("i", $course_id);
+            $stmt->execute();
+            $stmt->close();
+
+            // Добавляем новых пользователей
+            if (!empty($user_ids)) {
+                $stmt = $this->conn->prepare("INSERT INTO course_custom_access (course_id, user_id) VALUES (?, ?)");
+                foreach ($user_ids as $user_id) {
+                    $stmt->bind_param("ii", $course_id, $user_id);
+                    $stmt->execute();
+                }
+                $stmt->close();
+            }
+        }
+
+    }
+    public function updateIsPublishedType($status, $courseId){
+        // Обновляем статус курса в базе данных
+        $stmt = $this->conn->prepare("UPDATE courses SET is_published = ? WHERE course_id = ?");
+        $stmt->bind_param('ii', $status, $courseId);
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Ошибка при обновлении статуса']);
+        }
+    }
+    public function isUserSubscribedToCourse($userId, $courseId) {
+        // SQL-запрос для проверки подписки
+        $query = "SELECT COUNT(*) FROM subscriptions WHERE user_id = ? AND course_id = ?";
+
+        // Подготовка и выполнение запроса
+        if ($stmt = $this->conn->prepare($query)) {
+            $stmt->bind_param("ii", $userId, $courseId); // Привязка параметров
+            $stmt->execute();
+            $stmt->bind_result($count); // Получаем результат
+            $stmt->fetch(); // Извлекаем результат
+
+            $stmt->close();
+
+            // Если количество записей больше 0, значит, пользователь подписан на курс
+            return $count > 0;
+        } else {
+            // Ошибка выполнения запроса
+            return false;
+        }
+    }
+    public function isUserHasCustomAccess($userId, $courseId) {
+        // SQL-запрос для проверки наличия доступа
+        $query = "SELECT COUNT(*) FROM course_custom_access WHERE user_id = ? AND course_id = ?";
+
+        // Подготовка и выполнение запроса
+        if ($stmt = $this->conn->prepare($query)) {
+            $stmt->bind_param("ii", $userId, $courseId); // Привязка параметров
+            $stmt->execute();
+            $stmt->bind_result($count); // Получаем результат
+            $stmt->fetch(); // Извлекаем результат
+
+            $stmt->close();
+
+            // Если количество записей больше 0, значит, у пользователя есть доступ
+            return $count > 0;
+        } else {
+            // Ошибка выполнения запроса
+            return false;
+        }
+    }
+    public function getSubscribersByCourseId($courseId) {
+        // Подготовка SQL-запроса для получения подписчиков курса
+        $sql = "
+        SELECT u.user_id, u.user_login, u.user_email, u.user_avatar
+        FROM users u
+        INNER JOIN course_custom_access cca ON u.user_id = cca.user_id
+        WHERE cca.course_id = ?
+    ";
+        // Подготовка запроса
+        if ($stmt = $this->conn->prepare($sql)) {
+            // Привязываем параметр courseId к запросу
+            $stmt->bind_param("i", $courseId);
+            // Выполняем запрос
+            $stmt->execute();
+            // Получаем результат
+            $result = $stmt->get_result();
+            // Массив для хранения подписчиков
+            $subscribers = [];
+            // Проходим по всем строкам результата и сохраняем их в массив
+            while ($row = $result->fetch_assoc()) {
+                $subscribers[] = $row;
+            }
+            // Закрытие подготовленного запроса
+            $stmt->close();
+            // Возвращаем список подписчиков
+            return $subscribers;
+        } else {
+            // В случае ошибки запроса
+            return ["error" => "Unable to prepare the SQL query"];
+        }
+    }
+
+
 }

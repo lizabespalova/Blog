@@ -3,15 +3,18 @@
 namespace controllers\authorized_users_controllers;
 
 use models\Articles;
+use models\User;
 
 require_once 'app/services/helpers/session_check.php';
 class UserArticleController
 {
     private $articleModel;
+    private $userModel;
 
 
     public function __construct($conn) {
         $this->articleModel = new Articles($conn);
+        $this->userModel = new User($conn);
     }
     public function showUsersArticles(){
         require_once 'app/services/helpers/switch_language.php';
@@ -41,11 +44,6 @@ class UserArticleController
             $results = $this->articleModel->getFilteredArticles($userLogin,$title,$author,
                 $category, $date_from, $date_to);
 
-//            // Проверяем корректность результатов
-//            if (!$results) {
-//                throw new Exception('No data found.');
-//            }
-
             header('Content-Type: application/json');
             echo json_encode(['status' => 'success', 'data' => $results]);
         } catch (Exception $e) {
@@ -53,8 +51,11 @@ class UserArticleController
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
-//    public function handleUserInterest($userId,$category){
-//
-//    }
+    public function searchUsers(string $query): void {
+        header('Content-Type: application/json');
+        $users = $this->userModel->getUsersBySearchQuery($query);
+        echo json_encode($users);
+
+    }
 
 }

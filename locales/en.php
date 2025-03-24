@@ -206,4 +206,5 @@ return [
     'visibility_subscribers' => 'Subscribers only',
     'visibility_custom' => 'Select a user',
     'selected_users' => 'Selected users',
+    'view_course_subscribers' => 'View course subscribers',
 ];

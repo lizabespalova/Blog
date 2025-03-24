@@ -1,6 +1,7 @@
 <?php
 
 use controllers\authorized_users_controllers\CourseController;
+use controllers\authorized_users_controllers\UserArticleController;
 
 
 require_once __DIR__ . '/../../config/config.php';
@@ -76,6 +77,24 @@ function courses_route($uri, $method) {
          $courseId = (int)$matches[1];
          $controller = new CourseController(getDbConnection());
          $controller->getReactions($courseId);
+         exit;
+     case $method === 'GET' && preg_match('#^/search-users$#', $uri):
+         $query = $_GET['query'] ?? '';
+         $controller = new UserArticleController(getDbConnection());
+         $controller->searchUsers($query);
+         exit;
+     case $method === 'POST' && preg_match('#^/save-visibility$#', $uri):
+         $controller = new CourseController(getDbConnection());
+         $controller->saveVisibility($_POST);
+         exit;
+     case $method === 'POST' && preg_match('#^/update-course-status$#', $uri):
+         $controller = new CourseController(getDbConnection());
+         $controller->updateCourseStatus($_POST); // Параметры передаются через POST
+         exit;
+     case $method === 'GET' && preg_match('#^/courses/get-subscribers/(\d+)$#', $uri, $matches):
+         $courseId = $matches[1];
+         $controller = new CourseController(getDbConnection());
+         $controller->getCourseSubscribers($courseId);
          exit;
 
      default:

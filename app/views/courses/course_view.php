@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/courses/scroll_buttons.css">
     <link rel="stylesheet" href="/css/courses/courses_view.css">
     <link rel="stylesheet" href="/css/courses/progress_bar.css">
+    <link rel="stylesheet" href="/css/courses/modal_window.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/settings/themes.css">
@@ -59,11 +60,27 @@
                 <!-- Видимость курса с иконкой справа -->
                 <li><a href="javascript:void(0);" onclick="openVisibilityModal()">
                         <?= $translations['course_visibility']; ?> <i class="fas fa-eye"></i>
-                    </a></li>
-
+                    </a>
+                </li>
+                <!-- Просмотр подписчиков курса с иконкой справа -->
+                <li>
+                    <a href="javascript:void(0);" onclick="openSubscribersModal(<?= urlencode((string)$course['course_id']) ?>)">
+                        <?= $translations['view_course_subscribers']; ?> <i class="fas fa-users"></i>
+                    </a>
+                </li>
             </ul>
         </div>
 
+    </div>
+    <!-- Модальное окно для отображения подписчиков -->
+    <div id="subscribersModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSubscribersModal()">&times;</span>
+            <h2><?= $translations['followers']; ?></h2>
+            <ul id="subscribersList">
+                <!-- Список подписчиков будет загружен сюда -->
+            </ul>
+        </div>
     </div>
 
 
@@ -315,6 +332,7 @@
 <script src="/js/authorized_users/articles/articles_reactions.js"></script>
 <script src="/js/courses/show_menu.js"></script>
 <script src="/js/courses/modal_window_actions.js"></script>
+<script src="/js/courses/modal_subscribers.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

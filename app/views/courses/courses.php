@@ -1,5 +1,5 @@
 <div class="courses-list">
-    <?php foreach ($courses as $course): ?>
+    <?php foreach ($filteredCourses as $course): ?>
         <div class="course-card">
             <img src="<?= htmlspecialchars('/' . ltrim($course['cover_image'], '/')) ?>" alt="Обложка курса">
             <h3><?= htmlspecialchars($course['title']) ?></h3>

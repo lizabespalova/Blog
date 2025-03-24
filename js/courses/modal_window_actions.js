@@ -24,15 +24,41 @@ function searchUsers(query) {
         .then(users => {
             const results = document.getElementById('userSearchResults');
             results.innerHTML = '';
+
             users.forEach(user => {
                 const li = document.createElement('li');
-                li.textContent = user.user_login + ' (' + user.user_email + ')';
+                li.classList.add('user-item');
                 li.style.cursor = 'pointer';
                 li.onclick = () => addUserToSelected(user);
+
+                const avatar = document.createElement('img');
+                avatar.classList.add('avatar');
+                avatar.src = user.user_avatar ? user.user_avatar : '/templates/images/profile.jpg';
+                avatar.alt = `${user.user_login}'s avatar`;
+
+                const userInfo = document.createElement('div');
+                userInfo.classList.add('user-info');
+
+                const nameLink = document.createElement('a');
+                nameLink.href = user.link || '#';
+                nameLink.classList.add('user-name');
+                nameLink.innerHTML = `<strong>${user.user_login}</strong>`;
+
+                const emailSpan = document.createElement('span');
+                emailSpan.classList.add('user-email');
+                emailSpan.textContent = user.user_email;
+
+                userInfo.appendChild(nameLink);
+                userInfo.appendChild(emailSpan);
+
+                li.appendChild(avatar);
+                li.appendChild(userInfo);
+
                 results.appendChild(li);
             });
         });
 }
+
 
 const selectedUserIds = new Set();
 
@@ -57,3 +83,53 @@ function addUserToSelected(user) {
     li.appendChild(removeBtn);
     document.getElementById('selectedUsers').appendChild(li);
 }
+
+document.getElementById('visibilityForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const selectedUsers = Array.from(selectedUserIds);
+    formData.append('user_ids', JSON.stringify(selectedUsers));
+
+    const courseId = document.getElementById('course-id').value;
+    formData.append('course_id', courseId);
+
+    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+    formData.append('visibility', visibility);
+
+    // Первый запрос
+    fetch('/save-visibility', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Settings saved');
+                closeVisibilityModal();
+
+                // Второй запрос с использованием FormData
+                const secondFormData = new FormData();
+                secondFormData.append('course_id', courseId);
+                secondFormData.append('status', visibility === 'public' ? 1 : 0); // Открыть для всех или закрыть
+
+                fetch('/update-course-status', {
+                    method: 'POST',
+                    body: secondFormData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Course status updated');
+                        } else {
+                            alert('Error updating course status: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error updating course status:', error));
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error saving visibility settings:', error));
+});
+

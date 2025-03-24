@@ -208,5 +208,6 @@ return [
     'visibility_subscribers' => 'Nur für Abonnenten',
     'visibility_custom' => 'Wählen Sie einen Benutzer aus',
     'selected_users' => 'Ausgewählte Benutzer',
+    'view_course_subscribers' => 'Kursabonnenten anzeigen',
 
 ];

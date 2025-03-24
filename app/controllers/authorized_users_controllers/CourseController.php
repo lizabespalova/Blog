@@ -13,7 +13,6 @@ class CourseController
 {
     private $courseModel;
     private $userModel;
-
     private $articleModel;
     private $coverImagesService;
 
@@ -67,11 +66,38 @@ class CourseController
         require_once 'app/services/helpers/switch_language.php';
 
         $userId = $_SESSION['user']['user_id'] ?? null;
+
         // Получаем список курсов пользователя
         $courses = $this->courseModel->getUserCourses($userId);
-        $userLogin = $this->userModel->getLoginById($userId);
-        // Загружаем шаблон
+
+        // Фильтруем курсы по видимости
+        $filteredCourses = $this->getFilteredCourses($courses, $userId);
+
+        // Загружаем шаблон с отфильтрованными курсами
         require_once 'app/views/courses/my_courses.php';
+    }
+
+    public function getFilteredCourses($courses, $userId){
+         return array_filter($courses, function($course) use ($userId) {
+             $currentUserId = $userId;
+
+             // Хозяин курса всегда может его видеть
+             if ($course['user_id'] == $currentUserId) {
+                 return true;
+             }
+
+             // Проверка на тип видимости
+             switch ($course['visibility_type']) {
+                 case 'public':
+                     return true;
+                 case 'subscribers':
+                     return $this->courseModel->isUserSubscribedToCourse($currentUserId, $course['course_id']); // Функция для проверки подписки
+                 case 'custom':
+                     return $this->courseModel->isUserHasCustomAccess($currentUserId, $course['course_id']); // Функция для проверки доступа через course_custom_access
+                 default:
+                     return false;
+             }
+         });
     }
     public function showCourse($courseId) {
         require_once 'app/services/helpers/switch_language.php';
@@ -375,4 +401,41 @@ class CourseController
             'dislikes' => $dislikes
         ]);
     }
+    // Сохранение настроек видимости курса
+    public function saveVisibility($data) {
+        $course_id = intval($data['course_id'] ?? 0);
+        $visibility_type = $data['visibility'] ?? 'public';
+        $user_ids = json_decode($data['user_ids'] ?? '[]', true);
+
+        if (!$course_id) {
+            echo json_encode(['success' => false, 'error' => 'Отсутствует course_id']);
+            return;
+        }
+
+        // Обновляем тип видимости
+        $this->courseModel->updateVisibilityType($visibility_type, $course_id, $user_ids);
+
+        echo json_encode(['success' => true]);
+    }
+
+
+    // Метод для обновления статуса курса
+    public function updateCourseStatus($data) {
+        $courseId = intval($data['course_id'] ?? 0);
+        $status = intval($data['status'] ?? 0); // 0 - закрыт, 1 - открыт
+
+        if ($courseId > 0) {
+            $this->courseModel->updateIsPublishedType($status, $courseId);
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $courseId]);
+        }
+    }
+    public function getCourseSubscribers($courseId) {
+        // Получаем подписчиков курса из базы данных
+        $subscribers = $this->courseModel->getSubscribersByCourseId($courseId);
+        // Возвращаем результат, например, в формате JSON
+        echo json_encode($subscribers);
+    }
+
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
-require_once 'app/services/helpers/update_status.php';
+//require_once 'app/services/helpers/update_status.php';
 
 use Google\Service\Classroom\Course;
 use models\Articles;
@@ -24,6 +24,7 @@ class ProfileController
     private $settingModel;
     private $notificationModel;
     private $statusService;
+    private $courseController;
 
     private $markdownService;
     public function __construct($dbConnection) {
@@ -36,6 +37,7 @@ class ProfileController
         $this->notificationModel = new Notifications($dbConnection);
         $this->markdownService = new MarkdownService();
         $this->statusService = new StatusService();
+        $this->courseController = new CourseController($dbConnection);
     }
 
     public function showProfile($profileUserLogin)
@@ -78,6 +80,8 @@ class ProfileController
 //            var_dump($followStatus);
 
             $courses = $this->courseModel->getUserCourses($profileUserId);
+            // Фильтруем курсы по видимости
+            $filteredCourses = $this->courseController->getFilteredCourses($courses, $currentUser['user_id']);
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

@@ -206,5 +206,6 @@ return [
     'visibility_subscribers' => 'Только подписчики',
     'visibility_custom' => 'Выбрать пользовтаеля',
     'selected_users' => 'Выбранные пользователи',
+    'view_course_subscribers' => 'Просмотреть подписчиков курса',
 
 ];
