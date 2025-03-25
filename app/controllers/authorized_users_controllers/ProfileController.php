@@ -1,7 +1,7 @@
 <?php
 
 namespace controllers\authorized_users_controllers;
-//require_once 'app/services/helpers/update_status.php';
+require_once 'app/services/helpers/update_status.php';
 
 use Google\Service\Classroom\Course;
 use models\Articles;
@@ -45,11 +45,14 @@ class ProfileController
         require_once 'app/services/helpers/switch_language.php';
         try {
             // Проверка, что данные пользователя есть в сессии
-            $currentUser = $_SESSION['user'] ?? null;
-
+            $userId = $_SESSION['user']['user_id'] ?? null;
+            $currentUser = $this->userModel->get_user_by_id($userId);
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
+
             $profileUserId = $user['user_id'];
+            $email = $this->userModel->getUserEmail($profileUserId);
+
             if (!$user) {
                 throw new Exception($profileUserLogin );
             }
@@ -66,6 +69,7 @@ class ProfileController
             if (!empty($currentUser) && isset($currentUser['user_id'])) {
                 $isFollowing = $this->followModel->isFollowing($currentUser['user_id'], $profileUserId);
             }
+
             $user['is_online'] = $this->statusService->isUserOnline($user['last_active_at']);
             $profileStatus = $this->settingModel->getShowLastSeen($profileUserId);
             $profileVisibility = $this->settingModel->getProfileVisibility($profileUserId);
@@ -82,6 +86,8 @@ class ProfileController
             $courses = $this->courseModel->getUserCourses($profileUserId);
             // Фильтруем курсы по видимости
             $filteredCourses = $this->courseController->getFilteredCourses($courses, $currentUser['user_id']);
+            $hideEmail = $this->settingModel->getHideEmail($profileUserId);
+
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
             // Обработка ошибок

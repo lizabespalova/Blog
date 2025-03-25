@@ -28,6 +28,9 @@ return [
     'placeholder_current_password' => 'Введіть поточний пароль',
     'placeholder_new_password' => 'Введіть новий пароль',
     'placeholder_confirm_password' => 'Підтвердьте новий пароль',
+    'hide_email' => 'Сховати email
+Увага: У такому разі користувачі у ваших приватних курсах не зможуть до вас звернутися.',
+    'contact_hidden' => 'Контакт приховано',
 
     // Управление активными сессиями
     'your_session' => 'Ваша сесія (Ви онлайн)',
@@ -207,5 +210,6 @@ return [
     'visibility_custom' => 'Обрати користувача',
     'selected_users' => 'Обрані користувачі',
     'view_course_subscribers' => 'Подивитись підписників курсу',
+    'request_access' => 'Запросити доступ',
 
 ];

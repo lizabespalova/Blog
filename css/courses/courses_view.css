@@ -464,6 +464,7 @@ textarea {
     font-size: 16px;
 }
 
+
 /* Мобильная адаптация */
 @media (max-width: 600px) {
     .container {

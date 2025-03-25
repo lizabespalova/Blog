@@ -27,7 +27,9 @@ return [
     'placeholder_current_password' => 'Enter current password',
     'placeholder_new_password' => 'Enter new password',
     'placeholder_confirm_password' => 'Confirm new password',
-
+    'hide_email' => 'Hide email
+Attention: In this case, users in your private courses will not be able to contact you.',
+    'contact_hidden' => 'Contact hidden',
     // Управление активными сессиями
     'your_session' => 'Your Session (You are online)',
     'online' => '🟢 Online',
@@ -207,4 +209,8 @@ return [
     'visibility_custom' => 'Select a user',
     'selected_users' => 'Selected users',
     'view_course_subscribers' => 'View course subscribers',
+    'private_course' => 'Private course',
+    'request_access' => 'Request_access',
+
+
 ];

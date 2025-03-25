@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="/css/search/popular_writers.css">
     <link rel="stylesheet" href="/css/profile/markdown.css">
     <link rel="stylesheet" href="/css/search/feed.css">
-    <link rel="stylesheet" href="/css/pagination.css">
+    <link rel="stylesheet" href="/css/courses/my_courses.css">
+
+    <!--    <link rel="stylesheet" href="/css/pagination.css">-->
 
 </head>
 <body
@@ -37,6 +39,7 @@
     <a href="?section=feed" class="menu-item" data-section="feed"><?= $translations['feed'] ?></a>
     <a href="?section=popular-articles" class="menu-item" data-section="popular-articles"><?= $translations['popular_articles'] ?></a>
     <a href="?section=popular-writers" class="menu-item" data-section="popular-writers"><?= $translations['popular_writers'] ?></a>
+    <a href="?section=popular-courses" class="menu-item" data-section="popular-courses"><?= $translations['popular_courses'] ?></a>
 
     <!-- Форма поиска по тегам -->
     <form class="tag-search-form">
@@ -65,6 +68,7 @@
 <script src="/js/search/autoload_feed.js"></script>
 <script src="/js/search/autoload_popular_articles.js"></script>
 <script src="/js/search/autoload_writers.js"></script>
+<script src="/js/search/autoload_courses.js"></script>
 <script src="/js/search/load_sections.js"></script>
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
 

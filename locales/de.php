@@ -27,6 +27,9 @@ return [
     'placeholder_current_password' => 'Aktuelles Passwort eingeben',
     'placeholder_new_password' => 'Neues Passwort eingeben',
     'placeholder_confirm_password' => 'Neues Passwort bestätigen',
+    'hide_email' => 'E-Mail verbergen
+Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontaktieren.',
+    'contact_hidden' => 'Kontakt verborgen',
 
     // Управление активными сессиями
     'your_session' => 'Ihre Sitzung (Sie sind online)',
@@ -209,5 +212,6 @@ return [
     'visibility_custom' => 'Wählen Sie einen Benutzer aus',
     'selected_users' => 'Ausgewählte Benutzer',
     'view_course_subscribers' => 'Kursabonnenten anzeigen',
+    'request_access' => 'Zugriff anfordern',
 
 ];

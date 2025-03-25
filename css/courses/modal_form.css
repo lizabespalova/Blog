@@ -115,3 +115,63 @@
     padding-right: 15px; /* Отступ справа для удобного скролла */
 
 }
+@media (max-width: 768px) {
+    .modal-content-container {
+        width: 90%; /* Уменьшаем ширину */
+        margin: 50px auto; /* Делаем отступ сверху поменьше */
+        padding: 20px; /* Уменьшаем внутренний отступ */
+    }
+
+    #visibilityForm label {
+        flex-direction: column; /* Переключаем элементы в столбец */
+        align-items: flex-start;
+    }
+
+    #visibilityForm input[type="radio"] {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .courses-button {
+        font-size: 14px; /* Уменьшаем размер шрифта */
+        padding: 10px; /* Делаем кнопку компактнее */
+    }
+
+    #articles-list {
+        max-height: 60vh; /* Ограничиваем высоту списка */
+        padding-right: 10px; /* Уменьшаем отступ */
+    }
+
+    .close {
+        font-size: 24px; /* Уменьшаем размер крестика */
+        top: 5px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content-container {
+        width: 95%; /* Делаем ширину практически во всю ширину экрана */
+        margin: 30px auto;
+        padding: 15px;
+    }
+
+    .courses-button {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    #visibilityForm label {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    #visibilityForm button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .close {
+        font-size: 20px;
+    }
+}

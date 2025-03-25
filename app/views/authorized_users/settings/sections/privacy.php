@@ -17,4 +17,11 @@
             <?= $translations['show_last_seen'] ?>
         </label>
     </div>
+
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="hide_email" id="hide-email" <?php echo ($hideEmail) ? 'checked' : ''; ?> />
+            <?= $translations['hide_email'] ?>
+        </label>
+    </div>
 </form>

@@ -98,6 +98,16 @@ class Settings
         $stmt->close();
         return $language;
     }
+    public function getHideEmail($userId) {
+        $stmt = $this->conn->prepare("SELECT hide_email FROM settings WHERE user_id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->bind_result($hideEmail);
+        $stmt->fetch();
+        $stmt->close();
+        return (int) $hideEmail; // Возвращаем как integer (0 или 1)
+    }
+
     public function getProfileVisibility($userId)
     {
         // Подготовка SQL-запроса
@@ -151,6 +161,14 @@ class Settings
         $stmt->close();
         // Возвращаем значение show_last_seen
         return $showLastSeen ? true : false; // Возвращаем булево значение
+    }
+    public function setHideEmail($userId, $hideEmail){
+        $stmt = $this->conn->prepare("UPDATE settings SET hide_email = ?, updated_at = NOW() WHERE user_id = ?");
+        $stmt->bind_param("ii", $hideEmail, $userId);
+
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
     public function createDefaultSettings($userId) {
         // Подготовка SQL-запроса

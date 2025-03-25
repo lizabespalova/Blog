@@ -96,7 +96,17 @@ function courses_route($uri, $method) {
          $controller = new CourseController(getDbConnection());
          $controller->getCourseSubscribers($courseId);
          exit;
+     case $method === 'POST' && $uri === '/courses/remove-subscriber':
+         $data = json_decode(file_get_contents('php://input'), true);
+         if (!isset($data['user_id'], $data['course_id'])) {
+             echo json_encode(['success' => false, 'error' => 'Missing parameters']);
+             http_response_code(400);
+             exit;
+         }
 
+         $controller = new CourseController(getDbConnection());
+         $controller->removeSubscriber((int) $data['user_id'], (int) $data['course_id']);
+         exit;
      default:
          return false;
     }

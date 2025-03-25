@@ -33,7 +33,10 @@ function users_article_route($uri, $method) {
             $controller = new SearchController(getDbConnection());
             $controller->showPopularArticles();
             exit();
-
+        case '/sections/popular-courses':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularCourses();
+            exit();
         case '/sections/popular-writers':
             $controller = new SearchController(getDbConnection());
             $controller->showPopularWriters();

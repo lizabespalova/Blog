@@ -5,17 +5,20 @@ document.addEventListener("DOMContentLoaded", function () {
     privacyForm.addEventListener("change", function () {
         var profileVisibility = document.getElementById("profile-visibility");
         var showLastSeen = document.getElementById("show-last-seen");
+        var hideEmail = document.getElementById("hide-email");
 
-        if (!profileVisibility || !showLastSeen) return; // Проверяем, что элементы существуют
+        if (!profileVisibility || !showLastSeen || !hideEmail) return; // Проверяем, что элементы существуют
 
         // Получаем значения
         var profileVisibilityValue = profileVisibility.value;
         var showLastSeenValue = showLastSeen.checked ? 1 : 0;
+        var hideEmailValue = hideEmail.checked ? 1 : 0;
 
         // Создаем объект FormData
         var formData = new FormData();
         formData.append("profile_visibility", profileVisibilityValue);
         formData.append("show_last_seen", showLastSeenValue);
+        formData.append("hide_email", hideEmailValue);
 
         // Отправляем данные на сервер
         fetch("/settings/privacy", {

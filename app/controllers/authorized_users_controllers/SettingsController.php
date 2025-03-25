@@ -45,6 +45,8 @@ class SettingsController
         $profileVisibility = $this->settingModel->getProfileVisibility($userId);
         $showLastSeen = $this->settingModel->getShowLastSeen($userId);
         $language = $this->settingModel->getLanguage($userId);
+        $hideEmail = $this->settingModel->getHideEmail($userId); // Получаем из базы
+
         $flags = [
             'en' => 'gb',
             'ru' => 'ru',
@@ -214,15 +216,21 @@ class SettingsController
         echo json_encode(['success' => true, 'message' => 'User data updated successfully']);
     }
 
-    public function updatePrivacySettings(){
+    public function updatePrivacySettings() {
         $userId = $_SESSION['user']['user_id'];  // Получаем user_id из сессии
         $profileVisibility = $_POST['profile_visibility'];
         $showLastSeen = $_POST['show_last_seen'];
+        $hideEmail = isset($_POST['hide_email']) ? (int)$_POST['hide_email'] : 0;
+
         // Обновление данных в базе
         $success = $this->settingModel->setProfileVisibility($userId, $profileVisibility);
         $success &= $this->settingModel->setShowLastSeen($userId, $showLastSeen);
+        $success &= $this->settingModel->setHideEmail($userId, $hideEmail);
+
+        // Обновляем данные в сессии
         $_SESSION['settings']['profile_visibility'] = $profileVisibility;
         $_SESSION['settings']['show_last_seen'] = $showLastSeen;
+        $_SESSION['settings']['hide_email'] = $hideEmail;
 
         // Ответ на запрос
         if ($success) {
@@ -231,6 +239,7 @@ class SettingsController
             echo json_encode(['success' => false, 'message' => 'Failed to save settings']);
         }
     }
+
     public function updatePassword() {
         $user = $_SESSION['user'];
         $login = $user['user_login'];

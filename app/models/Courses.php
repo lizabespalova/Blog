@@ -473,6 +473,35 @@ class Courses
             return ["error" => "Unable to prepare the SQL query"];
         }
     }
+    public function removeSubscriber($userId, $courseId) {
+        $stmt = $this->conn->prepare("DELETE FROM course_custom_access WHERE user_id = ? AND course_id = ?");
+        $stmt->bind_param("ii", $userId, $courseId);  // связываем параметры
+        $stmt->execute();
+
+        // Используем affected_rows для mysqli
+        return $stmt->affected_rows > 0;
+    }
+
+    public function removeCustomAccess($course_id) {
+        $sql = "DELETE FROM course_custom_access WHERE course_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$course_id]);
+    }
+    public function getCourseVisibility($courseId) {
+        $sql = "SELECT visibility_type FROM courses WHERE course_id = ?";
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            return 'public'; // Возвращаем значение по умолчанию при ошибке
+        }
+
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['visibility_type'] ?? 'public'; // Если значение не найдено, используем 'public'
+    }
 
 
 }

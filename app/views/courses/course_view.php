@@ -74,8 +74,8 @@
     </div>
     <!-- Модальное окно для отображения подписчиков -->
     <div id="subscribersModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeSubscribersModal()">&times;</span>
+        <div class="modal-content-container">
+            <span class="close-btn" onclick="closeSubscriberModal()">&times;</span>
             <h2><?= $translations['followers']; ?></h2>
             <ul id="subscribersList">
                 <!-- Список подписчиков будет загружен сюда -->
@@ -285,20 +285,20 @@
             <form id="visibilityForm">
                 <label>
                     <?= $translations['visibility_public']; ?>
-                    <input type="radio" name="visibility" value="public" checked>
+                    <input type="radio" name="visibility" value="public" <?= ($course['visibility'] === 'public') ? 'checked' : ''; ?>>
                 </label>
 
                 <label>
                     <?= $translations['visibility_subscribers']; ?>
-                    <input type="radio" name="visibility" value="subscribers">
+                    <input type="radio" name="visibility" value="subscribers" <?= ($course['visibility'] === 'subscribers') ? 'checked' : ''; ?>>
                 </label>
 
                 <label>
                     <?= $translations['visibility_custom']; ?>
-                    <input type="radio" name="visibility" value="custom">
+                    <input type="radio" name="visibility" value="custom" <?= ($course['visibility'] === 'custom') ? 'checked' : ''; ?>>
                 </label>
 
-                <div id="customUsersBlock" style="display:none;">
+                <div id="customUsersBlock" style="display: <?= ($course['visibility'] === 'custom') ? 'block' : 'none'; ?>;">
                     <input type="text" id="userSearch" placeholder="<?= $translations['search']; ?>" oninput="searchUsers(this.value)">
                     <ul id="userSearchResults"></ul>
 
@@ -308,6 +308,7 @@
 
                 <button type="submit"><?= $translations['save']; ?></button>
             </form>
+
         </div>
     </div>
 

@@ -7,7 +7,6 @@ use models\Courses;
 use models\User;
 use services\CoverImagesService;
 
-require_once 'app/services/helpers/session_check.php';
 
 class CourseController
 {
@@ -25,6 +24,8 @@ class CourseController
     }
     public function showUserCoursesForm($username) {
         require_once 'app/services/helpers/switch_language.php';
+        require_once 'app/services/helpers/session_check.php';
+
         // Получаем список избранных статей с деталями
         $articles= $this->articleModel->getUserArticles($username);
         require_once 'app/views/courses/courses_form.php';
@@ -64,6 +65,7 @@ class CourseController
 
     public function showUserCourses(){
         require_once 'app/services/helpers/switch_language.php';
+        require_once 'app/services/helpers/session_check.php';
 
         $userId = $_SESSION['user']['user_id'] ?? null;
 
@@ -72,6 +74,7 @@ class CourseController
 
         // Фильтруем курсы по видимости
         $filteredCourses = $this->getFilteredCourses($courses, $userId);
+        $currentUser = $this->userModel->get_user_by_id($userId);
 
         // Загружаем шаблон с отфильтрованными курсами
         require_once 'app/views/courses/my_courses.php';
@@ -101,6 +104,8 @@ class CourseController
     }
     public function showCourse($courseId) {
         require_once 'app/services/helpers/switch_language.php';
+        require_once 'app/services/helpers/session_check.php';
+
         $userId = $_SESSION['user']['user_id'] ?? null;
         $course = $this->courseModel->getCourseById($courseId);
         $userlogin = $this->userModel->getLoginById($course['user_id']);
@@ -116,6 +121,7 @@ class CourseController
         // Получаем информацию о завершении статей
         $completedArticles = $this->courseModel->getCompletedArticlesForUser($userId, $courseId);
         $materials = $this->courseModel->getMaterials($courseId);
+        $visibility = $this->courseModel->getCourseVisibility($courseId);
 
         // Добавим данные автора в массив $course
         $author = $this->userModel->get_author_avatar($userlogin);
@@ -126,6 +132,7 @@ class CourseController
         // Добавляем данные о лайках и дизлайках в курс
         $course['likes'] = $likes;
         $course['dislikes'] = $dislikes;
+        $course['visibility'] = $visibility; // Передаём видимость в шаблон
 
         $course['author_avatar'] = $author['user_avatar'] ?? '/templates/images/profile.jpg';
 //        var_dump($completedArticles);
@@ -411,7 +418,10 @@ class CourseController
             echo json_encode(['success' => false, 'error' => 'Отсутствует course_id']);
             return;
         }
-
+// Если курс становится публичным или только для подписчиков, удаляем кастомный доступ
+        if ($visibility_type !== 'custom') {
+            $this->courseModel->removeCustomAccess($course_id);
+        }
         // Обновляем тип видимости
         $this->courseModel->updateVisibilityType($visibility_type, $course_id, $user_ids);
 
@@ -435,7 +445,14 @@ class CourseController
         // Получаем подписчиков курса из базы данных
         $subscribers = $this->courseModel->getSubscribersByCourseId($courseId);
         // Возвращаем результат, например, в формате JSON
-        echo json_encode($subscribers);
+        echo json_encode(["subscribers" => $subscribers]);
+    }
+    public function removeSubscriber($userId, $courseId) {
+        if ($this->courseModel->removeSubscriber($userId, $courseId)) {
+            echo json_encode(['success' => true, 'message' => 'Subscriber removed successfully']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Subscriber not found or already removed']);
+        }
     }
 
 }

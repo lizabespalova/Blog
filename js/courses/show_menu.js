@@ -1,5 +1,7 @@
 // Функция для открытия/закрытия меню
 function toggleSettingsMenu(event) {
+    event.stopPropagation(); // Останавливаем всплытие события
+
     const settingsMenu = document.getElementById('settings-menu');
 
     // Переключаем класс для управления видимостью
@@ -7,17 +9,24 @@ function toggleSettingsMenu(event) {
 
     // Позиционируем меню рядом с кнопкой шестерёнки
     const buttonRect = event.target.getBoundingClientRect();
-    settingsMenu.style.left = buttonRect.left + window.scrollX + 'px';  // Меню будет появляться рядом с кнопкой по горизонтали
-    settingsMenu.style.top = buttonRect.bottom + window.scrollY + 5 + 'px';  // Меню будет располагаться сразу под кнопкой
+    settingsMenu.style.left = buttonRect.left + window.scrollX + 'px';
+    settingsMenu.style.top = buttonRect.bottom + window.scrollY + 5 + 'px';
 }
 
-// Добавляем обработчик клика по документу
+// Закрываем меню при клике вне его
 document.addEventListener('click', function(event) {
     const settingsMenu = document.getElementById('settings-menu');
     const settingsButton = document.querySelector('.settings-btn');
 
-    // Проверяем, был ли клик внутри меню или кнопки, если нет - скрываем меню
-    if (!settingsMenu.contains(event.target) && event.target !== settingsButton) {
+    if (settingsMenu && settingsButton && !settingsMenu.contains(event.target) && !settingsButton.contains(event.target)) {
         settingsMenu.classList.remove('show');
     }
 });
+
+// Закрытие модального окна и возврат меню настроек
+function closeVisibilityModal() {
+    document.getElementById('visibilityModal').style.display = 'none';
+
+    // Показываем меню настроек снова после закрытия модального окна
+    document.getElementById('settings-menu').classList.add('show');
+}

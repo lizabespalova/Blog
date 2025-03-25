@@ -1,12 +1,13 @@
 function openVisibilityModal() {
     document.getElementById('visibilityModal').style.display = 'block';
-    document.getElementById('settings-menu').style.display = 'none';
+    document.getElementById('settings-menu').classList.remove('show'); // Скрываем меню
 }
-
 
 function closeVisibilityModal() {
     document.getElementById('visibilityModal').style.display = 'none';
 }
+
+
 
 // Переключение блока с выбором пользователей
 document.querySelectorAll('input[name="visibility"]').forEach(el => {
@@ -44,12 +45,7 @@ function searchUsers(query) {
                 nameLink.classList.add('user-name');
                 nameLink.innerHTML = `<strong>${user.user_login}</strong>`;
 
-                const emailSpan = document.createElement('span');
-                emailSpan.classList.add('user-email');
-                emailSpan.textContent = user.user_email;
-
                 userInfo.appendChild(nameLink);
-                userInfo.appendChild(emailSpan);
 
                 li.appendChild(avatar);
                 li.appendChild(userInfo);
@@ -68,7 +64,7 @@ function addUserToSelected(user) {
     selectedUserIds.add(user.user_id);
 
     const li = document.createElement('li');
-    li.textContent = user.user_login + ' (' + user.user_email + ')';
+    li.textContent = user.user_login;
     li.setAttribute('data-id', user.user_id);
 
     const removeBtn = document.createElement('span');
@@ -83,6 +79,7 @@ function addUserToSelected(user) {
     li.appendChild(removeBtn);
     document.getElementById('selectedUsers').appendChild(li);
 }
+
 
 document.getElementById('visibilityForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -105,7 +102,7 @@ document.getElementById('visibilityForm').addEventListener('submit', function(ev
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Settings saved');
+                window.location.href = "/success?message=" + 'Settings saved';
                 closeVisibilityModal();
 
                 // Второй запрос с использованием FormData
@@ -120,7 +117,8 @@ document.getElementById('visibilityForm').addEventListener('submit', function(ev
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('Course status updated');
+                            window.location.href = "/success?message=" + 'Course status updated';
+
                         } else {
                             alert('Error updating course status: ' + data.error);
                         }

@@ -1,8 +1,12 @@
 <?php
 
 namespace controllers\search_controllers;
+use controllers\authorized_users_controllers\CourseController;
 use models\Articles;
+use models\Courses;
 use models\Search;
+use models\Settings;
+use models\User;
 use services\MarkdownService;
 
 require_once 'app/services/helpers/session_check.php';
@@ -11,6 +15,11 @@ class SearchController
 {
     private $searchModel;
     private $articleModel;
+    private $courseModel;
+    private $userModel;
+    private $settingModel;
+
+    private $courseController;
     private $markdownService;
 
 
@@ -19,7 +28,10 @@ class SearchController
         $this->searchModel = new Search($dbConnection);
         $this->articleModel = new Articles($dbConnection);
         $this->markdownService = new MarkdownService();
-
+        $this->courseModel = new Courses($dbConnection);
+        $this->userModel = new User($dbConnection);
+        $this->courseController = new CourseController($dbConnection);
+        $this->settingModel = new Settings($dbConnection);
     }
 
     public function show_search_form()
@@ -77,6 +89,29 @@ class SearchController
         include __DIR__ . '/../../views/search/sections/popular_articles.php';
     }
 
+    public function showPopularCourses() {
+        // Получаем смещение из параметров запроса (по умолчанию 0)
+        $offset = $_GET['offset'] ?? 0;
+        $userId = $_SESSION['user']['user_id'] ?? null;
+
+        // Получаем популярные курсы
+        $courses = $this->searchModel->getPopularCourses(3, $offset);
+
+        // Фильтруем курсы по видимости или доступности
+        $filteredCourses = $this->courseController->getFilteredCourses($courses, $userId);
+
+        // Подключаем вспомогательные файлы для смены языка
+        require_once 'app/services/helpers/switch_language.php';
+
+        // Для каждого курса получаем email и настройки скрытия email
+        foreach ($filteredCourses as & $course) {
+            $course['email'] = $this->userModel->getUserEmail($course['user_id']);
+            $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
+        }
+
+        // Передаем курсы в шаблон для отображения
+        include __DIR__ . '/../../views/search/sections/popular_courses.php';
+    }
 
     public function showPopularWriters() {
         $limit = 4; // Количество авторов на странице
