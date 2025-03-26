@@ -1,57 +1,52 @@
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
+/* Контейнер для сетки курсов */
+.course-grid {
+    display: grid; /* Включаем Grid */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Автоматически заполняем сетку, минимальная ширина колонок 250px */
+    gap: 20px; /* Расстояние между карточками */
     padding: 20px;
-    text-align: center;
 }
 
-.courses-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    justify-content: center;
-    padding: 10px;
-}
-
+/* Стили для каждой карточки */
 .course-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
+    display: flex;
+    flex-direction: column; /* Элементы внутри карточки будут располагаться вертикально */
+    background-color: #fff;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    box-sizing: border-box; /* Учитываем padding при вычислении ширины/высоты */
+    height: 450px; /* Фиксированная высота для каждой карточки */
     text-align: center;
-    transition: transform 0.2s ease-in-out;
+    overflow: hidden; /* Обрезаем все, что выходит за пределы карточки */
 }
 
+/* При наведении увеличиваем карточку */
 .course-card:hover {
     transform: scale(1.05);
 }
 
+/* Стили изображения курса */
 .course-card img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
     border-radius: 5px;
 }
 
+/* Заголовок курса */
 .course-card h3 {
     font-size: 18px;
     margin: 10px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
+/* Описание курса */
 .course-card p {
     font-size: 14px;
     color: #666;
-    max-height: 3.6em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    margin-bottom: 20px;
 }
 
+/* Кнопка */
 .btn {
     display: inline-block;
     padding: 8px 12px;
@@ -59,26 +54,36 @@
     color: white;
     border-radius: 5px;
     text-decoration: none;
-    margin-top: 10px;
     transition: background 0.3s ease;
 }
 
+/* При наведении */
 .btn:hover {
     background: #0056b3;
 }
 
+/* Стили для заблокированных курсов */
+.locked-course {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.lock-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
 /* Адаптация для мобильных */
 @media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-    .courses-list {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .course-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Уменьшаем минимальную ширину на меньших экранах */
     }
 }
 
 @media (max-width: 480px) {
-    .courses-list {
-        grid-template-columns: 1fr;
+    .course-grid {
+        grid-template-columns: 1fr; /* Для мобильных устройств сетка будет в один столбец */
     }
 }

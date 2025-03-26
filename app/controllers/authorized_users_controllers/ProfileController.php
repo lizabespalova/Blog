@@ -51,7 +51,7 @@ class ProfileController
             $user = $this->userModel->get_user_by_login($profileUserLogin);
 
             $profileUserId = $user['user_id'];
-            $email = $this->userModel->getUserEmail($profileUserId);
+//            $email = $this->userModel->getUserEmail($profileUserId);
 
             if (!$user) {
                 throw new Exception($profileUserLogin );
@@ -84,9 +84,21 @@ class ProfileController
 //            var_dump($followStatus);
 
             $courses = $this->courseModel->getUserCourses($profileUserId);
-            // Фильтруем курсы по видимости
-            $filteredCourses = $this->courseController->getFilteredCourses($courses, $currentUser['user_id']);
-            $hideEmail = $this->settingModel->getHideEmail($profileUserId);
+            // Для каждого курса получаем email и настройки скрытия email
+            foreach ($courses as &$course) { // Добавили &
+                $course['email'] = $this->userModel->getUserEmail($course['user_id']);
+                $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
+                if ($course['visibility_type'] === 'subscribers') {
+                    $course['isSubscriber'] =  $this->followModel->isFollowing($userId, $course['user_id']);
+                } else {
+                    $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
+                }
+            }
+            unset($course); // Разрываем ссылку после использования
+
+//             Фильтруем курсы по видимости
+//            $filteredCourses = $this->courseController->getFilteredCourses($courses, $currentUser['user_id']);
+//            $hideEmail = $this->settingModel->getHideEmail($profileUserId);
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {

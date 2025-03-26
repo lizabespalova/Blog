@@ -4,6 +4,7 @@ namespace controllers\search_controllers;
 use controllers\authorized_users_controllers\CourseController;
 use models\Articles;
 use models\Courses;
+use models\Follows;
 use models\Search;
 use models\Settings;
 use models\User;
@@ -17,6 +18,8 @@ class SearchController
     private $articleModel;
     private $courseModel;
     private $userModel;
+    private $followModel;
+
     private $settingModel;
 
     private $courseController;
@@ -30,6 +33,7 @@ class SearchController
         $this->markdownService = new MarkdownService();
         $this->courseModel = new Courses($dbConnection);
         $this->userModel = new User($dbConnection);
+        $this->followModel = new Follows($dbConnection);
         $this->courseController = new CourseController($dbConnection);
         $this->settingModel = new Settings($dbConnection);
     }
@@ -96,18 +100,21 @@ class SearchController
 
         // Получаем популярные курсы
         $courses = $this->searchModel->getPopularCourses(3, $offset);
-
-        // Фильтруем курсы по видимости или доступности
-        $filteredCourses = $this->courseController->getFilteredCourses($courses, $userId);
-
         // Подключаем вспомогательные файлы для смены языка
         require_once 'app/services/helpers/switch_language.php';
 
         // Для каждого курса получаем email и настройки скрытия email
-        foreach ($filteredCourses as & $course) {
+        foreach ($courses as &$course) { // Добавили &
             $course['email'] = $this->userModel->getUserEmail($course['user_id']);
             $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
+            if ($course['visibility_type'] === 'subscribers') {
+                $course['isSubscriber'] =  $this->followModel->isFollowing($userId, $course['user_id']);
+            } else {
+                $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
+            }
         }
+        unset($course); // Разрываем ссылку после использования
+//        var_dump($courses);
 
         // Передаем курсы в шаблон для отображения
         include __DIR__ . '/../../views/search/sections/popular_courses.php';

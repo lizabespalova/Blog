@@ -55,11 +55,11 @@ const searchInput = document.querySelector('.searching-input');
 
 if (searchButton && searchInput) {
     searchButton.addEventListener('click', () => {
-        filterSearch('.searching-input', '.card, .writer-card', '.card-title, .card-meta, h3, p');
+        filterSearch('.searching-input', '.card, .writer-card, .course-card', '.card-title, .card-meta, h3, p');
     });
 
     searchInput.addEventListener('input', () => {
-        filterSearch('.searching-input', '.card, .writer-card', '.card-title, .card-meta, h3, p');
+        filterSearch('.searching-input', '.card, .writer-card, .course-card', '.card-title, .card-meta, h3, p');
     });
 } else {
     console.warn('Search button or input not found.');

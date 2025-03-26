@@ -49,17 +49,16 @@
     font-style: italic;
     font-size: 11px;
 }
-
 /* Контейнер для всех карточек */
 .reposts-articles-container {
     display: flex;
     flex-direction: column; /* Вертикальная ориентация */
-    align-items: center; /* Центрирование карточек */
     gap: 15px; /* Расстояние между блоками */
     margin: 0 auto;
     max-width: 800px; /* Ограничить ширину всего контейнера */
     padding: 10px;
 }
+
 
 /* Карточка репоста */
 .repost-card {
