@@ -1,6 +1,8 @@
 let isLoading = false;  // Флаг для предотвращения повторных запросов
 
 function loadMorePopularArticles() {
+    if (getSearchType() !== 'articles') return;
+
     if (isLoading) return;  // Если уже загружается, не делаем запрос
 
     const offset = document.querySelectorAll('.article').length;  // Сколько уже загружено статей

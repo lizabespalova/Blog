@@ -485,12 +485,22 @@ class Articles
 
         return $totalArticles;
     }
-    public function getArticlesFilteredByTags($tag){
-        $stmt = $this->conn->prepare("SELECT * FROM articles WHERE tags LIKE CONCAT('%', ?, '%') ORDER BY created_at DESC");
+    public function getArticlesFilteredByTags($tag) {
+        $stmt = $this->conn->prepare("
+        SELECT DISTINCT a.id, a.slug, a.title, a.created_at, 
+               a.content, 
+               u.user_login, u.user_avatar
+        FROM articles a
+        JOIN users u ON a.user_id = u.user_id
+        WHERE a.is_published = 1 
+        AND LOWER(a.tags) LIKE LOWER(CONCAT('%', ?, '%')) 
+        ORDER BY a.created_at DESC
+    ");
         $stmt->bind_param("s", $tag);
         $stmt->execute();
-        return $stmt->get_result();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+
 
     // Получение популярных статей по лайкам
     public function getPopularArticlesByCourseID(int $courseId): array

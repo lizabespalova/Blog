@@ -75,7 +75,44 @@ class SearchController
         include __DIR__ . '/../../views/search/form_search.php';
     }
 
+    public function search() {
+        $query = $_GET['query'] ?? '';
+        $type = $_GET['type'] ?? 'all'; // Тип поиска: all, articles, courses, writers
 
+        if (empty($query)) {
+            echo json_encode(["error" => "Query is empty"]);
+            return;
+        }
+
+        $results = [];
+
+        switch ($type) {
+            case 'articles':
+                $results['articles'] = $this->searchModel->searchArticles($query);
+                if (!empty($results['articles'])) {
+                    foreach ($results['articles'] as $key => $article) {
+                        // Парсим контент в HTML
+                        $results['articles'][$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+                    }
+                }
+                break;
+            case 'courses':
+                $results['courses'] = $this->searchModel->searchCourses($query);
+                break;
+            case 'writers':
+                $results['writers'] = $this->searchModel->searchWriters($query);
+                break;
+            default:
+                // Поиск по всем типам, если не указан конкретный
+                $results['articles'] = $this->searchModel->searchArticles($query);
+                $results['courses'] = $this->searchModel->searchCourses($query);
+                $results['writers'] = $this->searchModel->searchWriters($query);
+                break;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($results);
+    }
 
 
 
@@ -157,13 +194,22 @@ class SearchController
         $user = $_SESSION['user'] ?? null;
 
         $tag = $_GET['tag'] ?? '';
-        $tag = trim($tag);
         $articles = $this->articleModel->getArticlesFilteredByTags($tag);
-        if (!empty($articles)):
-            foreach ($articles as $article):
-                 include __DIR__ . '/../../views/partials/card.php';
-             endforeach;
-        endif;
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
+        }
+//        var_dump(count($articles)); // Выведет количество статей
+
+        include __DIR__ . '/../../views/search/sections/feed.php';
+
+
+//        if (!empty($articles)):
+//            foreach ($articles as $article):
+//                 include __DIR__ . '/../../views/partials/card.php';
+//             endforeach;
+//        endif;
     }
 
 

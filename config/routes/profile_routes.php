@@ -86,6 +86,12 @@ function profile_route($uri, $method) {
                 $controller->show_search_form();
             }
             exit();  // Остановка выполнения после маршрута
+        case '/search-item':
+            $controller = new SearchController($dbConnection);
+            if ($method === 'GET') {
+                $controller->search();
+            }
+            exit();
         case '/remove-follower':
             $controller = new FollowController($dbConnection);
             session_start();

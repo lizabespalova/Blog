@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const menuItems = document.querySelectorAll(".menu-item");
     const contentContainer = document.getElementById("content-container");
+
     const tagSearchForm = document.querySelector(".tag-search-form");
 
     // Функция для загрузки секции

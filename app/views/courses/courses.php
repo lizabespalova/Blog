@@ -1,5 +1,4 @@
 <div class="course-grid">
-
 <?php foreach ($courses as $course): ?>
     <div class="course-card">
         <img src="<?= htmlspecialchars('/' . ltrim($course['cover_image'], '/')) ?>" alt="Обложка курса">

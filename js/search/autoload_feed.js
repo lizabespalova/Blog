@@ -1,4 +1,7 @@
 function loadMoreArticles() {
+    // Проверяем, находимся ли мы на странице "feed"
+    if (getSearchType() !== 'feed') return;
+
     const offset = document.querySelectorAll('.article').length; // Сколько уже загружено статей
 
     // Получаем новые статьи с сервером, передавая смещение

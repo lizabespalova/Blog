@@ -1,6 +1,8 @@
 let Loading = false;  // Флаг для предотвращения повторных запросов
 
 function loadMorePopularWriters() {
+    if (getSearchType() !== 'writers') return;
+
     if (Loading) return;  // Если уже загружается, не делаем запрос
     Loading = true;  // Устанавливаем флаг, что запрос выполняется
 

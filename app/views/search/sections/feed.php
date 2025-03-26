@@ -21,7 +21,7 @@ if (empty($articles)): ?>
 <?php else: ?>
     <div id="feed-content">
         <?php foreach ($articles as $article): ?>
-            <div class="article">
+            <div class="article-feed">
                 <img src="<?= htmlspecialchars($article['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
                      alt="<?= htmlspecialchars($article['user_login']) ?>" class="article-avatar">
                 <div class="article-info">

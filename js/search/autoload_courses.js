@@ -1,6 +1,8 @@
 let isLoading = false;  // Флаг для предотвращения повторных запросов
 
 function loadMorePopularCourses() {
+    if (getSearchType() !== 'courses') return;
+
     if (isLoading) return;  // Если уже загружается, не делаем запрос
 
     const offset = document.querySelectorAll('.course').length;  // Сколько уже загружено курсов

@@ -121,7 +121,62 @@ class Search
         return $courses;
     }
 
+    public function searchAll($query) {
+        return [
+            "articles" => $this->searchArticles($query),
+            "courses" => $this->searchCourses($query),
+            "writers" => $this->searchWriters($query)
+        ];
+    }
+
+    public function searchArticles($query) {
+        $sql = "SELECT 
+                a.*, 
+                u.user_login, 
+                u.user_avatar 
+            FROM articles a
+            JOIN users u ON a.user_id = u.user_id
+            WHERE (a.title LIKE ? OR a.content LIKE ?) 
+            AND a.is_published = 1 
+            LIMIT 10";
+
+        $stmt = $this->conn->prepare($sql);
+        $likeQuery = "%$query%";
+        $stmt->bind_param("ss", $likeQuery, $likeQuery);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+    public function searchCourses($query) {
+        $sql = "SELECT c.*, 
+                   s.hide_email 
+            FROM courses c
+            LEFT JOIN settings s ON c.user_id = s.user_id
+            WHERE (c.title LIKE ? OR c.description LIKE ?)
+            LIMIT 10";
+
+        return $this->executeQuery($sql, "%$query%");
+    }
 
 
 
+    public function searchWriters($query) {
+        $sql = "SELECT user_id, user_login, user_avatar, user_specialisation 
+                FROM users 
+                WHERE user_login LIKE ? OR user_specialisation LIKE ? 
+                LIMIT 10";
+        return $this->executeQuery($sql, $query);
+    }
+
+    private function executeQuery($sql, $query) {
+        $stmt = $this->conn->prepare($sql);
+        $searchTerm = "%$query%";
+        $stmt->bind_param("ss", $searchTerm, $searchTerm);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
