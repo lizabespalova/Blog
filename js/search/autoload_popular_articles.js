@@ -1,38 +1,41 @@
-let isLoading = false;  // Флаг для предотвращения повторных запросов
+// let isLoading = false;  // Флаг загрузки
 
 function loadMorePopularArticles() {
-    if (getSearchType() !== 'articles') return;
+    if (getSearchType() !== 'articles' || isLoading) return;
 
-    if (isLoading) return;  // Если уже загружается, не делаем запрос
+    isLoading = true; // Устанавливаем флаг, что запрос выполняется
 
-    const offset = document.querySelectorAll('.article').length;  // Сколько уже загружено статей
+    // Получаем количество уже загруженных статей
+    const offset = document.querySelectorAll('.article-feed-container').length;
+    console.log("Offset before request:", offset); // Проверяем значение offset перед запросом
 
-    isLoading = true;  // Устанавливаем флаг, что запрос выполняется
-
-    // Получаем новые популярные статьи с сервером, передавая смещение
     fetch(`/sections/popular-articles?offset=${offset}`)
         .then(response => response.text())
         .then(data => {
-            console.log(data);  // Для отладки
+            console.log("Server response:", data);
 
-            // Проверяем, есть ли данные
-            if (data.trim()) {
-                document.getElementById('popular-articles-content').innerHTML += data;
+            const contentContainer = document.getElementById('content-container');
+
+            if (contentContainer) {  // Проверяем, существует ли контейнер
+                if (data.trim()) {
+                    // Добавляем новые статьи в контейнер
+                    contentContainer.insertAdjacentHTML('beforeend', data);
+                } else {
+                    console.log("Нет новых статей для загрузки");
+                    window.removeEventListener('scroll', onScrollPopular); // Убираем слушатель при отсутствии данных
+                }
             } else {
-                console.log("Нет новых статей для загрузки");
-                window.removeEventListener('scroll', onScrollPopular); // Скрываем область загрузки
+                console.error('Контейнер с id "article-feed-container" не найден.');
             }
-
-            isLoading = false;  // Сбрасываем флаг после загрузки
         })
-        .catch(() => {
-            isLoading = false;  // Сбрасываем флаг, если произошла ошибка
+        .finally(() => {
+            isLoading = false; // Сбрасываем флаг после загрузки
         });
 }
 
 function onScrollPopular() {
     // Проверяем, достиг ли пользователь нижней части страницы
-    if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 100) { // Немного добавил отступ для более точной реакции
         loadMorePopularArticles();
     }
 }

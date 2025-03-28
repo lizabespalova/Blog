@@ -75,7 +75,9 @@ class CourseController
         // Фильтруем курсы по видимости
         $filteredCourses = $this->getFilteredCourses($courses, $userId);
         $currentUser = $this->userModel->get_user_by_id($userId);
-
+        foreach ($courses as &$course) { // Добавили &
+            $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
+        }
         // Загружаем шаблон с отфильтрованными курсами
         require_once 'app/views/courses/my_courses.php';
     }
@@ -103,8 +105,8 @@ class CourseController
          });
     }
     public function showCourse($courseId) {
-        require_once 'app/services/helpers/switch_language.php';
         require_once 'app/services/helpers/session_check.php';
+        require_once 'app/services/helpers/switch_language.php';
 
         $userId = $_SESSION['user']['user_id'] ?? null;
         $course = $this->courseModel->getCourseById($courseId);
@@ -133,6 +135,7 @@ class CourseController
         $course['likes'] = $likes;
         $course['dislikes'] = $dislikes;
         $course['visibility'] = $visibility; // Передаём видимость в шаблон
+        $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
 
         $course['author_avatar'] = $author['user_avatar'] ?? '/templates/images/profile.jpg';
 //        var_dump($completedArticles);
@@ -253,6 +256,8 @@ class CourseController
         }
     }
     public function saveProgress(){
+        require_once 'app/services/helpers/session_check.php';
+
         $data = json_decode(file_get_contents('php://input'), true);
 
         $userId = $_SESSION['user']['user_id'] ?? null;
@@ -341,27 +346,33 @@ class CourseController
     }
 
     public function reactToCourse() {
+        require_once 'app/services/helpers/session_check.php';
+
         // Получаем данные из запроса
         $input = json_decode(file_get_contents('php://input'), true);
 
         $reactionType = $input['reaction_type'] ?? null;
         $courseId = $input['course_id'] ?? null;
-        $userId = $input['user_id'] ?? null;
-
+        $reactionerId = $_SESSION['user']['user_id'] ?? null;
+        if ($reactionerId === null) {
+            header('Content-Type: application/json');
+            echo json_encode(["error" => "You cannot leave likes or dislikes because you are not authorized"]);
+            exit();
+        }
         // Проверка существующей реакции
-        $existingReaction = $this->courseModel->getReaction($courseId, $userId);
+        $existingReaction = $this->courseModel->getReaction($courseId, $reactionerId);
 
         if ($existingReaction !== null) {
             if ($existingReaction['reaction'] === $reactionType) {
                 // Если нажали повторно — удаляем реакцию
-                $this->courseModel->removeReaction($courseId, $userId);
+                $this->courseModel->removeReaction($courseId, $reactionerId);
             } else {
                 // Обновляем реакцию на другую
-                $this->courseModel->updateReaction($courseId, $userId, $reactionType);
+                $this->courseModel->updateReaction($courseId, $reactionerId, $reactionType);
             }
         } else {
             // Если реакции нет — создаём
-            $this->courseModel->addReaction($courseId, $userId, $reactionType);
+            $this->courseModel->addReaction($courseId, $reactionerId, $reactionType);
         }
 
         // Получаем количество лайков и дизлайков

@@ -179,7 +179,6 @@ function performSearch() {
 function getSearchType() {
     const urlParams = new URLSearchParams(window.location.search);
     const section = urlParams.get('section'); // Получаем параметр section из URL
-console.log(section);
     switch (section) {
         case 'popular-articles':
             return 'articles';  // Если в URL указаны популярные статьи

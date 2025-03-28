@@ -213,5 +213,32 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'selected_users' => 'Ausgewählte Benutzer',
     'view_course_subscribers' => 'Kursabonnenten anzeigen',
     'request_access' => 'Zugriff anfordern',
+    'private_course' => 'Privatkurs',
+    'materials_count' => 'Anzahl der Materialien',
+    'course_information' => 'Kursinformation',
+    'article_amount' => 'Anzahl der Artikel',
+    'course_time' => 'Ungefähre Zeit zum Abschluss',
+    'difficulty_level' => 'Schwierigkeitsgrad',
+
+    //    Футер
+    'about' => 'Über',
+    //    О сайте
+    'website_description' => '<p>Meine Website bietet eine einzigartige Plattform für den Austausch von Wissen, Lernen und persönliche Entwicklung. Wir streben danach, eine Gemeinschaft zu schaffen, in der jeder nicht nur sein Wissen teilen, sondern auch aktiv wachsen kann, indem er Zugang zu verschiedenen Artikeln, Bildungs-Kursen und nützlichen Ressourcen erhält. Auf unserer Seite finden Sie aktuelle Materialien zu verschiedenen Themen, einschließlich IT, Technologie, persönliche Entwicklung und vieles mehr.</p>
+                <p>Wir geben jedem Benutzer die Möglichkeit, nicht nur zu lernen, sondern auch eigene Kurse und Artikel zu erstellen und so zur Entwicklung unserer Plattform beizutragen. Hier können Erfahrungen geteilt, Diskussionen geführt und wertvolle Ratschläge von anderen Teilnehmern erhalten werden. Wir glauben an die Kraft der Gemeinschaft und streben danach, unseren Raum für alle, die bereit sind zu lernen und zu wachsen, komfortabel und nützlich zu gestalten.</p>
+                <p>Besondere Aufmerksamkeit schenken wir den aktuellen IT-Nachrichten und -Trends. Wir diskutieren die neuesten Ereignisse in der Technologiebranche, was es uns ermöglicht, am Puls der Zeit zu bleiben und über die wichtigsten Veränderungen in der Branche informiert zu bleiben. Schließen Sie sich uns an und werden Sie Teil einer aktiven und inspirierenden Gemeinschaft!</p>',
+
+     'website_goals'=>  '<h2>Unsere Ziele:</h2> 
+                    <ul> 
+                        <li><strong>Bereitstellung hochwertiger Inhalte:</strong> Wir bemühen uns, unseren Nutzern nur geprüfte und aktuelle Materialien anzubieten. Jeder Kurs, Artikel und jede Ressource wird sorgfältig überprüft, damit Sie Wissen erhalten, das den höchsten Standards entspricht.</li> 
+                        <li><strong>Aufbau einer Gemeinschaft von Lerninteressierten:</strong> Wir sind überzeugt, dass Lernen nicht nur das Erwerben von Wissen ist, sondern auch der Austausch von Erfahrungen. Wir schaffen einen Raum, in dem jeder beitragen, Erfahrungen teilen und von anderen lernen kann.</li> 
+                        <li><strong>Gewährleistung eines einfachen Zugangs zu Materialien:</strong> Unser Ziel ist es, das Lernen zugänglich und bequem zu machen. Alle Ressourcen auf der Website sind leicht zu finden und zu nutzen, sei es Video-Tutorials, Artikel oder Kurse. Wir tun alles, um das Lernen für alle komfortabel und zugänglich zu machen.</li> 
+                    </ul>',
+    'website_contacts'=> '<h2>Kontakt:</h2> 
+                <p>Wenn Sie Fragen, Vorschläge oder Wünsche haben, helfen wir Ihnen gerne weiter. Kontaktieren Sie uns über einen der folgenden Kanäle:</p> 
+                <ul> 
+                    <li>Per E-Mail: <a href="mailto:info@example.com">info@example.com</a></li> 
+                    <li>Über das Kontaktformular auf der Website: <a href="/contact">Zum Formular</a></li> 
+                </ul>',
+    'website_coperation'=> 'Kooperation',
 
 ];

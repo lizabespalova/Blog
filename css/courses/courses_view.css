@@ -7,14 +7,36 @@
 
 .course-title {
     font-size: 24px;
-    margin-bottom: 20px;
-    display: flex; /* Для выравнивания заголовка и кнопки */
-    justify-content: center;
-    align-items: center;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+    font-weight: bold;
+    color: #333; /* Темный цвет текста */
+    text-transform: uppercase; /* Преобразуем в заглавные буквы */
+    letter-spacing: 1px; /* Немного увеличиваем межбуквенный интервал */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Тень для текста */
+    background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Градиентный фон */
+    -webkit-background-clip: text; /* Применяем фон к тексту */
+    color: transparent; /* Делаем текст прозрачным, чтобы фон был виден */
+    padding: 10px;
+}
+.course-title {
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
 }
 
+
+
 .course-cover-container {
-    width: 300px; /* Фиксированная ширина контейнера */
+    /*width: 300px; !* Фиксированная ширина контейнера *!*/
     height: 200px; /* Фиксированная высота контейнера */
     overflow: hidden; /* Обрезает изображение, если оно выходит за границы */
     border-radius: 10px;
@@ -27,7 +49,7 @@
 }
 
 .course-description {
-    font-size: 18px;
+    font-size: 22px;
     /*color: #444;*/
     line-height: 1.5;
     margin-bottom: 20px;
@@ -121,7 +143,7 @@ input,
 }
 
 .course-description-container {
-    text-align: left;
+    text-align: center;
     flex: 1; /* Занимает оставшееся пространство */
 }
 
@@ -218,13 +240,6 @@ input,
     padding: 16px;
     background: #fefefe;
     margin-bottom: 20px;
-}
-
-.course-description {
-    font-size: 14px;
-    color: #444;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .toggle-materials-btn {
@@ -346,22 +361,21 @@ textarea {
 .author-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px; /* Промежуток между элементами */
+    margin-bottom: 20px;
 }
 
 
 
 /* Кнопка шестерёнки для настроек */
 .settings-btn {
-    font-size: 25px; /* Размер шестерёнки */
+    font-size: 1.5rem;
     background: none;
     border: none;
-    color: #34495e;
     cursor: pointer;
-    padding: 5px;
-    transition: color 0.2s;
-    margin-left: 10px; /* Немного отступим от аватара */
-    flex-shrink: 0; /* Не позволяет кнопке сжаться */
+    margin-left: auto;
+
 }
 
 /* Контейнер для аватара и кнопки */
@@ -372,18 +386,6 @@ textarea {
     position: relative; /* Для позиционирования меню рядом с кнопкой */
 }
 
-/* Кнопка шестерёнки для настроек */
-.settings-btn {
-    font-size: 25px; /* Размер шестерёнки */
-    background: none;
-    border: none;
-    color: #34495e;
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.2s;
-    margin-left: 10px; /* Немного отступим от аватара */
-    flex-shrink: 0; /* Не позволяет кнопке сжаться */
-}
 
 /* Скрытое меню настроек */
 .settings-menu {
@@ -464,24 +466,76 @@ textarea {
     font-size: 16px;
 }
 
+.course-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    border-left: 5px solid #0056b3; /* добавлена палочка слева */
+}
 
-/* Мобильная адаптация */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
+.course-details-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px; /* увеличен отступ */
+    color: #333;
+    border-bottom: 2px solid #ddd; /* линия снизу для заголовка */
+    padding-bottom: 10px;
+}
+
+.details-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* увеличен отступ между элементами */
+    padding-left: 10px;
+    position: relative;
+}
+
+.icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    color: #0056b3;
+}
+
+.details-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background-color:#0056b3; /* маленькая палочка рядом с текстом */
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.details-item strong {
+    font-weight: 600;
+    color: #555;
+}
+
+.course-details .details-item:last-child {
+    margin-bottom: 0; /* убираем отступ снизу у последнего блока */
+}
+
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .author-info{
+        flex-direction: column;
     }
     .course-header {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: column; /* Располагаем элементы в колонку */
+        align-items: flex-start;
     }
 
-    .course-description-container {
-        text-align: center;
-        width: 100%;
+    .course-title {
+        font-size: 20px;
     }
+
     .course-cover-container {
         width: 100%;
-        max-width: 250px;
         height: 150px;
     }
 
@@ -489,66 +543,34 @@ textarea {
         font-size: 16px;
     }
 
-    .courses-buttons-container {
-        flex-direction: column;
-        gap: 8px;
+    .btn {
+        padding: 8px 12px;
+    }
+
+    .input,
+    .textarea {
         width: 90%;
     }
 
-    .edit-btn,
-    .courses-button {
-        padding: 2px 5px;
-        font-size: 14px;
-        width: auto;
-        text-align: center;
+    .courses-buttons-container {
+        flex-direction: column;
+        gap: 15px;
     }
 
-    .edit-btn:hover,
-    .courses-button:hover {
-        background-color: #1e35b7;
+    .upload-btn {
+        padding: 8px 12px;
     }
 
-    /* Адаптация материалов */
-    .material-item {
-        /* Добавляем место сверху, чтобы кнопка не перекрывала текст */
-        padding: 36px 12px 12px;
+    .modal-content {
+        width: 80%;
     }
 
-    .material-link {
-        font-size: xx-small;
+    .settings-menu {
+        width: 80%;
     }
 
-    .material-description,
-    .material-date {
-        font-size: 0.8em;
-    }
-
-    .delete-material-btn {
-        padding: 2px 6px;
-        width: auto;
-        background: none;
-        color: #e74c3c;
-    }
-
-    .delete-material-btn:hover {
-        background: none;
-        color: #c0392b;
-    }
-
-    /* Убираем текст на кнопке, оставляем только иконку */
-    .delete-material-btn::after {
-        content: '';
-    }
-
-    .delete-material-btn span {
-        display: none; /* если текст есть внутри кнопки — скрываем */
-    }
-    .toggle-materials-btn {
-        font-size: 0.50rem;          /* Уменьшенный шрифт */
-        border-radius: 6px;         /* Скруглённые края */
-        border: none;               /* Без границы */
-        cursor: pointer;            /* Курсор при наведении */
-        transition: background-color 0.2s ease-in-out;
+    .settings-btn {
+        font-size: 1.3rem;
     }
 }
 

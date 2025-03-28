@@ -52,10 +52,12 @@
                         <button class="btn-toggle-replies">⮟</button>
 
                         <!-- Кнопка удаления, доступна только автору комментария -->
+                        <?php if (!empty($user['user_id'])): ?>
                         <?php if ($comment['user_id'] === $user['user_id']): ?>
                             <button class="btn-delete" data-comment-id="<?= $comment['id']; ?>" title="Delete Comment">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
+                        <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>

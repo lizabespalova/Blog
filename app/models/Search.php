@@ -19,14 +19,19 @@ class Search
      */
     public function getArticlesByUserInterests(int $userId, int $limit = 10, int $offset = 0): array {
         $query = "
-    SELECT a.*,
-           (COALESCE(ui.interest_level, 0) * (a.views + a.likes)) AS weighted_score
-    FROM articles a
-    LEFT JOIN user_interests ui
-        ON a.category LIKE CONCAT('%', ui.category, '%') AND ui.user_id = ?
-    WHERE a.is_published = 1
-    ORDER BY weighted_score DESC, a.created_at DESC
-    LIMIT ?, ?
+        SELECT a.*, 
+               u.user_login, 
+               u.user_avatar, 
+               (COALESCE(ui.interest_level, 0) * (a.views + a.likes)) AS weighted_score
+        FROM articles a
+        LEFT JOIN user_interests ui
+            ON a.category LIKE CONCAT('%', ui.category, '%') 
+            AND ui.user_id = ?  -- Здесь передается ID пользователя
+        LEFT JOIN users u
+            ON a.user_id = u.user_id  -- Соединение с таблицей пользователей, чтобы получать информацию о пользователях
+        WHERE a.is_published = 1
+        ORDER BY weighted_score DESC, a.created_at DESC
+        LIMIT ?, ?  -- Параметры для лимита и смещения
     ";
 
         $stmt = $this->conn->prepare($query);
@@ -47,8 +52,13 @@ class Search
      */
     public function getMostPopularArticles(int $limit = 10, int $offset = 0): array {
         $query = "
-        SELECT a.*, (a.views + a.likes) AS popularity
+        SELECT a.*, 
+               u.user_login, 
+               u.user_avatar, 
+               (a.views + a.likes) AS popularity
         FROM articles a
+        LEFT JOIN users u
+            ON a.user_id = u.user_id  -- Соединение с таблицей пользователей
         WHERE a.is_published = 1
         ORDER BY popularity DESC
         LIMIT ?, ?

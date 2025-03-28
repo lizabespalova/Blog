@@ -74,6 +74,28 @@
     font-size: 24px;
     margin-right: 10px;
 }
+/* Общие стили для всех звезд */
+.star {
+    font-size: 20px; /* Размер звезд */
+    color: #d3d300; /* Цвет звезд (жёлтый) */
+}
+
+/* Для полных звезд */
+.star.full {
+    color: #ffcc00; /* Яркий желтый цвет для полной звезды */
+}
+
+/* Для полузвезды */
+.star.half {
+    background: linear-gradient(90deg, #ffcc00 50%, #d3d300 50%);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Для пустых звезд */
+.star.empty {
+    color: #d3d300; /* Цвет пустых звезд (светлый желтый) */
+}
 
 /* Адаптация для мобильных */
 @media (max-width: 768px) {

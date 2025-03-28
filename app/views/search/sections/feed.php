@@ -17,10 +17,11 @@ function truncateContent($content, $limit = 300) {
 
 // Проверяем, есть ли статьи
 if (empty($articles)): ?>
-    <p><?= $translations['no_feed'] ?? 'No posts from your subscriptions' ?></p>
+<!--    <p>--><?php //= $translations['no_feed'] ?? 'No posts from your subscriptions' ?><!--</p>-->
 <?php else: ?>
     <div id="feed-content">
         <?php foreach ($articles as $article): ?>
+            <div class="article-feed-container"> <!-- "article" оставляем для стилей, "article-item" для JS -->
             <div class="article-feed">
                 <img src="<?= htmlspecialchars($article['user_avatar'] ?: '/templates/images/profile.jpg') ?>"
                      alt="<?= htmlspecialchars($article['user_login']) ?>" class="article-avatar">
@@ -44,6 +45,7 @@ if (empty($articles)): ?>
                             <?= date('d M Y, H:i', strtotime($article['created_at'])) ?></small></p>
                 </div>
             </div>
+        </div>
         <?php endforeach; ?>
     </div>
 

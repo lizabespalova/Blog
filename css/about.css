@@ -1,0 +1,83 @@
+.about-page {
+    background: #f4f7fa; /* Светлый нейтральный фон */
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 40px auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    color: #333; /* Темный текст для контраста */
+}
+
+.about-content h1 {
+    font-size: 2.5rem;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; /* Темный цвет для заголовка */
+}
+
+.about-content h2 {
+    font-size: 1.8rem;
+    margin-top: 30px;
+    color: #444; /* Немного светлее для подзаголовков */
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555; /* Немного более светлый текст */
+}
+
+.about-content ul {
+    list-style-type: none;
+    padding: 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.about-content ul li {
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.about-content ul li::before {
+    content: "\2022";
+    color: #666; /* Цвет маркера в более нейтральном тоне */
+    position: absolute;
+    left: 0;
+    font-size: 1.5rem;
+}
+
+.about-content a {
+    color: #007bff; /* Спокойный синий для ссылок */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.about-content a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .about-page {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .about-content h1 {
+        font-size: 2rem;
+    }
+
+    .about-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-content p {
+        font-size: 1rem;
+    }
+
+    .about-content ul li {
+        font-size: 1rem;
+    }
+}

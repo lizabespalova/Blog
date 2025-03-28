@@ -6,6 +6,7 @@ html, body {
     flex-direction: column;
     overflow-x: hidden;  /* Отключает горизонтальную прокрутку */
     overflow-y: auto;    /* Включает вертикальную прокрутку */
+
 }
 
 /* Основной контейнер страницы */
@@ -30,6 +31,7 @@ html, body {
     text-align: left;
     width: 100%;
     margin-top: auto; /* Футер всегда внизу */
+
 }
 /* Колонки футера */
 .footer-column {
@@ -74,14 +76,85 @@ html, body {
     text-decoration: underline;
 }
 
-/* Для экранов шириной от 769px до 1440px (включая Samsung Galaxy S8) */
-@media (max-width: 768px) {
+/* Контейнер логотипа */
+.logo-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Логотип */
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 170px;
+    height: 170px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, rgba(0, 0, 0, 0.6) 90%);
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Изображение логотипа */
+.footer-logo {
+    width: 150px;
+    display: block;
+    border-radius: 50%;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+/* Эффект при наведении */
+.footer-logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+}
+
+/* Текст под логотипом */
+.logo-text {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Адаптивные стили для экрана шириной до 480px (мобильные устройства) */
+@media (max-width: 480px) {
     .container {
         width: 100%; /* Убедитесь, что контейнер не превышает ширину экрана */
         padding: 0 10px; /* Добавьте отступы, если нужно */
     }
-
     .footer-container {
-        padding: 10px 0; /* Убедитесь, что футер тоже адаптируется */
+        padding: 5px 0; /* Уменьшаем отступы футера */
+    }
+
+    .logo-wrapper {
+        width: 150px; /* Еще больше уменьшаем размер логотипа */
+        height: 150px;
+    }
+
+    .footer-logo {
+        width: 100px; /* Уменьшаем размер логотипа */
+        height: 100px;
+    }
+
+    .logo-text {
+        font-size: 0.9em; /* Уменьшаем размер текста */
+    }
+
+    .footer-column h3 {
+        font-size: 1em; /* Еще уменьшаем размер шрифта заголовка */
+    }
+
+    .footer-column p {
+        font-size: 0.75em; /* Уменьшаем размер текста */
     }
 }

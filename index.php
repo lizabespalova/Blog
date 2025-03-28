@@ -8,6 +8,7 @@ require_once __DIR__ . '/config/routes/favourites_routes.php';
 require_once __DIR__ . '/config/routes/users_articles_routes.php';
 require_once __DIR__ . '/config/routes/notifications_routes.php';
 require_once __DIR__ . '/config/routes/courses_routes.php';
+require_once __DIR__ . '/config/routes/footer_routes.php';
 
 
 // Подключение к базе данных

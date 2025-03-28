@@ -65,7 +65,38 @@
 .hidden {
     display: none;
 }
+.description-box {
+    max-width: 750px;
+    background: #f8f9fa;
+    border-left: 6px solid #007bff;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 20px auto; /* Центрирование */
+}
 
+.description-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    background: #fff3cd;
+    border-radius: 12px;
+    border: 1px solid #ffeeba;
+    max-width: 550px;
+    margin: 20px auto; /* Центрирование */
+    text-align: center;
+}
+
+.content-image img {
+    max-width: 90px;
+    height: auto;
+    opacity: 0.9;
+}
 /* Адаптация под планшеты */
 @media (max-width: 1024px) {
     .content-description {

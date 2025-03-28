@@ -1,23 +1,30 @@
+let isLoading = false; // Флаг загрузки
+
 function loadMoreArticles() {
-    // Проверяем, находимся ли мы на странице "feed"
-    if (getSearchType() !== 'feed') return;
+    if (getSearchType() !== 'feed' || isLoading) return;
 
-    const offset = document.querySelectorAll('.article').length; // Сколько уже загружено статей
+    isLoading = true;
+    const offset = document.querySelectorAll('.article-feed-container').length;
+    console.log("Offset before request:", offset); // Проверяем значение offset перед запросом
 
-    // Получаем новые статьи с сервером, передавая смещение
     fetch(`/sections/feed?offset=${offset}`)
         .then(response => response.text())
         .then(data => {
-            console.log(data);  // Для отладки
-            document.getElementById('feed-content').innerHTML += data;
-            processMarkdownContent();
+            console.log("Server response:", data);
 
-            if (!data.trim()) {
-                // Если данных больше нет, скрываем область загрузки
+            if (data.trim()) {
+                document.getElementById('content-container').insertAdjacentHTML('beforeend', data);
+                processMarkdownContent();
+            } else {
                 window.removeEventListener('scroll', onScroll);
             }
+        })
+        .finally(() => {
+            isLoading = false;
         });
 }
+
+
 
 function onScroll() {
     // Проверяем, достиг ли пользователь нижней части страницы

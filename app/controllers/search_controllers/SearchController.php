@@ -117,28 +117,39 @@ class SearchController
 
 
     public function showPopularArticles() {
+        require_once 'app/services/helpers/switch_language.php';
+
         $offset = $_GET['offset'] ?? 0;  // Получаем смещение из параметров запроса (по умолчанию 0)
         $userId = $_SESSION['user']['user_id'] ?? null;
+
+
         if ($userId) {
-            $article_cards = $this->searchModel->getArticlesByUserInterests($userId, 3, $offset);  // Загружаем 2 статьи за раз
+            $articles = $this->searchModel->getArticlesByUserInterests($userId, 3, $offset);  // Загружаем 2 статьи за раз
         } else {
-            $article_cards = $this->searchModel->getMostPopularArticles(3, $offset);  // Загружаем 2 статьи за раз
+            $articles = $this->searchModel->getMostPopularArticles(3, $offset);  // Загружаем 2 статьи за раз
+        }
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
         }
 
-        require_once 'app/services/helpers/switch_language.php';
         // Передаем статьи в шаблон
-        include __DIR__ . '/../../views/search/sections/popular_articles.php';
+        include __DIR__ . '/../../views/search/sections/feed.php';
+
+//        include __DIR__ . '/../../views/search/sections/popular_articles.php';
     }
 
     public function showPopularCourses() {
+        // Подключаем вспомогательные файлы для смены языка
+        require_once 'app/services/helpers/switch_language.php';
         // Получаем смещение из параметров запроса (по умолчанию 0)
         $offset = $_GET['offset'] ?? 0;
         $userId = $_SESSION['user']['user_id'] ?? null;
 
         // Получаем популярные курсы
         $courses = $this->searchModel->getPopularCourses(3, $offset);
-        // Подключаем вспомогательные файлы для смены языка
-        require_once 'app/services/helpers/switch_language.php';
+
 
         // Для каждого курса получаем email и настройки скрытия email
         foreach ($courses as &$course) { // Добавили &
@@ -149,9 +160,10 @@ class SearchController
             } else {
                 $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
             }
+            // Получаем рейтинг курса (средний рейтинг)
+            $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
         }
         unset($course); // Разрываем ссылку после использования
-//        var_dump($courses);
 
         // Передаем курсы в шаблон для отображения
         include __DIR__ . '/../../views/search/sections/popular_courses.php';
@@ -174,6 +186,7 @@ class SearchController
             $user_id = $user['user_id'];
             $articlesPerPage = 2; // Количество статей на одной загрузке
             $offset = $_GET['offset'] ?? 0; // Получаем смещение для загрузки новых статей
+//            var_dump($offset);
             // Загружаем статьи с учетом смещения
             $articles = $this->articleModel->getArticlesForFeed($user_id, $offset, $articlesPerPage);
 

@@ -528,5 +528,37 @@ class Articles
         $stmt->close();
         return $popularArticles;
     }
+    public function getUserPublicatedArticles($userLogin) {
+        // Подготавливаем SQL-запрос
+        $sql = "SELECT a.id, a.title, 
+                   a.content, 
+                   a.slug, a.created_at, u.user_avatar, u.user_login
+            FROM articles a
+            LEFT JOIN users u ON a.user_id = u.user_id
+            WHERE a.author = ? AND a.is_published = 1
+            ORDER BY a.created_at DESC";
+
+        // Подготовка запроса
+        if ($stmt = $this->conn->prepare($sql)) {
+            // Привязываем параметры
+            $stmt->bind_param('s', $userLogin); // Привязываем параметр типа строка
+
+            // Выполняем запрос
+            $stmt->execute();
+
+            // Получаем результат
+            $result = $stmt->get_result();
+            $articles = $result->fetch_all(MYSQLI_ASSOC); // Получаем данные в виде ассоциативного массива
+
+            // Закрываем подготовленный запрос
+            $stmt->close();
+
+            // Возвращаем массив статей
+            return $articles;
+        } else {
+            // В случае ошибки возвращаем пустой массив
+            return [];
+        }
+    }
 
 }

@@ -151,7 +151,6 @@ class Courses
             $insert->bind_param("iiisi", $user_id, $course_id, $article_id, $video_link, $is_completed);
             $insert->execute();
         }
-
     }
 
 
@@ -501,6 +500,37 @@ class Courses
         $row = $result->fetch_assoc();
 
         return $row['visibility_type'] ?? 'public'; // Если значение не найдено, используем 'public'
+    }
+
+    public function getCourseRating($courseId) {
+        // Подготовка SQL-запроса для получения лайков и дизлайков курса
+        $stmt = $this->conn->prepare("
+        SELECT 
+            SUM(CASE WHEN reaction = 'like' THEN 1 WHEN reaction = 'dislike' THEN -1 ELSE 0 END) AS rating,
+            COUNT(*) AS total_reactions
+        FROM course_reactions 
+        WHERE course_id = ?
+    ");
+        $stmt->bind_param("i", $courseId); // Подставляем courseId в запрос
+        $stmt->execute(); // Выполняем запрос
+        $result = $stmt->get_result(); // Получаем результат запроса
+        $row = $result->fetch_assoc(); // Извлекаем ассоциативный массив с результатами
+
+        // Если есть реакции, рассчитываем рейтинг
+        if ($row['total_reactions'] > 0) {
+            // Средний рейтинг: Если реакции +1 (лайк) и -1 (дизлайк), то это дает рейтинг 0.
+            // Вычисляем нормализованный рейтинг в пределах от 0 до 5
+            $rating = ($row['rating'] / $row['total_reactions'] + 1) * 2.5; // +1 для сдвига от 0 до 1, умножаем на 2.5, чтобы результат был в диапазоне от 0 до 5.
+
+            // Ограничиваем рейтинг в пределах от 0 до 5
+            $rating = max(0, min($rating, 5));
+
+            // Возвращаем рейтинг с точностью до 2 знаков после запятой
+            return round($rating, 2);
+        } else {
+            // Если нет реакций, возвращаем 0
+            return 0;
+        }
     }
 
 

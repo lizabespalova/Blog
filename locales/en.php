@@ -211,6 +211,31 @@ Attention: In this case, users in your private courses will not be able to conta
     'view_course_subscribers' => 'View course subscribers',
     'private_course' => 'Private course',
     'request_access' => 'Request_access',
+    'materials_count' => 'Number of Materials',
+    'course_information' => 'Course Information',
+    'article_amount' => 'Number of Articles',
+    'course_time' => 'Approximate Time to Complete',
+    'difficulty_level' => 'Difficulty Level',
 
+    //    Футер
+    'about' => 'About',
+
+    //    О сайте
+    'website_description' => '<p>My website provides a unique platform for knowledge exchange, learning, and personal development. We aim to create a community where everyone can not only share their knowledge but also actively grow by gaining access to various articles, educational courses, and useful resources. On our site, you will find up-to-date materials on various topics, including IT, technology, personal development, and much more.</p>
+                <p>We give every user the opportunity to not only learn but also create their own courses and articles, contributing to the development of our platform. Here, you can share experiences, create discussions, and receive valuable advice from other participants. We believe in the power of community and strive to make our space comfortable and useful for everyone who is ready to learn and grow.</p>
+                <p>We pay special attention to current IT news and trends. We discuss the latest events in the world of technology, which allows us to keep our finger on the pulse and stay informed about the most significant changes in the industry. Join us and become part of an active and inspiring community!</p>',
+    'website_goals'=> '<h2>Our Goals:</h2> 
+                <ul> 
+                    <li><strong>Providing high-quality content:</strong> We strive to offer our users only verified and up-to-date materials. Each course, article, and resource undergoes thorough review to ensure you receive knowledge that meets the highest standards.</li> 
+                    <li><strong>Creating a community of people interested in learning:</strong> We believe that learning is not only about acquiring knowledge but also about sharing experiences. We create a space where everyone can contribute, share their experience, and learn from others.</li> 
+                    <li><strong>Ensuring easy access to materials:</strong> Our goal is to make learning accessible and convenient. All resources on the site are easy to find and use, whether they are video lessons, articles, or courses. We do everything to make learning comfortable and available to everyone.</li> 
+                </ul>',
+    'website_contacts'=> '<h2>Contacts:</h2> 
+                <p>If you have any questions, suggestions, or requests, we are always happy to help. Contact us through any convenient channel:</p> 
+                <ul> 
+                    <li>By email: <a href="mailto:info@example.com">info@example.com</a></li> 
+                    <li>Through the feedback form on the website: <a href="/contact">Go to the form</a></li> 
+                </ul>',
+    'website_coperation'=> 'Cooperation',
 
 ];

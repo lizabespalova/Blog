@@ -32,21 +32,57 @@
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
 <div class="container">
-    <div class="author-avatar-block">
-        <div class="author-info">
-            <img src="<?= htmlspecialchars($course['author_avatar']) ?>"
-                 alt="Author Avatar"
-                 class="author-avatar">
-            <a href="/profile/<?= urlencode($userlogin); ?>" class="article-author">
-                <?= htmlspecialchars($userlogin); ?>
-            </a>
-        </div>
+    <div class="author-info">
+        <img src="<?= htmlspecialchars($course['author_avatar']) ?>"
+             alt="Author Avatar"
+             class="author-avatar">
+        <a href="/profile/<?= urlencode($userlogin); ?>" class="article-author">
+            <?= htmlspecialchars($userlogin); ?>
+        </a>
+        <h1 class="course-title" style="margin: 0; padding-top: 5px;">
+            <?= htmlspecialchars($course['title']) ?>
+            <?php if ($userId === $course['user_id']): ?>
+                <button class="edit-btn title-edit-btn">✏️</button>
+            <?php endif; ?>
+        </h1>
         <!-- Кнопка шестерёнки для настроек -->
         <?php if ($userId === $course['user_id']): ?>
             <button class="settings-btn" onclick="toggleSettingsMenu(event)">
                 ⚙️
             </button>
         <?php endif; ?>
+    </div>
+
+    <div class="course-details">
+        <div class="course-cover-container" data-course-id="<?= $course['course_id'] ?>">
+            <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
+            <?php if ($userId === $course['user_id']): ?>
+                <button class="edit-btn cover-edit-btn" onclick="triggerCoverUpload()">✏️</button>
+                <input type="file" id="cover-upload" accept="image/*" style="display: none;">
+            <?php endif; ?>
+        </div>
+
+        <h2 class="course-details-title"><?= $translations['course_information']?></h2>
+        <div class="details-item">
+            <span class="icon">📚</span>
+            <strong><?= $translations['article_amount']?>:</strong> 12
+        </div>
+        <div class="details-item">
+            <span class="icon">⏳</span>
+            <strong><?= $translations['course_time']?>:</strong> 10 часов
+        </div>
+        <div class="details-item">
+            <span class="icon">📑</span>
+            <strong><?= $translations['materials_count']?>:</strong> 25
+        </div>
+        <div class="details-item">
+            <span class="icon">🔒</span>
+            <strong><?= $translations['difficulty_level']?>:</strong> Средний
+        </div>
+    </div>
+
+    <div class="author-avatar-block">
+
         <!-- Выпадающее меню настроек -->
         <div id="settings-menu" class="settings-menu">
             <ul>
@@ -83,23 +119,7 @@
         </div>
     </div>
 
-
-    <h1 class="course-title" style="margin: 0; padding-top: 5px;">
-        <?= htmlspecialchars($course['title']) ?>
-        <?php if ($userId === $course['user_id']): ?>
-            <button class="edit-btn title-edit-btn">✏️</button>
-        <?php endif; ?>
-    </h1>
     <div class="course-header">
-        <div class="course-cover-container" data-course-id="<?= $course['course_id'] ?>">
-            <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
-            <?php if ($userId === $course['user_id']): ?>
-                <button class="edit-btn cover-edit-btn" onclick="triggerCoverUpload()">✏️</button>
-                <input type="file" id="cover-upload" accept="image/*" style="display: none;">
-            <?php endif; ?>
-        </div>
-
-
 
         <div class="course-description-container">
             <p class="course-description" data-course-id="<?= $course['course_id'] ?>">
@@ -145,14 +165,16 @@
     <?php include __DIR__ . '/../../views/courses/modal_window.php'; ?>
 
     <h2><?= $translations['courses_articles']?></h2>
+
+    <?php if (!empty($userId)): ?>
     <div class="progress-container">
         <div class="course-progress">
             <label for="course-progress-bar"><?= $translations['course_progress']?>:</label>
             <progress id="course-progress-bar" value="<?= $progress ?>" max="100"></progress>
             <span><?= $progress ?>%</span>
         </div>
-
     </div>
+    <?php endif; ?>
 
     <div class="articles-wrapper">
         <div class="articles-container">
@@ -160,20 +182,23 @@
                 <?php if (!empty($articlesInCourses)): ?>
                     <?php foreach ($articlesInCourses as $article): ?>
                         <div class="article-item">
-                            <label class="progress-item">
-                                <!-- Проверяем, завершена ли статья -->
-                                <input type="checkbox" class="progress-checkbox"
-                                       data-course-id="<?= $course['course_id'] ?>"
-                                       data-id="<?= $article['id'] ?>"
-                                       data-video-link="<?= htmlspecialchars($article['youtube_link']) ?>"
-                                    <?= in_array($article['id'], $completedArticles) ? 'checked' : ''; ?>>
+                            <?php if (!empty($userId)): ?>
+                                <label class="progress-item">
+                                    <!-- Чекбокс виден только для авторизованных пользователей -->
+                                    <input type="checkbox" class="progress-checkbox"
+                                           data-course-id="<?= $course['course_id'] ?>"
+                                           data-id="<?= $article['id'] ?>"
+                                           data-video-link="<?= htmlspecialchars($article['youtube_link']) ?>"
+                                        <?= in_array($article['id'], $completedArticles) ? 'checked' : ''; ?>>
+                                    <?= $translations['course_passed'] ?>
+                                </label>
+                            <?php endif; ?>
 
-                                <?= $translations['course_passed'] ?>
-                            </label>
                             <div class="course-card">
                                 <?php include __DIR__ . '/../../views/partials/card.php'; ?>
                             </div>
                         </div>
+
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p><?= $translations['no_articles']?></p>
@@ -244,7 +269,7 @@
 
                                 <div class="material-date"><?= date('d.m.Y H:i', strtotime($material['uploaded_at'])) ?></div>
 
-                                <?php if ($_SESSION['user']['user_id'] == $course['user_id']): ?>
+                                <?php if ($userId == $course['user_id']): ?>
                                     <button class="delete-material-btn" data-material-id="<?= $material['material_id'] ?>">🗑️ <?= $translations['delete'] ?></button>
                                 <?php endif; ?>
                             </div>

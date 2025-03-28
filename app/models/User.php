@@ -112,9 +112,6 @@ class User
             error_log("Error executing statement: " . $stmt->error);
             return false;
         }
-
-        // В данном случае нам не нужно проверять количество затронутых строк
-        // Мы считаем, что успешное выполнение запроса всегда возвращает true
         return true;
     }
     public function updateUserLink($userId, $newLink) {

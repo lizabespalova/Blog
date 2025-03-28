@@ -1,11 +1,12 @@
-document.querySelectorAll('.comment-input-wrapper, .repost-buttons').forEach(wrapper => {
-    const charCountForm = wrapper.querySelector('.char-count-form');
-    const charCount = wrapper.querySelector('.char-count');
+document.addEventListener('DOMContentLoaded', function () {
+    const textarea = document.getElementById('description');
+    const charCount = document.getElementById('char-count');
+    const maxLength = 1000;
 
-    if (charCountForm && charCount) {
-            // Обновляем счетчик символов для конкретной области
-            charCount.textContent = `${textarea.value.length}/500`;
-            charCountForm.textContent = `${textarea.value.length}/500`;
-
-    }
+    textarea.addEventListener('input', function () {
+        if (textarea.value.length > maxLength) {
+            textarea.value = textarea.value.substring(0, maxLength);
+        }
+        charCount.textContent = `${textarea.value.length}/${maxLength}`;
+    });
 });

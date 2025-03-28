@@ -60,8 +60,13 @@ class ProfileController
 
             $article_cards =  $this->repostModel->getReposts($profileUserId);
             $reposts = $article_cards;
-            $article_cards =  $this->userModel->getPublications($profileUserLogin);
-            $publications = $article_cards;
+//            $publications =  $this->userModel->getPublications($profileUserLogin);
+            $articles = $this->articleModel->getUserPublicatedArticles($profileUserLogin);
+            if (!empty($articles)) {
+                foreach ($articles as $key => $article) {
+                    $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+                }
+            }
             $followersCount = $this->followModel->getFollowersCount($profileUserId);
             $followingCount = $this->followModel->getFollowingCount($profileUserId);
             $isFollowing = false; // По умолчанию считаем, что пользователь не подписан
@@ -93,12 +98,10 @@ class ProfileController
                 } else {
                     $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
                 }
+                $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
+
             }
             unset($course); // Разрываем ссылку после использования
-
-//             Фильтруем курсы по видимости
-//            $filteredCourses = $this->courseController->getFilteredCourses($courses, $currentUser['user_id']);
-//            $hideEmail = $this->settingModel->getHideEmail($profileUserId);
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
