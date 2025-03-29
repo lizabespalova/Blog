@@ -4,6 +4,8 @@ namespace controllers\authorized_users_controllers;
 
 use models\Articles;
 use models\Courses;
+use models\Follows;
+use models\Settings;
 use models\User;
 use services\CoverImagesService;
 
@@ -12,15 +14,18 @@ class CourseController
 {
     private $courseModel;
     private $userModel;
+    private $settingModel;
     private $articleModel;
     private $coverImagesService;
-
+    private $followModel;
 
     public function __construct($conn) {
         $this->courseModel = new Courses($conn);
         $this->articleModel = new Articles($conn);
         $this->coverImagesService = new CoverImagesService();
         $this->userModel = new User($conn);
+        $this->settingModel = new Settings($conn);
+        $this->followModel = new Follows($conn);
     }
     public function showUserCoursesForm($username) {
         require_once 'app/services/helpers/switch_language.php';
@@ -75,9 +80,13 @@ class CourseController
         // Фильтруем курсы по видимости
         $filteredCourses = $this->getFilteredCourses($courses, $userId);
         $currentUser = $this->userModel->get_user_by_id($userId);
-        foreach ($courses as &$course) { // Добавили &
+        foreach ($courses as & $course) { // Добавили &
             $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
+            $course['email'] = $this->userModel->getUserEmail($course['user_id']);
+            $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
         }
+        unset($course); // Разрываем ссылку после использования
+
         // Загружаем шаблон с отфильтрованными курсами
         require_once 'app/views/courses/my_courses.php';
     }
@@ -124,20 +133,48 @@ class CourseController
         $completedArticles = $this->courseModel->getCompletedArticlesForUser($userId, $courseId);
         $materials = $this->courseModel->getMaterials($courseId);
         $visibility = $this->courseModel->getCourseVisibility($courseId);
+        if (($visibility == 'subscribers' || $visibility == 'custom') && $userId == null) {
+            exit();
+        }
 
         // Добавим данные автора в массив $course
         $author = $this->userModel->get_author_avatar($userlogin);
         // Получаем количество лайков и дизлайков
         $likes = $this->courseModel->getLikesForCourse($courseId);
         $dislikes = $this->courseModel->getDislikesForCourse($courseId);
+        // Получаем суммарное время чтения статей курса
+        $course['$totalReadTime'] = round($this->courseModel->getTotalReadTime($courseId) / 60, 1);
+        $course['materials_count'] = $this->courseModel->getMaterialsCount($courseId);
+        $course['difficulty'] = $this->courseModel->getAverageDifficulty($courseId);
 
         // Добавляем данные о лайках и дизлайках в курс
         $course['likes'] = $likes;
         $course['dislikes'] = $dislikes;
         $course['visibility'] = $visibility; // Передаём видимость в шаблон
         $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
-
+        $course['email'] = $this->userModel->getUserEmail($course['user_id']);
+        $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
         $course['author_avatar'] = $author['user_avatar'] ?? '/templates/images/profile.jpg';
+        $similarCourses = $this->courseModel->getSimilarCourses($courseId, $course['title'], 10);
+        foreach ($similarCourses as &$similarCourse) { // Добавили &
+            $similarCourse['email'] = $this->userModel->getUserEmail($similarCourse['user_id']);
+            $similarCourse['hideEmail'] = $this->settingModel->getHideEmail($similarCourse['user_id']);
+            if ($similarCourse['visibility_type'] === 'subscribers') {
+                $similarCourse['isSubscriber'] =  $this->followModel->isFollowing($userId, $similarCourse['user_id']);
+            } else {
+                $similarCourse['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
+            }
+            // Получаем рейтинг курса (средний рейтинг)
+            $similarCourse['rating'] =$this->courseModel->getCourseRating($similarCourse['course_id']);
+            $similarCourse['owner'] =$this->userModel->getLoginById($similarCourse['user_id']);
+
+//            var_dump( $course['email']);
+//            var_dump( $course['hideEmail']);
+//            var_dump( $course['visibility_type']);
+
+        }
+        unset($similarCourse); // Разрываем ссылку после использования
+
 //        var_dump($completedArticles);
         require_once 'app/views/courses/course_view.php';
     }

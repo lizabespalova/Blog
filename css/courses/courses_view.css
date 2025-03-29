@@ -235,7 +235,7 @@ input,
     margin-bottom: 6px;
 }
 .course-materials-block {
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 12px;
     padding: 16px;
     background: #fefefe;
@@ -509,16 +509,54 @@ textarea {
     border-radius: 50%;
     transform: translateY(-50%);
 }
+.details-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Пробел между иконкой и текстом */
+    margin-bottom: 10px; /* Отступ между элементами */
+    font-size: 16px;
+}
+
+.details-item .icon {
+    font-size: 20px;
+}
+
+.details-item strong {
+    font-weight: bold;
+    margin-right: 5px;
+}
 
 .details-item strong {
     font-weight: 600;
     color: #555;
 }
 
-.course-details .details-item:last-child {
-    margin-bottom: 0; /* убираем отступ снизу у последнего блока */
+/*.course-details .details-item:last-child {*/
+/*    margin-bottom: 0; !* убираем отступ снизу у последнего блока *!*/
+/*}*/
+
+.recommendations {
+    margin-top: 30px;  /* Отступ сверху, чтобы отделить от основного контента */
+    padding: 20px;     /* Паддинг для внутреннего отступа */
+    background-color: #f9f9f9;  /* Лёгкий фон для выделения */
+    border-radius: 8px;  /* Скругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Тень для выделения */
+    text-align: center;
 }
 
+.recommendations h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;  /* Отступ снизу, чтобы отделить заголовок от контента */
+}
+
+.recommendations .course-card {
+    margin-bottom: 15px;  /* Отступ между карточками курсов */
+}
+
+.recommendations .course-card:last-child {
+    margin-bottom: 0;  /* Убираем отступ у последней карточки */
+}
 
 /* Адаптивные стили */
 @media (max-width: 768px) {
@@ -571,6 +609,20 @@ textarea {
 
     .settings-btn {
         font-size: 1.3rem;
+    }
+    .details-item {
+        font-size: 12px; /* Уменьшил размер шрифта на маленьких экранах */
+        margin-bottom: 6px; /* Уменьшил отступы */
+        gap: 4px; /* Уменьшил пробел между иконкой и текстом */
+    }
+
+    .details-item .icon {
+        font-size: 16px; /* Уменьшил размер иконки на маленьких экранах */
+    }
+
+    .details-item::before {
+        width: 3px; /* Уменьшил размер палочки на маленьких экранах */
+        height: 3px; /* Уменьшил размер палочки */
     }
 }
 

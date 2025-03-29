@@ -40,7 +40,10 @@ if (empty($articles)): ?>
                         <a href="/articles/<?= htmlspecialchars($article['slug']) ?>" class="read-more">
                             <?= $translations['read_more'] ?? 'Read more' ?></a>
                     <?php endif; ?>
-
+                    <!-- Блок с лайками в правом верхнем углу -->
+                    <div class="article-likes">
+                        <span><?= htmlspecialchars($article['likes']) ?> 👍</span>
+                    </div>
                     <p><small><?= $translations['date'] ?? 'Date: ' ?>
                             <?= date('d M Y, H:i', strtotime($article['created_at'])) ?></small></p>
                 </div>

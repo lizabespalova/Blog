@@ -219,6 +219,10 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'article_amount' => 'Anzahl der Artikel',
     'course_time' => 'Ungefähre Zeit zum Abschluss',
     'difficulty_level' => 'Schwierigkeitsgrad',
+    'hours' => 'Stunden',
+    'course_difficulty' => 'Kursschwierigkeit',
+    'follow_owner' => 'Abonnieren Sie den Eigentümer',
+    'recommendatios' => 'Empfohlene Kurse',
 
     //    Футер
     'about' => 'Über',

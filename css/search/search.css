@@ -57,6 +57,13 @@
     border-bottom: 1px solid #ddd; /* Нижняя граница */
     margin-bottom: 20px; /* Отступ снизу */
 }
+.category-section {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Расстояние между категориями */
+    margin-top: 20px; /* Отступ сверху */
+    margin-bottom: 30px; /* Отступ снизу перед контентом */
+}
 
 /* Стили для элементов меню */
 .menu-item {
@@ -153,6 +160,15 @@
     .searching-button {
         border-radius: 0 0 15px 15px;
         width: 100%;
+    }
+    .category-section {
+        flex-direction: column; /* В столбик на узких экранах */
+        align-items: center; /* Выравнивание по центру */
+    }
+
+    .category-section .menu-item {
+        width: 80%; /* Делаем кнопки шире на мобильных */
+        text-align: center;
     }
 }
 /* Стили для элементов меню при наведении */

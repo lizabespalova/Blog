@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
 
+    <link rel="stylesheet" href="/css/search/feed.css">
     <link rel="stylesheet" href="/css/profile/profile_template.css">
     <link rel="stylesheet" href="/css/profile/navigation.css">
     <link rel="stylesheet" href="/css/profile/content.css">
     <link rel="stylesheet" href="/css/profile/markdown.css">
     <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/repost.css">
-    <link rel="stylesheet" href="/css/search/feed.css">
     <link rel="stylesheet" href="/css/courses/my_courses.css">
 
 
@@ -74,26 +74,34 @@
                     </div>
 
                 </div>
-                <p>
-                    <strong><?= $translations['registered'] ?>:</strong>
-                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>"><?= htmlspecialchars($user['created_at']) ?></span>
-                </p>
-                <p>
-                    <strong><?= $translations['specialization'] ?>:</strong>
-                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>"><?= htmlspecialchars($user['user_specialisation']) ?></span>
-                </p>
-                <p><strong><?= $translations['company'] ?>:</strong>
-                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>"><?= htmlspecialchars($user['user_company']) ?>
+                <div class="user-info">
+                    <p>
+                        <strong><?= $translations['registered'] ?>:</strong>
+                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>">
+                        <?= htmlspecialchars($user['created_at']) ?>
                     </span>
-                </p>
-                <p>
-                    <strong><?= $translations['experience'] ?>:</strong>
-                    <?= htmlspecialchars($user['user_experience']) ?> <?= $translations['years'] ?>
-                </p>
-                <p>
-                    <strong><?= $translations['articles'] ?>:</strong>
-                    <?= htmlspecialchars($userArticlesCount) ?>
-                </p>
+                    </p>
+                    <p>
+                        <strong><?= $translations['specialization'] ?>:</strong>
+                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
+                            <?= htmlspecialchars($user['user_specialisation']) ?>
+                    </span>
+                    </p>
+                    <p>
+                        <strong><?= $translations['company'] ?>:</strong>
+                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>">
+                            <?= htmlspecialchars($user['user_company']) ?>
+                    </span>
+                    </p>
+                    <p>
+                        <strong><?= $translations['experience'] ?>:</strong>
+                        <?= htmlspecialchars($user['user_experience']) ?> <?= $translations['years'] ?>
+                    </p>
+                    <p>
+                        <strong><?= $translations['articles'] ?>:</strong>
+                        <?= htmlspecialchars($userArticlesCount) ?>
+                    </p>
+                </div>
 
                 <?php if (!empty($currentUser['user_id']) && !empty($user['user_id']) && $currentUser['user_id'] === $user['user_id']): ?>
                     <button class="edit-description-button" onclick="toggleEditForm()">✎</button>

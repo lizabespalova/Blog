@@ -2,7 +2,7 @@
 document.querySelectorAll('.follow-button').forEach(button => {
     button.addEventListener('click', () => {
         const followedUserId = button.getAttribute('data-followed-user-id');
-        const isPrivateProfile = button.getAttribute('data-private') === 'true';
+        // const isPrivateProfile = button.getAttribute('data-private') === 'true';
         const actionType = button.getAttribute('data-action-type');
 
         let actionUrl = '';
@@ -41,7 +41,7 @@ document.querySelectorAll('.follow-button').forEach(button => {
     });
 });
 // Применение функции ко всем кнопкам Follow/Unfollow/Cancel Request
-document.querySelectorAll('.follow-button').forEach(button => handleFollowUnfollowButton(button));
+// document.querySelectorAll('.follow-button').forEach(button => handleFollowUnfollowButton(button));
 
 // Функция для навигации на другой URL
 function navigateTo(url) {

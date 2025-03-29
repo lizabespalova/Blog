@@ -18,22 +18,20 @@
             <?php else: ?>
                 <div class="locked-course">
                     <span class="lock-icon">🔒</span>
-                    <p><?= $translations['private_course'] ?>
-                        <?php if (!empty($course['hideEmail']) && !$course['hideEmail']): ?>
-                            (<?= !empty($course['email']) ? htmlspecialchars($course['email']) : $translations['contact_hidden'] ?>)
-                        <?php else: ?>
-                            (<?= $translations['contact_hidden'] ?>)
-                        <?php endif; ?>
-                    </p>
-
-                    <?php if (!empty($course['hideEmail']) && !$course['hideEmail'] && !empty($course['email'])): ?>
-                        <a href="mailto:<?= htmlspecialchars($course['email']) ?>" class="btn btn-contact">
-                            <?= $translations['request_access'] ?>
-                        </a>
+                    <!-- Убираем текст "Private course", но если курс закрыт для подписчиков, показываем кнопку подписки -->
+                    <?php if ($course['visibility_type'] === 'subscribers' && empty($course['isSubscriber'])): ?>
+                        <!-- Добавляем ссылку на страницу владельца -->
+                        <a href="/profile/<?= $course['owner'] ?>" class="btn"><?= $translations['follow_owner'] ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
-
+            <?php if ($course['hideEmail']==0 && $course['visibility_type'] === 'custom'): ?>
+                <?php if (!empty($course['email'])): ?>
+                    <a href="mailto:<?= htmlspecialchars($course['email']) ?>" class="btn btn-contact">
+                        <?= $translations['request_access'] ?>
+                    </a>
+                <?php endif; ?>
+            <?php endif; ?>
             <!-- Отображаем рейтинг курса (всегда, независимо от доступности) -->
             <div class="course-rating">
                 <?php

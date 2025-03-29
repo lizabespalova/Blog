@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/courses/modal_form.css">
     <link rel="stylesheet" href="/css/profile/article_template.css">
     <link rel="stylesheet" href="/css/reactions_buttons.css">
+    <link rel="stylesheet" href="/css/courses/my_courses.css">
 
 </head>
 <body
@@ -65,20 +66,22 @@
         <h2 class="course-details-title"><?= $translations['course_information']?></h2>
         <div class="details-item">
             <span class="icon">📚</span>
-            <strong><?= $translations['article_amount']?>:</strong> 12
+            <strong><?= $translations['article_amount']?>:</strong> <?= count($articlesInCourses) ?>
         </div>
         <div class="details-item">
             <span class="icon">⏳</span>
-            <strong><?= $translations['course_time']?>:</strong> 10 часов
+            <strong><?= $translations['course_time'] ?>:</strong><?= $course['$totalReadTime'] ?> <?= $translations['hours'] ?>
         </div>
         <div class="details-item">
             <span class="icon">📑</span>
-            <strong><?= $translations['materials_count']?>:</strong> 25
+            <strong><?= $translations['materials_count']?>:</strong> <?= $course['materials_count'] ?>
         </div>
+
         <div class="details-item">
-            <span class="icon">🔒</span>
-            <strong><?= $translations['difficulty_level']?>:</strong> Средний
+            <span class="icon">📊</span>
+            <strong><?= $translations['course_difficulty']?>:</strong> <?= ucfirst($course['difficulty']) ?>
         </div>
+
     </div>
 
     <div class="author-avatar-block">
@@ -193,10 +196,7 @@
                                     <?= $translations['course_passed'] ?>
                                 </label>
                             <?php endif; ?>
-
-                            <div class="course-card">
                                 <?php include __DIR__ . '/../../views/partials/card.php'; ?>
-                            </div>
                         </div>
 
                     <?php endforeach; ?>
@@ -297,6 +297,8 @@
                 <i class="fas fa-thumbs-down"></i>
                 <span class="dislike-count"><?= htmlspecialchars($course['dislikes']); ?></span>
             </button>
+            <!-- Поделиться -->
+            <?php include __DIR__ . '/../../views/partials/share_modal_menu.php'; ?>
         </div>
 
     </div>
@@ -335,6 +337,16 @@
             </form>
 
         </div>
+    </div>
+    <!-- Блок рекомендаций -->
+    <div class="recommendations">
+        <h2><?= $translations['recommendatios']; ?></h2>
+        <?php
+        // Преобразуем массив $similarCourses в переменные, чтобы использовать их в шаблоне
+        $courses = $similarCourses;
+        include __DIR__ . '/../../views/courses/courses.php';
+        ?>
+
     </div>
 
 </div>

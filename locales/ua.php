@@ -217,6 +217,10 @@ return [
     'article_amount' => 'Кількість статей',
     'course_time' => 'Приблизний час для проходження',
     'difficulty_level' => 'Рівень складності',
+    'hours' => 'годин',
+    'course_difficulty' => 'Складність курсу',
+    'follow_owner' => 'Підписатися на власника',
+    'recommendatios' => 'Рекомендовані курси',
 
     //    Футер
     'about' => 'Про сайт',

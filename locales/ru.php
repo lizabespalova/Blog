@@ -215,7 +215,10 @@ return [
     'article_amount' => 'Количество статей',
     'course_time' => 'Примерное время прохождения',
     'difficulty_level' => 'Уровень сложности',
-
+    'hours' => 'часов',
+    'course_difficulty' => 'Сложность курса',
+    'follow_owner' => 'Подписаться на хозяина',
+    'recommendatios' => 'Рекомендуемые курсы',
 
     //    Футер
     'about' => 'О сайте',

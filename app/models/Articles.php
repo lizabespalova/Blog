@@ -530,7 +530,7 @@ class Articles
     }
     public function getUserPublicatedArticles($userLogin) {
         // Подготавливаем SQL-запрос
-        $sql = "SELECT a.id, a.title, 
+        $sql = "SELECT a.id, a.title, a.likes, 
                    a.content, 
                    a.slug, a.created_at, u.user_avatar, u.user_login
             FROM articles a
@@ -560,5 +560,72 @@ class Articles
             return [];
         }
     }
+    public function showPopularAiArticles() {
+        $query = "
+        SELECT DISTINCT a.id, a.slug, a.title, a.content, a.created_at, 
+               a.link, a.views, a.cover_image, a.youtube_link, a.likes, 
+               u.user_login, u.user_avatar
+        FROM articles a
+        JOIN users u ON a.user_id = u.user_id
+        WHERE a.category = 'ai' 
+        AND a.is_published = 1 
+        ORDER BY (a.likes * 2 + a.views) DESC 
+        LIMIT 10
+    ";
 
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    public function showPopularItNewsArticles() {
+        $query = "
+        SELECT DISTINCT a.id, a.slug, a.title, a.content, a.created_at, 
+               a.link, a.views, a.cover_image, a.youtube_link, a.likes, 
+               u.user_login, u.user_avatar
+        FROM articles a
+        JOIN users u ON a.user_id = u.user_id
+        WHERE a.category = 'it_news' 
+        AND a.is_published = 1 
+        ORDER BY (a.likes * 2 + a.views) DESC 
+        LIMIT 10
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    public function showPopularWebDevelopmentArticles() {
+        $query = "
+        SELECT DISTINCT a.id, a.slug, a.title, a.content, a.created_at, 
+               a.link, a.views, a.cover_image, a.youtube_link, a.likes, 
+               u.user_login, u.user_avatar
+        FROM articles a
+        JOIN users u ON a.user_id = u.user_id
+        WHERE a.category = 'web_development' 
+        AND a.is_published = 1 
+        ORDER BY (a.likes * 2 + a.views) DESC 
+        LIMIT 10
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    public function showPopularCyberSecurityArticles() {
+        $query = "
+        SELECT DISTINCT a.id, a.slug, a.title, a.content, a.created_at, 
+               a.link, a.views, a.cover_image, a.youtube_link, a.likes, 
+               u.user_login, u.user_avatar
+        FROM articles a
+        JOIN users u ON a.user_id = u.user_id
+        WHERE a.category = 'cyber_security' 
+        AND a.is_published = 1 
+        ORDER BY (a.likes * 2 + a.views) DESC 
+        LIMIT 10
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 }

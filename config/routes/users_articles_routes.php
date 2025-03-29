@@ -49,6 +49,22 @@ function users_article_route($uri, $method) {
             $controller = new SearchController(getDbConnection());
             $controller->showArticlesFilteredByTags();
             exit();
+        case '/sections/ai':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularAiArticles();
+            exit();
+        case '/sections/it_news':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularItNewsArticles();
+            exit();
+        case '/sections/web_development':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularWebDevelopmentArticles();
+            exit();
+        case '/sections/cyber_security':
+            $controller = new SearchController(getDbConnection());
+            $controller->showPopularCyberSecurityArticles();
+            exit();
         default:
             return false;
     }

@@ -188,6 +188,14 @@ function getSearchType() {
             return 'courses';   // Если в URL указаны популярные курсы
         case 'feed':
             return 'feed';   // Если в URL указаны популярные курсы
+        case 'ai':
+            return 'ai';   // Если в URL указаны популярные курсы
+        case 'it_news':
+            return 'it_news';   // Если в URL указаны популярные курсы
+        case 'web_development':
+            return 'web_development';   // Если в URL указаны популярные курсы
+        case 'cyber_security':
+            return 'cyber_security';   // Если в URL указаны популярные курсы
         default:
             return 'all';       // По умолчанию ищем во всех категориях
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/cards.css">
     <link rel="stylesheet" href="/css/profile/profile_header.css">
     <link rel="stylesheet" href="/css/profile/profile_footer.css">
+
     <link rel="stylesheet" href="/css/profile/favourite_template.css">
     <link rel="stylesheet" href="/css/settings/themes.css">
     <link rel="stylesheet" href="/css/settings/font-style.css">
@@ -47,8 +48,15 @@
         <input type="text" name="tag" placeholder="<?= $translations['search_by_tag'] ?>" value="<?= htmlspecialchars($_GET['tag'] ?? '') ?>">
         <button type="submit"><?= $translations['search'] ?></button>
     </form>
-</div>
 
+</div>
+<!-- Меню категорий -->
+<div class="category-section">
+    <a href="?section=ai" class="menu-item" data-section="ai"><?= $translations['ai'] ?></a>
+    <a href="?section=it_news" class="menu-item" data-section="it_news"><?= $translations['it_news'] ?></a>
+    <a href="?section=web_development" class="menu-item" data-section="web_development"><?= $translations['web_development'] ?></a>
+    <a href="?section=cyber_security" class="menu-item" data-section="cyber_security"><?= $translations['cyber_security'] ?></a>
+</div>
 
 <!-- Контейнер для контента, загружаемого через AJAX -->
 <div id="content-container">
@@ -70,6 +78,8 @@
 <script src="/js/search/autoload_writers.js"></script>
 <script src="/js/search/autoload_courses.js"></script>
 <script src="/js/search/load_sections.js"></script>
+<script src="/js/authorized_users/follow.js"></script>
+
 <script src="/js/authorized_users/articles/get_markdown.js"></script>
 
 </body>

@@ -532,6 +532,79 @@ class Courses
             return 0;
         }
     }
+    public function getTotalReadTime($courseId) {
+        $query = "
+        SELECT SUM(a.read_time) AS total_time
+        FROM articles a
+        JOIN course_articles ca ON a.id = ca.article_id
+        WHERE ca.course_id = ?
+    ";
 
+        if ($stmt = $this->conn->prepare($query)) {
+            $stmt->bind_param("i", $courseId);
+            $stmt->execute();
+            $stmt->bind_result($total_time);
+            $stmt->fetch();
+            $stmt->close();
+            return $total_time ?? 0; // Если NULL, вернём 0
+        }
+
+        return 0; // В случае ошибки
+    }
+    public function getMaterialsCount($courseId) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM course_materials WHERE course_id = ?");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['count'] ?? 0;
+    }
+
+    public function getAverageDifficulty($courseId) {
+        $stmt = $this->conn->prepare("
+        SELECT difficulty FROM articles 
+        WHERE id IN (SELECT article_id FROM course_articles WHERE course_id = ?)
+    ");
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $difficultyLevels = ['beginner' => 1, 'intermediate' => 2, 'advanced' => 3];
+        $totalDifficulty = 0;
+        $count = 0;
+
+        while ($row = $result->fetch_assoc()) {
+            if (isset($difficultyLevels[$row['difficulty']])) {
+                $totalDifficulty += $difficultyLevels[$row['difficulty']];
+                $count++;
+            }
+        }
+
+        if ($count === 0) return 'unknown';
+
+        $avgDifficulty = round($totalDifficulty / $count);
+
+        return array_search($avgDifficulty, $difficultyLevels) ?: 'unknown';
+    }
+    public function getSimilarCourses($courseId, $title, $limit = 10) {
+        $sql = "SELECT c.*, u.user_login, 
+                   (SELECT COUNT(*) FROM course_reactions cr 
+                    WHERE cr.course_id = c.course_id AND cr.reaction = 'like') AS likes
+            FROM courses c
+            JOIN users u ON c.user_id = u.user_id
+            WHERE c.course_id != ? 
+              AND (c.title LIKE ? OR c.title LIKE ?)
+            ORDER BY likes DESC, c.created_at DESC
+            LIMIT ?";
+
+        $searchTitle1 = "%{$title}%"; // Совпадения в любом месте названия
+        $searchTitle2 = "{$title}%";  // Совпадения в начале названия
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("issi", $courseId, $searchTitle1, $searchTitle2, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 
 }

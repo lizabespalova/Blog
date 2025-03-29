@@ -133,12 +133,13 @@ class SearchController
                 $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
             }
         }
-
         // Передаем статьи в шаблон
         include __DIR__ . '/../../views/search/sections/feed.php';
 
 //        include __DIR__ . '/../../views/search/sections/popular_articles.php';
     }
+
+
 
     public function showPopularCourses() {
         // Подключаем вспомогательные файлы для смены языка
@@ -162,11 +163,17 @@ class SearchController
             }
             // Получаем рейтинг курса (средний рейтинг)
             $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
+            $course['owner'] =$this->userModel->getLoginById($course['user_id']);
+
+//            var_dump( $course['email']);
+//            var_dump( $course['hideEmail']);
+//            var_dump( $course['visibility_type']);
+
         }
         unset($course); // Разрываем ссылку после использования
 
         // Передаем курсы в шаблон для отображения
-        include __DIR__ . '/../../views/search/sections/popular_courses.php';
+        include __DIR__ . '/../../views/courses/courses.php';
     }
 
     public function showPopularWriters() {
@@ -216,14 +223,44 @@ class SearchController
 //        var_dump(count($articles)); // Выведет количество статей
 
         include __DIR__ . '/../../views/search/sections/feed.php';
-
-
-//        if (!empty($articles)):
-//            foreach ($articles as $article):
-//                 include __DIR__ . '/../../views/partials/card.php';
-//             endforeach;
-//        endif;
     }
 
+    public function showPopularAiArticles(){
+        $articles = $this->articleModel->showPopularAiArticles();
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
+        }
+        include __DIR__ . '/../../views/search/sections/feed.php';
+    }
+    public function showPopularItNewsArticles(){
+        $articles = $this->articleModel->showPopularItNewsArticles();
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
+        }
+        include __DIR__ . '/../../views/search/sections/feed.php';
+    }
+
+    public function showPopularWebDevelopmentArticles(){
+        $articles = $this->articleModel->showPopularWebDevelopmentArticles();
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
+        }
+        include __DIR__ . '/../../views/search/sections/feed.php';
+    }
+    public function showPopularCyberSecurityArticles(){
+        $articles = $this->articleModel->showPopularCyberSecurityArticles();
+        if (!empty($articles)) {
+            foreach ($articles as $key => $article) {
+                $articles[$key]['parsed_content'] = $this->markdownService->parseMarkdown($article['content']);
+            }
+        }
+        include __DIR__ . '/../../views/search/sections/feed.php';
+    }
 
 }

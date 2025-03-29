@@ -210,12 +210,16 @@ Attention: In this case, users in your private courses will not be able to conta
     'selected_users' => 'Selected users',
     'view_course_subscribers' => 'View course subscribers',
     'private_course' => 'Private course',
-    'request_access' => 'Request_access',
+    'request_access' => 'Request access',
     'materials_count' => 'Number of Materials',
     'course_information' => 'Course Information',
     'article_amount' => 'Number of Articles',
     'course_time' => 'Approximate Time to Complete',
     'difficulty_level' => 'Difficulty Level',
+    'hours' => 'hours',
+    'course_difficulty' => 'Course difficulty',
+    'follow_owner' => 'Follow owner',
+    'recommendatios' => 'Recommended courses',
 
     //    Футер
     'about' => 'About',
