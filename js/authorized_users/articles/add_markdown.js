@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         placeholder: "Write your article here...",
         spellChecker: false,
         autosave: {
-            enabled: true,
+            enabled: false,
             uniqueId: "MyUniqueID",
             delay: 1000
         },

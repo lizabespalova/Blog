@@ -59,10 +59,23 @@
                             <?php endif; ?>
                         <?php endif; ?>
                     </h1>
+                    <!-- Отображаем локацию, если она есть -->
+                    <?php if ($userLocation['country'] || $userLocation['city']): ?>
+                        <div class="user-location">
+                            <i class="fas fa-map-marker-alt location-icon"></i> <!-- Иконка локации -->
+                            <?php if ($userLocation['country']): ?>
+                                <span class="country"><?= htmlspecialchars($userLocation['country']) ?></span>
+                            <?php endif; ?>
+                            <?php if ($userLocation['city']): ?>
+                                <span class="city"><?= htmlspecialchars($userLocation['city']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
 
                     <div class="profile-stats">
                         <?php if (!empty($currentUser['user_id'])): ?>
-                        <?php if ($profileVisibility === 'public' || $profileUserId == $currentUser['user_id']): ?>
+                        <?php if ($profileVisibility === 'public' || $profileUserId == $currentUser['user_id'] || $isFollowing): ?>
                             <button class="stat" onclick="navigateTo('/user/<?= urlencode($user['user_id']) ?>/followers')">
                                 <?= $translations['followers']; ?>: <span id="followers-count"><?= htmlspecialchars($followersCount) ?></span>
                             </button>

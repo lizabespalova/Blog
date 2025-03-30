@@ -11,9 +11,9 @@
                     <label>
                         <input type="checkbox" value="<?= $article['id'] ?>">
                     </label>
-                    <div class="course-card">
+<!--                    <div class="course-card">-->
                         <?php include __DIR__ . '/../../views/partials/card.php'; ?>
-                    </div>
+<!--                    </div>-->
                 </div>
             <?php endforeach; ?>
         </div>

@@ -103,36 +103,6 @@ class RegisterController {
         return $errors;
     }
 
-//    private function configure_mailer() {
-//        $this->mailer->isSMTP();
-//        $this->mailer->Host = getHost();
-//        $this->mailer->Port = getPort();
-//        $this->mailer->SMTPSecure = getSmptSecure();
-//        $this->mailer->SMTPAuth = true;
-//        $this->mailer->Username = getEmail();
-//        $this->mailer->Password = getEmailPassword();
-//    }
-//
-//    private function send_confirmation_email($email, $token) {
-//        $confirmationUrl = 'http://localhost:8080/confirm?user_key=' . $token;
-//
-//        $this->mailer->setFrom(getEmail());
-//        $this->mailer->addAddress($email);
-//        $this->mailer->isHTML(true);
-//        $this->mailer->Subject = 'Confirm Your Registration';
-//        $this->mailer->Body = 'Please click the link below to confirm your registration:<br><a href="' . $confirmationUrl . '">Confirm Registration</a>';
-//
-//        try {
-//            $this->mailer->send();
-//            echo '<script type="text/javascript">
-//            alert("Confirmation email sent successfully!");
-//            window.location.href = "/confirmation_pending";
-//        </script>';
-//        } catch (Exception $e) {
-//            echo 'Error: ', $this->mailer->ErrorInfo;
-//        }
-//    }
-
     public function setPassword() {
         session_start();
 
@@ -389,21 +359,5 @@ class RegisterController {
         exit();
     }
 
-//    public function show_errors($errors) {
-//        // Проверяем, является ли $errors массивом
-//        if (!is_array($errors)) {
-//            $errors = [$errors]; // Если это не массив, преобразуем в массив
-//        }
-//
-//        // Соединяем сообщения в одну строку
-//        $errorMessages = implode(" ", $errors);
-//
-//        // Кодируем сообщение для URL
-//        $encodedMessage = urlencode($errorMessages);
-//
-//        // Перенаправляем на страницу ошибки с сообщением
-//        header("Location: /../../app/services/helpers/error_message.php?message=$encodedMessage");
-//        exit(); // Завершаем выполнение текущего скрипта
-//    }
 }
 ?>

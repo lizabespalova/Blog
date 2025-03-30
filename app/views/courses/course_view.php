@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
     <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/reactions_buttons.css">
     <link rel="stylesheet" href="/css/courses/scroll_buttons.css">
     <link rel="stylesheet" href="/css/courses/courses_view.css">
     <link rel="stylesheet" href="/css/courses/progress_bar.css">
@@ -297,6 +298,13 @@
                 <i class="fas fa-thumbs-down"></i>
                 <span class="dislike-count"><?= htmlspecialchars($course['dislikes']); ?></span>
             </button>
+            <!-- Избранное-->
+            <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
+                    data-course-id="<?= $course['course_id'] ?>"
+                    title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
+                <i class="fas fa-star"></i>
+            </button>
+
             <!-- Поделиться -->
             <?php include __DIR__ . '/../../views/partials/share_modal_menu.php'; ?>
         </div>
@@ -372,6 +380,7 @@
 <script src="/js/courses/modal_window_actions.js"></script>
 <script src="/js/courses/modal_subscribers.js"></script>
 <script src="/js/authorized_users/articles/repost_article.js"></script>
+<script src="/js/courses/course_to_favourite.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -26,6 +26,14 @@ function favourites_route($uri, $method) {
                 $controller->showFavourites();
             }
             exit();  // Остановка выполнения после маршрута
+        case $method === 'POST' && $uri === '/favorite/course':
+            $controller = new FavouriteController($dbConnection);
+            $controller->toggleFavoriteCourse();
+            exit;
+        case $method === 'GET' && preg_match('#^/favorite-courses/([\w-]+)$#', $uri, $matches):
+            $controller = new FavouriteController(getDbConnection());
+            $controller->showFavoriteCourses();
+            exit;
 
         default:
             return false;

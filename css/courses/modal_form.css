@@ -34,7 +34,7 @@
     margin: 100px auto;
     padding: 30px;
     border-radius: 12px;
-    width: 400px;
+    /*width: 400px;*/
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
 }

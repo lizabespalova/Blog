@@ -351,7 +351,29 @@
     text-decoration: underline;
 }
 
+/* Стиль для отображения локации */
+.user-location {
+    font-size: 14px;
+    color: #777;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 
+.user-location .location-icon {
+    color: #5a98e3;
+    font-size: 16px;
+}
+
+.user-location .country {
+    font-weight: bold;
+    color: #333;
+}
+
+.user-location .city {
+    font-style: italic;
+    color: #555;
+}
 
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
@@ -366,9 +388,14 @@
     .card-container {
         padding: 10px;
     }
-    /*.profile-navigation {*/
-    /*    width: auto;*/
-    /*}*/
+    .user-location {
+        font-size: 12px;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .user-location .location-icon {
+        font-size: 14px;
+    }
 }
 /* Адаптивные стили */
 @media (max-width: 768px) {

@@ -22,6 +22,12 @@ function footer_route($uri, $method) {
                 $controller->showAboutPage();
                 exit();
             }
+        case '/contact':
+            if ($method === 'GET') {
+                $controller = new FooterController($dbConnection);
+                $controller->showContactPage();
+                exit();
+            }
         default:
             return false;
     }

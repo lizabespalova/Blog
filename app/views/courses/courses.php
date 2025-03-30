@@ -25,7 +25,7 @@
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
-            <?php if ($course['hideEmail']==0 && $course['visibility_type'] === 'custom'): ?>
+            <?php if ($course['hideEmail']==0 && $course['visibility_type'] === 'custom' && !$isAccessible): ?>
                 <?php if (!empty($course['email'])): ?>
                     <a href="mailto:<?= htmlspecialchars($course['email']) ?>" class="btn btn-contact">
                         <?= $translations['request_access'] ?>

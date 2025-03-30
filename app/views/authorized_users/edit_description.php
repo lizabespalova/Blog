@@ -30,7 +30,7 @@
             <label for="description"><?= $translations['description'] ?>:</label>
             <textarea id="description" name="description" rows="10" cols="50" maxlength="1000" placeholder="<?= $translations['enter_description_placeholder'] ?>"></textarea>
             <br>
-            <span id="char-count">0/500</span> <!-- Можно добавить перевод подсказки, если требуется -->
+            <span id="char-count">0/1000</span> <!-- Можно добавить перевод подсказки, если требуется -->
             <br>
 
             <!-- Кнопки внутри формы -->

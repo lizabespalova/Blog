@@ -15,4 +15,9 @@ class FooterController
        include __DIR__ . '/../views/common_templates/about.php';
 
    }
+   public function showContactPage(){
+       require_once 'app/services/helpers/switch_language.php';
+
+       include __DIR__ . '/../views/common_templates/contact_form.php';
+   }
 }

@@ -25,14 +25,14 @@
 
 <?php include __DIR__ . '/../../views/base/profile_header.php'; ?>
 
- <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm">
+ <form action="/create-article" method="POST" enctype="multipart/form-data" class="article-form" id="articleForm" autocomplete="off">
 
      <label for="title"><?= $translations['title']; ?></label>
      <input type="text" id="title" name="title" placeholder="Title" required value="<?= !empty($title) ? htmlspecialchars($title) : '' ?>"><br>
 
      <label for="markdown-editor"><?= $translations['content']; ?></label>
      <!-- Для вывода контента статьи -->
-     <textarea id="markdown-editor" name="content" placeholder="Write your article here..."><?= htmlspecialchars($content) ?></textarea>
+     <textarea id="markdown-editor" name="content" placeholder="Write your article here...">  <?= !empty($content) ? htmlspecialchars($content) : '' ?></textarea>
 
 
      <!-- Модальное окно для таблиц -->

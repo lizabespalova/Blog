@@ -3,7 +3,10 @@
 namespace controllers\authorized_users_controllers;
 use Exception;
 use models\Articles;
+use models\Courses;
 use models\Favourites;
+use models\Follows;
+use models\Settings;
 use models\User;
 
 require_once 'app/services/helpers/session_check.php';
@@ -12,11 +15,16 @@ class FavouriteController
     private $favouriteModel;
     private $userModel;
     private $articleModel;
-
+    private $followModel;
+    private $courseModel;
+    private $settingModel;
     public function __construct($conn) {
         $this->favouriteModel = new Favourites($conn);
         $this->userModel = new User($conn);
         $this->articleModel = new Articles($conn);
+        $this->followModel = new Follows($conn);
+        $this->settingModel = new Settings($conn);
+        $this->courseModel = new Courses($conn);
     }
     public function showFavourites(){
         require_once 'app/services/helpers/switch_language.php';
@@ -98,5 +106,60 @@ class FavouriteController
         }
     }
 
+    public function toggleFavoriteCourse() {
+        require_once 'app/services/helpers/session_check.php';
+        $userId = $_SESSION['user']['user_id'] ?? null;
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (!isset($data['course_id'], $data['action'])) {
+            echo json_encode(["success" => false, "message" => "Invalid request"]);
+            return;
+        }
+
+        $course_id = intval($data['course_id']);
+        $action = $data['action'];
+
+        if ($action === "add") {
+            $this->favouriteModel->addCourseToFavourites($userId, $course_id);
+            echo json_encode(["success" => true, "action" => "added"]);
+        } elseif ($action === "remove") {
+            $this->favouriteModel->deleteCourseFromFavourites($userId, $course_id);
+            echo json_encode(["success" => true, "action" => "removed"]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Invalid action"]);
+        }
+    }
+    public function showFavoriteCourses() {
+        require_once 'app/services/helpers/session_check.php';
+        require_once 'app/services/helpers/switch_language.php';
+        $userId = $_SESSION['user']['user_id'] ?? null;
+        $currentUser = $this->userModel->get_user_by_id($userId);
+        if (!$userId) {
+            header("Location: /login");
+            exit;
+        }
+
+        $courses = $this->favouriteModel->getFavoriteCourses($userId);
+        foreach ($courses as &$course) { // Добавили &
+            $course['email'] = $this->userModel->getUserEmail($course['user_id']);
+            $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
+            if ($course['visibility_type'] === 'subscribers') {
+                $course['isSubscriber'] =  $this->followModel->isFollowing($userId, $course['user_id']);
+            } else {
+                $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
+            }
+            $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
+            $isAccessible = ($course['visibility_type'] === 'public' || // Курс публичный
+                $course['user_id'] == ($_SESSION['user']['user_id'] ?? null) || // Владелец курса
+                ($course['visibility_type'] === 'subscribers' && !empty($course['isSubscriber'])));
+            if (!$isAccessible) {
+                // Удаляем курс из избранного
+                $this->favouriteModel->deleteCourseFromFavourites($userId, $course['course_id']);
+            }
+        }
+        unset($course); // Разрываем ссылку после использования
+
+        include __DIR__ . '/../../views/courses/favorite_courses.php';
+    }
 
 }

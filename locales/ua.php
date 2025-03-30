@@ -81,6 +81,8 @@ return [
     'notifications' => 'Сповіщення',
     'settings' => 'Налаштування',
     'logout' => 'Вихід',
+    'select_country' => 'Країна',
+    'select_city' => 'Місто',
 
 
     //    Профиль
@@ -221,6 +223,7 @@ return [
     'course_difficulty' => 'Складність курсу',
     'follow_owner' => 'Підписатися на власника',
     'recommendatios' => 'Рекомендовані курси',
+    'favorite_courses' => 'Збережені курси',
 
     //    Футер
     'about' => 'Про сайт',
@@ -242,4 +245,11 @@ return [
                     <li>Через форму зворотного зв’язку на сайті: <a href="/contact">Перейти до форми</a></li> 
                 </ul>',
     'website_coperation'=> 'Кооперація',
+    //    Контактна форма
+    'connect_with_us' => 'Зв’яжіться з нами',
+    'user_name' => 'Ваше ім’я',
+    'user_email' => 'Ваш email',
+    'message' => 'Повідомлення',
+    'send' => 'Відправити',
+
 ];

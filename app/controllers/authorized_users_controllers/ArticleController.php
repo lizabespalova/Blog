@@ -73,8 +73,6 @@ class ArticleController
 //            var_dump($content);
         }
         // Передаем данные в форму
-
-
         include __DIR__ . '/../../views/authorized_users/form_article.php';
     }
 

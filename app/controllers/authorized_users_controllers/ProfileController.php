@@ -102,6 +102,7 @@ class ProfileController
 
             }
             unset($course); // Разрываем ссылку после использования
+            $userLocation = $this->settingModel->getLocation($userId); // Предполагаем, что эта функция извлекает страну и город
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {

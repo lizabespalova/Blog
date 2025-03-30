@@ -103,10 +103,10 @@ function courses_route($uri, $method) {
              http_response_code(400);
              exit;
          }
-
          $controller = new CourseController(getDbConnection());
          $controller->removeSubscriber((int) $data['user_id'], (int) $data['course_id']);
          exit;
+
      default:
          return false;
     }

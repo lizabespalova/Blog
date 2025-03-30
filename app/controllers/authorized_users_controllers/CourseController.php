@@ -4,6 +4,7 @@ namespace controllers\authorized_users_controllers;
 
 use models\Articles;
 use models\Courses;
+use models\Favourites;
 use models\Follows;
 use models\Settings;
 use models\User;
@@ -18,6 +19,7 @@ class CourseController
     private $articleModel;
     private $coverImagesService;
     private $followModel;
+    private $favouriteModel;
 
     public function __construct($conn) {
         $this->courseModel = new Courses($conn);
@@ -26,6 +28,7 @@ class CourseController
         $this->userModel = new User($conn);
         $this->settingModel = new Settings($conn);
         $this->followModel = new Follows($conn);
+        $this->favouriteModel = new Favourites($conn);
     }
     public function showUserCoursesForm($username) {
         require_once 'app/services/helpers/switch_language.php';
@@ -174,7 +177,7 @@ class CourseController
 
         }
         unset($similarCourse); // Разрываем ссылку после использования
-
+        $is_favorite = $this->favouriteModel->checkIfFavorite($userId, $course['course_id']);
 //        var_dump($completedArticles);
         require_once 'app/views/courses/course_view.php';
     }

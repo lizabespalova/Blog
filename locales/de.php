@@ -20,6 +20,9 @@ return [
     'enter_password' => 'Geben Sie Ihr Passwort ein',
     'delete_account_button' => 'Konto löschen',
     'delete_account_warning' => 'Sobald Ihr Konto gelöscht wurde, gehen alle Ihre Daten dauerhaft verloren.',
+    'select_country' => 'Länderauswahl',
+    'select_city' => 'Stadtauswahl',
+
     //    Страница настроек "Безопасность"
     'current_password' => 'Aktuelles Passwort',
     'new_password' => 'Neues Passwort',
@@ -223,6 +226,7 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'course_difficulty' => 'Kursschwierigkeit',
     'follow_owner' => 'Abonnieren Sie den Eigentümer',
     'recommendatios' => 'Empfohlene Kurse',
+    'favorite_courses' => 'Gespeicherte Kurse',
 
     //    Футер
     'about' => 'Über',
@@ -244,5 +248,11 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
                     <li>Über das Kontaktformular auf der Website: <a href="/contact">Zum Formular</a></li> 
                 </ul>',
     'website_coperation'=> 'Kooperation',
+//    Kontaktformular
+    'connect_with_us' => 'Kontaktieren Sie uns',
+    'user_name' => 'Ihr Name',
+    'user_email' => 'Ihre E-Mail',
+    'message' => 'Nachricht',
+    'send' => 'Senden',
 
 ];

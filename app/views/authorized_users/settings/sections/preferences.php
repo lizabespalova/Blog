@@ -22,17 +22,25 @@
     </div>
 
     <div class="form-group">
-        <label for="timezone"><?= $translations['timezone'] ?></label>
-        <select id="timezone" name="timezone" required>
-            <?php
-            $timezones = DateTimeZone::listIdentifiers();
-            foreach ($timezones as $tz) {
-                echo "<option value=\"$tz\">$tz</option>";
-            }
-            ?>
+        <label for="country"><?= $translations['select_country'] ?></label>
+        <select id="country" name="country" required data-countries='<?= json_encode($groupedCountries) ?>'>
+            <option value=""><?= $translations['select_country'] ?></option>
+            <?php foreach (array_keys($groupedCountries) as $country): ?>
+                <option value="<?= htmlspecialchars($country) ?>" <?= $defaultCountry === $country ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($country) ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </div>
 
+    <div class="form-group">
+        <label for="city"><?= $translations['select_city'] ?></label>
+        <select id="city" name="city" required>
+            <option value=""><?= $translations['select_city'] ?></option>
+            <?php if ($defaultCity): ?>
+                <option value="<?= htmlspecialchars($defaultCity) ?>" selected><?= htmlspecialchars($defaultCity) ?></option>
+            <?php endif; ?>
+        </select>
 
     <button type="submit" class="save-settings"><?= $translations['save_changes'] ?></button>
 </form>

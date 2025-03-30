@@ -79,6 +79,8 @@ Attention: In this case, users in your private courses will not be able to conta
     'notifications' => 'Notifications',
     'settings' => 'Settings',
     'logout' => 'Logout',
+    'select_country' => 'Select country',
+    'select_city' => 'Select city',
 
     //    Профиль
     'followers' => 'Followers',
@@ -220,7 +222,7 @@ Attention: In this case, users in your private courses will not be able to conta
     'course_difficulty' => 'Course difficulty',
     'follow_owner' => 'Follow owner',
     'recommendatios' => 'Recommended courses',
-
+    'favorite_courses' => 'Saved courses',
     //    Футер
     'about' => 'About',
 
@@ -241,5 +243,11 @@ Attention: In this case, users in your private courses will not be able to conta
                     <li>Through the feedback form on the website: <a href="/contact">Go to the form</a></li> 
                 </ul>',
     'website_coperation'=> 'Cooperation',
+//    Contact Form
+    'connect_with_us' => 'Contact Us',
+    'user_name' => 'Your Name',
+    'user_email' => 'Your Email',
+    'message' => 'Message',
+    'send' => 'Send',
 
 ];

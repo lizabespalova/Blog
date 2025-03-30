@@ -46,7 +46,26 @@ class SettingsController
         $showLastSeen = $this->settingModel->getShowLastSeen($userId);
         $language = $this->settingModel->getLanguage($userId);
         $hideEmail = $this->settingModel->getHideEmail($userId); // Получаем из базы
+        $userLocation = $this->settingModel->getLocation($userId); // Предполагаем, что эта функция извлекает страну и город
 
+        $defaultCountry = $userLocation['country'] ?? ''; // Страна по умолчанию
+        $defaultCity = $userLocation['city'] ?? ''; // Город по умолчанию
+
+// Загружаем список стран
+        $countries = json_decode(file_get_contents("https://restcountries.com/v3.1/all"), true);
+        $groupedCountries = [];
+
+        foreach ($countries as $country) {
+            $countryName = $country['name']['common'] ?? ''; // Название страны
+            $countryCode = $country['cca2'] ?? ''; // Код страны (ISO 3166-1 alpha-2)
+
+            if (!empty($countryName) && !empty($countryCode)) {
+                $groupedCountries[$countryName] = []; // Заполняем массив стран
+            }
+        }
+
+// Сортируем страны по алфавиту
+        ksort($groupedCountries);
         $flags = [
             'en' => 'gb',
             'ru' => 'ru',
@@ -310,6 +329,21 @@ class SettingsController
             echo json_encode(['success' => false, 'message' => 'No session ID provided']);
         }
     }
+    public function saveLocation() {
+        // Получаем данные из POST-запроса
+        $country = isset($_POST['country']) ? $_POST['country'] : null;
+        $city = isset($_POST['city']) ? $_POST['city'] : null;
 
+        if ($country && $city) {
+            // Логика для сохранения данных в базе данных
+            // Пример:
+            $userId = $_SESSION['user']['user_id'];  // Получаем user_id из сессии
+            $this->settingModel->setLocation($country,$city,$userId);
 
+            // Отправляем ответ обратно
+            echo json_encode(['status' => 'success', 'message' => 'Location updated successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid data']);
+        }
+    }
 }

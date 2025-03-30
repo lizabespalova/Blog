@@ -165,4 +165,42 @@ class Favourites
         $stmt->execute();
         $stmt->close();
     }
+    public function addCourseToFavourites($userId, $course_id){
+        $stmt = $this->conn->prepare("INSERT IGNORE INTO favorite_courses (user_id, course_id) VALUES (?, ?)");
+        $stmt->bind_param("ii", $userId, $course_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function deleteCourseFromFavourites($userId, $course_id)
+    {
+        $stmt = $this->conn->prepare("DELETE FROM favorite_courses WHERE user_id = ? AND course_id = ?");
+        $stmt->bind_param("ii", $userId, $course_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+    public function checkIfFavorite($user_id, $course_id) {
+        $stmt = $this->conn->prepare("SELECT 1 FROM favorite_courses WHERE user_id = ? AND course_id = ?");
+        $stmt->bind_param("ii", $user_id, $course_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $isFavorite = $result->num_rows > 0;
+        $stmt->close();
+        return $isFavorite;
+    }
+    public function getFavoriteCourses($userId) {
+        $stmt = $this->conn->prepare("
+        SELECT c.course_id, c.title, c.description, c.cover_image, c.visibility_type, c.user_id 
+        FROM courses c
+        JOIN favorite_courses f ON c.course_id = f.course_id
+        WHERE f.user_id = ?
+    ");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $courses = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $courses;
+    }
+
 }

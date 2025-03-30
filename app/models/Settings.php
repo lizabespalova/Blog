@@ -191,4 +191,33 @@ class Settings
         $stmt->execute();
         $stmt->close();
     }
+    public function setLocation($country, $city, $userId){
+        $query = "UPDATE settings SET country = ?, city = ? WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssi", $country, $city, $userId);  // "ssi" — это типы данных: string, string, integer
+        $stmt->execute();
+    }
+    public function getLocation($userId) {
+        // Пример запроса к базе данных для получения страны и города с использованием MySQLi
+        $query = "SELECT country, city FROM settings WHERE user_id = ?";
+
+        // Подготовка запроса
+        if ($stmt = $this->conn->prepare($query)) {
+            // Привязка параметра
+            $stmt->bind_param("i", $userId);
+
+            // Выполнение запроса
+            $stmt->execute();
+
+            // Получение результата
+            $result = $stmt->get_result();
+
+            // Проверка, если есть данные, то возвращаем их
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc(); // Вернем ассоциативный массив с данными
+            }
+        }
+
+        return null; // Если данных нет, возвращаем null
+    }
 }

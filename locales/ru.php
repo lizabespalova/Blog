@@ -79,6 +79,8 @@ return [
     'notifications' => 'Уведомления',
     'settings' => 'Настройки',
     'logout' => 'Выход',
+    'select_country' => 'Страна',
+    'select_city' => 'Город',
 
     //    Профиль
     'followers' => 'Подписчики',
@@ -219,6 +221,7 @@ return [
     'course_difficulty' => 'Сложность курса',
     'follow_owner' => 'Подписаться на хозяина',
     'recommendatios' => 'Рекомендуемые курсы',
+    'favorite_courses' => 'Сохраненные курсы',
 
     //    Футер
     'about' => 'О сайте',
@@ -240,6 +243,14 @@ return [
                     <li>Через форму обратной связи на сайте: <a href="/contact">Перейти к форме</a></li> 
                 </ul>',
     'website_coperation'=> 'Кооперация',
+
+    //    Контактная форма
+    'connect_with_us' => 'Свяжитесь с нами',
+    'user_name' => 'Ваше имя',
+    'user_email' => 'Ваш email',
+    'message' => 'Сообщение',
+    'send' => 'Отправить',
+
 
 
 ];

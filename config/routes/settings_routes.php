@@ -72,6 +72,12 @@ function setting_route($uri, $method) {
                 $controller->saveLanguage();
             }
             exit();
+        case '/settings/change-location':
+            $controller = new SettingsController(getDbConnection());
+            if ($method === 'POST') {
+                $controller->saveLocation();
+            }
+            exit();
         default:
             return false;
     }
