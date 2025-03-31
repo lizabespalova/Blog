@@ -430,6 +430,7 @@ class CourseController
     public function showStatistics(int $courseId): void
     {
         require_once 'app/services/helpers/switch_language.php';
+        require_once 'app/services/helpers/session_check.php';
 
         $course = $this->courseModel->getCourseById($courseId);
         if (!$course) {
@@ -437,14 +438,13 @@ class CourseController
             echo "Course not found";
             return;
         }
-        $user = $this->userModel->get_user_by_id($course['user_id']);
+//        $user = $this->userModel->get_user_by_id($course['user_id']);
         $statistics = [
             'likes' => $this->courseModel->getCourseLikes($courseId),
             'dislikes' => $this->courseModel->getCourseDislikes($courseId),
+            'favorites' => $this->courseModel->getFavoritesCount($courseId),
             'popular_articles' => $this->articleModel->getPopularArticlesByCourseID($courseId),
-
         ];
-
         require_once 'app/views/courses/statistic_courses_template.php';
     }
     public function getReactions($courseId){

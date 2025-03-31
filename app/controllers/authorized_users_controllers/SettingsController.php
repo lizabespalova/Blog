@@ -48,8 +48,10 @@ class SettingsController
         $hideEmail = $this->settingModel->getHideEmail($userId); // Получаем из базы
         $userLocation = $this->settingModel->getLocation($userId); // Предполагаем, что эта функция извлекает страну и город
 
-        $defaultCountry = $userLocation['country'] ?? ''; // Страна по умолчанию
-        $defaultCity = $userLocation['city'] ?? ''; // Город по умолчанию
+        $defaultLanguage = 'english';
+        $defaultFlag = 'gb';
+
+        $language = $language ?? $defaultLanguage;
 
 // Загружаем список стран
         $countries = json_decode(file_get_contents("https://restcountries.com/v3.1/all"), true);

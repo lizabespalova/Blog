@@ -67,7 +67,15 @@
                 <?php for ($i = 0; $i < $emptyStars; $i++): ?>
                     <span class="star empty">&#9734;</span>
                 <?php endfor; ?>
+                <!-- Числовое значение рейтинга -->
+                <span class="rating-number">(<?= number_format($rating, 1) ?>)</span>
             </div>
+            <?php if (!empty($course['favourites'])): ?>
+                <div class="course-stats">
+                    <?= $translations['students_enrolled'] ?>: <?= htmlspecialchars($course['favourites']) ?></i>
+                </div>
+            <?php endif; ?>
+
         </div>
     <?php endforeach; ?>
 </div>

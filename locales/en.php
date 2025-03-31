@@ -223,6 +223,8 @@ Attention: In this case, users in your private courses will not be able to conta
     'follow_owner' => 'Follow owner',
     'recommendatios' => 'Recommended courses',
     'favorite_courses' => 'Saved courses',
+    'students_enrolled' => 'Number of participants',
+
     //    Футер
     'about' => 'About',
 
@@ -239,8 +241,7 @@ Attention: In this case, users in your private courses will not be able to conta
     'website_contacts'=> '<h2>Contacts:</h2> 
                 <p>If you have any questions, suggestions, or requests, we are always happy to help. Contact us through any convenient channel:</p> 
                 <ul> 
-                    <li>By email: <a href="mailto:info@example.com">info@example.com</a></li> 
-                    <li>Through the feedback form on the website: <a href="/contact">Go to the form</a></li> 
+                    <li>By email: <a href="mailto:vedmedykportal@gmail.com">vedmedykportal@gmail.com</a></li> 
                 </ul>',
     'website_coperation'=> 'Cooperation',
 //    Contact Form

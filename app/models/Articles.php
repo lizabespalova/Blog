@@ -423,6 +423,13 @@ class Articles
         $stmt->execute();
         $stmt->close();
     }
+    // Удаление реакций пользователей на статьи
+    public function deleteArticleReactions($user_id) {
+        $stmt = $this->conn->prepare("DELETE FROM article_reactions WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
     // Функция получения статей для ленты
     public function getArticlesForFeed($user_id, $startIndex, $articlesPerPage)
     {

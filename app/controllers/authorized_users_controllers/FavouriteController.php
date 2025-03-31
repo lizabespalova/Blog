@@ -6,6 +6,7 @@ use models\Articles;
 use models\Courses;
 use models\Favourites;
 use models\Follows;
+use models\Notifications;
 use models\Settings;
 use models\User;
 
@@ -16,6 +17,8 @@ class FavouriteController
     private $userModel;
     private $articleModel;
     private $followModel;
+    private $notificationModel;
+
     private $courseModel;
     private $settingModel;
     public function __construct($conn) {
@@ -25,6 +28,7 @@ class FavouriteController
         $this->followModel = new Follows($conn);
         $this->settingModel = new Settings($conn);
         $this->courseModel = new Courses($conn);
+        $this->notificationModel = new Notifications($conn);
     }
     public function showFavourites(){
         require_once 'app/services/helpers/switch_language.php';
@@ -118,9 +122,14 @@ class FavouriteController
 
         $course_id = intval($data['course_id']);
         $action = $data['action'];
-
+        $user = $this->userModel->get_user_by_id($userId);
+        $course = $this->courseModel->getCourseById($course_id);
         if ($action === "add") {
             $this->favouriteModel->addCourseToFavourites($userId, $course_id);
+            $message = 'User '.$user['user_login'].' saved your course';
+
+            $this->notificationModel->addNotification($course['user_id'], $userId, 'favorite', $message, $course_id);
+
             echo json_encode(["success" => true, "action" => "added"]);
         } elseif ($action === "remove") {
             $this->favouriteModel->deleteCourseFromFavourites($userId, $course_id);
@@ -143,6 +152,7 @@ class FavouriteController
         foreach ($courses as &$course) { // Добавили &
             $course['email'] = $this->userModel->getUserEmail($course['user_id']);
             $course['hideEmail'] = $this->settingModel->getHideEmail($course['user_id']);
+            $course['favourites'] = $this->courseModel->getFavoritesCount($course['course_id']);
             if ($course['visibility_type'] === 'subscribers') {
                 $course['isSubscriber'] =  $this->followModel->isFollowing($userId, $course['user_id']);
             } else {

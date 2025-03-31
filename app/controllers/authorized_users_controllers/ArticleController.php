@@ -565,7 +565,8 @@ class ArticleController
         }
 
         $article_slug = $input['article_slug'];
-        $userId = $input['user_id'];
+        $article = $this->articleModel->get_article_by_slug($article_slug);
+//        $userId = $input['user_id'];
         $reactionerId = $_SESSION['user']['user_id'] ?? null;
         if ($reactionerId === null) {
             header('Content-Type: application/json');
@@ -585,7 +586,7 @@ class ArticleController
             $message = 'User '. $user_login.' added a comment';
 
             // Отправить уведомление при обновлении
-            $this->notificationModel->addNotification($userId, $reactionerId, 'comment_reaction', $message, $commentId);
+            $this->notificationModel->addNotification($article['user_id'], $reactionerId, 'comment', $message, $commentId);
             // Если это ответ, уведомить автора родительского комментария
             if ($parent_id) {
                 $parentComment = $this->articleCommentsModel->get_comment_by_id($parent_id);

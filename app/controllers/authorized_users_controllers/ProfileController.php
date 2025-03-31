@@ -49,8 +49,8 @@ class ProfileController
             $currentUser = $this->userModel->get_user_by_id($userId);
             // Получение данных пользователя из базы данных
             $user = $this->userModel->get_user_by_login($profileUserLogin);
-
             $profileUserId = $user['user_id'];
+            $avatar = $this->userModel->get_author_avatar($profileUserLogin);
 //            $email = $this->userModel->getUserEmail($profileUserId);
 
             if (!$user) {
@@ -58,9 +58,8 @@ class ProfileController
             }
             $userArticlesCount = $this->userModel->getUserArticlesCount($profileUserId);
 
-            $article_cards =  $this->repostModel->getReposts($profileUserId);
-            $reposts = $article_cards;
-//            $publications =  $this->userModel->getPublications($profileUserLogin);
+            $reposts =  $this->repostModel->getReposts($profileUserId);
+
             $articles = $this->articleModel->getUserPublicatedArticles($profileUserLogin);
             if (!empty($articles)) {
                 foreach ($articles as $key => $article) {
@@ -99,10 +98,10 @@ class ProfileController
                     $course['isSubscriber'] = true; // Если курс не только для подписчиков, разрешаем доступ
                 }
                 $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
-
+                $course['favourites'] = $this->courseModel->getFavoritesCount($course['course_id']);
             }
             unset($course); // Разрываем ссылку после использования
-            $userLocation = $this->settingModel->getLocation($userId); // Предполагаем, что эта функция извлекает страну и город
+            $userLocation = $this->settingModel->getLocation($profileUserId); // Предполагаем, что эта функция извлекает страну и город
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
@@ -128,6 +127,7 @@ class ProfileController
 
         if (password_verify($password, $userData['user_password'])) {
             $this->userModel->deleteAccount($user_id);
+            $this->deleteUploads($user_id);
             session_destroy();
 
             // Отправляем JSON и завершаем выполнение
@@ -144,5 +144,30 @@ class ProfileController
             exit;
         }
     }
+    public function deleteUploads($user_id) {
+        $userFolder = 'uploads/' . $user_id;
 
+        if (is_dir($userFolder)) {
+            $this->deleteFolder($userFolder);
+        }
+    }
+
+    private function deleteFolder($folder) {
+        if (!is_dir($folder)) {
+            return;
+        }
+
+        $files = array_diff(scandir($folder), array('.', '..'));
+
+        foreach ($files as $file) {
+            $filePath = "$folder/$file";
+            if (is_dir($filePath)) {
+                $this->deleteFolder($filePath); // Рекурсивное удаление вложенных папок
+            } else {
+                unlink($filePath); // Удаление файла
+            }
+        }
+
+        rmdir($folder); // Удаление пустой папки
+    }
 }

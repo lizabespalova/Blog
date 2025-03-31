@@ -164,6 +164,7 @@ class SearchController
             // Получаем рейтинг курса (средний рейтинг)
             $course['rating'] =$this->courseModel->getCourseRating($course['course_id']);
             $course['owner'] =$this->userModel->getLoginById($course['user_id']);
+            $course['favourites'] = $this->courseModel->getFavoritesCount($course['course_id']);
 
 //            var_dump( $course['email']);
 //            var_dump( $course['hideEmail']);

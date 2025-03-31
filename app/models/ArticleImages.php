@@ -110,6 +110,7 @@ class ArticleImages
             return false;
         }
     }
+    // Удаление изображений статей
 
 
 }

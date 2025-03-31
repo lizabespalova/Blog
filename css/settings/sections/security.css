@@ -118,7 +118,10 @@
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ограничение на 2 строки */
+    -webkit-box-orient: vertical;
+    word-break: break-word;
 }
 
 /* Блок кнопки выхода */
@@ -177,4 +180,8 @@
         width: 100%;
         text-align: center;
     }
+    .session-header h4 {
+        font-size: 0.9em;
+    }
+
 }

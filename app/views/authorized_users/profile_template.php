@@ -306,8 +306,8 @@ if ($profileVisibility === 'public' || $profileUserId === $userId || $isFollowin
 <?php endif; ?>
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
 <script src="/js/authorized_users/add_dialog_window.js"></script>
 <script src="/js/authorized_users/show_edit_form.js"></script>
 <script src="/js/authorized_users/files_uploads/add_avatar.js"></script>

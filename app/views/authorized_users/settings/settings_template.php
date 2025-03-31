@@ -73,7 +73,7 @@
 
     </aside>
     <main class="settings-content">
-        <h1><?= htmlspecialchars($sections[$page]) ?></h1>
+        <h1 class="h1-settings"><?= htmlspecialchars($sections[$page]) ?></h1>
         <div class="settings-section">
             <?php include "sections/{$page}.php"; ?>
         </div>

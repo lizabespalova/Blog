@@ -227,6 +227,7 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'follow_owner' => 'Abonnieren Sie den Eigentümer',
     'recommendatios' => 'Empfohlene Kurse',
     'favorite_courses' => 'Gespeicherte Kurse',
+    'students_enrolled' => 'Teilnehmerzahl',
 
     //    Футер
     'about' => 'Über',
@@ -244,8 +245,7 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'website_contacts'=> '<h2>Kontakt:</h2> 
                 <p>Wenn Sie Fragen, Vorschläge oder Wünsche haben, helfen wir Ihnen gerne weiter. Kontaktieren Sie uns über einen der folgenden Kanäle:</p> 
                 <ul> 
-                    <li>Per E-Mail: <a href="mailto:info@example.com">info@example.com</a></li> 
-                    <li>Über das Kontaktformular auf der Website: <a href="/contact">Zum Formular</a></li> 
+                    <li>Per E-Mail: <a href="mailto:vedmedykportal@gmail.com">vedmedykportal@gmail.com</a></li> 
                 </ul>',
     'website_coperation'=> 'Kooperation',
 //    Kontaktformular

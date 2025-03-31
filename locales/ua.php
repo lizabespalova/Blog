@@ -224,6 +224,7 @@ return [
     'follow_owner' => 'Підписатися на власника',
     'recommendatios' => 'Рекомендовані курси',
     'favorite_courses' => 'Збережені курси',
+    'students_enrolled' => 'Кількість учасників',
 
     //    Футер
     'about' => 'Про сайт',
@@ -241,8 +242,7 @@ return [
     'website_contacts'=> '<h2>Контакти:</h2> 
                 <p>Якщо у вас виникли питання, пропозиції або побажання, ми завжди раді вам допомогти. Зв’яжіться з нами будь-яким зручним для вас способом:</p> 
                 <ul> 
-                    <li>За електронною поштою: <a href="mailto:info@example.com">info@example.com</a></li> 
-                    <li>Через форму зворотного зв’язку на сайті: <a href="/contact">Перейти до форми</a></li> 
+                    <li>За електронною поштою: <a href="mailto:vedmedykportal@gmail.com">vedmedykportal@gmail.com</a></li> 
                 </ul>',
     'website_coperation'=> 'Кооперація',
     //    Контактна форма

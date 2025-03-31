@@ -72,7 +72,7 @@ class EditProfileController
         }
 
         $description = trim($_POST['description']);
-        $description = substr($description, 0, 500); // Ограничение длины
+//        $description = substr($description, 0, 500); // Ограничение длины
 
         // Сохранение в сессию
         $_SESSION['user']['user_description'] = $description;

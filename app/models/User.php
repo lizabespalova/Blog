@@ -15,6 +15,7 @@ class User
     private $article;
     private $articleReaction;
 
+    private $course;
 
     public function __construct($conn) {
         $this->conn = $conn;
@@ -25,6 +26,7 @@ class User
         $this->comment = new Comment($conn);
         $this->article = new Articles($conn);
         $this->articleReaction = new ArticleReactions($conn);
+        $this->course = new Courses($conn);
     }
 
     public function get_user_by_login($login) {
@@ -97,23 +99,26 @@ class User
     }
     public function update_user_description($userId, $description): bool
     {
+//        var_dump($description);
         // Подготовка SQL-запроса
         $stmt = $this->conn->prepare("UPDATE users SET user_description = ? WHERE user_id = ?");
         if ($stmt === false) {
-            error_log("Error preparing statement: " . $this->conn->error);
             return false;
         }
 
         // Связывание параметров
+        // Параметры: первый - строка, второй - целое число
         $stmt->bind_param('si', $description, $userId);
 
         // Выполнение запроса
         if (!$stmt->execute()) {
-            error_log("Error executing statement: " . $stmt->error);
             return false;
         }
+
         return true;
     }
+
+
     public function updateUserLink($userId, $newLink) {
         $query = "UPDATE users SET link = ? WHERE user_id = ?";
         $stmt = $this->conn->prepare($query);
@@ -488,7 +493,8 @@ class User
     public function deleteAccount($user_id) {
          $this->session->deleteSessionByUserId($user_id);
          $this->article->deleteArticleByUserId($user_id);
-         (new Follows($this->conn))->deleteFollowerAndFollowingByUserId($user_id);
+        $this->article->deleteArticleReactions($user_id);
+        (new Follows($this->conn))->deleteFollowerAndFollowingByUserId($user_id);
          (new Follows($this->conn))->deleteFollowRequestByUserId($user_id);
          $this->articleReaction->deleteReactionByUserId($user_id);
          $this->comment->deleteCommentByUserId($user_id);
@@ -498,7 +504,13 @@ class User
          $this->setting->deleteSettingsByUserId($user_id);
          $this->repost->deleteRepostByUserId($user_id);
          (new Favourites($this->conn))->deleteFavouriteByUserId($user_id);
-         $this->deleteUser($user_id);
+        (new Favourites($this->conn))->deleteFavouriteCourses($user_id);
+        $this->course->deleteUserCourses($user_id);
+        $this->course->deleteMaterials($user_id);
+        $this->course->deleteProgress($user_id);
+        $this->course->deleteReactions($user_id);
+        $this->course->deleteCustomAccess($user_id);
+        $this->deleteUser($user_id);
     }
     public function deleteUserInterestsByUserId($user_id){
         $stmt = $this->conn->prepare("DELETE FROM user_interests WHERE user_id = ?");

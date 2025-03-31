@@ -165,6 +165,12 @@ class Favourites
         $stmt->execute();
         $stmt->close();
     }
+    public function deleteFavouriteCourses($user_id) {
+        $query = "DELETE FROM favorite_courses WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
     public function addCourseToFavourites($userId, $course_id){
         $stmt = $this->conn->prepare("INSERT IGNORE INTO favorite_courses (user_id, course_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $userId, $course_id);

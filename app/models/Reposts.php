@@ -36,14 +36,16 @@ class Reposts
             SELECT 
                 r.id AS repost_id,
                 r.message AS message,
-                r.created_at AS created_at,
+                r.created_at AS repost_created_at,
                 r.user_id AS user_id,
                 a.id AS id,
                 a.title AS title,
                 a.author AS author,
                 a.content AS content,
                 a.slug AS slug,
-                a.cover_image AS cover_image
+                a.cover_image AS cover_image,
+                a.created_at  AS created_at
+
             FROM reposts r
             JOIN articles a ON r.article_id = a.id
             WHERE r.user_id = ?

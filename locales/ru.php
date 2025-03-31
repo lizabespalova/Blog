@@ -222,6 +222,7 @@ return [
     'follow_owner' => 'Подписаться на хозяина',
     'recommendatios' => 'Рекомендуемые курсы',
     'favorite_courses' => 'Сохраненные курсы',
+    'students_enrolled' => 'Количество учащихся',
 
     //    Футер
     'about' => 'О сайте',
@@ -239,8 +240,7 @@ return [
     'website_contacts'=> '<h2>Контакты:</h2> 
                 <p>Если у вас возникли вопросы, предложения или пожелания, мы всегда рады вам помочь. Свяжитесь с нами по любому удобному для вас каналу:</p> 
                 <ul> 
-                    <li>По электронной почте: <a href="mailto:info@example.com">info@example.com</a></li> 
-                    <li>Через форму обратной связи на сайте: <a href="/contact">Перейти к форме</a></li> 
+                    <li>По электронной почте: <a href="mailto:vedmedykportal@gmail.com">vedmedykportal@gmail.com</a></li> 
                 </ul>',
     'website_coperation'=> 'Кооперация',
 

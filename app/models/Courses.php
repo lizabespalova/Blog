@@ -329,6 +329,17 @@ class Courses
 
         return (int)($result['dislikes'] ?? 0);
     }
+    public function getFavoritesCount($courseId)
+    {
+        $query = "SELECT COUNT(*) as total FROM favorite_courses WHERE course_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $courseId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['total'] ?? 0; // Возвращает количество или 0, если записей нет
+    }
 
     public function getLikesById($courseId){
         $likesQuery = $this->conn->prepare("
@@ -605,6 +616,39 @@ class Courses
         $result = $stmt->get_result();
 
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    public function deleteUserCourses($user_id) {
+        $query = "DELETE FROM courses WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
+    public function deleteCustomAccess($user_id) {
+        $query = "DELETE FROM course_custom_access WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
+
+    public function deleteReactions($user_id) {
+        $query = "DELETE FROM course_reactions WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
+
+    public function deleteMaterials($user_id) {
+        $query = "DELETE FROM course_materials WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
+
+    public function deleteProgress($user_id) {
+        $query = "DELETE FROM course_progress WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
     }
 
 }

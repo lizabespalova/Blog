@@ -28,6 +28,11 @@
     <h1><?= sprintf($translations['statistics_for'], htmlspecialchars($course['title'])); ?></h1>
 
     <div class="statistic-item">
+        <strong><i class="fas fa-user"></i> <?= $translations['author']; ?>:</strong>
+        <span><?= htmlspecialchars($user['user_login']); ?></span>
+    </div>
+
+    <div class="statistic-item">
         <strong><i class="fas fa-thumbs-up"></i> <?= $translations['likes']; ?>:</strong>
         <span id="likes"><?= htmlspecialchars($statistics['likes']); ?></span>
         <button class="stat" onclick="showList('likes', '<?= htmlspecialchars($course['course_id'], ENT_QUOTES, 'UTF-8'); ?>', 'course')">
@@ -43,8 +48,8 @@
         </button>
     </div>
     <div class="statistic-item">
-        <strong><i class="fas fa-user"></i> <?= $translations['author']; ?>:</strong>
-        <span><?= htmlspecialchars($user['user_login']); ?></span>
+        <strong><i class="fas fa-bookmark"></i> <?= $translations['favourites']; ?>:</strong>
+        <span id="favorites"><?= htmlspecialchars($statistics['favorites']); ?></span>
     </div>
 
     <div class="statistic-item">
