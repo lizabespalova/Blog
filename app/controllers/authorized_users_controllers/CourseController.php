@@ -39,6 +39,7 @@ class CourseController
         require_once 'app/views/courses/courses_form.php';
     }
     public function createCourse() {
+        require_once 'app/services/helpers/session_check.php';
         header('Content-Type: application/json'); // Указываем JSON-ответ
         $courseTitle = $_POST['course_title'] ?? '';
         $courseDescription = $_POST['course_description'] ?? '';
@@ -47,7 +48,7 @@ class CourseController
         $userId = $_SESSION['user']['user_id'] ?? null;
 
         if (!$userId || empty($courseTitle) || empty($courseDescription)) {
-            echo json_encode(['success' => false, 'message' => 'Заполните все обязательные поля!']);
+            echo json_encode(['success' => false, 'message' => 'Fill in all required fields!']);
             return;
         }
 
@@ -56,7 +57,7 @@ class CourseController
         $courseId = $this->courseModel->save($userId, $courseTitle, $courseDescription, null, $articlesArray);
 
         if (!$courseId) {
-            echo json_encode(['success' => false, 'message' => 'Ошибка при создании курса.']);
+            echo json_encode(['success' => false, 'message' => 'Error creating course.']);
             return;
         }
 
@@ -68,7 +69,7 @@ class CourseController
 
         $this->courseModel->updateCoverImage($courseId, $cover_image_path);
 
-        echo json_encode(['success' => true, 'message' => 'Курс успешно создан!', 'course_id' => $courseId]);
+        echo json_encode(['success' => true, 'message' => 'The course has been successfully created!', 'course_id' => $courseId]);
     }
 
     public function showUserCourses(){
@@ -234,11 +235,13 @@ class CourseController
 
 
     public function updateCoverCourse() {
+        require_once 'app/services/helpers/session_check.php';
+
         $userId = $_SESSION['user']['user_id'] ?? null;
 
 
         if (!isset($_FILES['cover_image']) || !isset($_POST['course_id'])) {
-            echo json_encode(['success' => false, 'error' => 'Нет данных']);
+            echo json_encode(['success' => false, 'error' => 'No data']);
             return;
         }
 
@@ -248,7 +251,7 @@ class CourseController
         $course = $this->courseModel->getCourseById($courseId);
 
         if (!$course || $course['user_id'] !== $userId) {
-            echo json_encode(['success' => false, 'error' => 'Курс не найден или нет доступа']);
+            echo json_encode(['success' => false, 'error' => 'Course not found or not available']);
             return;
         }
 
@@ -259,7 +262,7 @@ class CourseController
 
         $this->courseModel->updateCoverImage($courseId, $cover_image_path);
         // Обновляем базу
-        echo json_encode(['success' => true, 'message' => 'Курс успешно создан!', 'course_id' => $courseId]);
+        echo json_encode(['success' => true, 'message' => 'The course has been successfully created!', 'course_id' => $courseId]);
 
     }
 

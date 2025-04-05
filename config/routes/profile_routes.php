@@ -7,6 +7,7 @@ use controllers\authorized_users_controllers\FollowController;
 use controllers\authorized_users_controllers\NotificationController;
 use controllers\authorized_users_controllers\ProfileController;
 use controllers\authorized_users_controllers\SettingsController;
+use controllers\FooterController;
 use controllers\search_controllers\SearchController;
 
 require_once __DIR__ . '/../../config/config.php';
@@ -111,6 +112,10 @@ function profile_route($uri, $method) {
         case '/delete_account':
             $controller = new ProfileController(getDbConnection());
             $controller->deleteAccount();
+            exit();
+        case '/privacy-policy':
+            $controller = new FooterController();
+            $controller->showPrivacyPolicy();
             exit();
         default:
             return false;

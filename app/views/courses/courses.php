@@ -3,7 +3,6 @@
         <div class="course-card">
             <img src="<?= htmlspecialchars('/' . ltrim($course['cover_image'], '/')) ?>" alt="Обложка курса">
             <h3><?= htmlspecialchars($course['title']) ?></h3>
-            <p><?= htmlspecialchars($course['description']) ?></p>
 
             <?php
             // Условие для проверки доступности курса

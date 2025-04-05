@@ -304,6 +304,13 @@ if ($profileVisibility === 'public' || $profileUserId === $userId || $isFollowin
         </div>
     </div>
 <?php endif; ?>
+
+<!-- Сообщение о куки -->
+<div id="cookie-notice" class="cookie-notice">
+    <?= $translations['cookie'] ?><a href="/privacy-policy"> <?= $translations['more_details'] ?></a>.
+    <button id="accept-cookies"> <?= $translations['understood'] ?></button>
+</div>
+
 <!-- Footer Section -->
 <?php include __DIR__ . '/../../views/base/profile_footer.php'; ?>
 
@@ -318,6 +325,7 @@ if ($profileVisibility === 'public' || $profileUserId === $userId || $isFollowin
 <script src="/js/authorized_users/turn_profile_page_parts.js"></script>
 <script src="/js/async_tasks/send_notifications.js"></script>
 <script src="/js/async_tasks/delete_notification.js"></script>
+<script src="/js/toogle_cookie.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 

@@ -374,6 +374,34 @@
     font-style: italic;
     color: #555;
 }
+.cookie-notice {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2b2b2b;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    z-index: 9999;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cookie-notice button {
+    margin-left: 10px;
+    background-color: #f1c40f;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.cookie-notice a {
+    color: #f1c40f;
+    text-decoration: underline;
+}
 
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {

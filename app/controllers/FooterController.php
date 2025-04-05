@@ -20,4 +20,9 @@ class FooterController
 
        include __DIR__ . '/../views/common_templates/contact_form.php';
    }
+   public function showPrivacyPolicy(){
+       require_once 'app/services/helpers/switch_language.php';
+
+       include __DIR__ . '/../views/common_templates/privacy_policy_form.php';
+   }
 }

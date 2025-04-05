@@ -122,7 +122,6 @@ function performSearch() {
                         courseCard.innerHTML = `
                             <img src="${coverImage}" alt="Course cover">
                             <h3>${course.title}</h3>
-                            <p>${course.description || 'No description available'}</p>
                             ${isAccessible
                             ? `<a href="/course/${course.course_id}" class="btn">Open Course</a>`
                             : `<div class="locked-course">

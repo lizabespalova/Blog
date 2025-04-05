@@ -251,4 +251,17 @@ Attention: In this case, users in your private courses will not be able to conta
     'message' => 'Message',
     'send' => 'Send',
 
+
+    //    Куки
+    'cookie' => 'This website uses cookies to enhance your experience',
+    'more_details' => 'More details',
+    'understood' => 'Understood',
+    'privacy_policy' => 'Privacy Policy',
+    'privacy_content' => [
+        '1' => 'We value your privacy. This website uses cookies to improve user experience and provide personalized content.',
+        '2' => 'Cookies are small data files stored on your device. They help us understand how users interact with our website, improve performance, and offer features tailored to your preferences.',
+        '3' => 'By continuing to use this site, you agree to our use of cookies as described in this policy. You can manage or disable cookies through your browser settings at any time.',
+        '4' => 'For more details on how your data is used, please contact us or refer to our full terms of service.'
+    ]
+
 ];

@@ -28,9 +28,9 @@
             <label>Password</label>
         </div>
         <div class="forget">
-            <label>
-                <input type="checkbox" name="agree">I agree with rules
-            </label>
+<!--            <label>-->
+<!--                <input type="checkbox" name="agree">I agree with rules-->
+<!--            </label>-->
         </div>
         <button type="submit" name="register">Sign in</button>
         <div class="register">

@@ -255,4 +255,15 @@ Achtung: In diesem Fall können Nutzer in Ihren privaten Kursen Sie nicht kontak
     'message' => 'Nachricht',
     'send' => 'Senden',
 
+    //    Куки
+    'cookie' => 'Diese Website verwendet Cookies, um die Benutzererfahrung zu verbessern',
+    'more_details' => 'Mehr erfahren',
+    'understood' => 'Verstanden',
+    'privacy_policy' => 'Datenschutz-Bestimmungen',
+    'privacy_content' => [
+        '1' => 'Wir schätzen Ihre Privatsphäre. Diese Website verwendet Cookies, um die Benutzererfahrung zu verbessern und personalisierte Inhalte bereitzustellen.',
+        '2' => 'Cookies sind kleine Datendateien, die auf Ihrem Gerät gespeichert werden. Sie helfen uns zu verstehen, wie Benutzer mit unserer Website interagieren, die Leistung zu verbessern und Funktionen anzubieten, die auf Ihre Vorlieben zugeschnitten sind.',
+        '3' => 'Indem Sie diese Seite weiterhin nutzen, stimmen Sie der Verwendung von Cookies gemäß dieser Richtlinie zu. Sie können Cookies jederzeit über die Einstellungen Ihres Browsers verwalten oder deaktivieren.',
+        '4' => 'Für weitere Details darüber, wie Ihre Daten verwendet werden, kontaktieren Sie uns bitte oder lesen Sie unsere vollständigen Nutzungsbedingungen.'
+    ]
 ];

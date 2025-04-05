@@ -299,11 +299,13 @@
                 <span class="dislike-count"><?= htmlspecialchars($course['dislikes']); ?></span>
             </button>
             <!-- Избранное-->
-            <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
+            <?php if (!empty($userId)): ?>
+                <button class="btn-favorite <?= $is_favorite ? 'added' : '' ?>"
                     data-course-id="<?= $course['course_id'] ?>"
                     title="<?= $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' ?>">
                 <i class="fas fa-star"></i>
             </button>
+            <?php endif; ?>
 
             <!-- Поделиться -->
             <?php include __DIR__ . '/../../views/partials/share_modal_menu.php'; ?>

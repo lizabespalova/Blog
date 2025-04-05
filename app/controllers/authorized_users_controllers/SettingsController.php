@@ -56,16 +56,16 @@ class SettingsController
 // Загружаем список стран
         $countries = json_decode(file_get_contents("https://restcountries.com/v3.1/all"), true);
         $groupedCountries = [];
+        if (is_array($countries) || is_object($countries)) {
+            foreach ($countries as $country) {
+                $countryName = $country['name']['common'] ?? ''; // Название страны
+                $countryCode = $country['cca2'] ?? ''; // Код страны (ISO 3166-1 alpha-2)
 
-        foreach ($countries as $country) {
-            $countryName = $country['name']['common'] ?? ''; // Название страны
-            $countryCode = $country['cca2'] ?? ''; // Код страны (ISO 3166-1 alpha-2)
-
-            if (!empty($countryName) && !empty($countryCode)) {
-                $groupedCountries[$countryName] = []; // Заполняем массив стран
+                if (!empty($countryName) && !empty($countryCode)) {
+                    $groupedCountries[$countryName] = []; // Заполняем массив стран
+                }
             }
         }
-
 // Сортируем страны по алфавиту
         ksort($groupedCountries);
         $flags = [
