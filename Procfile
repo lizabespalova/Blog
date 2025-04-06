@@ -1,1 +1,1 @@
-web: echo $PORT && php -S https://blog.up.railway.app:$PORT -t .
+web: php -S 0.0.0.0:$PORT -t .
