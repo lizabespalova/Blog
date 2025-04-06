@@ -8,6 +8,7 @@
 
     <div class="footer-column">
         <h3><a href="/about" class="footer-link"><?= $translations['about'] ?></a></h3>
+        <h3><a href="/privacy-policy" class="footer-link"><?= $translations['privacy_policy'] ?></a></h3>
     </div>
     <div class="footer-column">
         <p><?= $translations['website_contacts'] ?></p>
