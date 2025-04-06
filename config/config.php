@@ -25,7 +25,7 @@ function getDbConnection() {
 }
 function getEmail(){return $_ENV['EMAIL'];}
 function getEmailPassword(){return $_ENV['EMAIL_PASSWORD'];}
-function getPort(){return 5000;}
+function getPort(){return $_ENV['PORT'];}
 function getHost(){return $_ENV['HOST'];}
 function getSmptSecure(){return $_ENV['SMTP_SECURE'];}
 function getGoogleClientId(){return $_ENV['GOOGLE_CLIENT_ID'];}
