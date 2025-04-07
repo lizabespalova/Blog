@@ -1,7 +1,8 @@
 <?php
 
 namespace services;
-require_once __DIR__ . '/../views/auth/phpmailer/PHPMailerAutoload.php';
+//require_once __DIR__ . '/../views/auth/phpmailer/PHPMailerAutoload.php';
+//use PHPMailer;
 
 use Exception;
 use models\Settings;
