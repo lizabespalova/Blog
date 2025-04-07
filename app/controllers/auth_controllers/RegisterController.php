@@ -315,6 +315,8 @@ class RegisterController {
 
     // Регистрация нового пользователя через Google
     private function registerUserFromGoogle($userInfo) {
+        error_reporting(E_ALL & ~E_DEPRECATED & ~E_WARNING);
+
         $email = $userInfo['email'];
         $login = explode('@', $email)[0]; // Логин до '@'
 
