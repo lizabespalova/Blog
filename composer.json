@@ -6,7 +6,8 @@
     "ext-json": "*",
     "google/apiclient": "2.14",
     "ext-curl": "*",
-    "phpmailer/phpmailer": "^6.9"
+    "phpmailer/phpmailer": "^6.9",
+    "sendgrid/sendgrid": "^8.1"
   },
   "autoload": {
     "psr-4": {

@@ -38,4 +38,5 @@ function getBaseUrl() {
 }
 function getConfirmationUrl(){return $_ENV['CONFIRMATION_URL'];}
 function getUpdateEmailUrl(){return $_ENV['UPDATE_EMAIL_URL'];}
+function getSengridApiKey(){return $_ENV['SENDGRID_API_KEY'];}
 ?>
