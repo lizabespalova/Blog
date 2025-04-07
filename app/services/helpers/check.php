@@ -20,37 +20,39 @@ $customerModel = new User($conn);
 if (isset($_COOKIE['id'], $_COOKIE['hash'])) {
     $user_id = intval($_COOKIE['id']);
     $userdata = $customerModel->get_user_by_id($user_id);
+
     if ($userdata && md5($userdata['user_hash']) === $_COOKIE['hash']) {
-            // Хеш совпадает
-            $_SESSION['user'] = [
-                'user_id' => $userdata['user_id'],
-                'user_description' => $userdata['user_description'],
-                'user_avatar' => $userdata['user_avatar'],
-                'user_login' => $userdata['user_login'],
-                'user_specialisation' => $userdata['user_specialisation'],
-                'user_company' => $userdata['user_company'],
-                'user_experience' => $userdata['user_experience'],
-                'user_articles' => $userdata['user_articles'],
-                'login_error_message'=> $userdata['login_error_message'],
-                'created_at'=> $userdata['created_at']
-            ];
-            $userModel = new User(getDbConnection());
-            $user = $userModel->get_user_by_id($userdata['user_id']);
+        // Хеш совпадает — формируем безопасно сессию
+        $_SESSION['user'] = [
+            'user_id' => $userdata['user_id'] ?? null,
+            'user_description' => $userdata['user_description'] ?? '',
+            'user_avatar' => $userdata['user_avatar'] ?? '',
+            'user_login' => $userdata['user_login'] ?? '',
+            'user_specialisation' => $userdata['user_specialisation'] ?? '',
+            'user_company' => $userdata['user_company'] ?? '',
+            'user_experience' => $userdata['user_experience'] ?? '',
+            'user_articles' => $userdata['user_articles'] ?? [],
+            'login_error_message' => $userdata['login_error_message'] ?? '',
+            'created_at' => $userdata['created_at'] ?? null
+        ];
 
-            // Создаем объект сессии и добавляем новую сессию
-            $sessionModel = new Session($conn);
-            $sessionId = session_id(); // Получаем ID текущей сессии
-            $userAgent = $_SERVER['HTTP_USER_AGENT']; // Получаем информацию о браузере
-            // Пример использования:
-            $ipAddress = getRealIP();
-            $location = getUserLocation($ipAddress);
+        $userModel = new User(getDbConnection());
+        $user = $userModel->get_user_by_id($userdata['user_id']);
 
-            $sessionModel->addSession($user_id, $sessionId, $userAgent, $ipAddress, $location);
+        // Добавляем новую сессию
+        $sessionModel = new Session($conn);
+        $sessionId = session_id();
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $ipAddress = getRealIP();
+        $location = getUserLocation($ipAddress);
 
-            header('Location: /profile' . '/'. $user['user_login']); // Путь к странице профиля
-            exit();
+        $sessionModel->addSession($user_id, $sessionId, $userAgent, $ipAddress, $location);
+
+        // Без вывода до редиректа!
+        header('Location: /profile/' . $user['user_login']);
+        exit();
     }
-} else {
+}else {
     echo "Enable cookies";
 }
 function getRealIP() {
