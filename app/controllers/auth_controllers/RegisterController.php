@@ -338,9 +338,6 @@ class RegisterController {
 
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
-        header('Access-Control-Allow-Origin: *'); // Разрешение на кросс-доменные запросы
-        header('Access-Control-Allow-Credentials: true'); // Разрешение на отправку куков
-
 //        $_SESSION['user']['user_id'] = $existingUser['user_id'];
 //        $_SESSION['user']['user_email'] = $existingUser['user_email'];
 //        $_SESSION['user']['user_login'] = $existingUser['user_login'];
@@ -357,16 +354,16 @@ class RegisterController {
             'samesite' => 'Lax',
         ]);
 
-        setcookie('hash', md5($hash), [
-            'expires' => time() + 3600,
-            'path' => '/',
-            'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
-            'secure' => true,  // Для HTTPS должно быть true
-            'samesite' => 'Lax',
-        ]);
+//        setcookie('hash', md5($hash), [
+//            'expires' => time() + 3600,
+//            'path' => '/',
+//            'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
+//            'secure' => true,  // Для HTTPS должно быть true
+//            'samesite' => 'Lax',
+//        ]);
 
         //localhost
-//        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
+        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
         header("Location: app/services/helpers/check.php");
 
