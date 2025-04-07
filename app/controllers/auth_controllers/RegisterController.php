@@ -347,8 +347,9 @@ class RegisterController {
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        setcookie('id', $existingUser['user_id'], time() + 3600, '/', '', true, true);
-        setcookie('hash', md5($hash), time() + 3600, '/', '', true, true);
+        header('Set-Cookie: id=' . $existingUser['user_id'] . '; Max-Age=3600; Path=/; SameSite=Lax');
+        header('Set-Cookie: hash=' . md5($hash) . '; Max-Age=3600; Path=/; SameSite=Lax');
+
         //localhost
 //        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
