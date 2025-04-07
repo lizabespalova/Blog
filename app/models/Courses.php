@@ -70,7 +70,7 @@ class Courses
         $stmt->bind_param("i", $courseId);
         $stmt->execute();
     }
-    public function insertIntoCourseArticles($articleIds = [], $courseId){
+    public function insertIntoCourseArticles($courseId, $articleIds = []) {
         //  Добавляем новые статьи в таблицу `course_articles`
         if (!empty($articleIds)) {
             foreach ($articleIds as $articleId) {
@@ -83,6 +83,7 @@ class Courses
             }
         }
     }
+
     public function updateCourse($courseId, $userId, $title, $description, $coverImage, $articleIds = []){
         // Шаг 1: Обновляем курс в таблице `courses`
         $query = "UPDATE courses SET user_id = ?, title = ?, description = ?, cover_image = ? WHERE course_id = ?";
