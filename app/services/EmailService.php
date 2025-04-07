@@ -43,14 +43,14 @@ class EmailService
         $emailToSend->addTo($email);
         $emailToSend->addContent("text/html", $body);
 
-        $sendgrid = new SendGrid(getSengridApiKey());
+        $sendgrid = new \SendGrid(getSengridApiKey()); // обязательно \ перед классом если есть namespace
         try {
-            $response = $sendgrid->send($emailToSend);
+            $response = $sendgrid->send($emailToSend); // правильно, send принимает Mail объект
             if ($response->statusCode() >= 200 && $response->statusCode() < 300) {
                 echo '<script type="text/javascript">
-                        alert("Confirmation email sent successfully!");
-                        window.location.href = "/confirmation_pending";
-                    </script>';
+                    alert("Confirmation email sent successfully!");
+                    window.location.href = "/confirmation_pending";
+                </script>';
             } else {
                 echo 'Email not sent. Status: ' . $response->statusCode();
                 echo '<pre>' . print_r($response->body(), true) . '</pre>';
