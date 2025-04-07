@@ -350,7 +350,7 @@ class RegisterController {
         setcookie('id', $existingUser['user_id'], [
             'expires' => time() + 3600,
             'path' => '/',
-            'domain' => 'league-of-code.up.railway.app', // 👈 твой домен
+            'domain' => '.railway.app', // 👈 твой домен
             'secure' => true,
             'httponly' => true,
             'samesite' => 'Lax',
@@ -361,7 +361,7 @@ class RegisterController {
             'secure' => true,      // только по HTTPS
             'httponly' => true,    // недоступна из JS
             'samesite' => 'Lax',   // можно поставить 'Strict' при необходимости
-            'domain' => 'league-of-code.up.railway.app', // <--- добавь сюда
+            'domain' => '.railway.app', // <--- добавь сюда
         ]);
         //localhost
 //        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
