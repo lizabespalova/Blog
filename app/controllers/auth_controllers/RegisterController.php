@@ -339,9 +339,9 @@ class RegisterController {
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
 
-//        $_SESSION['user_id'] = $existingUser['user_id'];
-//        $_SESSION['user_email'] = $existingUser['user_email'];
-//        $_SESSION['user_login'] = $existingUser['user_login'];
+        $_SESSION['user']['user_id'] = $existingUser['user_id'];
+        $_SESSION['user']['user_email'] = $existingUser['user_email'];
+        $_SESSION['user']['user_login'] = $existingUser['user_login'];
 //        $this->show_errors($existingUser['user_id']);
         $hash = $this->authService->generate_code(10);
         // Обновляем хеш авторизации и IP в базе данных
