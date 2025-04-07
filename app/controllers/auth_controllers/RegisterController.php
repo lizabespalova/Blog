@@ -339,21 +339,29 @@ class RegisterController {
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
 
-        $_SESSION['user']['user_id'] = $existingUser['user_id'];
-        $_SESSION['user']['user_email'] = $existingUser['user_email'];
-        $_SESSION['user']['user_login'] = $existingUser['user_login'];
+//        $_SESSION['user']['user_id'] = $existingUser['user_id'];
+//        $_SESSION['user']['user_email'] = $existingUser['user_email'];
+//        $_SESSION['user']['user_login'] = $existingUser['user_login'];
 //        $this->show_errors($existingUser['user_id']);
         $hash = $this->authService->generate_code(10);
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        setcookie('id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
+        setcookie('id', $existingUser['user_id'], [
+            'expires' => time() + 3600,
+            'path' => '/',
+            'domain' => 'league-of-code.up.railway.app', // 👈 твой домен
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
         setcookie("hash", md5($hash), [
             'expires' => time() + 3600,
             'path' => '/',
             'secure' => true,      // только по HTTPS
             'httponly' => true,    // недоступна из JS
             'samesite' => 'Lax',   // можно поставить 'Strict' при необходимости
+            'domain' => 'league-of-code.up.railway.app', // <--- добавь сюда
         ]);
         //localhost
 //        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
