@@ -347,22 +347,8 @@ class RegisterController {
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        setcookie('id', $existingUser['user_id'], [
-            'expires' => time() + 3600,
-            'path' => '/',
-            'domain' => '.railway.app', // 👈 твой домен
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-        setcookie("hash", md5($hash), [
-            'expires' => time() + 3600,
-            'path' => '/',
-            'secure' => true,      // только по HTTPS
-            'httponly' => true,    // недоступна из JS
-            'samesite' => 'Lax',   // можно поставить 'Strict' при необходимости
-            'domain' => '.railway.app', // <--- добавь сюда
-        ]);
+        setcookie('id', $existingUser['user_id'], time() + 3600, '/', '', true, true);
+        setcookie('hash', md5($hash), time() + 3600, '/', '', true, true);
         //localhost
 //        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
