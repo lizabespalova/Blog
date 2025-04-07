@@ -105,43 +105,36 @@ class RegisterController {
         return $errors;
     }
 
-    public function setPassword() {
-        session_start();
 
-        // Убедитесь, что пользователь авторизован
-        if (!isset($_SESSION['user']['user_id'])) {
-//        $this->show_errors("User wasn`t found");
-          $this->errorService->show_error("User wasn`t found");
-            exit();
-        }
-        $user = $this->userModel->get_temporary_user_by_id($_SESSION['user']['user_id']);
-        // Получаем данные из формы
+    public function setPassword() {
+        require_once 'app/services/helpers/session_check.php'; // Проверяет сессию и запускает session_start()
+
+        $userId = $_SESSION['user']['user_id'] ?? null;
+        if (!$userId) return $this->errorService->show_error("User wasn’t found");
+
+        $user = $this->userModel->get_temporary_user_by_id($userId);
+        if (!$user) return $this->errorService->show_error("User wasn’t found");
+
         $password = $_POST['password'] ?? '';
         $passwordConfirmation = $_POST['password_confirmation'] ?? '';
+        if ($password !== $passwordConfirmation) return $this->errorService->show_error("Passwords don’t match");
 
-        // Проверяем, что пароли совпадают
-        if ($password !== $passwordConfirmation) {
-//            $this->show_errors("Passwords don`t match");
-            $this->errorService->show_error("Passwords don`t match");
-        }
-
-        // Хэшируем пароль
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        // Перемещаем пользователя в основную таблицу без пароля
-        if (isset($user)) {
-            $link = '/profile/' . $user['user_login'];
-            $userId = $this->userModel->move_to_main_table($user['user_login'], $user['user_email'], $hashedPassword, $link, $user['created_at']);
 
-            // Удаляем временного пользователя
-            $this->userModel->delete_temporary_user($user['id']);
-            $this->settingModel->createDefaultSettings($userId);
-            // Перенаправляем на профиль или другую страницу
-            header('Location:'.$link);
-            exit();
-        }else{
-//            $this->show_errors("User wasn`t found");
-            $this->errorService->show_error("User wasn`t found");
-        }
+        $link = '/profile/' . $user['user_login'];
+        $newUserId = $this->userModel->move_to_main_table(
+            $user['user_login'],
+            $user['user_email'],
+            $hashedPassword,
+            $link,
+            $user['created_at']
+        );
+
+        $this->userModel->delete_temporary_user($user['id']);
+        $this->settingModel->createDefaultSettings($newUserId);
+
+        header("Location: $link");
+        exit();
     }
 
     public function getClient($flag) {
@@ -354,7 +347,7 @@ class RegisterController {
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        setcookie('user_id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
+        setcookie('id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
         setcookie("hash", md5($hash), [
             'expires' => time() + 3600,
             'path' => '/',
