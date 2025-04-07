@@ -1,8 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-// Загрузка переменных из .env файла. Закомментировала для деплоя
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
+
+//// Загрузка переменных из .env файла. Закомментировала для деплоя
+//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+//$dotenv->load();
 
 // Функция для получения подключения к базе данных
 function getDbConnection() {
