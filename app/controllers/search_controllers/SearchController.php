@@ -60,7 +60,7 @@ class SearchController
 
         // Перенаправление, если параметр 'section' отсутствует
         if (!isset($_GET['section'])) {
-            header("Location: " . $_SERVER['REQUEST_URI'] . "&section=popular-articles" . $paginationParams);
+            header("Location: " . $_SERVER['REQUEST_URI'] . "&section=popular-articles" /*. $paginationParams*/);
             exit;
         }
 
