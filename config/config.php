@@ -8,10 +8,10 @@ require __DIR__ . '/../vendor/autoload.php';
 // Функция для получения подключения к базе данных
 function getDbConnection() {
     // Подключение к базе данных
-    $servername = $_ENV['DB_SERVERNAME'];
-    $username = $_ENV['DB_USERNAME'];
-    $password = $_ENV['DB_PASSWORD'];
-    $dbname = $_ENV['DB_NAME'];
+    $servername = $_ENV['MYSQLHOST'];
+    $username = $_ENV['MYSQLUSER'];
+    $password = $_ENV['MYSQLPASSWORD'];
+    $dbname = $_ENV['MYSQL_DATABASE'];
 
     // Создание подключения
     $conn = new mysqli($servername, $username, $password, $dbname);
