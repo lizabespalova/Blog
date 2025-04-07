@@ -23,7 +23,7 @@ class SettingsController
         $this->settingModel = new Settings($conn);
         $this->sessionModel = new Session($conn);
         $this->emailService = new EmailService();
-        $this->emailService->configure_mailer();
+//        $this->emailService->configure_mailer();
     }
     public function showSettingsTemplate(){
         require_once 'app/services/helpers/switch_language.php';

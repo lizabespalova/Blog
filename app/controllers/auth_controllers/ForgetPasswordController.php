@@ -20,7 +20,7 @@ class ForgetPasswordController {
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
         $this->emailService = new EmailService();
-        $this->emailService->configure_mailer();
+//        $this->emailService->configure_mailer();
     }
     public function show_forget_form(){
         include __DIR__ . '/../../views/auth/form_forget.php';

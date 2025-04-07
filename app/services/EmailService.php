@@ -26,15 +26,15 @@ class EmailService
         $this->settingModel = new Settings(getDbConnection());
     }
 
-    public function configure_mailer() {
-        $this->mailer->isSMTP();
-        $this->mailer->Host = getHost();
-        $this->mailer->Port = getPort();
-        $this->mailer->SMTPSecure = getSmptSecure();
-        $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = getEmail();
-        $this->mailer->Password = getEmailPassword();
-    }
+//    public function configure_mailer() {
+//        $this->mailer->isSMTP();
+//        $this->mailer->Host = getHost();
+//        $this->mailer->Port = getPort();
+//        $this->mailer->SMTPSecure = getSmptSecure();
+//        $this->mailer->SMTPAuth = true;
+//        $this->mailer->Username = getEmail();
+//        $this->mailer->Password = getEmailPassword();
+//    }
 
     public function sendConfirmationEmail($email, $subject, $body) {
         $emailToSend = new Mail();

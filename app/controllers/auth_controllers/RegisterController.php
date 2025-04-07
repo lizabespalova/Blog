@@ -31,7 +31,7 @@ class RegisterController {
         $this->authService = new AuthService($dbConnection);
         $this->errorService = new ErrorService();
         $this->emailService = new EmailService();
-        $this->emailService->configure_mailer();
+//        $this->emailService->configure_mailer();
     }
 
     public function show_register_form() {
