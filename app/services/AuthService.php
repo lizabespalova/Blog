@@ -6,7 +6,7 @@ use models\User;
 
 class AuthService
 {
-
+    private $userModel;
     public function __construct($dbConnection) {
         $this->userModel = new User($dbConnection);
     }
