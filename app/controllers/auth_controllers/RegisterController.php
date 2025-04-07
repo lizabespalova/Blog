@@ -338,7 +338,6 @@ class RegisterController {
 
     // Авторизация существующего пользователя
     private function loginUser($existingUser) {
-
 //        $_SESSION['user']['user_id'] = $existingUser['user_id'];
 //        $_SESSION['user']['user_email'] = $existingUser['user_email'];
 //        $_SESSION['user']['user_login'] = $existingUser['user_login'];
@@ -347,13 +346,13 @@ class RegisterController {
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        header('Set-Cookie: id=' . $existingUser['user_id'] . '; Max-Age=3600; Path=/; SameSite=Lax');
-        header('Set-Cookie: hash=' . md5($hash) . '; Max-Age=3600; Path=/; SameSite=Lax');
-
+        setcookie('id', $existingUser['user_id'], time() + 3600, '/', '', true, true);
+        setcookie('hash', md5($hash), time() + 3600, '/', '', true, true);
+        var_dump($_COOKIE['id'], $_COOKIE['hash']);
         //localhost
 //        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
-        header("Location: app/services/helpers/check.php");
+//        header("Location: app/services/helpers/check.php");
 
 //        header('Location: /profile/' . $existingUser['user_login']);
         exit();
