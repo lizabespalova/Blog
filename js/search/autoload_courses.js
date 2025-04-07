@@ -1,4 +1,4 @@
-let isLoading = false;  // Флаг для предотвращения повторных запросов
+// let isLoading = false;  // Флаг для предотвращения повторных запросов
 
 function loadMorePopularCourses() {
     if (getSearchType() !== 'courses') return;
