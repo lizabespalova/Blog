@@ -355,7 +355,15 @@ class RegisterController {
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
         setcookie('id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
-        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
+        setcookie("hash", md5($hash), [
+            'expires' => time() + 3600,
+            'path' => '/',
+            'secure' => true,      // только по HTTPS
+            'httponly' => true,    // недоступна из JS
+            'samesite' => 'Lax',   // можно поставить 'Strict' при необходимости
+        ]);
+        //localhost
+//        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
         header("Location: app/services/helpers/check.php");
 
