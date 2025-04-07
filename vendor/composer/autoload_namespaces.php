@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
-    'Google_' => array($vendorDir . '/google/apiclient/src'),
 );

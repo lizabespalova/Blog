@@ -4,7 +4,7 @@
     "ext-mysqli": "*",
     "erusev/parsedown": "^1.7",
     "ext-json": "*",
-    "google/apiclient": "2.0",
+    "google/apiclient": "2.14",
     "ext-curl": "*"
   },
   "autoload": {
