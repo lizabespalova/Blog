@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use Exception;
 use models\Settings;
 use models\User;
-use PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class EmailService
 {
