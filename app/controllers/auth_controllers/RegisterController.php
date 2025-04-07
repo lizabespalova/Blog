@@ -114,7 +114,7 @@ class RegisterController {
           $this->errorService->show_error("User wasn`t found");
             exit();
         }
-        $user = $this->userModel->get_temporary_user_by_id($_SESSION['user_id']);
+        $user = $this->userModel->get_temporary_user_by_id($_SESSION['user']['user_id']);
         // Получаем данные из формы
         $password = $_POST['password'] ?? '';
         $passwordConfirmation = $_POST['password_confirmation'] ?? '';
@@ -354,7 +354,7 @@ class RegisterController {
         // Обновляем хеш авторизации и IP в базе данных
         $this->userModel->update_user_hash($existingUser['user_id'], $hash);
 
-        setcookie('id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
+        setcookie('user_id', $existingUser['user_id'], time() + 3600, "/", "", true, true);  // cookie действует 1 час
         setcookie("hash", md5($hash), [
             'expires' => time() + 3600,
             'path' => '/',
