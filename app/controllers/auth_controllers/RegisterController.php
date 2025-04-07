@@ -109,7 +109,7 @@ class RegisterController {
         session_start();
 
         // Убедитесь, что пользователь авторизован
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['user']['user_id'])) {
 //        $this->show_errors("User wasn`t found");
           $this->errorService->show_error("User wasn`t found");
             exit();
