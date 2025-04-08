@@ -38,8 +38,23 @@ class LoginController {
                     $this->userModel->update_user_hash($data['user_id'], $hash, $attach_ip);
 
                     // Устанавливаем куки
-                    setcookie("id", $data['user_id'], time() + 60 * 60 * 24 * 30, "/");
-                    setcookie("hash", md5($hash), time() + 60 * 60 * 24 * 30, "/", null, null, true); // httponly !!!
+//                    setcookie("id", $data['user_id'], time() + 60 * 60 * 24 * 30, "/");
+//                    setcookie("hash", md5($hash), time() + 60 * 60 * 24 * 30, "/", null, null, true); // httponly !!!
+                    setcookie('id', $data['user_id'], [
+                        'expires' => time() + 3600,
+                        'path' => '/',
+                        'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
+                        'secure' => true,  // Для HTTPS должно быть true
+                        'samesite' => 'Lax',
+                    ]);
+
+                    setcookie('hash', md5($hash), [
+                        'expires' => time() + 3600,
+                        'path' => '/',
+                        'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
+                        'secure' => true,  // Для HTTPS должно быть true
+                        'samesite' => 'Lax',
+                    ]);
 
                     // Перенаправляем на страницу проверки
 //                    $this->checkAuthentication();
