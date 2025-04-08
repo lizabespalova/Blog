@@ -2,6 +2,7 @@
 
 namespace controllers\authorized_users_controllers;
 
+use Exception;
 use models\Articles;
 use models\Courses;
 use models\Favourites;
@@ -9,6 +10,9 @@ use models\Follows;
 use models\Settings;
 use models\User;
 use services\CoverImagesService;
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Exception\ApiError;
 
 
 class CourseController
@@ -315,6 +319,44 @@ class CourseController
 
         echo json_encode(['message' => "Прогресс сохранён {$article_id}"]);
     }
+//    public function saveMaterials()
+//    {
+//        $courseId = $_POST['course_id'] ?? null;
+//        $userId = $_SESSION['user']['user_id'] ?? null;
+//        $description = trim($_POST['description'] ?? '');
+//
+//        if (!$courseId || !$userId || empty($_FILES['material_files'])) {
+//            http_response_code(400);
+//            echo json_encode(['success' => false, 'error' => 'Недостаточно данных для загрузки']);
+//            return;
+//        }
+//        $uploadDir =  'uploads/' . $userId . '/courses/' . $courseId . '/materials/';
+//        $this->coverImagesService->create_user_directory($uploadDir);
+//
+//        $uploadedFiles = $_FILES['material_files'];
+//        $successFiles = [];
+//
+//        for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
+//            $originalName = basename($uploadedFiles['name'][$i]);
+//            $tmpPath = $uploadedFiles['tmp_name'][$i];
+//            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+//            $safeFileName = uniqid('material_', true) . '.' . $extension;
+//            $targetPath = $uploadDir . $safeFileName;
+//
+//            if (move_uploaded_file($tmpPath, $targetPath)) {
+//                $successFiles = $this->courseModel->createMaterials($courseId, $userId, $safeFileName, $originalName, $description);
+//            }
+//        }
+//
+//        if (count($successFiles)) {
+//            echo json_encode(['success' => true, 'files' => $successFiles]);
+//        } else {
+//            http_response_code(500);
+//            echo json_encode(['success' => false, 'error' => 'Не удалось сохранить материалы']);
+//        }
+//    }
+
+//Для продакшена
     public function saveMaterials()
     {
         $courseId = $_POST['course_id'] ?? null;
@@ -326,8 +368,9 @@ class CourseController
             echo json_encode(['success' => false, 'error' => 'Недостаточно данных для загрузки']);
             return;
         }
-        $uploadDir =  'uploads/' . $userId . '/courses/' . $courseId . '/materials/';
-        $this->coverImagesService->create_user_directory($uploadDir);
+
+        // Инициализируем конфигурацию Cloudinary
+        initCloudinaryConfig();
 
         $uploadedFiles = $_FILES['material_files'];
         $successFiles = [];
@@ -335,12 +378,27 @@ class CourseController
         for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
             $originalName = basename($uploadedFiles['name'][$i]);
             $tmpPath = $uploadedFiles['tmp_name'][$i];
-            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-            $safeFileName = uniqid('material_', true) . '.' . $extension;
-            $targetPath = $uploadDir . $safeFileName;
 
-            if (move_uploaded_file($tmpPath, $targetPath)) {
-                $successFiles = $this->courseModel->createMaterials($courseId, $userId, $safeFileName, $originalName, $description);
+            try {
+                // Загружаем файл на Cloudinary
+                $uploadApi = new UploadApi();
+                $response = $uploadApi->upload($tmpPath);
+
+                // Получаем URL материала с Cloudinary
+                $cloudUrl = $response['secure_url'];
+
+                // Сохраняем ссылку на материал в базе данных
+                $successFiles[] = $this->courseModel->createMaterials(
+                    $courseId,
+                    $userId,
+                    $cloudUrl,  // Сохраняем URL вместо имени файла
+                    $originalName,
+                    $description
+                );
+            } catch (ApiError $e) {
+                // Обработка ошибки
+                echo json_encode(['success' => false, 'error' => 'Ошибка при загрузке материала: ' . $e->getMessage()]);
+                return;
             }
         }
 
