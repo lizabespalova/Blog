@@ -4,6 +4,9 @@ use models\User;
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Api\Exception\ApiError;
 
+// Инициализация Cloudinary
+initCloudinaryConfig();  // Вызываем вашу функцию инициализации Cloudinary
+
 session_start();
 require_once __DIR__ . '/../../models/User.php';
 require_once __DIR__ . '/../../../config/config.php';
