@@ -263,7 +263,7 @@
                     <div class="materials-list hidden">
                         <?php foreach ($group as $material): ?>
                             <div class="material-item">
-                                <a href="/uploads/<?= $userId ?>/courses/<?= $courseId ?>/materials/<?= htmlspecialchars($material['file_name']) ?>" target="_blank" class="material-link">
+                                <a href="<?= htmlspecialchars($material['file_name']) ?>" target="_blank" class="material-link">
                                     📄 <?= htmlspecialchars($material['original_name']) ?>
                                 </a>
 
