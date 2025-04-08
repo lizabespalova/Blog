@@ -36,9 +36,8 @@
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-photo">
-
             <?php if (!empty($user['user_avatar'])): ?>
-                <img src="<?= htmlspecialchars($user['user_avatar']) ?>" alt="Your Avatar">
+                <img src="<?= htmlspecialchars((string)$user['user_avatar']) ?>" alt="Your Avatar">
             <?php else: ?>
                 <img src="/templates/images/profile.jpg" alt="Default Avatar">
             <?php endif; ?>
@@ -64,10 +63,10 @@
                         <div class="user-location">
                             <i class="fas fa-map-marker-alt location-icon"></i> <!-- Иконка локации -->
                             <?php if ($userLocation['country']): ?>
-                                <span class="country"><?= htmlspecialchars($userLocation['country']) ?></span>
+                                <span class="country"><?= htmlspecialchars((string)$userLocation['country']) ?></span>
                             <?php endif; ?>
                             <?php if ($userLocation['city']): ?>
-                                <span class="city"><?= htmlspecialchars($userLocation['city']) ?></span>
+                                <span class="city"><?= htmlspecialchars((string)$userLocation['city']) ?></span>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -90,25 +89,26 @@
                 <div class="user-info">
                     <p>
                         <strong><?= $translations['registered'] ?>:</strong>
-                    <span id="created-display" data-full-text="<?= htmlspecialchars($user['created_at']) ?>">
+                    <span id="created-display" data-full-text="<?= htmlspecialchars((string)$user['created_at']) ?>">
                         <?= htmlspecialchars($user['created_at']) ?>
                     </span>
                     </p>
                     <p>
                         <strong><?= $translations['specialization'] ?>:</strong>
-                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars($user['user_specialisation']) ?>">
+                    <span id="specialisation-display" data-full-text="<?= htmlspecialchars((string)$user['user_specialisation']) ?>">
                             <?= htmlspecialchars($user['user_specialisation']) ?>
                     </span>
                     </p>
                     <p>
                         <strong><?= $translations['company'] ?>:</strong>
-                    <span id="company-display" data-full-text="<?= htmlspecialchars($user['user_company']) ?>">
+                    <span id="company-display" data-full-text="<?= htmlspecialchars((string)$user['user_company']) ?>">
                             <?= htmlspecialchars($user['user_company']) ?>
                     </span>
                     </p>
                     <p>
                         <strong><?= $translations['experience'] ?>:</strong>
-                        <?= htmlspecialchars($user['user_experience']) ?> <?= $translations['years'] ?>
+                        <?= htmlspecialchars((string) $user['user_experience']) ?><?= $translations['years'] ?>
+
                     </p>
                     <p>
                         <strong><?= $translations['articles'] ?>:</strong>
