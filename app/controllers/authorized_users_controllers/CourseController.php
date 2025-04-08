@@ -380,11 +380,24 @@ class CourseController
         for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
             $originalName = basename($uploadedFiles['name'][$i]);
             $tmpPath = $uploadedFiles['tmp_name'][$i];
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+            // Проверяем MIME-тип файла перед загрузкой
+            $mimeType = mime_content_type($tmpPath);
+            if (!in_array($mimeType, ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/zip'])) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Неподдерживаемый формат файла']);
+                return;
+            }
 
             try {
                 // Загружаем файл на Cloudinary
                 $uploadApi = new UploadApi();
-                $response = $uploadApi->upload($tmpPath);
+                $response = $uploadApi->upload($tmpPath, [
+                    'resource_type' => 'auto', // Автоматическое определение типа ресурса
+                    'use_filename' => true,   // Сохраняем имя файла
+                    'unique_filename' => true // Генерируем уникальное имя для файла
+                ]);
 
                 // Получаем URL материала с Cloudinary
                 $cloudUrl = $response['secure_url'];
@@ -411,6 +424,7 @@ class CourseController
             echo json_encode(['success' => false, 'error' => 'Не удалось сохранить материалы']);
         }
     }
+
 
     public function deleteMaterials()
     {
