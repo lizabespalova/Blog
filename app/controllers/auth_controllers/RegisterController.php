@@ -354,16 +354,16 @@ class RegisterController {
             'samesite' => 'Lax',
         ]);
 
-//        setcookie('hash', md5($hash), [
-//            'expires' => time() + 3600,
-//            'path' => '/',
-//            'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
-//            'secure' => true,  // Для HTTPS должно быть true
-//            'samesite' => 'Lax',
-//        ]);
+        setcookie('hash', md5($hash), [
+            'expires' => time() + 3600,
+            'path' => '/',
+            'domain' => 'league-of-code.up.railway.app', // Используй именно этот домен
+            'secure' => true,  // Для HTTPS должно быть true
+            'samesite' => 'Lax',
+        ]);
 
         //localhost
-        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
+//        setcookie("hash", md5($hash), time() + 3600, "/", null, null, true); // httponly !!!
 
         header("Location: app/services/helpers/check.php");
 

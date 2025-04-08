@@ -199,7 +199,7 @@ class EmailService
             if ($user) {
                 if (empty($user['user_password'])) {
                     // Перенаправляем на страницу установки пароля
-                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user']['user_id'] = $user['id'];
                     header('Location: /app/views/auth/set_password.php');
                     exit();
                 } else {
