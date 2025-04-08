@@ -57,7 +57,7 @@
 
     <div class="course-details">
         <div class="course-cover-container" data-course-id="<?= $course['course_id'] ?>">
-            <img src="/<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
+            <img src="<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
             <?php if ($userId === $course['user_id']): ?>
                 <button class="edit-btn cover-edit-btn" onclick="triggerCoverUpload()">✏️</button>
                 <input type="file" id="cover-upload" accept="image/*" style="display: none;">
