@@ -124,7 +124,6 @@
     </div>
 
     <div class="course-header">
-
         <div class="course-description-container">
             <p class="course-description" data-course-id="<?= $course['course_id'] ?>">
                 <?= nl2br(htmlspecialchars($course['description'])) ?>

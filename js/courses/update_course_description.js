@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open modal with current description
     editButton.addEventListener("click", function () {
-        descInput.value = descElement.textContent.trim();
+        // Заменяем 'textContent' на 'innerText', чтобы не захватывать символы, такие как кнопки
+        descInput.value = descElement.innerText.trim();
         modal.style.display = "flex";
     });
 
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Save new description
     saveButton.addEventListener("click", function () {
         let newDesc = descInput.value.trim();
-        let currentDesc = descElement.textContent.trim();
+        let currentDesc = descElement.innerText.trim();  // Используем innerText для получения только текста без HTML
 
         if (!newDesc || newDesc === currentDesc) {
             modal.style.display = "none";
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 let response = JSON.parse(xhr.responseText);
                 if (response.success) {
+                    // После сохранения, обновляем описание без включения кнопки редактирования
                     descElement.innerHTML = newDesc.replace(/\n/g, "<br>");
                     modal.style.display = "none";
                 } else {
