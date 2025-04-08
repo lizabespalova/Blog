@@ -71,8 +71,13 @@ class Courses
         $stmt->execute();
     }
     public function insertIntoCourseArticles($courseId, $articleIds = []) {
-        //  Добавляем новые статьи в таблицу `course_articles`
-        if (!empty($articleIds)) {
+        // Если пришло одно число, делаем из него массив
+        if (is_int($articleIds)) {
+            $articleIds = [$articleIds];
+        }
+
+        // Убедимся, что это массив и не пустой
+        if (!empty($articleIds) && is_array($articleIds)) {
             foreach ($articleIds as $articleId) {
                 $articleQuery = "INSERT INTO course_articles (course_id, article_id) VALUES (?, ?)";
                 $articleStmt = $this->conn->prepare($articleQuery);
@@ -82,6 +87,7 @@ class Courses
                 }
             }
         }
+        return true;
     }
 
     public function updateCourse($courseId, $userId, $title, $description, $coverImage, $articleIds = []){
