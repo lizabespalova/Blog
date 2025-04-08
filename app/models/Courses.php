@@ -20,7 +20,7 @@ class Courses
             $courseId = $stmt->insert_id; // Получаем ID вставленного курса
 
             // Если передан массив с articleIds, добавляем статьи в таблицу `course_articles`
-            $this->insertIntoCourseArticles($articleIds, $courseId);
+            $this->insertIntoCourseArticles($courseId,$articleIds);
 
             return $courseId; // Возвращаем ID курса
         } else {
@@ -100,7 +100,7 @@ class Courses
             return false; // Ошибка при обновлении курса
         }
 
-        $this->insertIntoCourseArticles($articleIds, $courseId);
+        $this->insertIntoCourseArticles($courseId,$articleIds);
 
         return true; // Обновление прошло успешно
     }
