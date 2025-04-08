@@ -417,7 +417,7 @@ class ArticleController
             'difficulty' => $_POST['difficulty'],
             'read_time' => $_POST['read_time'],
             'tags' => $_POST['tags'],
-            'slug' => $_POST['slug'],
+            'slug' => $_POST['slug'] ?? null,
             'is_published' => $_POST['is_published'],
             'cover_image' => $_FILES['cover_image'],
             'author' => $_SESSION['user']['user_login'],
