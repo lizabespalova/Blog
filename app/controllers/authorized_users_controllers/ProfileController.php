@@ -43,6 +43,8 @@ class ProfileController
     public function showProfile($profileUserLogin)
     {
         require_once 'app/services/helpers/switch_language.php';
+        require_once 'app/services/helpers/session_check.php';
+
         try {
             // Проверка, что данные пользователя есть в сессии
             $userId = $_SESSION['user']['user_id'] ?? null;
@@ -105,11 +107,12 @@ class ProfileController
 
             include __DIR__ . '/../../views/authorized_users/profile_template.php';
         } catch (Exception $e) {
-            // Обработка ошибок
+            // Безопасно экранируем сообщение
+            $errorMessage = htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
             echo "<script>
-                alert('{$e->getMessage()}');
-                window.location.href = '/login'; // Перенаправление на страницу логина
-              </script>";
+            alert('$errorMessage');
+            window.location.href = '/login';
+        </script>";
             exit();
         }
     }
