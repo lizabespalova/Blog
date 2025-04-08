@@ -43,8 +43,6 @@ class ProfileController
     public function showProfile($profileUserLogin)
     {
         require_once 'app/services/helpers/switch_language.php';
-        require_once 'app/services/helpers/session_check.php';
-
         try {
             // Проверка, что данные пользователя есть в сессии
             $userId = $_SESSION['user']['user_id'] ?? null;
