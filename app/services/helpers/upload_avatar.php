@@ -3,6 +3,7 @@
 use models\User;
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Api\Exception\ApiError;
+require_once __DIR__ . '/../../../config/config.php'; // Убедитесь, что путь правильный
 
 // Инициализация Cloudinary
 initCloudinaryConfig();  // Вызываем вашу функцию инициализации Cloudinary
