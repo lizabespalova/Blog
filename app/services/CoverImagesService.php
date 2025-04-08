@@ -2,8 +2,11 @@
 
 namespace services;
 require __DIR__ . '/../../vendor/autoload.php';
-use Cloudinary\Uploader;
+
+use Cloudinary\Api\Exception\ApiError;
+use \Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
+use Exception;
 
 
 class CoverImagesService
@@ -41,23 +44,27 @@ class CoverImagesService
     }
 
 // Метод для загрузки изображения в Cloudinary
-    private function uploadToCloudinary($filePath) {
+    private function uploadToCloudinary($filePath)
+    {
         // Инициализируем конфигурацию Cloudinary
         initCloudinaryConfig();
 
         try {
             // Загружаем файл на Cloudinary
-            $response = Uploader::upload($filePath);
+            $response = (new UploadApi())->upload($filePath);
 
             // Если загрузка прошла успешно, возвращаем URL изображения
             return $response['secure_url'];
+        } catch (ApiError $e) {
+            // Обработка ошибок API Cloudinary
+            echo "Cloudinary API error: " . $e->getMessage();
+            return false;
         } catch (Exception $e) {
-            // Обработка ошибок
+            // Общая ошибка
             echo "Ошибка при загрузке изображения в Cloudinary: " . $e->getMessage();
             return false;
         }
     }
-
     public function create_user_directory($userDir)
     {
         if (!file_exists($userDir)) {
