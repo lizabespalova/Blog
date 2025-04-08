@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
+use Cloudinary\Configuration\Configuration;
 
 //// Загрузка переменных из .env файла. Закомментировала для деплоя
 //$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
@@ -23,6 +24,21 @@ function getDbConnection() {
 
     return $conn;
 }
+
+// Функция для инициализации конфигурации Cloudinary
+function initCloudinaryConfig() {
+   Configuration::instance([
+        'cloud' => [
+            'cloud_name' => getFilesTwickpicsName(),  // Функция для получения имени облака
+            'api_key'    => getFilesTwickpicsApiKey(), // Функция для получения API ключа
+            'api_secret' => getFilesTwickpicsSecretApiKey(), // Функция для получения секретного ключа
+        ],
+        'url' => [
+            'secure' => true // Установка безопасного соединения для URL
+        ]
+    ]);
+}
+
 function getEmail(){return $_ENV['EMAIL'];}
 function getEmailPassword(){return $_ENV['EMAIL_PASSWORD'];}
 function getPort(){return $_ENV['PORT'];}
@@ -39,4 +55,9 @@ function getBaseUrl() {
 function getConfirmationUrl(){return $_ENV['CONFIRMATION_URL'];}
 function getUpdateEmailUrl(){return $_ENV['UPDATE_EMAIL_URL'];}
 function getSengridApiKey(){return $_ENV['SENDGRID_API_KEY'];}
+function getFilesTwickpicsApiKey(){return $_ENV['FILES_TWICKPICS_API_KEY'];}
+function getFilesTwickpicsSecretApiKey(){return $_ENV['FILES_TWICKPICS_SECRET_API_KEY'];}
+function getFilesTwickpicsName(){return $_ENV['FILES_TWICKPICS_NAME'];}
+
+
 ?>
