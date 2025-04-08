@@ -359,6 +359,8 @@ class CourseController
 //Для продакшена
     public function saveMaterials()
     {
+        require_once 'app/services/helpers/session_check.php';
+
         $courseId = $_POST['course_id'] ?? null;
         $userId = $_SESSION['user']['user_id'] ?? null;
         $description = trim($_POST['description'] ?? '');

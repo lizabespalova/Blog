@@ -1,7 +1,7 @@
 <div class="course-grid">
     <?php foreach ($courses as $course): ?>
         <div class="course-card">
-            <img src="<?= htmlspecialchars('/' . ltrim($course['cover_image'], '/')) ?>" alt="Обложка курса">
+            <img src="<?= htmlspecialchars($course['cover_image']) ?>" alt="Обложка курса" class="course-cover" id="course-cover">
             <h3><?= htmlspecialchars($course['title']) ?></h3>
 
             <?php
