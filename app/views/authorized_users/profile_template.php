@@ -96,13 +96,13 @@
                     <p>
                         <strong><?= $translations['specialization'] ?>:</strong>
                     <span id="specialisation-display" data-full-text="<?= htmlspecialchars((string)$user['user_specialisation']) ?>">
-                            <?= htmlspecialchars($user['user_specialisation']) ?>
+                            <?= htmlspecialchars((string)$user['user_specialisation']) ?>
                     </span>
                     </p>
                     <p>
                         <strong><?= $translations['company'] ?>:</strong>
                     <span id="company-display" data-full-text="<?= htmlspecialchars((string)$user['user_company']) ?>">
-                            <?= htmlspecialchars($user['user_company']) ?>
+                            <?= htmlspecialchars((string)$user['user_company']) ?>
                     </span>
                     </p>
                     <p>
