@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => {
                 console.error('Network error:', error);
-                window.location.href = "/error?message=" + encodeURIComponent(error.message);
+                // window.location.href = "/error?message=" + encodeURIComponent(error.message);
             });
     });
 });
