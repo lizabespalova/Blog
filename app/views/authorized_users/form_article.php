@@ -90,7 +90,7 @@
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*" >
 
-         <img src="<?= $article['cover_image'] ?>" alt="<?= htmlspecialchars($article['title']) ?>">
+         <img src="<?= $article['cover_image'] ?>" alt="<?= htmlspecialchars($article['title'], ENT_QUOTES) ?>">
           alt="<?= $translations['cover_image_preview'] ?>" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">
          <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
