@@ -39,7 +39,7 @@ require_once 'app/services/helpers/switch_language.php';
             </div>
         </div>
         <div class="card-image">
-            <img src="/<?= htmlspecialchars($article['cover_image'], ENT_QUOTES) ?>" alt="<?= htmlspecialchars($article['title'], ENT_QUOTES) ?>">
+            <img src="<?= htmlspecialchars((string)$article['cover_image'], ENT_QUOTES) ?>" alt="<?= htmlspecialchars($article['title'], ENT_QUOTES) ?>">
         </div>
         <div class="card-content">
             <h3 class="card-title">
