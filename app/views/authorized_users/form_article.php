@@ -89,7 +89,10 @@
      <label for="cover_image"><?= $translations['cover_image'] ?></label>
      <div class="image-preview-container">
          <input type="file" id="cover_image" name="cover_image" accept="image/*" >
-         <img id="cover_image_preview" class="cover-image-preview" src="<?= htmlspecialchars($article['cover_image'] ?? '') ?>"
+         <img id="cover_image_preview" class="cover-image-preview"
+              src="<?= isset($article['cover_image']) ? htmlspecialchars((string)$article['cover_image']) : '' ?>"
+              alt="<?= $translations['cover_image_preview'] ?>"
+              style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">
               alt="<?= $translations['cover_image_preview'] ?>" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">
          <button id="remove_button" class="remove-button" style="display: <?= !empty($article['cover_image']) ? 'block' : 'none' ?>;">×</button>
      </div>
