@@ -36,13 +36,13 @@
                         <!-- Лайки -->
                         <button class="btn-like" data-url="/comments/react" title="Like"  data-user_id="<?= htmlspecialchars($comment['user_id']); ?>" data-comment_id="<?= htmlspecialchars($comment['id']); ?>">
                             <i class="fas fa-thumbs-up"></i>
-                            <span class="like-count"><?= htmlspecialchars($comment['likes']); ?></span>
+                            <span class="like-count"><?= htmlspecialchars((string)$comment['likes']); ?></span>
                         </button>
 
                         <!-- Дизлайки -->
                         <button class="btn-dislike" data-url="/comments/react" title="Dislike"  data-user_id="<?= htmlspecialchars($comment['user_id']); ?>" data-comment_id="<?= htmlspecialchars($comment['id']);?>">
                             <i class="fas fa-thumbs-down"></i>
-                            <span class="dislike-count"><?= htmlspecialchars($comment['dislikes']); ?></span>
+                            <span class="dislike-count"><?= htmlspecialchars((string)$comment['dislikes']); ?></span>
                         </button>
                         </div>
                         <!-- Кнопка ответа -->
