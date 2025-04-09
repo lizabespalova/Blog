@@ -59,13 +59,13 @@ class ArticleController
         if ($slug) {
             $article = $this->articleModel->get_article_by_slug($slug);
             // Проверка и обработка обложки
-            $coverImage = $this->articleModel->get_cover_image_by_slug($slug) ?? '';
+            $article['cover_image'] = $this->articleModel->get_cover_image_by_slug($slug) ?? '';
 //            $baseUrl = 'http://localhost:8080/';
-            $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
-            $coverImage = getBaseUrl() ."/". ltrim($coverImage, '/');
-
-        // Обработка пробелов в пути, если они не закодированы
-            $article['cover_image'] = preg_replace('/\s+/', '%20', $coverImage);
+//            $coverImage = preg_replace('#^articles/edit/#', '', $coverImage);
+//            $coverImage = getBaseUrl() ."/". ltrim($coverImage, '/');
+//
+//        // Обработка пробелов в пути, если они не закодированы
+//            $article['cover_image'] = preg_replace('/\s+/', '%20', $coverImage);
 
 //            var_dump($coverImage);
             $title = $article['title'] ?? '';
