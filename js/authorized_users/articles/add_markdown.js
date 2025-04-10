@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let formData = new FormData();
         formData.append("image", file);
 
-        fetch("/api/upload-temp-image", {
+        fetch("/upload-temp-image", {
             method: "POST",
             body: formData
         })

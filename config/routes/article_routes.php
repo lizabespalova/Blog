@@ -70,9 +70,9 @@ function article_route($uri, $method) {
             $controller = new ArticleController(getDbConnection());
             $controller->getArticleReactioners($slug); // Передаем slug в метод контроллера
             exit();
-        case $method === 'POST' && preg_match('#^/api/upload-temp-image$#', $uri):
+        case $method === 'POST' && preg_match('#^/upload-temp-image$#', $uri):
             $controller = new ArticleController(getDbConnection());
-            $controller->upload_temp_image(); // вызываем нужный метод
+            $controller->upload_temp_image();
             exit();
 
         default:
