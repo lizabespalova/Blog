@@ -178,12 +178,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Обработка якорей
             plainText = plainText.replace(/\[([^\]]+)\]\(#([^)]+)\)/g, '<a href="#$2">$1</a>');
 
+            //localhost
             // Обработка изображений с использованием imageMap
+            // for (const [id, url] of Object.entries(imageMap)) {
+            //     // Формируем тэг картинки с корректной ссылкой
+            //     let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+            //     plainText = plainText.replace(new RegExp(`\\!\\[${id}\\]\\(.*?\\)`, 'g'), imageTag);
+            // }
+
+            // Преобразуем ссылки на изображения в теги <img>
             for (const [id, url] of Object.entries(imageMap)) {
-                // Формируем тэг картинки с корректной ссылкой
                 let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
                 plainText = plainText.replace(new RegExp(`\\!\\[${id}\\]\\(.*?\\)`, 'g'), imageTag);
             }
+            return plainText;
+
             // // Определяем базовый URL для сайта
             // const baseUrl = 'http://localhost:8080/';
             //
@@ -203,7 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
             //     return `<img src="${cleanUrl}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
             // });
 
-            return simplemde.markdown(plainText);
+            //localhost
+            // return simplemde.markdown(plainText);
         }
     });
 
@@ -291,48 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //     reader.readAsDataURL(file);
     // }
 
-    function handleImageUpload(file, callback) {
-        if (!file) return;
 
-        if (uploadedFiles.length >= 5) {
-            showError("You can upload up to 5 images only.");
-            return;
-        }
-
-        if (!isValidImage(file)) {
-            showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
-            return;
-        }
-
-        if (!isValidSize(file)) {
-            showError("File size exceeds the limit of 5 MB.");
-            return;
-        }
-
-        let formData = new FormData();
-        formData.append("image", file);
-
-        fetch("/upload-temp-image", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.url) {
-                    let imageId = `image${Date.now()}`;
-                    uploadedFiles.push(file);
-                    imageMap[imageId] = data.url;
-
-                    callback(`![${imageId}](${data.url})`);
-                } else {
-                    showError("Failed to upload image.");
-                }
-            })
-            .catch(error => {
-                console.error("Upload error:", error);
-                showError("Image upload failed.");
-            });
-    }
 
     function showEmojiPicker(editor) {
         const toolbarButton = document.querySelector(".fa-smile-o");
@@ -400,7 +369,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     }
 
+    function handleImageUpload(file, callback) {
+        if (!file) return;
 
+        if (uploadedFiles.length >= 5) {
+            showError("You can upload up to 5 images only.");
+            return;
+        }
+
+        if (!isValidImage(file)) {
+            showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
+            return;
+        }
+
+        if (!isValidSize(file)) {
+            showError("File size exceeds the limit of 5 MB.");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("image", file);
+
+        fetch("/upload-temp-image", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.url) {
+                    let imageId = `image${Date.now()}`;
+                    uploadedFiles.push(file);
+                    imageMap[imageId] = data.url;
+
+                    callback(`![${imageId}](${data.url})`);
+                } else {
+                    showError("Failed to upload image.");
+                }
+            })
+            .catch(error => {
+                console.error("Upload error:", error);
+                showError("Image upload failed.");
+            });
+    }
 
     function initializeImageMap() {
         let content = simplemde.value(); // Получаем текущее содержимое редактора
@@ -408,16 +418,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
         uploadedFiles = []; // Используем массив для хранения файлов
 
+        // Проходим по найденным изображениям
         for (let match of content.matchAll(imageRegex)) {
             let imageUrl = match[1]; // URL изображения
-
             if (imageUrl) {
                 uploadedFiles.push({ url: imageUrl }); // Добавляем объект с URL в массив
             }
         }
-        console.log(uploadedFiles.length); // Выводим количество изображений в массиве
-    }
 
-// Вызываем функцию после инициализации редактора
-    initializeImageMap();
+        // Преобразуем ссылку в картинку для превью
+        let plainText = content;
+        for (const [id, url] of Object.entries(imageMap)) {
+            // Формируем HTML тег для картинки
+            let imageTag = `<img src="${url}" alt="${id}" style="max-width: 100%; height: auto; border-radius: 8px;">`;
+            plainText = plainText.replace(new RegExp(`\\!\\[${id}\\]\\(.*?\\)`, 'g'), imageTag);
+        }
+
+        // Обновляем превью
+        document.querySelector(".editor-preview").innerHTML = plainText;
+    }
+    //localhost
+//     function initializeImageMap() {
+//         let content = simplemde.value(); // Получаем текущее содержимое редактора
+//         let imageRegex = /!\[.*?\]\((https?:\/\/[^)]+)\)/g; // Регулярка для поиска изображений в Markdown
+//
+//         uploadedFiles = []; // Используем массив для хранения файлов
+//
+//         for (let match of content.matchAll(imageRegex)) {
+//             let imageUrl = match[1]; // URL изображения
+//
+//             if (imageUrl) {
+//                 uploadedFiles.push({ url: imageUrl }); // Добавляем объект с URL в массив
+//             }
+//         }
+//         console.log(uploadedFiles.length); // Выводим количество изображений в массиве
+//     }
+//
+// // Вызываем функцию после инициализации редактора
+//     initializeImageMap();
 });
