@@ -28,9 +28,15 @@ class CoverImagesService
 
 //            // Получаем имя файла обложки
 //            $cover_image_name = basename($_FILES['cover_image']['name']);
+// Проверяем, что файл существует и не пустой
+            if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
+                // Загружаем изображение в Cloudinary
+                $cover_image_path = $this->uploadToCloudinary($_FILES['cover_image']['tmp_name']);
+            } else {
+                // Устанавливаем значение по умолчанию, если файл не был загружен
+                $cover_image_path = null;
+            }
 
-            // Загружаем изображение в Cloudinary
-            $cover_image_path = isset($_FILES['cover_image']['tmp_name']) ? $this->uploadToCloudinary($_FILES['cover_image']['tmp_name']) : null;
             return $cover_image_path;
 //            if ($cover_image_path) {
 //                // Возвращаем URL изображения для сохранения в базе данных
