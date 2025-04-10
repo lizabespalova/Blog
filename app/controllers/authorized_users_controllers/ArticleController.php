@@ -99,9 +99,9 @@ class ArticleController
                     'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover'
                 );
 
-                if (!$cover_image_path) {
-                    $cover_image_path = 'templates/images/article_logo.png';
-                }
+//                if (!$cover_image_path) {
+//                    $cover_image_path = 'templates/images/article_logo.png';
+//                }
 
                 $result = $this->articleModel->update_article($articleId, $inputData, $cover_image_path);
             } else {
@@ -116,9 +116,9 @@ class ArticleController
                         'uploads/' . $inputData['user_id'] . '/article_photos/' . $articleId . '/cover'
                     );
 
-                    if (!$cover_image_path) {
-                        $cover_image_path = 'templates/images/article_logo.png';
-                    }
+//                    if (!$cover_image_path) {
+//                        $cover_image_path = 'templates/images/article_logo.png';
+//                    }
 
                     // Обновляем статью с путем к обложке
                     $this->articleModel->update_article_cover($articleId, $cover_image_path);
