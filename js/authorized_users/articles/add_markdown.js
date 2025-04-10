@@ -253,6 +253,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
     // Функция проверки изображения
+    //localhost
+    // function handleImageUpload(file, callback) {
+    //     if (!file) return;
+    //
+    //     if (uploadedFiles.length >= 5) {
+    //         showError("You can upload up to 5 images only.");
+    //         return;
+    //     }
+    //
+    //     if (!isValidImage(file)) {
+    //         showError("Invalid file format. Only JPEG, PNG, or GIF images are allowed.");
+    //         return;
+    //     }
+    //
+    //     if (!isValidSize(file)) {
+    //         showError("File size exceeds the limit of 5 MB.");
+    //         return;
+    //     }
+    //
+    //     let reader = new FileReader();
+    //     reader.onload = function(e) {
+    //         let imageId = `image${Date.now()}`;
+    //         imageMap[imageId] = e.target.result;
+    //         uploadedFiles.push(file); // Добавляем только файл в массив
+    //         let userId = document.getElementById("user_id").value;
+    //         let articleId = document.getElementById("article_id").value;
+    //
+    //         // Строим ссылку на изображение (можно использовать относительный путь или base64, если нужно)
+    //         let imageUrl = `http://localhost:8080/uploads/${userId}/article_photos/${articleId}/${imageId}.jpg`;
+    //
+    //         console.log(`Image ID: ${imageId}, Image URL: ${imageUrl}`);
+    //
+    //         // Вызываем callback с уникальным ID изображения и ссылкой, чтобы использовать в редакторе
+    //         callback(`![${imageId}](${imageUrl})`);
+    //     };
+    //     reader.readAsDataURL(file);
+    // }
+
     function handleImageUpload(file, callback) {
         if (!file) return;
 
@@ -271,32 +309,30 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // // Проверим, не загружено ли уже такое изображение
-        // const existingImage = uploadedFiles.find(f => f.name === file.name);
-        // if (existingImage) {
-        //     showError("This image is already uploaded.");
-        //     return;
-        // }
+        let formData = new FormData();
+        formData.append("image", file);
 
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            let imageId = `image${Date.now()}`;
-            imageMap[imageId] = e.target.result;
-            uploadedFiles.push(file); // Добавляем только файл в массив
-            let userId = document.getElementById("user_id").value;
-            let articleId = document.getElementById("article_id").value;
+        fetch("/api/upload-temp-image", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.url) {
+                    let imageId = `image${Date.now()}`;
+                    uploadedFiles.push(file);
+                    imageMap[imageId] = data.url;
 
-            // Строим ссылку на изображение (можно использовать относительный путь или base64, если нужно)
-            let imageUrl = `http://localhost:8080/uploads/${userId}/article_photos/${articleId}/${imageId}.jpg`;
-
-            console.log(`Image ID: ${imageId}, Image URL: ${imageUrl}`);
-
-            // Вызываем callback с уникальным ID изображения и ссылкой, чтобы использовать в редакторе
-            callback(`![${imageId}](${imageUrl})`);
-        };
-        reader.readAsDataURL(file);
+                    callback(`![${imageId}](${data.url})`);
+                } else {
+                    showError("Failed to upload image.");
+                }
+            })
+            .catch(error => {
+                console.error("Upload error:", error);
+                showError("Image upload failed.");
+            });
     }
-
 
     function showEmojiPicker(editor) {
         const toolbarButton = document.querySelector(".fa-smile-o");

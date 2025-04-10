@@ -2,6 +2,7 @@
 
 namespace controllers\authorized_users_controllers;
 
+use Cloudinary\Api\Upload\UploadApi;
 use models\ArticleComments;
 use models\ArticleImages;
 use models\ArticleReactions;
@@ -803,5 +804,30 @@ class ArticleController
             'dislikes' => $dislikes
         ]);
     }
+    public function upload_temp_image()
+    {
+        if (!isset($_FILES['image'])) {
+            echo json_encode(['success' => false, 'message' => 'No file uploaded.']);
+            return;
+        }
 
+        initCloudinaryConfig(); // твоя функция конфигурации
+
+        try {
+            $fileTmp = $_FILES['image']['tmp_name'];
+            $upload = (new UploadApi())->upload($fileTmp, [
+                'folder' => 'temp_editor_uploads' // временная папка или та же, что и всегда
+            ]);
+
+            echo json_encode([
+                'success' => true,
+                'url' => $upload['secure_url']
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }
