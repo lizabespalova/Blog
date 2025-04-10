@@ -211,19 +211,44 @@ class ArticleController
         return 'http://' . $_SERVER['HTTP_HOST'] . '/uploads/' . $user_id . '/article_photos/' . $article_id . '/' . $fileName;
     }
 
-    public function process_images($articleDir, $article_id, $content, $slug, $userId, $matches) {
+//    localhost
+//    public function process_images($articleDir, $article_id, $content, $slug, $userId, $matches) {
+//        foreach ($matches[2] as $index => $base64Data) {
+//            $photoNumber = $matches[1][$index];
+//            $imagePath = $this->generate_image_path($userId, $article_id, $photoNumber);
+//
+//            // Сохраняем изображение на сервере
+//            if ($this->save_Base64Image($base64Data, $articleDir . '/' . basename($imagePath))) {
+//                // Сохраняем путь к изображению в базе данных
+//                $this->articleImagesModel->save_image_path_to_db($article_id, $imagePath, $slug);
+//
+//                // Заменяем base64-код на путь к изображению в контенте
+//                $currentMatch = $matches[0][$index];
+//                $content = str_replace($currentMatch, '[image' . $photoNumber . '](' . $imagePath . ')', $content);
+//            }
+//        }
+//
+//        // Обновляем контент статьи в базе данных
+//        $this->articleModel->update_content($article_id, $content);
+//
+//        // Удаляем лишние изображения
+//       $this->delete_unused_images($content, $slug);
+//    }
+    public function process_images($articleDir, $article_id, $content, $slug, $userId, $matches)
+    {
         foreach ($matches[2] as $index => $base64Data) {
             $photoNumber = $matches[1][$index];
-            $imagePath = $this->generate_image_path($userId, $article_id, $photoNumber);
 
-            // Сохраняем изображение на сервере
-            if ($this->save_Base64Image($base64Data, $articleDir . '/' . basename($imagePath))) {
+            // Сохраняем изображение в Cloudinary
+            $imageUrl = $this->uploadBase64ToCloudinary($base64Data);
+
+            if ($imageUrl) {
                 // Сохраняем путь к изображению в базе данных
-                $this->articleImagesModel->save_image_path_to_db($article_id, $imagePath, $slug);
+                $this->articleImagesModel->save_image_path_to_db($article_id, $imageUrl, $slug);
 
                 // Заменяем base64-код на путь к изображению в контенте
                 $currentMatch = $matches[0][$index];
-                $content = str_replace($currentMatch, '[image' . $photoNumber . '](' . $imagePath . ')', $content);
+                $content = str_replace($currentMatch, '[image' . $photoNumber . '](' . $imageUrl . ')', $content);
             }
         }
 
@@ -231,7 +256,31 @@ class ArticleController
         $this->articleModel->update_content($article_id, $content);
 
         // Удаляем лишние изображения
-       $this->delete_unused_images($content, $slug);
+        $this->delete_unused_images($content, $slug);
+    }
+
+    public function uploadBase64ToCloudinary($base64Data)
+    {
+        // Инициализируем Cloudinary (если нужно)
+        initCloudinaryConfig();
+
+        try {
+            // Преобразуем в формат, который понимает Cloudinary
+            $base64 = 'data:image/jpeg;base64,' . $base64Data;
+
+            // Загружаем через SDK
+            $response = (new UploadApi())->upload($base64, [
+                'folder' => 'article_photos' // можешь поменять на нужную папку
+            ]);
+
+            return $response['secure_url'];
+        } catch (ApiError $e) {
+            echo "Cloudinary API error: " . $e->getMessage();
+            return false;
+        } catch (Exception $e) {
+            echo "Ошибка при загрузке base64 в Cloudinary: " . $e->getMessage();
+            return false;
+        }
     }
 
     public function delete_unused_images( $content, $slug)
@@ -334,29 +383,30 @@ class ArticleController
      * @param string $imagePath Путь, по которому нужно сохранить изображение.
      * @return bool Успех операции.
      */
-    public function save_Base64Image($base64Data, $imagePath): bool
-    {
-        // Декодируем base64-код в бинарные данные
-        $imageData = base64_decode($base64Data);
-
-        // Проверяем, удалось ли декодировать данные
-        if ($imageData === false) {
-            echo "Error: didn`t decode base64 data.\n";
-            return false;
-        }
-
-        // Сохраняем декодированные данные в файл по указанному пути
-        $result = file_put_contents($imagePath, $imageData);
-
-        // Проверяем, удалось ли сохранить файл
-        if ($result === false) {
-            echo "Error during saving in path: {$imagePath}.\n";
-            return false;
-        }
-
-        echo "Image successfully saved in path {$imagePath}.\n";
-        return true;
-    }
+//    localhost
+//    public function save_Base64Image($base64Data, $imagePath): bool
+//    {
+//        // Декодируем base64-код в бинарные данные
+//        $imageData = base64_decode($base64Data);
+//
+//        // Проверяем, удалось ли декодировать данные
+//        if ($imageData === false) {
+//            echo "Error: didn`t decode base64 data.\n";
+//            return false;
+//        }
+//
+//        // Сохраняем декодированные данные в файл по указанному пути
+//        $result = file_put_contents($imagePath, $imageData);
+//
+//        // Проверяем, удалось ли сохранить файл
+//        if ($result === false) {
+//            echo "Error during saving in path: {$imagePath}.\n";
+//            return false;
+//        }
+//
+//        echo "Image successfully saved in path {$imagePath}.\n";
+//        return true;
+//    }
 
     public function structure_comments($comments) {
         $structuredComments = [];
