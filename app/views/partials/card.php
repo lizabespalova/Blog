@@ -42,7 +42,7 @@ require_once 'app/services/helpers/switch_language.php';
             <?php if (!empty($article['cover_image'])): ?>
                 <img src="<?= htmlspecialchars((string)$article['cover_image'], ENT_QUOTES) ?>" alt="<?= htmlspecialchars($article['title'], ENT_QUOTES) ?>">
             <?php else: ?>
-            <img src="/templates/images/article_logo.png" alt="Default Avatar">
+                <img src="<?= htmlspecialchars('/templates/images/article_logo.png', ENT_QUOTES) ?>" alt="Default Avatar">
             <?php endif; ?>
         </div>
         <div class="card-content">

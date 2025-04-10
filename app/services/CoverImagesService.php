@@ -31,14 +31,14 @@ class CoverImagesService
 
             // Загружаем изображение в Cloudinary
             $cover_image_path = isset($_FILES['cover_image']['tmp_name']) ? $this->uploadToCloudinary($_FILES['cover_image']['tmp_name']) : null;
-
-            if ($cover_image_path) {
-                // Возвращаем URL изображения для сохранения в базе данных
-                return $cover_image_path; // Путь к изображению на Cloudinary
-            } else {
-                echo "Error uploading cover image.";
-                return false;
-            }
+            return $cover_image_path;
+//            if ($cover_image_path) {
+//                // Возвращаем URL изображения для сохранения в базе данных
+//                return $cover_image_path; // Путь к изображению на Cloudinary
+//            } else {
+////                echo "Error uploading cover image.";
+//                return false;
+//            }
         }
         return false;
     }
