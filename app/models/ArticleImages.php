@@ -14,13 +14,17 @@ class ArticleImages
         $sql = "INSERT INTO article_images (article_id, image_path, slug) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
-            die('Ошибка подготовки запроса: ' . $this->conn->error);
+//            die('Ошибка подготовки запроса: ' . $this->conn->error);
+            error_log('Ошибка подготовки запроса: ' . $this->conn->error);
+
         }
 
         // Привязываем параметры и выполняем запрос
         $stmt->bind_param('iss', $article_id, $image_path, $slug);
         if (!$stmt->execute()) {
-            die('Prepare failed: ' . $stmt->error);
+//            die('Prepare failed: ' . $stmt->error);
+            error_log('Ошибка подготовки запроса: ' . $this->conn->error);
+
         }
 
         // Закрываем подготовленный запрос
