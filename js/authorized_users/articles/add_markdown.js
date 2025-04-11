@@ -455,5 +455,5 @@ document.addEventListener('DOMContentLoaded', function() {
 //     }
 //
 // // Вызываем функцию после инициализации редактора
-//     initializeImageMap();
+     initializeImageMap();
 });
